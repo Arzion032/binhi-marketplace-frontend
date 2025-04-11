@@ -1,79 +1,74 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import React from "react";
+import { Input } from "./components/input";
+import { Button } from "./components/button";
+import { Card } from "./components/card";
+import { FaGoogle, FaFacebook } from "react-icons/fa";
 
 function App() {
-  const [count, setCount] = useState(0)
-//comment
-// joihg
-// sad
-
   return (
-    <>
-    <div tabIndex={0} className="collapse collapse-plus bg-base-100 border-base-300 border">
-  <div className="collapse-title font-semibold">How do I create an account?</div>
-  <div className="collapse-content text-sm">
-    Click the "Sign Up" button in the top right corner and follow the registration process.
-  </div>
-</div>
+    <div
+  className="min-h-screen flex items-center justify-center bg-green-700"
+  style={{
+    backgroundImage: 'background.png',
+    backgroundSize: 'cover',
+    backgroundPosition: 'center',
+    position: 'relative',
+  }}
+>
+  <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden w-full max-w-5xl">
+    
+        {/* Left imnida */}
+        <div className="md:w-1/2 text-white flex flex-col justify-center items-center p-10">
+          <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-24 mb-4" />
+          <img src="/Binhi.png" alt="Binhi" className="w-24 mb-4" />
+          <p className="mt-4 text-center">Ang Ugat sa Masaganang Bukas!</p>
+        </div>
 
-<div className="card w-96 bg-base-100 shadow-sm">
-  <div className="card-body">
-    <span className="badge badge-xs badge-warning">Most Popular</span>
-    <div className="flex justify-between">
-      <h2 className="text-3xl font-bold">Premium</h2>
-      <span className="text-xl">$29/mo</span>
-    </div>
-    <ul className="mt-6 flex flex-col gap-2 text-xs">
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-        <span>High-resolution image generation</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Customizable style templates</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-        <span>Batch processing capabilities</span>
-      </li>
-      <li>
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-success" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-        <span>AI-driven image enhancements</span>
-      </li>
-      <li className="opacity-50">
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-        <span className="line-through">Seamless cloud integration</span>
-      </li>
-      <li className="opacity-50">
-        <svg xmlns="http://www.w3.org/2000/svg" className="size-4 me-2 inline-block text-base-content/50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" /></svg>
-        <span className="line-through">Real-time collaboration tools</span>
-      </li>
-    </ul>
-    <div className="mt-6">
-      <button className="btn btn-primary btn-block">Subscribe</button>
-    </div>
-  </div>
-</div>
+        {/* Right imnida */}
+        <div className="md:w-1/2 p-10">
+          <Card>
+            <h2 className="text-2xl font-bold text-center mb-2">Welcome to BINHI!!</h2>
+            <p className="text-sm text-center mb-6">
+              Sign Up and don’t miss the opportunity to easily connect with BINHI!!
+            </p>
 
-<div className="card bg-base-100 w-96 shadow-sm">
-  <figure>
-    <img
-      src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
-      alt="Shoes" />
-  </figure>
-  <div className="card-body">
-    <h2 className="card-title">Card Title</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
-    <div className="card-actions justify-end">
-      <button className="btn btn-primary">Buy Now</button>
-      <button className="btn btn-primary">Add to Cart</button>
+            <form className="space-y-4">
+              <div>
+                <label className="label font-semibold">Phone Number/Email</label>
+                <Input type="text" placeholder="Enter your Phone Number or Email" />
+              </div>
+
+              <div>
+                <label className="label font-semibold">Password</label>
+                <Input type="password" placeholder="Enter your Password" />
+                <a href="#" className="text-xs text-right block mt-1 hover:underline text-gray-500">Forgot Password?</a>
+              </div>
+
+              <Button className="w-full bg-green-600 text-white">Next</Button>
+            </form>
+
+            <div className="divider">OR</div>
+
+            <div className="flex justify-center gap-3">
+              <Button className="btn-outline flex items-center gap-2">
+                <FaGoogle /> Log In with Google
+              </Button>
+              <Button className="btn-outline flex items-center gap-2">
+                <FaFacebook /> Log In with Facebook
+              </Button>
+            </div>
+
+            <p className="text-center text-sm mt-6">
+              New to BINHI? <a href="#" className="text-green-600 font-semibold hover:underline">Create Account</a>
+            </p>
+            <p className="text-center text-xs mt-2 text-gray-500">
+              By continuing, you agree to BINHI <a href="#" className="underline">Terms of Service</a> and <a href="#" className="underline">Privacy Policy</a>.
+            </p>
+          </Card>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
-    </>
-  )
+  );
 }
 
-export default App
+export default App;
