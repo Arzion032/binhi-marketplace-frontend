@@ -1,9 +1,8 @@
-// src/components/Login/SignUpPage.jsx
+// src/components/SignUp/SignUpPage.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { Card } from "../Card";
-import { FaGoogle, FaFacebook } from "react-icons/fa";
 
 const SignUpPage = () => {
   const navigate = useNavigate();
@@ -42,24 +41,29 @@ const SignUpPage = () => {
               <form className="space-y-2" onSubmit={handleNext}>
                 <div>
                   <label className="text-lg label font-semibold">Phone Number/Email</label>
-                  <input type="text" placeholder="Enter your Phone Number or Email" className="mb-5 text-black w-full rounded-full px-4 py-3 border border-black placeholder:text-sm"/>
-                </div>     
-                <Button className="w-full rounded-full bg-[#4CAE4F] text-white transition-all hover:bg-green-600 hover:scale-100 hover:shadow-lg">Next</Button>
+                  <input
+                    type="text"
+                    placeholder="Enter your Phone Number or Email"
+                    className="mb-5 text-black w-full rounded-full px-4 py-3 border border-black placeholder:text-sm"
+                  />
+                </div>
+                <Button className="w-full rounded-full bg-[#4CAE4F] text-white transition-all hover:bg-green-600 hover:scale-100 hover:shadow-lg">
+                  Next
+                </Button>
               </form>
 
               <div className="divider text-gray-500">OR</div>
 
               <div className="flex justify-center gap-3">
-              <Button className=" rounded-full btn-outline flex items-center gap-2 transition-all hover:bg-green-600 hover:scale-100 hover:shadow-lg">
-                <img src="/google.png" alt="Google" className="w-8  h-8" />
-                Sign Up with Google
-              </Button>
-              <Button className=" rounded-full btn-outline flex items-center gap-2 transition-all hover:bg-green-600 hover:scale-100 hover:shadow-lg">
-                <img src="/fb.png" alt="Facebook" className="w-8 h-8" />
-                Sign Up with Facebook
-              </Button>
-            </div>
-
+                <Button className="rounded-full btn-outline flex items-center gap-2 transition-all hover:bg-green-600 hover:scale-100 hover:shadow-lg">
+                  <img src="/google.png" alt="Google" className="w-8 h-8" />
+                  Sign Up with Google
+                </Button>
+                <Button className="rounded-full btn-outline flex items-center gap-2 transition-all hover:bg-green-600 hover:scale-100 hover:shadow-lg">
+                  <img src="/fb.png" alt="Facebook" className="w-8 h-8" />
+                  Sign Up with Facebook
+                </Button>
+              </div>
 
               <p className="text-center text-lg mt-6">
                 Already have an account?{" "}
@@ -69,6 +73,7 @@ const SignUpPage = () => {
               </p>
 
               <br /><br /><br />
+
               <p className="text-center text-md mt-2 text-black">
                 By continuing, you agree to BINHI{" "}
                 <a href="#" className="underline font-bold">Terms of Service</a> and{" "}
