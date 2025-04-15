@@ -1,6 +1,6 @@
 // src/components/SignUp/SignUpPage.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { Card } from "../Card";
 
@@ -68,7 +68,7 @@ const SignUpPage = () => {
               <p className="text-center text-lg mt-6">
                 Already have an account?{" "}
                 <a href="#" className="text-green-600 font-semibold hover:underline">
-                  Log In
+                  <Link to="/">Log In</Link>
                 </a>
               </p>
 

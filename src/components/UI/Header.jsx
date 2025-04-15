@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import AuthLabel from "../Auth/AuthLabel";
 
 const Header = () => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
@@ -8,7 +9,8 @@ const Header = () => {
   };
 
   // Dynamically change flag image based on selected language
-  const flagSrc = selectedLang === "Tagalog" ? "/ph_flag.png" : "/us_flag.jpg";
+
+  const flagSrc = selectedLang === "Tagalog" ? "/Flags.png" : "/us_flag.png";
 
   return (
     <header className="w-full flex items-center justify-between px-6 py-4 bg-white shadow">
@@ -19,7 +21,7 @@ const Header = () => {
           alt="Binhi Logo"
           className="h-10 w-15"
         />
-        <span className="text-gray-300 text-lg font-semibold ml-2">Sign Up</span>
+        <AuthLabel/>
       </div>
 
       {/* Right side (Language Dropdown + Help) */}
@@ -47,3 +49,4 @@ const Header = () => {
 };
 
 export default Header;
+
