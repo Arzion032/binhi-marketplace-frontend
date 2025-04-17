@@ -26,7 +26,7 @@ const NextStep = () => {
               <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg ">
                 1
               </div>
-              <span className="font-bold text-green-600 mt-2 font-medium">Verification</span>
+              <span className="font-bold text-green-600 mt-2">Verification</span>
             </div>
 
             <img src="/dotgreen.png" alt="Step Flow" />
