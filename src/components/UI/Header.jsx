@@ -11,7 +11,7 @@ const Header = () => {
   const flagSrc = selectedLang === "Tagalog" ? "/ph_flag.png" : "/us_flag.jpg";
 
   return (
-    <header className="w-full flex items-center justify-between px-6 py-4 bg-white shadow">
+    <header className="fixed top-0 z-30 w-full flex items-center justify-between px-6 py-4 bg-white shadow h-[88px]">
       {/* Left side (Logo + Title) */}
       <div className="flex items-center font-inter">
         <img

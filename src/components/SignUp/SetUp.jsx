@@ -8,8 +8,8 @@ const SetUp = () => {
   const [username, setUsername] = useState("");
 
   return (
-    <div className="min-h-screen bg-green-400 flex items-center justify-center font-inter px-4">
-      <div className="bg-white rounded-3xl shadow-lg w-full max-w-7xl h-[800px] p-20 relative">
+    <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-full max-w-7xl p-20 relative" style={{ marginTop: '110px' }}>
 
         {/* Back Button */}
         <button
@@ -70,6 +70,38 @@ const SetUp = () => {
               onChange={(e) => setUsername(e.target.value)}
             />
           </div>
+          {/* Address Field */}
+<div className="text-left mb-4">
+  <label className="block mb-1 font-medium text-gray-700">Address</label>
+  <input
+    type="text"
+    className="w-full border border-gray-300 rounded-lg px-4 py-2 text-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+    placeholder="Barangay, Purok, Street"
+  />
+</div>
+
+{/* Map + Add Location */}
+<div className="relative mb-4 w-full">
+  <img
+    src="/map.png" // Replace with actual image path
+    alt="Map"
+    className="w-full h-40 object-cover rounded-lg border"
+  />
+  <button
+    className="absolute inset-0 flex items-center justify-center"
+    onClick={() => alert("Add Location Clicked!")}
+  >
+    <div className="bg-white border rounded-full px-4 py-1 text-sm font-medium shadow-md hover:bg-gray-100 transition">
+      + Add Location
+    </div>
+  </button>
+</div>
+
+{/* Default Address & Location Display */}
+<div className="flex flex-col items-center gap-1 mb-6">
+    <img src="/default.png" alt="Default Address" className="w-10 h-10" />
+</div>
+
 
           {/* No Validation Notice */}
           <p className="text-sm text-gray-500 italic mb-6">* Profile setup validation is temporarily disabled.</p>
