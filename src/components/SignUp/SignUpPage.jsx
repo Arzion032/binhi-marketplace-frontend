@@ -22,7 +22,7 @@ const SignUpPage = () => {
 
       {/* Main Content */}
       <div className="relative z-20 flex items-center justify-center px-4 py-10">
-        <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden w-full max-w-5xl gap-40">
+        <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden w-full max-w-screen-xl mx-auto px-4 gap-40">
           {/* Left Side */}
           <div className="text-white flex flex-col justify-center items-center">
             <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-40 mb-2" />
