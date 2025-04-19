@@ -24,11 +24,13 @@ function LogInPage() {
 
         {/* Right Side */}
         <div className="md:w-1/2 flex items-center justify-center p-8 pt-1">
+
           <Card className="w-full max-w-md p-8 rounded-2xl shadow-lg">
             <h2 className="text-2xl font-bold text-center mb-2">Welcome Back to BINHI!</h2>
             <p className="text-sm text-center mb-6">
               Log In and don’t miss the opportunity to easily connect with BINHI!
             </p>
+
 
             <form className="space-y-1">
               <div>

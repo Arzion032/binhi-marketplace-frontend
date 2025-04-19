@@ -1,12 +1,12 @@
 import React from "react";
-import Header from "../UI/InitialHeader";
+import InitialHeader from "../UI/InitialHeader";
 
 const InitialLayout = ({ children }) => {
   return (
     <div className="relative min-h-screen">
       {/* Header */}
       <div className="relative z-30">
-        <Header />
+        <InitialHeader />
       </div>
 
       {/* Background */}
