@@ -12,7 +12,7 @@ const MainHeader = () => {
   return (
     <header className="w-full bg-white shadow font-inter">
       {/* Top Header */}
-      <div className="flex items-center justify-between px-6 py-2 text-sm bg-gray-100 text-gray-700">
+      <div className="flex items-center justify-between px-8 py-4 text-sm bg-gray-100 text-gray-700">
         <div className="flex gap-4">
           <a href="#" className="hover:underline">About Us</a>
           <a href="#" className="hover:underline">Seller Center</a>
@@ -46,29 +46,29 @@ const MainHeader = () => {
 
         {/* Center: Search */}
         <div className="flex items-center flex-1 justify-center px-4">
-          <div className="flex items-center border border-black rounded-full px-3 py-1 w-full max-w-md">
-            <img src="/search.png" alt="Search" className="w-4 h-4 mx-2" />
+          <div className="flex items-center border-2 border-black rounded-full px-3 py-1 w-full max-w-md h-10">
+            <img src="/search.png" alt="Search" className="w-5 h-5 mx-2" />
             <input
               type="text"
-              placeholder="Search..."
-              className="flex-grow outline-none px-2 text-sm"
+              placeholder="Search"
+              className="flex-grow outline-none font-bold text-[12px]"
             />
             <button>
-              <img src="/mic.png" alt="Mic" className="w-4 h-4 mx-2" />
+              <img src="/mic.png" alt="Mic" className="w-5 h-5 mx-2" />
             </button>
             <button>
-              <img src="/camera.png" alt="Camera" className="w-4 h-4" />
+              <img src="/camera.png" alt="Camera" className="w-5 h-5" />
             </button>
           </div>
         </div>
 
         {/* Right: Icons */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4">
           <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer" />
           <img src="/bell.png" alt="Notifications" className="w-5 h-5 cursor-pointer" />
           <div className="flex items-center gap-2 cursor-pointer">
-            <img src="/account.png" alt="Account" className="w-5 h-5" />
-            <span className="text-sm">My Account</span>
+            <img src="/account.png" alt="Account" className="w-10 h-10" />
+            <span className="text-sm font-bold">My Account</span>
             <svg
               className="w-4 h-4"
               fill="none"

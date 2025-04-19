@@ -22,19 +22,19 @@ const SignUpPage = () => {
 
       {/* Main Content */}
       <div className="relative z-20 flex items-center justify-center px-4 py-10">
-        <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden w-full max-w-screen-xl mx-auto px-4 gap-40">
+        <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden w-full max-w-5xl gap-40">
           {/* Left Side */}
-          <div className="text-white flex flex-col justify-center items-center">
-            <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-40 mb-2" />
-            <img src="/Binhi.png" alt="Binhi" className="w-50 mb-4" />
-            <p className="text-2xl text-center">Ang Ugat sa Masaganang Bukas!</p>
+          <div className="text-white flex flex-col items-center pt-16">
+            <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-[130px] h-[130px] mb-1" />
+            <img src="/Binhi.png" alt="Binhi" className="w-[250px] h-[100px] mb-4" />
+            <p className="text-[14px] text-center">Ang Ugat sa Masaganang Bukas!</p>
           </div>
 
           {/* Right Side */}
-          <div className="md:w-1/1 p-5 bg-white rounded-2xl">
+          <div className="w-[550px] p-10 rounded-2xl">
             <Card>
               <h2 className="text-3xl font-bold text-center mb-2">Welcome to BINHI!</h2>
-              <p className="text-lg text-center mb-5">
+              <p className="text-lg text-center mb-6">
                 Sign Up and don’t miss the opportunity to easily connect with BINHI!
               </p>
 
