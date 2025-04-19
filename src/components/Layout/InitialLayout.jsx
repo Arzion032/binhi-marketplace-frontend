@@ -1,17 +1,17 @@
 import React from "react";
-import Header from "../UI/Header";
+import InitialHeader from "../UI/InitialHeader";
 
-const MainLayout = ({ children }) => {
+const InitialLayout = ({ children }) => {
   return (
     <div className="relative min-h-screen">
       {/* Header */}
       <div className="relative z-30">
-        <Header />
+        <InitialHeader />
       </div>
 
       {/* Background */}
       <div
-        className="absolute inset-0 bg-cover bg-center z-0"
+        className="absolute inset-0 bg-cover bg-center z-20"
         style={{ backgroundImage: "url('background.jpg')" }}
       ></div>
 
@@ -23,4 +23,4 @@ const MainLayout = ({ children }) => {
   );
 };
 
-export default MainLayout;
+export default InitialLayout;
