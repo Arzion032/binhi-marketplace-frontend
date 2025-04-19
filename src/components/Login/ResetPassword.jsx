@@ -37,7 +37,7 @@ const ResetPassword = () => {
           />
         </div>
 
-        <br /><br />
+        <br /><br /><br />
         <button className="btn bg-green-600 rounded-full w-full text-white shadow-md" onClick={handleNext}>
           Next
         </button>

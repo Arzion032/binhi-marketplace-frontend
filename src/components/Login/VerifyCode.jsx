@@ -76,7 +76,7 @@ const VerifyCode = () => {
           </button>
         </p>
 
-        <br /><br />
+        <br /><br /><br />
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
