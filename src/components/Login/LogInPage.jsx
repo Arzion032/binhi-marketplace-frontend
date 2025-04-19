@@ -1,3 +1,4 @@
+// LogInPage.jsx
 import React, { useState } from "react";
 import { Input } from "../Input";
 import { Button } from "../Button";
@@ -15,21 +16,21 @@ function LogInPage() {
     <div className="flex items-center justify-center px-4 py-10">
       <div className="flex flex-col md:flex-row rounded-2xl overflow-hidden w-full max-w-5xl">
         {/* Left Side */}
-        <div className="md:w-1/2 text-white flex flex-col justify-center items-center p-10">
-          <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-40 mb-2" />
-          <img src="/Binhi.png" alt="Binhi" className="w-50 mb-4" />
+        <div className="md:w-1/2 text-white flex flex-col items-center pt-20">
+          <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-[130px] h-[130px] mb-2" />
+          <img src="/Binhi.png" alt="Binhi" className="w-[250px] h-[100px] mb-4" />
           <p className="text-1xl mt-0 text-center">Ang Ugat sa Masaganang Bukas!</p>
         </div>
 
         {/* Right Side */}
-        <div className="md:w-1/2 p-11">
-          <Card>
+        <div className="md:w-1/2 flex items-center justify-center p-8 pt-1">
+          <Card className="w-full max-w-md p-8 rounded-2xl shadow-lg">
             <h2 className="text-2xl font-bold text-center mb-2">Welcome Back to BINHI!</h2>
             <p className="text-sm text-center mb-6">
               Log In and don’t miss the opportunity to easily connect with BINHI!
             </p>
 
-            <form className="space-y-4">
+            <form className="space-y-1">
               <div>
                 <label className="label font-semibold">Phone Number/Email</label>
                 <Input type="text" placeholder="Enter your Phone Number or Email" />
@@ -81,9 +82,9 @@ function LogInPage() {
 
             <p className="text-center text-sm mt-6">
               New to BINHI?{" "}
-              <a href="#" className="text-green-600 font-semibold">
-              <Link to="/signup">Create Account</Link>
-              </a>
+              <Link to="/signup" className="text-green-600 font-semibold">
+                Create Account
+              </Link>
             </p>
             <p className="text-center text-xs mt-2 text-gray-500">
               By continuing, you agree to BINHI{" "}
@@ -93,7 +94,8 @@ function LogInPage() {
               and{" "}
               <a href="#" className="underline">
                 Privacy Policy
-              </a>.
+              </a>
+              .
             </p>
           </Card>
         </div>
