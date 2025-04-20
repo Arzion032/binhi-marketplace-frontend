@@ -37,7 +37,7 @@ const MainHeader = () => {
       <div className="w-full flex items-center justify-between px-6 py-4">
         {/* Left: Logo */}
         <Link to="/">
-          <div className="flex items-center">
+          <div className="flex items-center hover:scale-110">
             <img
               src="/Primary Logo w_ BG.png"
               alt="Binhi Logo"
@@ -56,18 +56,18 @@ const MainHeader = () => {
               className="flex-grow outline-none font-bold text-[12px]"
             />
             <button>
-              <img src="/mic.png" alt="Mic" className="w-5 h-5 mx-2" />
+              <img src="/mic.png" alt="Mic" className="w-5 h-5 mx-2 hover:scale-110" />
             </button>
             <button>
-              <img src="/camera.png" alt="Camera" className="w-5 h-5" />
+              <img src="/camera.png" alt="Camera" className="w-5 h-5 hover:scale-110" />
             </button>
           </div>
         </div>
 
         {/* Right: Icons */}
         <div className="flex items-center gap-4">
-          <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer" />
-          <img src="/bell.png" alt="Notifications" className="w-5 h-5 cursor-pointer" />
+          <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer hover:scale-110" />
+          <img src="/bell.png" alt="Notifications" className="w-5 h-5 cursor-pointer hover:scale-110" />
           <div className="flex items-center gap-2 cursor-pointer">
             <img src="/account.png" alt="Account" className="w-10 h-10" />
             <span className="text-sm font-bold">My Account</span>
