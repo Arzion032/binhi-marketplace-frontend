@@ -1,6 +1,5 @@
 import React, { useRef, useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom"; // ✅ import useLocation
-import { ArrowLeft } from "lucide-react";
 
 const VerifyCode = () => {
   const navigate = useNavigate();
@@ -36,12 +35,11 @@ const VerifyCode = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/background.jpg')" }}>
-      <div className="bg-white rounded-2xl p-10 w-full max-w-md shadow-lg">
-        {/* Back Button */}
+    <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/your-background.jpg')" }}>
+<div className="bg-white rounded-2xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
+{/* Back Button */}
         <button onClick={() => navigate("/reset-password")} className="flex items-center text-sm text-black mb-4">
-          <ArrowLeft className="w-4 h-4 mr-1" />
-          Back
+        <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
         </button>
 
         {/* Title and Info */}
@@ -50,9 +48,12 @@ const VerifyCode = () => {
           We have sent the code to <br />
           <span className="text-black font-medium">{email}</span>.
         </p>
+        <p className="text-sm font-bold text-black mt-1 mb-2">
+          Enter the code <br />
+        </p>
 
         {/* Code Inputs */}
-        <div className="flex justify-between gap-2 mb-4">
+        <div className="flex justify-center gap-7 mb-4">
           {codes.map((code, i) => (
             <input
               key={i}
@@ -60,7 +61,7 @@ const VerifyCode = () => {
               type="text"
               inputMode="numeric"
               maxLength="1"
-              className="w-10 h-12 text-center border border-gray-300 rounded-lg text-lg"
+              className="w-10 h-11 text-center border border-gray-300 rounded-lg text-lg"
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
@@ -69,18 +70,18 @@ const VerifyCode = () => {
         </div>
 
         {/* Resend Text */}
-        <p className="text-center text-sm text-gray-400 mb-6">
+        <p className="text-center text-sm text-gray-400 mb-[336px]">
           Didn’t receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
           </button>
         </p>
 
-        <br /><br /><br />
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          className="w-full py-2 rounded-full bg-green-600 text-white font-semibold"
+          className="w-full py-2 rounded-full bg-green-600 text-white shadow-lg text-lg h-12
+        hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out"
         >
           Next
         </button>
