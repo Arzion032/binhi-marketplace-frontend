@@ -1,13 +1,20 @@
 import React from 'react'
+<<<<<<< HEAD
 import MainHeader from "../UI/MainHeader";
 
+=======
+import MainHeader from './MainHeader' // Import the header component
+>>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
 
 const Marketplace = () => {
   return (
     <div className="min-h-screen w-full">
       <div className="bg-[#F5F9F5] shadow-lg"> 
       {/* Main Header */}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
       <MainHeader />
 
       {/* Hero Section */}
@@ -22,10 +29,17 @@ const Marketplace = () => {
               Take the first step toward a greener future.
             </p>
             <div className="flex flex-wrap justify-center md:justify-start gap-4">
+<<<<<<< HEAD
               <button className="bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
                 Shop Now
               </button>
               <button className="border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
+=======
+              <button className="bg-white text-green-600 font-medium px-6 py-2 rounded-full">
+                Shop Now
+              </button>
+              <button className="border border-white font-medium px-6 py-2 rounded-full">
+>>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
                 Explore →
               </button>
             </div>
@@ -230,7 +244,11 @@ const Marketplace = () => {
         image: "/fruit-avocado.png"
       },
     ].map((product, index) => (
+<<<<<<< HEAD
       <div key={index}   className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full">
+=======
+      <div key={index}   className="bg-white rounded-xl shadow-md p-4 text-left transition hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full">
+>>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
       <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">VEGETABLE</span>
       <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
       <p className="text-left font-semibold text-[16px]">{product.name}</p>
@@ -240,13 +258,20 @@ const Marketplace = () => {
       5.0 • {product.sold} Sold
       </div>
       <div className= "flex items-center justify-between gap-4 mt-2"> 
+<<<<<<< HEAD
       <img src = "shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125"/> 
       <button className="text-sm bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110">
       Buy Now
+=======
+      <img src = "shopping-cart.png" alt="cart" className="w-6 h-6"/> 
+      <button className="text-sm bg-[#4CAE4F] items-right text-white w-80 px-4 py-1 rounded-2xl">
+        Buy Now
+>>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
       </button>
       </div>
       </div>
     ))}
+<<<<<<< HEAD
   </div>  
 </section>
 <div className="flex justify-center mt-5">
@@ -262,6 +287,18 @@ const Marketplace = () => {
     </span>
   </div>
   <p className="text-[20px] font-bold text-right hover:underline">See more</p>
+=======
+  </div>
+</section>
+<div className="flex items-center justify-between mx-[40px]">
+  <div className="flex items-center gap-2">
+    <p className="text-[25px] font-bold">Featured Products</p>
+    <span className="text-[10px] font-normal text-gray-400">
+      Do not miss the current offers until the end of April
+    </span>
+  </div>
+  <p className="text-[15px] font-bold text-right">See more</p>
+>>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
 </div>
 
     </div>

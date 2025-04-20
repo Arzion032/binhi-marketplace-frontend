@@ -1,5 +1,9 @@
 import React from "react";
+<<<<<<< HEAD
 import InitialHeader from "../UI/InitialHeader";
+=======
+import Header from "../UI/InitialHeader";
+>>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
 
 const InitialLayout = ({ children }) => {
   return (
