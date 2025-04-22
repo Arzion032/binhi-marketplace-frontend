@@ -248,7 +248,7 @@ const Marketplace = () => {
           ))}
         </div>  
         <div className="flex justify-center mt-10">
-        <button className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-80 px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110">
+        <button className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110">
           See More
         </button>
       </div>
@@ -256,7 +256,7 @@ const Marketplace = () => {
 
       {/*Featured Products Section, miii*/}
       <section className="px-6 py-6 bg-[#F5F9F5] ">
-      <div className="flex items-center justify-between mx-[40px] mt-[5px]">
+      <div className="flex items-center justify-between mx-[40px] mt-[5px] mb-[10px]">
         <div className="flex items-center gap-2">
           <p className="text-[30px] font-bold text-shadow-lg">Featured Products</p>
           <span className="text-[14px] font-normal text-gray-400">
@@ -265,7 +265,7 @@ const Marketplace = () => {
         </div>
         <p className="text-[20px] font-bold text-right hover:underline">See more</p>
       </div>
-        <div className="mx-[40px] max-w-8xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-6">
+        <div className="mx-[60px] max-w-8xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-7 gap-6">
           {[
             {
               name: "Premium Farm Fresh Sweet Corn",
@@ -418,14 +418,28 @@ const Marketplace = () => {
 
   {/* See More Button */}
   <div className="flex justify-center mt-10 relative z-10">
-    <button className="bg-white border border-[#4CAE4F]  text-[#4CAE4F] font-semibold px-8 py-2 rounded-full hover:bg-green-50 transition">
+    <button className="bg-white border border-[#4CAE4F]  text-[#4CAE4F] font-semibold w-[500px] px-8 py-2 rounded-full hover:bg-green-50 transition">
       See More
     </button>
   </div>
 </section>
+
+<section>
+    <h1 className="bg-white border-2 border-gray text-[38px] text-center font-bold shadow-xl p-2"> KNOW MORE ABOUT <span className="text-[#4CAE4F]"> OUR FEDERATION</span>!</h1>
+    <div className="flex justify-center items-center bg-white border-2 border-gray shadow-lg ">
+    <div className="flex justify-center items-center gap-4  p-4 bg-white">    
+    <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white gap-4">Who are we?</button>
+    <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white">Frequent Questions</button>
+    <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white">Help & Support</button>
     </div>
+    </div>
+    <container className ="bg-white h-[20px]">
+    lorem ipsum
+    </container>
+    </section>
+    </div>
+ 
   )
-  console.log(farmer.rank);
 }
 
 export default Marketplace
