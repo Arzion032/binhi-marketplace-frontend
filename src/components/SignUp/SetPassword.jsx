@@ -131,7 +131,7 @@ const SetPassword = () => {
             <span>At least 1 symbol (@#$)</span>
           </div>
 
-          <div className="flex items-center gap-2 text-sm text-gray-400">
+          <div className="flex items-center gap-2 text-sm text-gray-400 mb-[10px]">
             <img src="/wrong.png" alt="wrong" className="h-3 w-3" />
             <span>At least 1 number (123)</span>
           </div>

@@ -1,9 +1,10 @@
+// src/components/Layout/MainLayout.jsx
 import React from "react";
 import InitialHeader from "../UI/InitialHeader";
 
 const InitialLayout = ({ children }) => {
   return (
-    <div className="relative min-h-screen">
+    <div className="relative min-h-screen flex flex-col">
       {/* Header */}
       <div className="relative z-30">
         <InitialHeader />
@@ -16,7 +17,7 @@ const InitialLayout = ({ children }) => {
       ></div>
 
       {/* Main Content */}
-      <div className="relative z-20">
+      <div className="relative z-20 flex-grow min-h-screen overflow-auto">
         {children}
       </div>
     </div>
