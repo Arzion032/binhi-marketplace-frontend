@@ -16,25 +16,6 @@ function LogInPage() {
     <div className="flex items-center justify-center px-5 py-10">
      <div className="flex flex-col md:flex-row md:space-x-12 rounded-2xl overflow-hidden w-full max-w-6xl">
         {/* Left Side */}
-<<<<<<< HEAD
-        <div className="md:w-1/2 text-white flex flex-col items-center justify-center pt-20">
-          <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-[220px] h-[220px] mb-4" />
-          <img src="/Binhi.png" alt="Binhi" className="w-[480px] h-[200px] mb-2" />
-          <p className="text-3xl mt-2">Ang Ugat sa Masaganang Bukas!</p>
-        </div>
-
-        {/* Right Side */}
-
-        <div className="md:w-1/2 flex items-center justify-center p-4">
-          <Card className="w-full max-w-xl p-10 rounded-2xl shadow-2xl bg-white">
-            <h2 className="text-4xl font-bold text-center mb-4">Welcome Back to BINHI!</h2>
-            <p className="text-xl text-center mb-8">
-              Log In and don’t miss the opportunity to easily connect with BINHI!
-            </p>
-
-            <form className="space-y-4">
-i
-=======
         <div className="md:w-1/2 text-white flex flex-col items-center pt-20">
           <img src="/Binhi Logo.png" alt="Binhi Logo" className="w-[130px] h-[130px] mb-2" />
           <img src="/Binhi.png" alt="Binhi" className="w-[250px] h-[100px] mb-4" />
@@ -50,7 +31,7 @@ i
           </p>
 
             <form className="space-y-1">
->>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
+
               <div>
                 <label className="label font-semibold text-lg">Phone Number/Email</label>
                 <Input type="text" placeholder="Enter your Phone Number or Email" className="h-12 text-lg" />

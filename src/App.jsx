@@ -2,7 +2,6 @@
   import React from "react";
   import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-<<<<<<< HEAD
 import SignUpPage from "./components/SignUp/SignUpPage";
 import NextStep from "./components/SignUp/NextStep";
 import SetPassword from "./components/SignUp/SetPassword";
@@ -31,30 +30,5 @@ function App() {
     </Router>
   );
 }
-=======
-  import Header from "./components/UI/InitialHeader";
-  import SignUpPage from "./components/SignUp/SignUpPage";
-  import NextStep from "./components/SignUp/NextStep";
-  import SetPassword from "./components/SignUp/SetPassword";
-  import SetUp from "./components/SignUp/SetUp";
-  import Marketplace from "./components/LandingPage/Marketplace"
-
-    
->>>>>>> 0d09aade4112dce86a4ec164fc3d23880a0af08a
-
-  function App() {
-    return (
-      <Router>
-        <Header />
-        <Routes>
-          <Route path="/" element={<SignUpPage />} />
-          <Route path="/set-password" element={<SetPassword />} />
-          <Route path="/next-step" element={<NextStep />} />  
-          <Route path="/set-up" element={<SetUp />} />  
-          <Route path="/marketplace" element={<Marketplace />} />
-        </Routes>
-      </Router>
-    );
-  }
 
   export default App;

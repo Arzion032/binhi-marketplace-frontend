@@ -36,10 +36,8 @@ const MainHeader = () => {
       {/* Main Header */}
       <div className="w-full flex items-center justify-between px-6 py-4">
         {/* Left: Logo */}
-<<<<<<< HEAD
-=======
+
         <Link to="/">
->>>>>>> develop
         <div className="flex items-center">
           <img
             src="/Primary Logo w_ BG.png"
@@ -47,10 +45,8 @@ const MainHeader = () => {
             className="h-10 w-auto"
           />
         </div>
-<<<<<<< HEAD
-=======
         </Link>
->>>>>>> develop
+
 
         {/* Center: Search */}
         <div className="flex items-center flex-1 justify-center px-4">
