@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Link } from "react-router-dom";
+
 const MainHeader = () => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
 
@@ -71,7 +72,8 @@ const MainHeader = () => {
           <img src="/bell.png" alt="Notifications" className="w-5 h-5 cursor-pointer hover:scale-110" />
           <div className="flex items-center gap-2 cursor-pointer">
             <img src="/account.png" alt="Account" className="w-10 h-10" />
-            <span className="text-sm font-bold">My Account</span>
+            <Link to="/UserProfile">
+            <span className="text-sm font-bold">My Account</span> </Link>
             <svg
               className="w-4 h-4"
               fill="none"
