@@ -23,10 +23,10 @@ function LogInPage() {
 
         {/* Right Side */}
         <div className="md:w-[60%] flex items-center justify-center p-4 ml-[100px]">
-        <Card className="w-full max-w-xl p-10 pt-2 rounded-2xl shadow-2xl bg-white">
+        <Card className="w-full max-w-xl p-12 pt-2 pb-6 rounded-3xl shadow-2xl bg-white">
         <h2 className="pt-10 text-4xl font-bold text-center mb-4">Welcome Back to BINHI!</h2>
             <p className="text-xl text-center mb-8">
-              Log In and don’t miss the opportunity to easily connect with BINHI!
+              Log In and don’t miss the opportunity to <br/>easily connect with BINHI!
             </p>
 
             <form className="mb-6">
@@ -62,8 +62,7 @@ function LogInPage() {
               </div>
 
               <br />
-              <Button className="w-full rounded-full bg-green-600 text-white shadow-lg text-lg h-12
-                  hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
+              <Button>
                 Log In
               </Button>
             </form>
@@ -71,24 +70,26 @@ function LogInPage() {
             <div className="divider text-gray-500 my-6 text-sm">OR</div>
 
             <div className="flex justify-center gap-2">
-              <Button className="btn-outline rounded-full flex items-center justify-center gap-3 text-lg h-12">
-                <img src="/google.png" alt="Google Icon" className="w-6 h-6" />
-                Log In with Google
-              </Button>
-              <Button className="btn-outline rounded-full flex items-center justify-center gap-3 text-lg h-12">
-                <img src="/Facebook.png" alt="Facebook Icon" className="w-6 h-6" />
-                Log In with Facebook
-              </Button>
+          <Button variant="outline" className="flex items-center justify-center gap-3">
+          <img src="/google.png" alt="Google Icon" className="w-6 h-6" />
+          Log In with Google
+        </Button>
+
+        {/* Facebook Button */}
+        <Button variant="outline" className="flex items-center justify-center gap-3">
+          <img src="/Facebook.png" alt="Facebook Icon" className="w-6 h-6" />
+          Log In with Facebook
+        </Button>
             </div>
 
-            <p className="text-center text-base mt-8">
+            <p className="text-center text-base mt-6">
               New to BINHI?{" "}
               <Link to="/signup" className="text-green-600 font-semibold">
                 Create Account
               </Link>
             </p>
 
-            <p className="text-center text-md mt-9 text-black">
+            <p className="text-center text-md mt-8 text-black">
               By continuing, you agree to BINHI{" "}
               <a href="#" className="underline font-bold">Terms of <br />Service</a> and{" "}
               <a href="#" className="underline font-bold">Privacy Policy</a>.

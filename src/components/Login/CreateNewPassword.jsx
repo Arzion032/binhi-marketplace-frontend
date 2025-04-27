@@ -37,7 +37,7 @@ export default function CreateNewPassword() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: "url('/your-background.jpg')" }}
     >
-        <div className="bg-white rounded-2xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
+        <div className="bg-white rounded-3xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
       <button
           onClick={() => navigate("/")}
           className="flex items-center gap-1 text-sm text-black mb-4"
@@ -48,7 +48,7 @@ export default function CreateNewPassword() {
         <h2 className="text-2xl font-bold mb-2 text-center">
           Create New Password
         </h2>
-        <p className="text-sm text-center text-gray-600 mt-1 mb-3">
+        <p className="text-md text-center text-gray-600 mt-1 mb-3">
         Create your new password for <br />
           <span className="text-black font-medium">{email}</span>.
         </p>
@@ -64,13 +64,13 @@ export default function CreateNewPassword() {
             onChange={(e) => setPassword(e.target.value)}
           />
           <div
-            className="absolute right-3 top-[3.9rem] -translate-y-1/2 cursor-pointer"
+            className="absolute right-3 top-[4.1rem] -translate-y-1/2 cursor-pointer"
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <img src="/eye-open.png" alt="Hide password" className="w-5 h-5" />
+              <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
             ) : (
-              <img src="/eye-closed.png" alt="Show password" className="w-5 h-5" />
+              <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
             )}
           </div>
         </div>
@@ -86,13 +86,13 @@ export default function CreateNewPassword() {
             className="input input-bordered w-full"
           />
           <div
-            className="absolute right-3 top-[4rem] -translate-y-1/2 cursor-pointer"
+            className="absolute right-3 top-[4.1rem] -translate-y-1/2 cursor-pointer"
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
           >
             {showConfirmPassword ? (
-              <img src="/eye-open.png" alt="Hide password" className="w-5 h-5" />
+              <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
             ) : (
-              <img src="/eye-closed.png" alt="Show password" className="w-5 h-5" />
+              <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
             )}
           </div>
         </div>
@@ -122,13 +122,12 @@ export default function CreateNewPassword() {
 </div>
 
 
-        <br /> <br /><br /><br /> 
-        <Button className="w-full py-2 rounded-full bg-green-600 text-white shadow-lg text-lg h-12
-        hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
+    <div className="mt-[100px]">
+        <Button>
              Next
          </Button>
       </div>
-
+      </div>
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
           <div className="modal-box text-center">

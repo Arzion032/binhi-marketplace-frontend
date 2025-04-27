@@ -36,7 +36,7 @@ const VerifyCode = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/your-background.jpg')" }}>
-<div className="bg-white rounded-2xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
+<div className="bg-white rounded-3xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
 {/* Back Button */}
         <button onClick={() => navigate("/reset-password")} className="flex items-center text-sm text-black mb-4">
         <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
@@ -44,7 +44,7 @@ const VerifyCode = () => {
 
         {/* Title and Info */}
         <h2 className="text-2xl font-bold text-center">Enter Verification Code</h2>
-        <p className="text-sm text-center text-gray-600 mt-1 mb-6">
+        <p className="text-md text-center text-gray-600 mt-1 mb-6">
           We have sent the code to <br />
           <span className="text-black font-medium">{email}</span>.
         </p>
@@ -80,7 +80,7 @@ const VerifyCode = () => {
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          className="w-full py-2 rounded-full bg-green-600 text-white shadow-lg text-lg h-12
+          className="w-full py-2 rounded-full bg-green-600 text-white shadow-lg text-lg h-14
         hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out"
         >
           Next

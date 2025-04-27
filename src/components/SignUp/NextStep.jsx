@@ -7,7 +7,7 @@ const NextStep = () => {
 
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[750px] p-10 relative " style={{ marginTop: '90px' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[750px] p-10 relative " style={{ marginTop: '5 px' }}>
         
         {/* Back Button */}
         <button

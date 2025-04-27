@@ -9,7 +9,7 @@ const SetUp = () => {
 
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[900px] p-10 relative mt-10" style={{ marginTop: '90px' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[900px] p-10 relative mt-10" style={{ marginTop: '5px' }}>
 
         {/* Back Button */}
         <button
