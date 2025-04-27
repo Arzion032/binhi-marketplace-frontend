@@ -47,9 +47,9 @@ function LogInPage() {
                   onClick={togglePasswordVisibility}
                 >
                   {showPassword ? (
-                    <img src="/eye-open.png" alt="Hide password" className="w-6 h-6" />
+                    <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
                   ) : (
-                    <img src="/eye-closed.png" alt="Show password" className="w-6 h-6" />
+                    <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
                   )}
                 </div>
 
