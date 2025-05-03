@@ -2,7 +2,7 @@ import React from "react";
 import MainHeader from "../UI/MainHeader";
 
 
-const InitialLayout = ({ children }) => {
+const MainLayout = ({ children }) => {
   return (
     <div className="relative min-h-screen">
       {/* Header */}
@@ -24,4 +24,6 @@ const InitialLayout = ({ children }) => {
   );
 };
 
-export default InitialLayout;
+export default MainLayout;
+
+

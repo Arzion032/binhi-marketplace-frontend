@@ -1,13 +1,10 @@
 import React from 'react'
-import MainHeader from "../UI/MainHeader";
 import FederationSection from './FederationSection';
 
 const Marketplace = () => {
   return (
     <div className="min-h-screen w-full">
-      <div className="bg-[#F5F9F5] shadow-lg"> 
-      {/* Main Header */}
-      <MainHeader />
+      <div className="bg-[#F5F9F5] shadow-lg">  
 
       {/*Landing Section */}
       <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">      

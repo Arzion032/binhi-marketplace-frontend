@@ -1,13 +1,8 @@
 import React from 'react'
-import MainHeader from "../UI/MainHeader";
 
 const UserProfilePage = () => {
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5]">
-      {/* Main Header */}
-      <div className="shadow-lg">
-        <MainHeader />
-      </div>
 
       {/* Profile Section */}
       <div className="max-w-7xl mx-auto p-6 flex flex-col md:flex-row gap-6">

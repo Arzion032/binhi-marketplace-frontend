@@ -13,6 +13,7 @@ import CreateNewPassword from "./components/Login/CreateNewPassword";
 import VerifyCode from "./components/Login/VerifyCode";
 import Marketplace from "./components/LandingPage/Marketplace";
 import UserProfilePage from "./components/ProfilePage/UserProfilePage";
+import MainLayout from "./components/Layout/MainLayout";
 
 function App() {
   return (
@@ -26,8 +27,12 @@ function App() {
         <Route path="/reset-password" element={<InitialLayout><ResetPassword /></InitialLayout>} />
         <Route path="/create-new-password" element={<InitialLayout><CreateNewPassword /></InitialLayout>} />
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
-        <Route path="/" element={<Marketplace />} />
-        <Route path="/userprofile" element={<UserProfilePage/>} />
+        
+        
+        <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
+        <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
+
+
       </Routes>
     </Router>
   );
