@@ -1,6 +1,6 @@
-  // src/App.jsx
-  import React from "react";
-  import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+  // Checkers - Melvin
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import SignUpPage from "./components/SignUp/SignUpPage";
 import NextStep from "./components/SignUp/NextStep";
