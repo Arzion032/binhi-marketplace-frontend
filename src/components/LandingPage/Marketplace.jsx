@@ -423,43 +423,8 @@ const Marketplace = () => {
       </section>
 
       {/*Federation Section, miii*/}
-      <section>
-      <h1 className="bg-white border-2 border-gray text-[36px] text-center font-bold shadow-xl p-2"> KNOW MORE ABOUT <span className="text-[#4CAE4F]"> OUR FEDERATION</span>!</h1>
-      <div className="flex justify-center items-center bg-white border-gray shadow-lg ">
-      <div className="flex justify-center items-center gap-4  p-4 bg-white">    
-      <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white gap-4">Who are we?</button>
-      <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white">Frequent Questions</button>
-      <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white">Help & Support</button>
-      </div>
-      </div>
-      <container className ="bg-white h-[20px]">
-
-      </container>
-      </section>
       <FederationSection/>
      
-     {/*Counts*/}
-     <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">     
-      <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
-        {/* 1st Stat */}
-        <div className="px-4 py-4">
-          <h2 className="text-[70px] font-semibold">546+</h2>
-          <p className="text-[20px] font-normal">Registered Farmers</p>
-        </div>  
-
-        {/* 2nd Stat */}
-        <div className="px-4 py-4">
-          <h2 className="text-[70px] font-semibold">789,900+</h2>
-          <p className="text-[20px]">Orders Delivered</p>
-        </div>
-
-        {/* 3rd Stat */}
-        <div className="px-4 py-4">
-          <h2 className="text-[70px] font-semibold">690+</h2>
-          <p className="text-[20px]">Food Items</p>
-        </div>
-      </div>
-     </section> 
 
      <footer className="bg-[#D9D9D9] mt-6 pt-10 pb-4">
   <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">

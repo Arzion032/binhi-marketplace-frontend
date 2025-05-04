@@ -20,7 +20,7 @@ const UserProfilePage = () => {
       name: "Premium Farm Fresh Sweet Corn",
       image: "Mais.png",
       quantity: 1,
-      price: 0,
+      price: 53.00,
       status: "To Ship"
     }
   ];
@@ -186,29 +186,29 @@ const UserProfilePage = () => {
                 <img
                   src={order.image}
                   alt={order.name}
-                  className="w-16 h-16 rounded-lg object-cover"
+                  className="w-24 h-24 rounded-lg object-cover"
                 />
 
                 <div className="flex flex-col gap-2">
                   {/* Product name and quantity */}
                   <div>
-                    <p className="text-[15px] font-semibold">{order.name}</p>
-                    <p className="text-sm text-gray-500 mt-1">Quantity: {order.quantity}</p>
+                    <p className="text-lg font-semibold">{order.name}</p>
+                    <p className="text-sm text-gray-500 mt-12">Quantity: {order.quantity}</p>
                   </div>
                 </div>
               </div>
 
               {/* Right section: Status and price */}
               <div className="text-right space-y-2">
-                <span className={`text-white text-sm px-3 py-1 rounded-full ${
+                <span className={`inline-block text-white text-sm text-center w-28 py-1 rounded-full ${
                   order.status === "Completed" ? "bg-[#4CAE4F]" :
                   order.status === "To Ship" ? "bg-[#D1A157]" :
-                  "bg-gray-400"
+                  "bg-gray-400" 
                 }`}>
                   {order.status}
                 </span>
                 {order.price > 0 && (
-                  <p className="text-md font-bold">₱{order.price.toFixed(2)}</p>
+                  <p className="text-base font-bold">₱{order.price.toFixed(2)}</p>
                 )}
               </div>
             </div>

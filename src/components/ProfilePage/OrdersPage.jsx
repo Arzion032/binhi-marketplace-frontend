@@ -1,10 +1,10 @@
-// OrdersPage.jsx
 import React, { useState } from 'react'
-import { Expand, Minimize } from 'lucide-react'
+import { useNavigate } from 'react-router-dom';
+import { Expand } from 'lucide-react'
 
-const OrdersPage = () => {
+const OrderPage = () => {
   const [selectedTab, setSelectedTab] = useState("All");
-  const [isExpanded, setIsExpanded] = useState(false);
+  const navigate = useNavigate();
 
   const orders = [
     {
@@ -20,7 +20,7 @@ const OrdersPage = () => {
       name: "Premium Farm Fresh Sweet Corn",
       image: "Mais.png",
       quantity: 1,
-      price: 0,
+      price: 53.00,
       status: "To Ship"
     }
   ];
@@ -30,64 +30,98 @@ const OrdersPage = () => {
     : orders.filter(order => order.status === selectedTab);
 
   return (
-    <div className="min-h-screen w-full bg-[#F5F9F5] p-6">
-      <div className="max-w-5xl mx-auto bg-white border-2 border-gray-300 rounded-xl shadow-md p-6">
-        <div className="flex justify-between items-start border-b pb-4 gap-2">
-          <div className={`transition-all duration-300 flex-1 ${isExpanded ? 'flex flex-wrap gap-3' : 'flex gap-3 overflow-x-auto whitespace-nowrap'}`}>
-            {["All", "To Pay", "To Ship", "To Receive", "Completed", "Cancelled", "Return/Refund"].map(tab => (
+    <div className="min-h-screen bg-[#F5F9F5]">
+      <div className="max-w-9xl mx-auto p-4 flex flex-col md:flex-row gap-6">
+
+      <div className="w-full md:w-1/3 space-y-4">
+           {/* Back Button and Title - Moved above profile card */}
+           <div className="flex items-center gap-4 mb-2">
+            <button
+              className="flex items-center text-gray-600 hover:text-black"
+              onClick={() => navigate("/")}
+            >
+              <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
+            </button>
+            <p className="text-3xl font-bold">Order History</p>
+          </div>    
+
+          {/* Orders Section */}
+          <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6">
+            <div className="flex justify-between items-start border-b pb-4 gap-4">
+              <div className="flex flex-wrap gap-8 flex-1">
+                {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map(tab => (
+                  <button
+                    key={tab}
+                    onClick={() => setSelectedTab(tab)}
+                    className={`text-sm px-4 py-1 rounded-full transition-all duration-200 ${
+                      selectedTab === tab 
+                        ? "bg-[#4CAE4F] text-white font-semibold" 
+                        : "text-gray-600 hover:text-green-600"
+                    }`}
+                  >
+                    {tab}
+                  </button>
+                ))}
+              </div>
+
+              {/* Expand button */}
               <button
-                key={tab}
-                onClick={() => setSelectedTab(tab)}
-                className={`text-sm px-4 py-1 rounded-full transition-all duration-200 ${
-                  selectedTab === tab 
-                    ? "bg-[#4CAE4F] text-white font-semibold" 
-                    : "text-gray-600 hover:text-green-600"
-                }`}
+                onClick={() => navigate('/orders')}
+                className="text-gray-500 hover:text-black transition-colors shrink-0"
               >
-                {tab}
+                <Expand size={20} />
               </button>
-            ))}
-          </div>
+            </div>
+                
+            {/* Order Items */}
+            <div className="mt-6 space-y-6">
+              
+              {filteredOrders.length === 0 ? (
+                <p className="text-center text-gray-500">No orders under "{selectedTab}"</p>
+              ) : (
+                filteredOrders.map(order => (
+                  <div key={order.id} className="flex justify-between items-center border-2 border-gray-300 p-4 rounded-xl bg-white shadow-sm">
+              {/* Left section: Product and seller info */}
+              <div className="flex gap-4 items-start w-full">
+                {/* Product image */}
+                <img
+                  src={order.image}
+                  alt={order.name}
+                  className="w-24 h-24 rounded-lg object-cover"
+                />
 
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-gray-500 hover:text-black transition-colors shrink-0"
-          >
-            {isExpanded ? <Minimize size={20} /> : <Expand size={20} />}
-          </button>
-        </div>
-
-        <div className="mt-6 space-y-6">
-          {filteredOrders.length === 0 ? (
-            <p className="text-center text-gray-500">No orders under "{selectedTab}"</p>
-          ) : (
-            filteredOrders.map(order => (
-              <div key={order.id} className="flex justify-between items-center border-2 border-gray-300 p-4 rounded-lg">
-                <div className="flex gap-4 items-center">
-                  <img src={order.image} alt={order.name} className="w-16 h-16 rounded-lg" />
+                <div className="flex flex-col gap-2">
+                  {/* Product name and quantity */}
                   <div>
-                    <p className="font-semibold">{order.name}</p>
-                    {order.quantity && (
-                      <p className="text-sm text-gray-500">Quantity: {order.quantity}</p>
-                    )}
+                    <p className="text-lg font-semibold">{order.name}</p>
+                    <p className="text-sm text-gray-500 mt-12">Quantity: {order.quantity}</p>
                   </div>
                 </div>
-                <div className="text-right">
-                  <p className={`text-white rounded-full px-4 ${
-                    order.status === "Completed" ? "bg-[#4CAE4F]" : 
-                    order.status === "To Ship" ? "bg-[#D1A157]" : "bg-gray-400"
-                  }`}>{order.status}</p>
-                  {order.price > 0 && (
-                    <p className="font-bold mt-2">₱{order.price.toFixed(2)}</p>
-                  )}
-                </div>
               </div>
-            ))
-          )}
+
+              {/* Right section: Status and price */}
+              <div className="text-right space-y-2">
+                <span className={`inline-block text-white text-sm text-center w-28 py-1 rounded-full ${
+                  order.status === "Completed" ? "bg-[#4CAE4F]" :
+                  order.status === "To Ship" ? "bg-[#D1A157]" :
+                  "bg-gray-400" 
+                }`}>
+                  {order.status}
+                </span>
+                {order.price > 0 && (
+                  <p className="text-base font-bold">₱{order.price.toFixed(2)}</p>
+                )}
+              </div>
+            </div>
+
+                ))
+              )}
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+      </div>
   )
 }
 
-export default OrdersPage;
+export default OrderPage;

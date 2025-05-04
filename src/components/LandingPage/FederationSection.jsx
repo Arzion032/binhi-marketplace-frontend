@@ -5,9 +5,7 @@ function FederationSection() {
 
   return (
     <section className="py-10 bg-gray-50">
-      <h2 className="text-center text-2xl font-bold mb-6">
-        KNOW MORE ABOUT <span className="text-green-500">OUR FEDERATION</span>!
-      </h2>
+      <h1 className="bg-white border-2 border-gray text-[36px] text-center font-bold shadow-lg p-2 mb-10"> KNOW MORE ABOUT <span className="text-[#4CAE4F]"> OUR FEDERATION</span>!</h1>
 
       {/* Tabs */}
       <div className="flex justify-center gap-4 mb-8">
@@ -60,20 +58,27 @@ function FederationSection() {
       </div>
 
       {/* Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-center bg-green-500 text-white mt-10 p-6 rounded-xl max-w-6xl mx-auto">
-        <div>
-          <h4 className="text-3xl font-bold">546+</h4>
-          <p>Registered Farmers</p>
+  <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">     
+      <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
+        {/* 1st Stat */}
+        <div className="px-4 py-4">
+          <h2 className="text-[70px] font-semibold">546+</h2>
+          <p className="text-[20px] font-normal">Registered Farmers</p>
+        </div>  
+
+        {/* 2nd Stat */}
+        <div className="px-4 py-4">
+          <h2 className="text-[70px] font-semibold">789,900+</h2>
+          <p className="text-[20px]">Orders Delivered</p>
         </div>
-        <div>
-          <h4 className="text-3xl font-bold">789,900+</h4>
-          <p>Orders Delivered</p>
-        </div>
-        <div>
-          <h4 className="text-3xl font-bold">690+</h4>
-          <p>Food Items</p>
+
+        {/* 3rd Stat */}
+        <div className="px-4 py-4">
+          <h2 className="text-[70px] font-semibold">690+</h2>
+          <p className="text-[20px]">Food Items</p>
         </div>
       </div>
+     </section> 
     </section>
   );
 }
