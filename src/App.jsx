@@ -13,7 +13,9 @@ import CreateNewPassword from "./components/Login/CreateNewPassword";
 import VerifyCode from "./components/Login/VerifyCode";
 import Marketplace from "./components/LandingPage/Marketplace";
 import UserProfilePage from "./components/ProfilePage/UserProfilePage";
+import OrdersPage from './components/ProfilePage/OrdersPage';
 import MainLayout from "./components/Layout/MainLayout";
+
 
 function App() {
   return (
@@ -31,6 +33,7 @@ function App() {
         
         <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
+        <Route path="/orders" element={<MainLayout><OrdersPage /></MainLayout>} />
 
 
       </Routes>
