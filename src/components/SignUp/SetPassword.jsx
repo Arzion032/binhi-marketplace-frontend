@@ -19,7 +19,7 @@ const SetPassword = () => {
 
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[760px] p-10 relative mt-10" style={{ marginTop: '5px' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative mt-10" style={{ marginTop: '5px' }}>
 
         {/* Back Button */}
         <button
@@ -29,35 +29,36 @@ const SetPassword = () => {
           <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
         </button>
 
-        {/* Step Indicator */}
-        <div className="flex justify-center mb-3">
-          <div className="flex items-center gap-4">
-            <div className="flex flex-col items-center">
-              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
-                1
+          {/* Step Indicator */}
+          <div className="flex justify-center mb-3">
+            <div className="flex items-center gap-4">
+              <div className="flex flex-col items-center">
+                <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+                  1
+                </div>
+                <span className="text-green-600 mt-2">Verification</span>
               </div>
-              <span className="text-green-600 mt-2">Verification</span>
-            </div>
 
-            <img src="/dotgreen.png" alt="Step Flow" />
+              <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
 
-            <div className="flex flex-col items-center">
-              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg">
-                2
+              <div className="flex flex-col items-center">
+              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
+              2
+                </div>
+                <span className="font-bold text-green-600 mt-2">Password</span>
               </div>
-              <span className="font-bold text-green-600 mt-2">Password</span>
-            </div>
 
-            <img src="/dotwhite.png" alt="Step Flow" />
+              <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
 
-            <div className="flex flex-col items-center">
-              <div className="font-bold text-[28px] text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
-                3
+              <div className="flex flex-col items-center">
+                <div className="font-bold text-[28px] text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+                  3
+                </div>
+                <span className="text-[#D9D9D9] mt-2">Set Up</span>
               </div>
-              <span className="text-[#D9D9D9] mt-2">Set Up</span>
             </div>
           </div>
-        </div>
+
 
         {/* Main Content */}
         <div className="text-center mt-5">

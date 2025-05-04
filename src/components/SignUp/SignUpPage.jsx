@@ -42,8 +42,8 @@ const SignUpPage = () => {
       </div>
 
       <br />
-      <Button className="w-full rounded-full bg-green-600 text-white shadow-lg text-lg h-12
-          hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
+      <Button className="w-full rounded-full bg-green-500 text-white text-lg h-12
+          hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
         Next
       </Button>
     </form>
