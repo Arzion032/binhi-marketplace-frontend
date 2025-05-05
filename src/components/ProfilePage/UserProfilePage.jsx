@@ -179,8 +179,36 @@ const UserProfilePage = () => {
                 <p className="text-center text-gray-500">No orders under "{selectedTab}"</p>
               ) : (
                 filteredOrders.map(order => (
-                  <div key={order.id} className="flex justify-between items-center border-2 border-gray-300 p-4 rounded-xl bg-white shadow-sm">
-              {/* Left section: Product and seller info */}
+              <div key={order.id} className="flex flex-col border-2 border-gray-300 p-4 rounded-xl bg-white shadow-sm relative">
+
+              {/* Seller Info: Profile and Name */}
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <img
+                    src={order.sellerProfile || "/default-profile.png"} // fallback if no image
+                    alt="Seller"
+                    className="w-8 h-8 rounded-full object-cover"
+                  />
+                  <p className="text-sm font-medium text-gray-700">{order.sellerName}</p>
+                </div>
+
+                {/* Buttons: Chat and View Shop */}
+                <div className="flex items-left gap-2">
+                  <button className="text-gray-500 text-sm font-medium px-3 py-2 rounded-full transition">
+                    Click here to chat
+                  </button>
+                  <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-sm font-medium px-3 py-2 rounded-full transition">
+                    <img src="/shopp.png" className="w-5 h-5" /> View Shop
+                  </button>
+                  <span className={`inline-block mx-auto text-white text-sm text-center w-28 py-1 rounded-full ${
+                  order.status === "Completed" ? "bg-[#4CAE4F]" :
+                  order.status === "To Ship" ? "bg-[#D1A157]" :
+                  "bg-gray-400" 
+                }`}>
+                  {order.status}
+                </span>
+                </div>
+  </div>
               <div className="flex gap-4 items-start w-full">
                 {/* Product image */}
                 <img
@@ -200,13 +228,7 @@ const UserProfilePage = () => {
 
               {/* Right section: Status and price */}
               <div className="text-right space-y-2">
-                <span className={`inline-block text-white text-sm text-center w-28 py-1 rounded-full ${
-                  order.status === "Completed" ? "bg-[#4CAE4F]" :
-                  order.status === "To Ship" ? "bg-[#D1A157]" :
-                  "bg-gray-400" 
-                }`}>
-                  {order.status}
-                </span>
+              
                 {order.price > 0 && (
                   <p className="text-base font-bold">₱{order.price.toFixed(2)}</p>
                 )}

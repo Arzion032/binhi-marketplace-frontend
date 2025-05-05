@@ -15,6 +15,7 @@ import Marketplace from "./components/LandingPage/Marketplace";
 import UserProfilePage from "./components/ProfilePage/UserProfilePage";
 import OrdersPage from './components/ProfilePage/OrdersPage';
 import MainLayout from "./components/Layout/MainLayout";
+import OrderLayout from "./components/Layout/OrderLayout";
 
 
 function App() {
@@ -32,8 +33,8 @@ function App() {
         
         
         <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
-        <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
-        <Route path="/orders" element={<MainLayout><OrdersPage /></MainLayout>} />
+        <Route path="/userprofile" element={<OrderLayout><UserProfilePage/></OrderLayout>} />
+        <Route path="/orders" element={<OrderLayout><OrdersPage /></OrderLayout>} />
 
 
       </Routes>
