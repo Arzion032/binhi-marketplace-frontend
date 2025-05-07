@@ -6,6 +6,18 @@ const SetUp = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [email, setEmail] = useState("user@example.com"); // You can get this from context, props, or localStorage
+
+  // Handle finish button click
+  const handleFinish = () => {
+    setShowSuccess(true);
+    
+    // Auto-redirect after 3 seconds
+    setTimeout(() => {
+      navigate("/login");
+    }, 3000);
+  };
 
   return (
     <div
@@ -21,35 +33,35 @@ const SetUp = () => {
           <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
         </button>
 
-   {/* Step Indicator */}
-   <div className="flex justify-center mb-3">
-            <div className="flex items-center gap-4">
-              <div className="flex flex-col items-center">
-                <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
-                  1
-                </div>
-                <span className="text-green-600 mt-2">Verification</span>
+        {/* Step Indicator */}
+        <div className="flex justify-center mb-3">
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center">
+              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+                1
               </div>
+              <span className="text-green-600 mt-2">Verification</span>
+            </div>
 
-              <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
+            <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
 
-              <div className="flex flex-col items-center">
-                <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg">
-                  2
-                </div>
-                <span className="text-green-600 mt-2">Password</span>
+            <div className="flex flex-col items-center">
+              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg">
+                2
               </div>
+              <span className="text-green-600 mt-2">Password</span>
+            </div>
 
-              <img src="/dotfullgreen.png" alt="Step Flow" className="relative -top-3" />
+            <img src="/dotfullgreen.png" alt="Step Flow" className="relative -top-3" />
 
-              <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center">
               <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
-              3
-                </div>
-                <span className="font-bold text-[#D9D9D9] text-green-600 mt-2">Set Up</span>
+                3
               </div>
+              <span className="font-bold text-green-600 mt-2">Set Up</span>
             </div>
           </div>
+        </div>
 
         {/* Main Content */}
         <div className="text-center max-w-md mx-auto w-full">
@@ -58,7 +70,7 @@ const SetUp = () => {
           <h2 className="text-[32px] font-bold mb-2 mt-2">Finish your Set Up!</h2>
           <p className="text-gray-600 mb-4">Finish your set-up to start exploring Binhi!</p>
 
-        {/* First Name & Last Name */}
+          {/* First Name & Last Name */}
           <div className="flex gap-4 mb-6">
             {/* First Name */}
             <div className="w-1/2">
@@ -85,7 +97,6 @@ const SetUp = () => {
             </div>
           </div>
 
-
           {/* Address Field */}
           <div className="text-left mb-4">
             <label className="block mb-1 font-bold text-gray-700">Address</label>
@@ -108,61 +119,91 @@ const SetUp = () => {
               </div>
             </button>
           </div>
-        {/* Checkbox for Default Address with Help Icon */}
-        <div className="flex items-start justify-start gap-2 mb-4 mt-4">
-          {/* Checkbox with Check Icon */}
-          <label className="relative flex items-center cursor-pointer mt-[2px]">
-            <input
-              type="checkbox"
-              defaultChecked
-              className="peer appearance-none w-5 h-5 rounded border border-[#4CAE4F] bg-white checked:bg-[#4CAE4F] checked:border-[#4CAE4F] transition"
-            />
-            {/* Check Icon */}
-            <svg
-              className="absolute left-[2px] top-[2px] w-4 h-4 text-white hidden peer-checked:block pointer-events-none"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={3}
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-            </svg>
-          </label>
 
-          {/* Label and Help Icon */}
-          <div className="flex items-center gap-2">
-            <span className="text-sm text-gray-700">Set as default address</span>
+          {/* Checkbox for Default Address with Help Icon */}
+          <div className="flex items-start justify-start gap-2 mb-4 mt-4">
+            {/* Checkbox with Check Icon */}
+            <label className="relative flex items-center cursor-pointer mt-[2px]">
+              <input
+                type="checkbox"
+                defaultChecked
+                className="peer appearance-none w-5 h-5 rounded border border-[#4CAE4F] bg-white checked:bg-[#4CAE4F] checked:border-[#4CAE4F] transition"
+              />
+              {/* Check Icon */}
+              <svg
+                className="absolute left-[2px] top-[2px] w-4 h-4 text-white hidden peer-checked:block pointer-events-none"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={3}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+              </svg>
+            </label>
 
-            <div className="relative group inline-block">
-            <img
-              src="/circle-help.png"
-              alt="Help Icon"
-              className="w-4 h-4 cursor-pointer"
-            />
+            {/* Label and Help Icon */}
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-gray-700">Set as default address</span>
 
-            {/* Tooltip (Left arrow, vertically centered) */}
-            <div className="absolute hidden group-hover:flex items-center left-full top-1/2 -translate-y-1/2 ml-4 z-50">
-              {/* Arrow pointing left and centered vertically */}
-              <div className="w-3 h-3 bg-white border-l border-b border-black transform rotate-45"></div>
+              <div className="relative group inline-block">
+                <img
+                  src="/circle-help.png"
+                  alt="Help Icon"
+                  className="w-4 h-4 cursor-pointer"
+                />
 
-              {/* Tooltip Box */}
-              <div className="bg-white border border-black text-black text-xs px-2 py-1 rounded-2xl shadow-lg text-center whitespace-nowrap max-w-[180px] ml-1">
-                The first address is your <br />default address.
+                {/* Tooltip (Left arrow, vertically centered) */}
+                <div className="absolute hidden group-hover:flex items-center left-full top-1/2 -translate-y-1/2 ml-4 z-50">
+                  {/* Arrow pointing left and centered vertically */}
+                  <div className="w-3 h-3 bg-white border-l border-b border-black transform rotate-45"></div>
+
+                  {/* Tooltip Box */}
+                  <div className="bg-white border border-black text-black text-xs px-2 py-1 rounded-2xl shadow-lg text-center whitespace-nowrap max-w-[180px] ml-1">
+                    The first address is your <br />default address.
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <button
-          className="w-[488px] h-[54px] mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
-          onClick={() => navigate("/home")}
-        >
-          Finish
-      </button>
-
+          <button
+            className="w-[488px] h-[54px] mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+            onClick={handleFinish}
+          >
+            Finish
+          </button>
         </div>
       </div>
+
+      {/* Success Modal */}
+      {showSuccess && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-lg p-6 w-[500px] shadow-xl">
+            <div className="flex flex-col items-center text-center">
+              <h3 className="text-lg font-bold mb-4">
+                Account Created Successfully
+              </h3>
+              <img
+                src="/Checkpass.png"
+                alt="Success"
+                className="w-16 h-16 mb-4"
+              />
+              <p className="text-sm text-gray-600 mb-3">
+                You have successfully created your account with the email <span className="font-medium">{email}</span>.
+              </p>
+              <p className="text-xs text-gray-500 mb-4">
+                You will be redirected to Login Page in 3 seconds.
+              </p>
+              <button 
+                className="w-full py-2 rounded-full bg-green-500 text-white shadow-md text-sm font-medium hover:bg-green-600 focus:outline-none"
+                onClick={() => navigate("/login")}
+              >
+                Okay
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
