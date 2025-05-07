@@ -190,17 +190,17 @@ const UserProfilePage = () => {
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <p className="text-sm font-medium text-gray-700">{order.sellerName}</p>
-                </div>
-
-                {/* Buttons: Chat and View Shop */}
-                <div className="flex items-left gap-2">
                   <button className="text-gray-500 text-sm font-medium px-3 py-2 rounded-full transition">
                     Click here to chat
                   </button>
                   <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-sm font-medium px-3 py-2 rounded-full transition">
                     <img src="/shopp.png" className="w-5 h-5" /> View Shop
                   </button>
-                  <span className={`inline-block mx-auto text-white text-sm text-center w-28 py-1 rounded-full ${
+                </div>
+
+                {/* Buttons: Chat and View Shop */}
+                <div className="flex items-left gap-2">
+                  <span className={`inline-block text-white text-sm text-center w-28 py-1 rounded-full ${
                   order.status === "Completed" ? "bg-[#4CAE4F]" :
                   order.status === "To Ship" ? "bg-[#D1A157]" :
                   "bg-gray-400" 
@@ -208,7 +208,10 @@ const UserProfilePage = () => {
                   {order.status}
                 </span>
                 </div>
-  </div>
+                </div>
+
+                <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
+
               <div className="flex gap-4 items-start w-full">
                 {/* Product image */}
                 <img
