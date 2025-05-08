@@ -45,7 +45,7 @@ function FederationSection() {
 
       {/* Tab Content */}
       {activeTab === "who" && (
-        <div className="flex flex-col md:flex-row items-center gap-6 mx-[80px] mt-[20px] bg-white p-6 border rounded-xl shadow-lg">
+        <div className="flex flex-col md:flex-row items-center gap-6 mx-[80px] mt-[10px] bg-white p-6 border rounded-xl shadow-lg">
           <img
             src="Farmers.png"
             alt="Farmers"
@@ -110,15 +110,38 @@ function FederationSection() {
       {activeTab === "support" && (
         <div className="mx-[80px] mt-[20px] bg-white p-6 border rounded-xl shadow-lg text-gray-700">
           <h3 className="text-2xl font-bold text-center mb-4">Help and our farmers to produce more quality products! </h3>
-          <p className="text-center mb-2">
-            Contact us with{" "}
-            <span className="text-blue-600 underline">support@bmffi.org</span>
+          <p className="text-center font-bold mb-2">
+            Contact us with:{" "}
+            {/* <span className="text-blue-600 underline">support@bmffi.org</span> */}
           </p>
-          <p className="text-center">
+
+           {/* Social Icons */}
+    <div className="flex justify-center gap-2 mb-4">
+      {/* Messenger */}
+      <div className="flex items-center gap-2">
+        <img src="/Messenger.png" alt="Messenger" className="w-6 h-6" />
+      </div>
+
+      {/* Facebook */}
+      <div className="flex items-center gap-2">
+        <img src="/fb.png" alt="Facebook" className="w-6 h-6" />
+      </div>
+
+      {/* WhatsApp */}
+      <div className="flex items-center gap-2">
+        <img src="/WhatsApp.png" alt="WhatsApp" className="w-6 h-6" />
+        <span className="text-sm font-medium">Jcell Castro</span>
+      </div>
+    </div>
+
+          <p className="flex justify-center gap-2 mb-2 font-bold mt-10">
             Donate us with:{" "}
-            <span className="font-semibold">(02) 1234-5678</span>
           </p>
-        </div>
+          <div className="flex justify-center items-center gap-2">
+        <img src="/qr code.png" alt="QR" className="w-15 h-15" />
+        <span className="text-sm font-bold">GCASH <br className="font-normal"/> 0928-7272-370</span>
+      </div>
+    </div>
       )}
 
       {/* Stats */}
