@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const SetUp = () => {
@@ -8,6 +8,100 @@ const SetUp = () => {
   const [lastName, setLastName] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [email, setEmail] = useState("user@example.com"); // You can get this from context, props, or localStorage
+  const [showAddressModal, setShowAddressModal] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("Region");
+  
+  // Selected address details
+  const [selectedRegion, setSelectedRegion] = useState("Metro Manila");
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedBarangay, setSelectedBarangay] = useState("");
+  const [completeAddress, setCompleteAddress] = useState("");
+// Address options
+const regions = ["Metro Manila", "Mindanao", "North Luzon", "South Luzon"];
+const provinces = {
+  "Metro Manila": ["NCR First District", "NCR Second District", "NCR Third District", "NCR Fourth District"],
+  "Mindanao": ["Davao", "Zamboanga", "Bukidnon", "Misamis Oriental"],
+  "North Luzon": ["Pangasinan", "Ilocos Norte", "Ilocos Sur", "La Union"],
+  "South Luzon": ["Rizal", "Batangas", "Cavite", "Laguna", "Quezon"] 
+};
+
+const cities = {
+  "NCR First District": ["Manila", "Caloocan", "Navotas", "Malabon"],
+  "NCR Second District": ["Quezon City", "San Juan", "Marikina", "Pasig"],
+  "Davao": ["Davao City", "Tagum", "Panabo", "Digos"],
+  "Pangasinan": ["Dagupan", "Alaminos", "San Carlos", "Urdaneta"],
+  "Batangas": ["Batangas City", "Lipa", "Tanauan", "Santo Tomas"],
+  "Rizal": ["Binangonan"] 
+};
+
+const barangays = {
+  "Manila": ["Binondo", "Ermita", "Intramuros", "Malate", "Quiapo"],
+  "Quezon City": ["Diliman", "Cubao", "Kamuning", "Novaliches", "Project 6"],
+  "Davao City": ["Poblacion", "Toril", "Buhangin", "Talomo", "Agdao"],
+  "Dagupan": ["Calmay", "Lucao", "Malued", "Tapuac", "Bonuan"],
+  "Batangas City": ["Alangilan", "Balagtas", "Kumintang", "Soro-soro", "Wawa"],
+  "Binangonan": ["Batingan", "Calumpang", "Darangan", "Mahabang Parang", "Pantok"]
+};
+
+
+  // Update complete address when selections change
+  useEffect(() => {
+    let address = [];
+    if (selectedBarangay) address.push(selectedBarangay);
+    if (selectedCity) address.push(selectedCity);
+    if (selectedProvince) address.push(selectedProvince);
+    if (selectedRegion) address.push(selectedRegion);
+    
+    setCompleteAddress(address.join(", "));
+  }, [selectedRegion, selectedProvince, selectedCity, selectedBarangay]);
+
+  // Function to handle tab progression
+  const progressToNextTab = (currentTab) => {
+    switch (currentTab) {
+      case "Region":
+        setSelectedTab("Province");
+        break;
+      case "Province":
+        setSelectedTab("City");
+        break;
+      case "City":
+        setSelectedTab("Barangay");
+        break;
+      case "Barangay":
+        setShowAddressModal(false);
+        break;
+      default:
+        break;
+    }
+  };
+
+  // Selection handlers
+  const handleRegionSelect = (region) => {
+    setSelectedRegion(region);
+    setSelectedProvince("");
+    setSelectedCity("");
+    setSelectedBarangay("");
+    progressToNextTab("Region");
+  };
+
+  const handleProvinceSelect = (province) => {
+    setSelectedProvince(province);
+    setSelectedCity("");
+    setSelectedBarangay("");
+    progressToNextTab("Province");
+  };
+
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+    setSelectedBarangay("");
+    progressToNextTab("City");
+  };
+
+  const handleBarangaySelect = (barangay) => {
+    setSelectedBarangay(barangay);
+    progressToNextTab("Barangay");
+  };
 
   // Handle finish button click
   const handleFinish = () => {
@@ -24,7 +118,7 @@ const SetUp = () => {
       className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4"
       style={{ backgroundImage: 'url("/background.jpg")' }}
     >
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative mt-10" style={{ marginTop: "5px" }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[780px] p-10 relative mt-10" style={{ marginTop: "5px" }}>
         {/* Back Button */}
         <button
           className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-black"
@@ -68,7 +162,7 @@ const SetUp = () => {
           <img src="/lock.png" alt="Setup Icon" className="mt-2 inline w-[55px] h-[56px]" />
 
           <h2 className="text-[32px] font-bold mb-2 mt-2">Finish your Set Up!</h2>
-          <p className="text-gray-600 mb-4">Finish your set-up to start exploring Binhi!</p>
+          <p className="text-gray-600 mb-4">Complete the set up to start exploring Binhi!</p>
 
           {/* First Name & Last Name */}
           <div className="flex gap-4 mb-6">
@@ -97,17 +191,147 @@ const SetUp = () => {
             </div>
           </div>
 
-          {/* Address Field */}
-          <div className="text-left mb-4">
+          {/* Address Field with Dropdown Arrow */}
+          <div className="text-left mb-4 relative">
             <label className="block mb-1 font-bold text-gray-700">Address</label>
-            <input
-              type="text"
-              className="input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg"
-              placeholder="Barangay, Purok, Street"
-            />
+            <div className="relative">
+              <input
+                type="text"
+                className="input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg pr-10"
+                placeholder="Barangay, Purok, Street"
+                readOnly
+                value={completeAddress}
+                onClick={() => setShowAddressModal(true)}
+              />
+              <button 
+                className="absolute right-4 top-1/2 transform -translate-y-1/2"
+                onClick={() => setShowAddressModal(true)}
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
+              </button>
+            </div>
           </div>
 
-          {/* Map + Add Location */}
+          {/* Address Modal with Green Border and Custom Scrollbar */}
+          {showAddressModal && (
+            <div className="mb-6 overflow-hidden rounded-lg border-2 border-green-500 absolute bg-white shadow-xl z-10 left-1/2 transform -translate-x-1/2 w-[450px]">
+              {/* Tabs with Green Background */}
+              <div className="flex bg-gray-100">
+                {["Region", "Province", "City", "Barangay"].map((tab) => (
+                  <button
+                    key={tab}
+                    className={`relative flex-1 py-2 px-2 text-sm font-medium ${
+                      selectedTab === tab ? "text-green-600" : "text-gray-700"
+                    }`}
+                    onClick={() => setSelectedTab(tab)}
+                  >
+                    {tab}
+                    {/* Green underline for active tab */}
+                    {selectedTab === tab && (
+                      <div className="absolute bottom-0 left-0 right-0 h-1 bg-green-500"></div>
+                    )}
+                  </button>
+                ))}
+              </div>
+              
+              {/* Tab Content with Custom Scrollbar */}
+              <div 
+                className="max-h-48 overflow-y-auto bg-white custom-scrollbar"
+                style={{
+                  scrollbarWidth: 'thin',
+                  scrollbarColor: '#4CAE4F transparent'
+                }}
+              >
+                <style jsx global>{`
+                  .custom-scrollbar::-webkit-scrollbar {
+                    width: 4px;
+                  }
+                  .custom-scrollbar::-webkit-scrollbar-track {
+                    background: transparent;
+                  }
+                  .custom-scrollbar::-webkit-scrollbar-thumb {
+                    background-color: #4CAE4F;
+                    border-radius: 20px;
+                  }
+                `}</style>
+                
+                {selectedTab === "Region" && (
+                  <div>
+                    {regions.map((region) => (
+                      <div 
+                        key={region} 
+                        className={`py-2 px-4 cursor-pointer text-left ${
+                          selectedRegion === region 
+                            ? "bg-green-50 text-green-700" 
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                        onClick={() => handleRegionSelect(region)}
+                      >
+                        {region}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {selectedTab === "Province" && (
+                  <div>
+                    {provinces[selectedRegion]?.map((province) => (
+                      <div 
+                        key={province} 
+                        className={`py-2 px-4 cursor-pointer text-left ${
+                          selectedProvince === province 
+                            ? "bg-green-50 text-green-700" 
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                        onClick={() => handleProvinceSelect(province)}
+                      >
+                        {province}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {selectedTab === "City" && (
+                  <div>
+                    {cities[selectedProvince]?.map((city) => (
+                      <div 
+                        key={city} 
+                        className={`py-2 px-4 cursor-pointer text-left ${
+                          selectedCity === city 
+                            ? "bg-green-50 text-green-700" 
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                        onClick={() => handleCitySelect(city)}
+                      >
+                        {city}
+                      </div>
+                    ))}
+                  </div>
+                )}
+                
+                {selectedTab === "Barangay" && (
+                  <div>
+                    {barangays[selectedCity]?.map((barangay) => (
+                      <div 
+                        key={barangay} 
+                        className={`py-2 px-4 cursor-pointer text-left ${
+                          selectedBarangay === barangay 
+                            ? "bg-green-50 text-green-700" 
+                            : "text-gray-700 hover:bg-gray-50"
+                        }`}
+                        onClick={() => handleBarangaySelect(barangay)}
+                      >
+                        {barangay}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        {/* Map + Add Location */}
           <div className="relative mb-4 w-full">
             <img src="/map.png" alt="Map" className="w-full h-20 object-cover rounded-full" />
             <button
@@ -167,7 +391,7 @@ const SetUp = () => {
           </div>
 
           <button
-            className="w-[488px] h-[54px] mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+            className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
             onClick={handleFinish}
           >
             Finish
