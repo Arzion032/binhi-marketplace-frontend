@@ -32,17 +32,39 @@ const OrderPage = () => {
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5] px-6 py-4">
       {/* Header */}
-      <div className="flex items-center gap-4 mb-4">
-        <button
-          className="text-gray-600 hover:text-black"
-          onClick={() => navigate("/")}
-        >
-          <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
-        </button>
-        <h1 className="text-3xl font-bold">Order History</h1>
-        
-      </div>
-      <div className="w-full h-[2px] bg-gray-300 mb-4" />
+      <div className="flex items-center justify-between gap-4 mb-4">
+  <div className="flex items-center gap-4">
+    <button
+      className="text-gray-600 hover:text-black"
+      onClick={() => navigate("/")}
+    >
+      <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
+    </button>
+
+    <div className="flex flex-col">
+      <h1 className="text-3xl font-bold">Order History</h1>
+      <p className="text-sm text-gray-600">View your recent and past orders here.</p>
+    </div>
+  </div>
+
+  <div className="flex items-center px-4">
+  <div className="flex items-center bg-white border-2 border-black rounded-full px-3 py-1 w-[600px] h-14">
+      <img src="/search.png" alt="Search" className="w-5 h-5 mx-4" />
+      <input
+        type="text"
+        placeholder="Search by Seller Name, Order ID, or Product Name"
+        className="flex-grow text-sm bg-white"
+      />
+      <button>
+        <img src="/mic.png" alt="Mic" className="w-5 h-5 hover:scale-110" />
+      </button>
+      <button>
+        <img src="/camera.png" alt="Camera" className="w-5 h-5 mx-4 hover:scale-110" />
+      </button>
+    </div>
+  </div>
+</div>
+      <div className="w-[1850px] items-center h-[3px] bg-gray-300 mb-6 mt-6" />
 
       {/* Order Section */}
       <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6 w-full">
