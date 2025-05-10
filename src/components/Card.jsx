@@ -1,7 +1,7 @@
-export const Card = ({ children }) => {
-    return (
-      <div className="p-6 rounded-lg bg-white shadow-md w-full">
-        {children}
-      </div>
-    );
-  };
+export const Card = ({ children, className }) => {
+  return (
+    <div className={`p-6 rounded-2xl bg-white shadow-md ${className}`}>
+      {children}
+    </div>
+  );
+};
