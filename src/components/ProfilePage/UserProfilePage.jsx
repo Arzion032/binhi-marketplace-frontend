@@ -31,38 +31,38 @@ const UserProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-[#F5F9F5]">
-      <div className="max-w-7xl mx-auto p-4 flex flex-col md:flex-row gap-6">
+      <div className="mx-10 p-4 flex flex-col md:flex-row gap-6">
 
         {/* Left Side */}
-        <div className="w-full md:w-1/3 space-y-4">
+        <div className="w-full md:w-1/2 space-y-4">
 
           {/* Back Button and Title - Moved above profile card */}
           <div className="flex items-center gap-4 mb-2">
             <button
               className="flex items-center text-gray-600 hover:text-black"
-              onClick={() => navigate("/")}
+              onClick={() => navigate("/landingpage")}
             >
               <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
             </button>
-            <p className="text-3xl font-bold">User Profile</p>
+            <p className="text-4xl font-bold">User Profile</p>
           </div>
 
           {/* Left - Profile Info */}
-          <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6 w-full md:w-full">
+          <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6 w-full md:w-full h-[950px]">
             <div className="flex flex-col items-center">
               <div className="relative">
                 <img 
                   src="333.png" 
                   alt="Profile" 
-                  className="w-24 h-24 rounded-full object-cover" 
+                  className="w-28 h-28 mt-5 rounded-full object-cover" 
                 />
                 <button className="absolute bottom-0 right-0 bg-white p-1 rounded-full shadow-lg">
-                  <img src="Edit.png" alt="edit" className="h-5 w-5" />
+                  <img src="Edit.png" alt="edit" className="h-8 w-8" />
                 </button>
               </div>
-              <h2 className="text-xl font-bold mt-4">Juan Dela Cruz</h2>
-              <p className="text-gray-500">Farmer</p>
-              <button className="mt-4 bg-[#4CAE4F] text-white px-4 py-2 rounded-full">Edit Profile</button>
+              <h2 className="text-3xl font-bold mt-4">Juan Dela Cruz</h2>
+              <p className="text-xl mt-4 text-500">Farmer</p>
+              <button className="text-xl mt-4 mb-8 bg-[#4CAE4F] text-white px-6 py-2 rounded-full">Edit Profile</button>
             </div>
 
             {/* Info Fields */}
@@ -76,11 +76,11 @@ const UserProfilePage = () => {
                 ];
                 return (
                   <div key={label}>
-                    <p className="text-[#858585] text-[15px] font-bold">{label}</p>
+                    <p className="text-[#858585] text-xl mb-2 font-bold">{label}</p>
                     <input
                       type={label === "Email" ? "email" : "text"}
                       placeholder={placeholders[idx]}
-                      className="text-[15px] w-full border-2 border-gray-300 rounded-full p-2"
+                      className="text-lg w-full border-2 border-gray-300 rounded-full p-4"
                     />
                   </div>
                 );
@@ -90,7 +90,7 @@ const UserProfilePage = () => {
         </div>
 
         {/* Right - Steps and Orders */}
-        <div className="w-full md:w-2/3 space-y-6 mt-12">
+        <div className="w-full md:w-3/2 ">
 
         {/* Steps Section */}
         <div className="p-6">
@@ -122,11 +122,11 @@ const UserProfilePage = () => {
               return (
                 <div key={index} className="flex items-center">
                   {/* Step content */}
-                  <div className="flex flex-col items-center text-center min-w-[150px]">
-                    <img src={imgSrc} alt={step} className="w-18 h-18 mb-2" />
-                    <p className="text-xs text-gray-500">Step {index + 1}</p>
-                    <p className="text-sm font-bold text-black">{step}</p>
-                    <p className={`text-xs ${statusColor}`}>{status}</p>
+                  <div className="flex flex-col items-center text-center">
+                    <img src={imgSrc} alt={step} className="w-[80px] h-[80px] mb-2" />
+                    <p className="text-md text-gray-500">Step {index + 1}</p>
+                    <p className="text-lg font-bold text-black">{step}</p>
+                    <p className={`text-md ${statusColor}`}>{status}</p>
                   </div>
 
                   {/* Line between steps */}
@@ -134,7 +134,7 @@ const UserProfilePage = () => {
                     <img
                       src={lineSrc}
                       alt="Step Line"
-                      className="w-[100px] h-[6px] mb-[60px]"
+                      className="w-[200px] h-[6px] mb-[110px]"
                     />
                   )}
                 </div>
@@ -143,16 +143,15 @@ const UserProfilePage = () => {
           </div>
         </div>
 
-
           {/* Orders Section */}
           <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6">
             <div className="flex justify-between items-start border-b pb-4 gap-4">
-              <div className="flex flex-wrap gap-8 flex-1">
+              <div className="flex flex-wrap gap-16 flex-1">
                 {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map(tab => (
                   <button
                     key={tab}
                     onClick={() => setSelectedTab(tab)}
-                    className={`text-sm px-4 py-1 rounded-full transition-all duration-200 ${
+                    className={`text-lg px-4 py-1 rounded-full transition-all duration-200 ${
                       selectedTab === tab 
                         ? "bg-[#4CAE4F] text-white font-semibold" 
                         : "text-gray-600 hover:text-green-600"
@@ -165,7 +164,7 @@ const UserProfilePage = () => {
 
               {/* Expand button */}
               <button
-                onClick={() => navigate('/orders')}
+                onClick={() => navigate('/orderhistory')}
                 className="text-gray-500 hover:text-black transition-colors shrink-0"
               >
                 <Expand size={20} />
@@ -234,13 +233,20 @@ const UserProfilePage = () => {
               
                 {order.price > 0 && (
                   <p className="text-base font-bold">₱{order.price.toFixed(2)}</p>
-                )}
+                )}        
               </div>
+              <div className="flex justify-end mt-5">
+                  <button
+                  onClick={() => navigate('/orderhistory')}
+                  className="w-[200px] hover:underline text-[#4CAE4F] font-bold py-2 px-6 rounded-full transition-all"
+                >
+                  View More
+                </button>
+                </div>
             </div>
-
                 ))
               )}
-            </div>
+          </div>
           </div>
         </div>
       </div>

@@ -13,7 +13,7 @@ import CreateNewPassword from "./components/Login/CreateNewPassword";
 import VerifyCode from "./components/Login/VerifyCode";
 import Marketplace from "./components/LandingPage/Marketplace";
 import UserProfilePage from "./components/ProfilePage/UserProfilePage";
-import OrdersPage from './components/ProfilePage/OrdersPage';
+import OrderHistory from './components/ProfilePage/OrdersHistory';
 import MainLayout from "./components/Layout/MainLayout";
 import OrderLayout from "./components/Layout/OrderLayout";
 
@@ -32,9 +32,9 @@ function App() {
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
         
         
-        <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
+        <Route path="/landingpage" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<OrderLayout><UserProfilePage/></OrderLayout>} />
-        <Route path="/orders" element={<OrderLayout><OrdersPage /></OrderLayout>} />
+        <Route path="/orderhistory" element={<OrderLayout><OrderHistory /></OrderLayout>} />
 
 
       </Routes>
