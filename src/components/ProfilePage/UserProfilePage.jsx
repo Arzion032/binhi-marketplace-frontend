@@ -125,7 +125,7 @@ const UserProfilePage = () => {
                   <div className="flex flex-col items-center text-center">
                     <img src={imgSrc} alt={step} className="w-[80px] h-[80px] mb-2" />
                     <p className="text-md text-gray-500">Step {index + 1}</p>
-                    <p className="text-lg font-bold text-black">{step}</p>
+                    <p className="text-xl font-bold text-black">{step}</p>
                     <p className={`text-md ${statusColor}`}>{status}</p>
                   </div>
 
@@ -145,13 +145,13 @@ const UserProfilePage = () => {
 
           {/* Orders Section */}
           <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6">
-            <div className="flex justify-between items-start border-b pb-4 gap-4">
+            <div className="flex justify-between items-start border-b pb-4 gap-3">
               <div className="flex flex-wrap gap-16 flex-1">
                 {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map(tab => (
                   <button
                     key={tab}
                     onClick={() => setSelectedTab(tab)}
-                    className={`text-lg px-4 py-1 rounded-full transition-all duration-200 ${
+                    className={`text-xl px-3 py-1 rounded-full transition-all duration-200 ${
                       selectedTab === tab 
                         ? "bg-[#4CAE4F] text-white font-semibold" 
                         : "text-gray-600 hover:text-green-600"
@@ -167,7 +167,6 @@ const UserProfilePage = () => {
                 onClick={() => navigate('/orderhistory')}
                 className="text-gray-500 hover:text-black transition-colors shrink-0"
               >
-                <Expand size={20} />
               </button>
             </div>
                 
@@ -189,17 +188,17 @@ const UserProfilePage = () => {
                     className="w-8 h-8 rounded-full object-cover"
                   />
                   <p className="text-sm font-medium text-gray-700">{order.sellerName}</p>
-                  <button className="text-gray-500 text-sm font-medium px-3 py-2 rounded-full transition">
+                  <button className="text-gray-500 text-base font-medium px-3 py-2 rounded-full transition">
                     Click here to chat
                   </button>
-                  <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-sm font-medium px-3 py-2 rounded-full transition">
+                  <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-lg font-medium px-3 py-2 rounded-full transition">
                     <img src="/shopp.png" className="w-5 h-5" /> View Shop
                   </button>
                 </div>
 
                 {/* Buttons: Chat and View Shop */}
                 <div className="flex items-left gap-2">
-                  <span className={`inline-block text-white text-sm text-center w-28 py-1 rounded-full ${
+                  <span className={`inline-block text-white text-base text-center w-28 px-2 py-2 rounded-full ${
                   order.status === "Completed" ? "bg-[#4CAE4F]" :
                   order.status === "To Ship" ? "bg-[#D1A157]" :
                   "bg-gray-400" 
@@ -222,8 +221,8 @@ const UserProfilePage = () => {
                 <div className="flex flex-col gap-2">
                   {/* Product name and quantity */}
                   <div>
-                    <p className="text-lg font-semibold">{order.name}</p>
-                    <p className="text-sm text-gray-500 mt-12">Quantity: {order.quantity}</p>
+                    <p className="text-2xl font-semibold">{order.name}</p>
+                    <p className="text-lg text-gray-500 mt-12">Quantity: {order.quantity}</p>
                   </div>
                 </div>
               </div>
@@ -232,13 +231,13 @@ const UserProfilePage = () => {
               <div className="text-right space-y-2">
               
                 {order.price > 0 && (
-                  <p className="text-base font-bold">₱{order.price.toFixed(2)}</p>
+                  <p className="text-xl font-bold">₱{order.price.toFixed(2)}</p>
                 )}        
               </div>
               <div className="flex justify-end mt-5">
                   <button
                   onClick={() => navigate('/orderhistory')}
-                  className="w-[200px] hover:underline text-[#4CAE4F] font-bold py-2 px-6 rounded-full transition-all"
+                  className="w-[200px] text-lg hover:underline text-[#4CAE4F] font-bold py-2 px-6 rounded-full transition-all"
                 >
                   View More
                 </button>
