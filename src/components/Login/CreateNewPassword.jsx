@@ -192,26 +192,25 @@ export default function CreateNewPassword() {
       {/* Success Modal */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-[500px] shadow-xl">
+          <div className="bg-white rounded-3xl p-11 w-[620px] h-[460px] shadow-xl">
             <div className="flex flex-col items-center text-center">
-              <h3 className="text-lg font-bold mb-4">
+              <h3 className="text-3xl font-bold mb-4">
                 Password Reset Successfully!
               </h3>
               <img
                 src="/Checkpass.png"
                 alt="Success"
-                className="w-16 h-16 mb-4"
+                className="w-18 h-18 mb-4"
               />
-              <p className="text-sm text-gray-600 mb-3">
+              <p className="text-base text-gray-600 mb-3">
                 You have successfully reset the password for the account with the email <span className="font-medium">{email}</span>.
-              </p>
-              <p className="text-xs text-gray-500 mb-4">
-                You will be redirected to Login Page in 3 seconds.
-              </p>
+              </p> <br/> <br/> 
+              <p className="text-sm text-gray-500 mb-4">
+                You will be redirected to Login Page in 3 <br/> seconds.
+              </p> 
               <button 
-                className="w-full py-2 rounded-full bg-green-500 text-white shadow-md text-sm font-medium
-                hover:bg-green-600 focus:outline-none"
-                onClick={() => navigate("/login")}
+            className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+            onClick={() => navigate("/login")}
               >
                 Okay
               </button>

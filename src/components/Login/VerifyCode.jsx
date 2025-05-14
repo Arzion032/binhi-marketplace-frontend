@@ -70,7 +70,7 @@ const VerifyCode = () => {
         </div>
 
         {/* Resend Text */}
-        <p className="text-center text-sm text-gray-400 mb-[336px]">
+        <p className="text-center text-sm text-gray-400 mb-[325px]">
           Didn’t receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
@@ -80,9 +80,9 @@ const VerifyCode = () => {
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          className="w-full py-2 rounded-full bg-green-500 text-white text-lg h-14
-        hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out"
-        >
+          className="w-full py-2 rounded-full bg-green-500 text-white shadow-lg text-lg h-14
+          hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out" 
+          >
           Next
         </button>
       </div>

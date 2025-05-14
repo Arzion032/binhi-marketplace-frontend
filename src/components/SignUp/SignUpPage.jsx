@@ -88,9 +88,8 @@ const SignUpPage = () => {
   <a href="#" className="text-green-600 font-bold text-xl">
     Click Here!
   </a>
-
-  {/* Help Icon with Hover Image */}
-  <div className="relative group inline-block">
+{/* Help Icon with Hover Image */}
+<div className="relative group inline-block">
   {/* Circle Help Icon */}
   <img
     src="/circle-help.png"
@@ -100,21 +99,16 @@ const SignUpPage = () => {
 
   {/* Custom Tooltip */}
   <div className="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 mt-2 z-50">
-  
-  {/* Arrow */}
-  <div className="w-3 h-3 bg-white border-t border-l border-black rotate-45 -mt-2"></div>
-  
-  {/* Tooltip Box */}
-  <div className="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center">
+    {/* Arrow */}
+    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-1 w-2 h-2 bg-white border-t border-l border-black rotate-45"></div>
 
-{/* Tooltip Box */}
-<div className="bg-white border border-black text-black text-sm px-4 py-2 rounded shadow-lg w-max text-center">
-  Sign up here if you’re part of the federation!
+    {/* Tooltip Box */}
+    <div className="bg-white border border-black text-black text-sm px-4 py-0 rounded-full shadow-lg w-max text-center">
+      Sign up here if you’re <br/>part of the federation!
+    </div>
+  </div>
 </div>
 
-</div>
-</div>
-</div>
 </Card>
 </div>
       </div>

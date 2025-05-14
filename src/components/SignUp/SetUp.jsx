@@ -118,7 +118,7 @@ const barangays = {
       className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4"
       style={{ backgroundImage: 'url("/background.jpg")' }}
     >
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[780px] p-10 relative mt-10" style={{ marginTop: "5px" }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[730px] p-10 relative mt-10" style={{ marginTop: "5px" }}>
         {/* Back Button */}
         <button
           className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-black"
@@ -131,7 +131,7 @@ const barangays = {
         <div className="flex justify-center mb-3">
           <div className="flex items-center gap-4">
             <div className="flex flex-col items-center">
-              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+              <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
                 1
               </div>
               <span className="text-green-600 mt-2">Verification</span>
@@ -140,7 +140,7 @@ const barangays = {
             <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
 
             <div className="flex flex-col items-center">
-              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg">
+              <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg">
                 2
               </div>
               <span className="text-green-600 mt-2">Password</span>
@@ -149,7 +149,7 @@ const barangays = {
             <img src="/dotfullgreen.png" alt="Step Flow" className="relative -top-3" />
 
             <div className="flex flex-col items-center">
-              <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
+              <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
                 3
               </div>
               <span className="font-bold text-green-600 mt-2">Set Up</span>
@@ -161,7 +161,7 @@ const barangays = {
         <div className="text-center max-w-md mx-auto w-full">
           <img src="/lock.png" alt="Setup Icon" className="mt-2 inline w-[55px] h-[56px]" />
 
-          <h2 className="text-[32px] font-bold mb-2 mt-2">Finish your Set Up!</h2>
+          <h2 className="text-3xl font-bold mb-2 mt-2">Finish your Set Up!</h2>
           <p className="text-gray-600 mb-4">Complete the set up to start exploring Binhi!</p>
 
           {/* First Name & Last Name */}
@@ -192,7 +192,7 @@ const barangays = {
           </div>
 
           {/* Address Field with Dropdown Arrow */}
-          <div className="text-left mb-4 relative">
+          <div className="text-left mb-1 relative">
             <label className="block mb-1 font-bold text-gray-700">Address</label>
             <div className="relative">
               <input
@@ -216,7 +216,7 @@ const barangays = {
 
           {/* Address Modal with Green Border and Custom Scrollbar */}
           {showAddressModal && (
-            <div className="mb-6 overflow-hidden rounded-lg border-2 border-green-500 absolute bg-white shadow-xl z-10 left-1/2 transform -translate-x-1/2 w-[450px]">
+            <div className="mb-6 overflow-hidden rounded-3xl border-2 border-green-500 absolute bg-white shadow-xl z-10 left-1/2 transform -translate-x-1/2 w-[450px]">
               {/* Tabs with Green Background */}
               <div className="flex bg-gray-100">
                 {["Region", "Province", "City", "Barangay"].map((tab) => (
@@ -402,25 +402,25 @@ const barangays = {
       {/* Success Modal */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg p-6 w-[500px] shadow-xl">
+          <div className="bg-white rounded-3xl p-11 w-[620px] h-[460px] shadow-xl">
             <div className="flex flex-col items-center text-center">
-              <h3 className="text-lg font-bold mb-4">
+              <h3 className="text-3xl font-bold mb-4">
                 Account Created Successfully
               </h3>
               <img
                 src="/Checkpass.png"
                 alt="Success"
-                className="w-16 h-16 mb-4"
+                className="w-18 h-18 mb-4"
               />
-              <p className="text-sm text-gray-600 mb-3">
-                You have successfully created your account with the email <span className="font-medium">{email}</span>.
-              </p>
-              <p className="text-xs text-gray-500 mb-4">
-                You will be redirected to Login Page in 3 seconds.
+              <p className="text-base text-gray-600 mb-3">
+                You have successfully created your account with <br/> the email <span className="font-medium">{email}</span>.
+              </p> <br/> <br/> 
+              <p className="text-sm text-gray-500 mb-4">
+                You will be redirected to Login Page in <br/> 3 seconds.
               </p>
               <button 
-                className="w-full py-2 rounded-full bg-green-500 text-white shadow-md text-sm font-medium hover:bg-green-600 focus:outline-none"
-                onClick={() => navigate("/login")}
+            className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+            onClick={() => navigate("/login")}
               >
                 Okay
               </button>

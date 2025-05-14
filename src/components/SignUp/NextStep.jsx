@@ -22,7 +22,7 @@ const NextStep = () => {
           <div className="flex items-center gap-4">
             {/* Step 1 - Active */}
             <div className="flex flex-col items-center">
-            <div className="font-bold text-[28px] bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
+            <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
             1
               </div>
               <span className="font-bold text-green-600 mt-2">Verification</span>
@@ -33,7 +33,7 @@ const NextStep = () => {
 
             {/* Step 2 - Inactive */}
             <div className="flex flex-col items-center">
-            <div className="font-bold text-[28px] text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+            <div className="font-bold text-3xl text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
             2
               </div>
               <span className="text-[#D9D9D9] mt-2">Password</span>
@@ -44,7 +44,7 @@ const NextStep = () => {
 
             {/* Step 3 - Inactive */}
             <div className="flex flex-col items-center">
-              <div className="font-bold text-[28px] text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+              <div className="font-bold text-3xl text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
                 3
               </div>
               <span className="text-[#D9D9D9] mt-2">Set Up</span>
@@ -59,8 +59,8 @@ const NextStep = () => {
             <img src="/lock-password-fill.png" alt="Lock Icon" className="inline w-[65px] h-[66px] " />
           </div>
 
-          <h2 className="text-[32px] font-bold">Enter Verification Code</h2>
-          <p className="text-[15px] text-gray-600 mb-5">
+          <h2 className="text-3xl font-bold">Enter Verification Code</h2>
+          <p className="text-base text-gray-600 mb-5">
             We have sent the code to <strong>juandelacruz@gmail.com</strong>
           </p>
 

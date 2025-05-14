@@ -4,6 +4,8 @@ import { Button } from "../Button";
 import { Card } from "../Card";
 import { Link } from "react-router-dom";
 
+//Fixed Font Sizing
+
 function LogInPage() {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -55,7 +57,7 @@ function LogInPage() {
 
                 <Link
                   to="/reset-password"
-                  className="text-[18px] text-left block mt-1 text-gray-600"
+                  className="text-lg text-left block mt-1 text-gray-600"
                 >
                   Forgot Password?
                 </Link>
