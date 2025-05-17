@@ -27,11 +27,8 @@ function App() {
         <Route path="/reset-password" element={<InitialLayout><ResetPassword /></InitialLayout>} />
         <Route path="/create-new-password" element={<InitialLayout><CreateNewPassword /></InitialLayout>} />
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
-        
-        
         <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
-
 
       </Routes>
     </Router>
