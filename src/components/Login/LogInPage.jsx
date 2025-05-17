@@ -5,7 +5,10 @@ import { Card } from "../Card";
 import { Link } from "react-router-dom";
 
 //Fixed Font Sizing
+//kakaiba to melvin waahhhhh
 
+
+//miss ko siya
 function LogInPage() {
   const [showPassword, setShowPassword] = useState(false);
 
