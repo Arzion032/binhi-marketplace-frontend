@@ -1,7 +1,6 @@
 import React, { useState } from 'react'; 
-import { useNavigate } from 'react-router-dom';
 
-/*Cart Page poo */
+/*Cart Page pooo */
 
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([
