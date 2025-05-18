@@ -32,7 +32,7 @@ function App() {
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
         
         
-        <Route path="/landingpage" element={<MainLayout><Marketplace/></MainLayout>} />
+        <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<OrderLayout><UserProfilePage/></OrderLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory /></OrderLayout>} />
 
