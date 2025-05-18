@@ -16,7 +16,7 @@ import UserProfilePage from "./components/ProfilePage/UserProfilePage";
 import OrderHistory from './components/ProfilePage/OrdersHistory';
 import MainLayout from "./components/Layout/MainLayout";
 import OrderLayout from "./components/Layout/OrderLayout";
-
+import CartPage from "./components/Cart/CartPage";
 
 function App() {
   return (
@@ -32,10 +32,10 @@ function App() {
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
         
         
-        <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
-        <Route path="/userprofile" element={<OrderLayout><UserProfilePage/></OrderLayout>} />
-        <Route path="/orderhistory" element={<OrderLayout><OrderHistory /></OrderLayout>} />
-
+        <Route path="/landingpage" element={<MainLayout><Marketplace/></MainLayout>} />
+        <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
+        <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
+        <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
 
       </Routes>
     </Router>
