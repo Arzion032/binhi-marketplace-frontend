@@ -1,6 +1,8 @@
 import React, { useState } from 'react'; 
 import { useNavigate } from 'react-router-dom';
 
+/*Cart Page poo */
+
 const CartPage = () => {
   const [cartItems, setCartItems] = useState([
     {
@@ -97,7 +99,17 @@ const CartPage = () => {
     </div>
   </div>
       </div>
-      
+      <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
+      <thead>
+                <tr className="text-left border-b-2">
+                  <th className="px-2">Select</th>
+                  <th>Items</th>
+                  <th>Name</th>
+                  <th>Quantity</th>
+                  <th>Price</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
       {/* Cart Section */}
       <div className="flex flex-col lg:flex-row gap-8">
         <div className="flex-1">
@@ -124,16 +136,7 @@ const CartPage = () => {
             </div>
 
             <table className="w-full table-auto">
-              <thead>
-                <tr className="text-left border-b-2">
-                  <th className="px-2">Select</th>
-                  <th>Items</th>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
+      
               <tbody>
                 {cartItems.map(item => (
                   <tr key={item.id} className="border-b hover:bg-gray-50">
