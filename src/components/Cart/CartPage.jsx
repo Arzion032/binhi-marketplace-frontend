@@ -1,9 +1,7 @@
-import React, { useState } from 'react'; 
-
-/*Cart Page pooo */
-
+import React, { useState } from 'react';
+/*pahguuuuhd*/
 const CartPage = () => {
-  const [cartItems, setCartItems] = useState([
+  const initialItems = [
     {
       id: 1,
       name: "Freshly Home Made Butter with Chocolate Inside",
@@ -26,19 +24,12 @@ const CartPage = () => {
       seller: "Vinas Family",
       image: "Butter.png",
       quantity: 1,
-      price: 53.0,
+      price: 85.0,
     },
-    {
-      id: 4,
-      name: "Freshly Home Made Butter with Chocolate Inside",
-      seller: "Vinas Family",
-      image: "Butter.png",
-      quantity: 1,
-      price: 32.0,
-    },
-  ]);
+  ];
 
-  const [selectedItems, setSelectedItems] = useState([]);
+  const [cartItems, setCartItems] = useState(initialItems);
+  const [selectedItems, setSelectedItems] = useState(initialItems.map(item => item.id));
 
   const handleQuantityChange = (id, amount) => {
     setCartItems(prev =>
@@ -65,160 +56,114 @@ const CartPage = () => {
 
   const selectedCartItems = cartItems.filter(item => selectedItems.includes(item.id));
   const subtotal = selectedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
-  const discount = selectedCartItems.length > 0 ? 53 : 0;
-  const tax = selectedCartItems.length > 0 ? 999 : 0;
+  const discount = 53;
+  const tax = 999;
   const total = subtotal - discount + tax;
 
   return (
-    <div className="min-h-screen w-full bg-[#F5F9F5] px-6 py-4">
-      {/* Header */}
-      <div className="flex mx-10 items-center justify-between gap-4 mb-4">
-      <div className="flex items-center gap-4">
+    <div className="min-h-screen bg-[#F5F9F5] p-4 lg:p-10">
+      <h1 className="text-4xl font-bold mb-2">Your Cart ({cartItems.length})</h1>
+      <p className="text-gray-600 mb-6">You have {cartItems.length} items in your cart, check out now!</p>
 
-      <div className="flex flex-col">
-        <h1 className="text-4xl font-bold">Your Cart ({cartItems.length})</h1>
-        <p className="text-gray-600">You have {cartItems.length} items in your cart, check out now!</p>
-      </div>
-      </div>
+      <div className="flex flex-col lg:flex-row gap-6">
+        <div className="w-full lg:w-2/3 space-y-6">
 
-      <div className="flex items-center px-4">
-  <div className="flex items-center bg-white border-2 border-black rounded-full px-3 py-1 w-[600px] h-14">
-      <img src="/search.png" alt="Search" className="w-5 h-5 mx-4" />
-      <input
-        type="text"
-        placeholder="Search by Seller Name, Order ID, or Product Name"
-        className="flex-grow text-sm bg-white"
-      />
-      <button>
-        <img src="/mic.png" alt="Mic" className="w-5 h-5 hover:scale-110" />
-      </button>
-      <button>
-        <img src="/camera.png" alt="Camera" className="w-5 h-5 mx-4 hover:scale-110" />
-      </button>
-    </div>
-  </div>
-      </div>
-      <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
-      <thead>
-                <tr className="text-left border-b-2">
-                  <th className="px-2">Select</th>
-                  <th>Items</th>
-                  <th>Name</th>
-                  <th>Quantity</th>
-                  <th>Price</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-      {/* Cart Section */}
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="flex-1">
-          {/* Cart Items */}
-          <div className="bg-white border rounded-lg shadow-md p-6 mb-10">
-            <div className="flex items-center gap-2 mb-4">
-              <input
-                type="checkbox"
-                checked={allSelected}
-                onChange={toggleSelectAll}
-              />
-              <img
-                src={"/avatar.png"}
-                alt="Seller"
-                className="w-8 h-8 rounded-full object-cover"
-              />
-              <p className="text-sm font-medium text-gray-700">Vinas Family</p>
-              <button className="text-gray-500 text-base font-medium px-3 py-2 rounded-full transition">
-                Click here to chat
-              </button>
+          <div className="flex px-6 py-4 bg-white rounded-full font-semibold border-2 text-xl">
+            <div className="w-2/12">ITEMS</div>
+            <div className="w-4/12">NAME</div>
+            <div className="w-2/12 text-center">QUANTITY</div>
+            <div className="w-2/12 text-center">PRICE</div>
+            <div className="w-2/12 text-center">ACTION</div>
+          </div>
+
+          <div className="bg-white p-4 rounded-2xl shadow border space-y-4">
+            <div className="flex items-center gap-2">
+              <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} />
+              <img src="avatar.png" alt="Seller" className="w-8 h-8 rounded-full" />
+              <p className="text-lg font-medium">Vinas Family</p>
+              <button className="text-xs text-gray-500 underline">Click here to chat</button>
               <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-lg font-medium px-3 py-2 rounded-full transition">
-                <img src="/shopp.png" className="w-5 h-5" /> View Shop
-              </button>
+                        <img src="/shopp.png" className="w-5 h-5" /> View Shop
+                      </button>
             </div>
 
-            <table className="w-full table-auto">
-      
-              <tbody>
-                {cartItems.map(item => (
-                  <tr key={item.id} className="border-b hover:bg-gray-50">
-                    <td className="px-2">
-                      <input
-                        type="checkbox"
-                        checked={selectedItems.includes(item.id)}
-                        onChange={() => {
-                          if (selectedItems.includes(item.id)) {
-                            setSelectedItems(prev => prev.filter(id => id !== item.id));
-                          } else {
-                            setSelectedItems(prev => [...prev, item.id]);
-                          }
-                        }}
-                      />
-                    </td>
-                    <td className="py-4">
-                      <img src={item.image} alt={item.name} className="w-20 h-20 rounded-lg" />
-                    </td>
-                    <td>
-                      <p className="font-semibold">{item.name}</p>
-                      <p className="text-sm text-gray-500">{item.seller}</p>
-                    </td>
-                    <td>
-                      <div className="flex items-center gap-2">
-                        <button onClick={() => handleQuantityChange(item.id, -1)} className="px-2 py-1 border rounded">-</button>
-                        <span>{item.quantity}</span>
-                        <button onClick={() => handleQuantityChange(item.id, 1)} className="px-2 py-1 border rounded">+</button>
-                      </div>
-                    </td>
-                    <td>₱{(item.price * item.quantity).toFixed(2)}</td>
-                    <td>
-                      <button onClick={() => handleDelete(item.id)} className="text-red-500 hover:underline">Delete</button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            {cartItems.map(item => (
+              <div key={item.id} className="flex items-center border-t pt-4 gap-4">
+                <input
+                  type="checkbox"
+                  checked={selectedItems.includes(item.id)}
+                  onChange={() => {
+                    setSelectedItems(prev =>
+                      prev.includes(item.id)
+                        ? prev.filter(id => id !== item.id)
+                        : [...prev, item.id]
+                    );
+                  }}
+                />
+                <img src={item.image} alt={item.name} className="w-20 h-20 rounded-lg" />
+                <div className="flex-1">
+                  <p className="font-bold text-lg">{item.name}</p>
+                  <p className="text-lg text-gray-500">{item.seller}</p>
+                </div>
+                <div className="flex items-center gap-2 mx-8">
+                  <button onClick={() => handleQuantityChange(item.id, -1)} className="px-2 text-lg bg-gray-200 rounded">-</button>
+                  <span>{item.quantity}</span>
+                  <button onClick={() => handleQuantityChange(item.id, 1)} className="px-2 text-lg text-white bg-[#4CAE4F] rounded">+</button>
+                </div>
+                <div className="w-24 text-lg text-center font-bold mx-8">₱{(item.price * item.quantity).toFixed(2)}</div>
+                <button onClick={() => handleDelete(item.id)} className="text-red-600 mx-8">
+                <img src="trash.png" alt="Delete" className="w-6 h-6 mx-10" />
+              </button>
+              </div>
+            ))}
 
-            <div className="text-right mt-6">
-              <button onClick={() => setCartItems([])} className="text-red-500 hover:underline">Delete All</button>
+            <div className="flex items-center justify-between border-t pt-4 text-sm">
+              <p className="font-bold">SELECT ALL ITEMS</p>
+              <button onClick={() => { setCartItems([]); setSelectedItems([]); }}>
+              <img src="trash.png" alt="Delete" className="w-6 h-6" />
+              </button>
             </div>
           </div>
         </div>
 
-        {/* Order Summary */}
-        <div className="bg-white border rounded-lg shadow-md p-6 w-full max-w-md">
-          <h2 className="text-xl font-bold mb-4">Order Summary</h2>
-
-          <div className="mb-4">
-            <input
-              type="text"
-              placeholder="Add Promo Code"
-              className="w-full border px-3 py-2 rounded-md"
-            />
+        <div className="w-full lg:w-1/3 bg-white p-6 rounded-2xl shadow border-2">
+          <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
+          <div className="w-[550px] items-center h-[1px] bg-black mb-4" />
+          <div className="flex mb-4 rounded overflow-hidden">
+            <input className="flex-grow px-3 py-2" placeholder="Add Promo Code" />
+            <button className="px-2 border-2 border-black rounded-full text-sm font-medium">Apply</button>
           </div>
+          <div className="w-[550px] items-center h-[1px] bg-black mb-4" />
 
-          <div className="space-y-2 text-lg">
+
+          <div className="space-y-2 text-xl">
             <div className="flex justify-between">
               <p>Subtotal</p>
-              <p>₱{subtotal.toFixed(2)}</p>
+              <p className="text-[#4CAE4F]">₱{subtotal.toFixed(0)}</p>
             </div>
             <div className="flex justify-between">
               <p>Discount</p>
-              <p>₱{discount.toFixed(2)}</p>
+              <p className="text-[#4CAE4F]">₱{discount.toFixed(0)}</p>
             </div>
             <div className="flex justify-between">
               <p>Tax</p>
-              <p>₱{tax.toFixed(2)}</p>
+              <p className="text-[#4CAE4F]">₱{tax.toFixed(0)}</p>
             </div>
-            <div className="flex justify-between font-bold text-lg mt-2">
+            <div className="flex justify-between font-bold text-2xl pt-2 border-t mt-10 ">
               <p>Total</p>
-              <p>₱{total.toFixed(2)}</p>
+              <p className="text-[#4CAE4F] border border-[#4CAE4F] rounded-full p-2">₱{total.toFixed(0)}</p>
             </div>
           </div>
 
-          <button className="mt-6 w-full bg-[#4CAE4F] hover:bg-green-700 text-white font-semibold py-2 px-4 rounded-full">
+          <button
+            disabled={selectedCartItems.length === 0}
+            className={`mt-6 w-full py-2 px-4 rounded-full text-white font-semibold ${selectedCartItems.length === 0 ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}`}
+          >
             Buy Now ({selectedCartItems.length})
           </button>
         </div>
       </div>
     </div>
-
   );
 };
 
