@@ -29,7 +29,6 @@ function App() {
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
         <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
-
       </Routes>
     </Router>
   );
