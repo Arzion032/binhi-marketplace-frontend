@@ -15,6 +15,7 @@ import Marketplace from "./components/LandingPage/Marketplace";
 import UserProfilePage from "./components/ProfilePage/UserProfilePage";
 import MainLayout from "./components/Layout/MainLayout";
 import ProductDetails from "./components/LandingPage/ProductDetails";
+
 function App() {
   return (
     <Router>
@@ -27,9 +28,10 @@ function App() {
         <Route path="/reset-password" element={<InitialLayout><ResetPassword /></InitialLayout>} />
         <Route path="/create-new-password" element={<InitialLayout><CreateNewPassword /></InitialLayout>} />
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
-        <Route path="/product-details/:id" element={<ProductDetails />} />
+        <Route path="/product/:productId" element={<MainLayout><ProductDetails /></MainLayout>} />
         <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
+        
 
 
       </Routes>
