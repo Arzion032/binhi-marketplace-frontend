@@ -151,7 +151,7 @@ const CartPage = () => {
             </div>
             <div className="flex justify-between font-bold text-2xl pt-2 border-t mt-10 ">
               <p>Total</p>
-              <p className="text-[#4CAE4F] border border-[#4CAE4F] rounded-full p-2">₱{total.toFixed(0)}</p>
+              <p className="text-[#4CAE4F] rounded-full p-2">₱{total.toFixed(0)}</p>
             </div>
           </div>
 

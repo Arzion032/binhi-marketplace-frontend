@@ -36,6 +36,8 @@ function App() {
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
+        <Route path="/chatpage" element={<ChatPage />} />
+
 
       </Routes>
     </Router>
