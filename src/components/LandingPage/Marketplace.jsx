@@ -2,6 +2,8 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FederationSection from './FederationSection';
 
+      {/*comment, miii */}
+
 const Marketplace = () => {
   const navigate = useNavigate();
 
@@ -35,6 +37,7 @@ const Marketplace = () => {
                 alt="Farmers"
                 className="w-full bottom-[-60px] h-auto max-w-[520px] rounded-none"
               />
+
             </div>
           </div>
         </section>
@@ -300,6 +303,7 @@ const Marketplace = () => {
       </section>
 
       {/*Federation Section, miii*/}
+
       <section>
         <h1 className="bg-white border-2 border-gray text-[36px] text-center font-bold shadow-xl p-2">
           KNOW MORE ABOUT <span className="text-[#4CAE4F]"> OUR FEDERATION</span>!
@@ -390,6 +394,7 @@ const Marketplace = () => {
           </div>
         </div>
       </footer>
+
       <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
         Binhi 2024, All Rights Reserved.
       </div>

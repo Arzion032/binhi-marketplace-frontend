@@ -1,7 +1,5 @@
-  // Checkers - Melvin
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
 import SignUpPage from "./components/SignUp/SignUpPage";
 import NextStep from "./components/SignUp/NextStep";
 import SetPassword from "./components/SignUp/SetPassword";
@@ -13,8 +11,12 @@ import CreateNewPassword from "./components/Login/CreateNewPassword";
 import VerifyCode from "./components/Login/VerifyCode";
 import Marketplace from "./components/LandingPage/Marketplace";
 import UserProfilePage from "./components/ProfilePage/UserProfilePage";
+import OrderHistory from './components/ProfilePage/OrdersHistory';
 import MainLayout from "./components/Layout/MainLayout";
 import ProductDetails from "./components/LandingPage/ProductDetails";
+import OrderLayout from "./components/Layout/OrderLayout";
+import CartPage from "./components/Cart/CartPage";
+
 
 function App() {
   return (
@@ -31,9 +33,10 @@ function App() {
         <Route path="/product/:productId" element={<MainLayout><ProductDetails /></MainLayout>} />
         <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
-        
-
-
+        <Route path="/landingpage" element={<MainLayout><Marketplace/></MainLayout>} />
+        <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
+        <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
+        <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
       </Routes>
     </Router>
   );
