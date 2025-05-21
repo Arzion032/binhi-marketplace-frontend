@@ -10,7 +10,7 @@ export default function CreateNewPassword() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const email = location.state?.email || "your email"; // ✅ fallback
+  const email = location.state?.email || "your email"; // fallback
 
   const isPasswordValid =
     /[A-Z]/.test(password) &&
@@ -37,8 +37,11 @@ export default function CreateNewPassword() {
       className="min-h-screen flex items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: "url('/your-background.jpg')" }}
     >
-        <div className="bg-white rounded-3xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
-      <button
+      <div
+        className="bg-white rounded-3xl shadow-2xl p-10"
+        style={{ width: "576px", height: "731px" }}
+      >
+        <button
           onClick={() => navigate("/")}
           className="flex items-center gap-1 text-sm text-black mb-4"
         >
@@ -49,7 +52,7 @@ export default function CreateNewPassword() {
           Create New Password
         </h2>
         <p className="text-md text-center text-gray-600 mt-1 mb-3">
-        Create your new password for <br />
+          Create your new password for <br />
           <span className="text-black font-medium">{email}</span>.
         </p>
 
@@ -68,9 +71,17 @@ export default function CreateNewPassword() {
             onClick={() => setShowPassword(!showPassword)}
           >
             {showPassword ? (
-              <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
+              <img
+                src="/eye-open.png"
+                alt="Hide password"
+                className="w-[28px] h-[22px]"
+              />
             ) : (
-              <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
+              <img
+                src="/eye-closed.png"
+                alt="Show password"
+                className="w-[28px] h-[22px]"
+              />
             )}
           </div>
         </div>
@@ -90,60 +101,119 @@ export default function CreateNewPassword() {
             onClick={() => setShowConfirmPassword(!showConfirmPassword)}
           >
             {showConfirmPassword ? (
-              <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
+              <img
+                src="/eye-open.png"
+                alt="Hide password"
+                className="w-[28px] h-[22px]"
+              />
             ) : (
-              <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
+              <img
+                src="/eye-closed.png"
+                alt="Show password"
+                className="w-[28px] h-[22px]"
+              />
             )}
           </div>
         </div>
 
+        {/* Password Requirements */}
         <div className="text-md text-gray-600 mb-[25px]">
-  <p className="font-medium mb-2">Password must contain:</p>
+          <p className="font-medium mb-2">Your Password must contain..</p>
 
-  <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${password.length >= 8 ? "text-green-600" : "text-gray-400"}`}>
-    <img src={password.length >= 8 ? "/check.png" : "/wrong.png"} alt="check" className="h-3 w-3" />
-    <span>Minimum of 8 characters</span>
-  </div>
+          <div
+            className={`flex items-center gap-2 text-sm font-medium mb-1 ${
+              password.length >= 8 ? "text-green-600" : "text-red-500"
+            }`}
+          >
+            <img
+              src={password.length >= 8 ? "/check.png" : "/wrong.png"}
+              alt="check"
+              className="h-3 w-3"
+            />
+            <span>Minimum of 8 characters</span>
+          </div>
 
-  <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${/[A-Z]/.test(password) && /[a-z]/.test(password) ? "text-green-600" : "text-gray-400"}`}>
-    <img src={/[A-Z]/.test(password) && /[a-z]/.test(password) ? "/check.png" : "/wrong.png"} alt="check" className="h-3 w-3" />
-    <span>At least 1 lower and upper case letters (AaBb)</span>
-  </div>
+          <div
+            className={`flex items-center gap-2 text-sm font-medium mb-1 ${
+              /[A-Z]/.test(password) && /[a-z]/.test(password)
+                ? "text-green-600"
+                : "text-red-500"
+            }`}
+          >
+            <img
+              src={
+                /[A-Z]/.test(password) && /[a-z]/.test(password)
+                  ? "/check.png"
+                  : "/wrong.png"
+              }
+              alt="check"
+              className="h-3 w-3"
+            />
+            <span>At least 1 lower and upper case letters (AaBb)</span>
+          </div>
 
-  <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${/[^A-Za-z0-9]/.test(password) ? "text-green-600" : "text-gray-400"}`}>
-    <img src={/[^A-Za-z0-9]/.test(password) ? "/check.png" : "/wrong.png"} alt="check" className="h-3 w-3" />
-    <span>At least 1 symbol (@#$)</span>
-  </div>
+          <div
+            className={`flex items-center gap-2 text-sm font-medium mb-1 ${
+              /[^A-Za-z0-9]/.test(password)
+                ? "text-green-600"
+                : "text-red-500"
+            }`}
+          >
+            <img
+              src={
+                /[^A-Za-z0-9]/.test(password) ? "/check.png" : "/wrong.png"
+              }
+              alt="check"
+              className="h-3 w-3"
+            />
+            <span>At least 1 symbol (@#$)</span>
+          </div>
 
-  <div className={`flex items-center gap-2 text-sm font-medium ${/\d/.test(password) ? "text-green-600" : "text-gray-400"}`}>
-    <img src={/\d/.test(password) ? "/check.png" : "/wrong.png"} alt="check" className="h-3 w-3" />
-    <span>At least 1 number (123)</span>
-  </div>
-</div>
+          <div
+            className={`flex items-center gap-2 text-sm font-medium ${
+              /\d/.test(password) ? "text-green-600" : "text-red-500"
+            }`}
+          >
+            <img
+              src={/\d/.test(password) ? "/check.png" : "/wrong.png"}
+              alt="check"
+              className="h-3 w-3"
+            />
+            <span>At least 1 number (123)</span>
+          </div>
+        </div>
 
-
-    <div className="mt-[100px]">
-        <Button>
-             Next
-         </Button>
+        {/* Next Button */}
+        <div className="mt-[100px]">
+          <Button onClick={handleNext}>Next</Button>
+        </div>
       </div>
-      </div>
+
+      {/* Success Modal */}
       {showSuccess && (
-        <div className="fixed inset-0 bg-black bg-opacity-30 flex items-center justify-center z-50">
-          <div className="modal-box text-center">
-            <h3 className="font-bold text-lg mb-4">Password Reset Successfully!</h3>
-            <div className="flex justify-center mb-4">
-              <div className="bg-green-500 rounded-full p-3">
-                <svg
-                  className="w-8 h-8 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  viewBox="0 0 24 24"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-3xl p-11 w-[620px] h-[460px] shadow-xl">
+            <div className="flex flex-col items-center text-center">
+              <h3 className="text-3xl font-bold mb-4">
+                Password Reset Successfully!
+              </h3>
+              <img
+                src="/Checkpass.png"
+                alt="Success"
+                className="w-18 h-18 mb-4"
+              />
+              <p className="text-base text-gray-600 mb-3">
+                You have successfully reset the password for the account with the email <span className="font-medium">{email}</span>.
+              </p> <br/> <br/> 
+              <p className="text-sm text-gray-500 mb-4">
+                You will be redirected to Login Page in 3 <br/> seconds.
+              </p> 
+              <button 
+            className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+            onClick={() => navigate("/login")}
+              >
+                Okay
+              </button>
             </div>
           </div>
         </div>

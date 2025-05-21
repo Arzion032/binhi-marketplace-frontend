@@ -36,8 +36,8 @@ const ResetPassword = () => {
         </div>
 
         <div className="mt-[352px]">
-          <button className="w-full py-2 rounded-full bg-green-600 text-white shadow-lg text-lg h-14
-          hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out" 
+          <button className="w-full py-2 rounded-full bg-green-500 text-white shadow-lg text-lg h-14
+          hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out" 
           onClick={handleNext}>
             Next
           </button>

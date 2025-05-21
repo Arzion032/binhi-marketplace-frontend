@@ -1,18 +1,23 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+const daisyui = require("daisyui");
+
+module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,ts,jsx,tsx}"
+    "./src/**/*.{js,ts,jsx,tsx}",
   ],
   theme: {
     extend: {
       fontFamily: {
         inter: ['Inter', 'sans-serif'],
       },
+      colors: {
+        gold: '#D1A157',
+      },
     },
   },
-  plugins: [require("daisyui")],
+  plugins: [daisyui],
   daisyui: {
-    themes: ["light"], 
+    themes: ["light"],
   },
-}
+};
