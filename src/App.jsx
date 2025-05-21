@@ -16,6 +16,7 @@ import MainLayout from "./components/Layout/MainLayout";
 import ProductDetails from "./components/LandingPage/ProductDetails";
 import OrderLayout from "./components/Layout/OrderLayout";
 import CartPage from "./components/Cart/CartPage";
+import ChatPage from "./components/Chat/ChatPage";
 
 
 function App() {
@@ -37,6 +38,8 @@ function App() {
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
+        <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
+
 
       </Routes>
     </Router>

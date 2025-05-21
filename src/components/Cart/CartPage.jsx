@@ -81,7 +81,8 @@ const CartPage = () => {
               <input type="checkbox" checked={allSelected} onChange={toggleSelectAll} />
               <img src="avatar.png" alt="Seller" className="w-8 h-8 rounded-full" />
               <p className="text-lg font-medium">Vinas Family</p>
-              <button className="text-xs text-gray-500 underline">Click here to chat</button>
+              <Link to="/ChatPage">
+              <button className="text-xs text-gray-500 underline">Click here to chat</button></Link>
               <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-lg font-medium px-3 py-2 rounded-full transition">
                         <img src="/shopp.png" className="w-5 h-5" /> View Shop
                       </button>
