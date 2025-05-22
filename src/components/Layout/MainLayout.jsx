@@ -13,7 +13,7 @@ const MainLayout = ({ children }) => {
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center z-20"
-        style={{ backgroundImage: "url('background.jpg')" }}
+        
       ></div>
 
       {/* Main Content */}

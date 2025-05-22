@@ -2,13 +2,13 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import FederationSection from './FederationSection';
 
-      {/*comment, miii */}
-
+//Added Product Details
+//batman hello
 const Marketplace = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full bg-white">
       <div className="bg-[#F5F9F5] shadow-lg">  
 
         {/*Landing Section */}
@@ -37,7 +37,6 @@ const Marketplace = () => {
                 alt="Farmers"
                 className="w-full bottom-[-60px] h-auto max-w-[520px] rounded-none"
               />
-
             </div>
           </div>
         </section>
@@ -303,24 +302,13 @@ const Marketplace = () => {
       </section>
 
       {/*Federation Section, miii*/}
-
       <section>
-        <h1 className="bg-white border-2 border-gray text-[36px] text-center font-bold shadow-xl p-2">
-          KNOW MORE ABOUT <span className="text-[#4CAE4F]"> OUR FEDERATION</span>!
-        </h1>  
-        <div className="flex justify-center items-center bg-white border-gray shadow-lg">
-          <div className="flex justify-center items-center gap-4 p-4 bg-white">
-            <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white gap-4">Who are we?</button>
-            <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white">Frequent Questions</button>
-            <button className="bg-[#4CAE4F] rounded-full px-3 py-2 text-white">Help & Support</button>
-          </div>
-        </div>
         <container className="bg-white h-[20px]"></container>
       </section>
       <FederationSection/>
 
       {/*Counts*/}
-      <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
+<section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
           <div className="px-4 py-4">
             <h2 className="text-[70px] font-semibold">546+</h2>
@@ -394,7 +382,6 @@ const Marketplace = () => {
           </div>
         </div>
       </footer>
-
       <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
         Binhi 2024, All Rights Reserved.
       </div>

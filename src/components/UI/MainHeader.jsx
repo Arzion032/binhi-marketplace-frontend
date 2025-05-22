@@ -12,7 +12,7 @@ const MainHeader = () => {
   const flagSrc = selectedLang === "Tagalog" ? "/Flags.png" : "/us_flag.png";
 
   return (
-    <header className="w-full bg-white shadow font-inter">
+<header className="w-full bg-white shadow font-inter">
       {/* Top Header */}
       <div className="flex items-center justify-between px-8 py-4 text-sm bg-gray-100 text-gray-700">
         <div className="flex gap-4">
