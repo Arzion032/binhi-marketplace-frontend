@@ -68,7 +68,8 @@ const MainHeader = () => {
 
         {/* Right: Icons */}
         <div className="flex items-center gap-4">
-          <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer hover:scale-110" />
+           <Link to="/CartPage">
+          <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer hover:scale-110" /></Link>
           <img src="/bell.png" alt="Notifications" className="w-5 h-5 cursor-pointer hover:scale-110" />
           <div className="flex items-center gap-2 cursor-pointer">
             <img src="/account.png" alt="Account" className="w-10 h-10" />

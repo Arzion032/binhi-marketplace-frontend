@@ -221,7 +221,8 @@ const ProductDetails = () => {
 
             <div className="mt-10 flex gap-4">
               <button className="btn btn-outline btn-success flex-1">Add to Cart</button>
-              <button className="btn btn-success flex-1">Buy Now</button>
+              <Link to="/CheckoutPage">
+              <button className="btn btn-success flex-1">Buy Now</button></Link>
             </div>
 
             <div className="mt-10 border border-gray-200 rounded-lg p-4">
@@ -302,6 +303,17 @@ const ProductDetails = () => {
               </div>
             ))}
           </div>
+          <div className="group fixed bottom-10 right-10 z-50">
+            <button
+                onClick={() => navigate('/ChatPage')}
+                className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
+            >
+                <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
+            </button>
+            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                Chats
+            </div>
+            </div>
         </div>
       </div>
     </div>

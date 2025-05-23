@@ -398,6 +398,18 @@ const Marketplace = () => {
       <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
         Binhi 2024, All Rights Reserved.
       </div>
+
+      <div className="group fixed bottom-10 right-10 z-50">
+            <button
+                onClick={() => navigate('/ChatPage')}
+                className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
+            >
+                <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
+            </button>
+            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                Chats
+            </div>
+            </div>
     </div>
   );
 };

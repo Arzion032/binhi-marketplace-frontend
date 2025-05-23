@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
+import { Expand } from 'lucide-react';
+/*Styling pu*/
 
 const UserProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState("All");
@@ -12,7 +14,7 @@ const UserProfilePage = () => {
       image: "Butter.png",
       quantity: 1,
       price: 53.00,
-      status: "Completed"
+      status: "Delivered"
     },
     {
       id: 2,
@@ -20,7 +22,7 @@ const UserProfilePage = () => {
       image: "Mais.png",
       quantity: 1,
       price: 53.00,
-      status: "To Ship"
+      status: "Pending"
     }
   ];
 
@@ -133,7 +135,7 @@ const UserProfilePage = () => {
                     <img
                       src={lineSrc}
                       alt="Step Line"
-                      className="w-[200px] h-[6px] mb-[110px]"
+                      className="w-[200px] h-[8px] mb-[110px]"
                     />
                   )}
                 </div>
@@ -147,10 +149,10 @@ const UserProfilePage = () => {
             <div className="flex justify-between items-start border-b pb-4 gap-3">
               <div className="flex flex-wrap gap-16 flex-1">
                 {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map(tab => (
-                  <button
+                  <button 
                     key={tab}
                     onClick={() => setSelectedTab(tab)}
-                    className={`text-xl px-3 py-1 rounded-full transition-all duration-200 ${
+                    className={`text-lg px-3 py-1 rounded-full transition-all duration-200 ${
                       selectedTab === tab 
                         ? "bg-[#4CAE4F] text-white font-semibold" 
                         : "text-gray-600 hover:text-green-600"
@@ -164,8 +166,9 @@ const UserProfilePage = () => {
               {/* Expand button */}
               <button
                 onClick={() => navigate('/orderhistory')}
-                className="text-gray-500 hover:text-black transition-colors shrink-0"
+                className="text-green hover:text-black transition-colors shrink-0 mt-2"
               >
+              <Expand size={20} />
               </button>
             </div>
                 
@@ -190,17 +193,16 @@ const UserProfilePage = () => {
                   <button className="text-gray-500 text-base font-medium px-3 py-2 rounded-full transition">
                     Click here to chat
                   </button>
-                  <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-lg font-medium px-3 py-2 rounded-full transition">
-                    <img src="/shopp.png" className="w-5 h-5" /> View Shop
+                  <button className="flex items-center gap-2 hover:bg-green-700 hover:text-white text-[#4CAE4F] text-sm font-medium px-3 py-2 border border-[#4CAE4F] rounded-full transition">
+                  <img src="/shoppp.png" className="w-5 h-5" /> View Shop
                   </button>
                 </div>
 
                 {/* Buttons: Chat and View Shop */}
                 <div className="flex items-left gap-2">
-                  <span className={`inline-block text-white text-base text-center w-28 px-2 py-2 rounded-full ${
-                  order.status === "Completed" ? "bg-[#4CAE4F]" :
-                  order.status === "To Ship" ? "bg-[#D1A157]" :
-                  "bg-gray-400" 
+                  <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${
+                  order.status === "Delivered" ? "bg-[#4CAE4F]" :
+                 "bg-[#D1A157]"
                 }`}>
                   {order.status}
                 </span>
@@ -209,42 +211,57 @@ const UserProfilePage = () => {
 
                 <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
 
-              <div className="flex gap-4 items-start w-full">
-                {/* Product image */}
-                <img
-                  src={order.image}
-                  alt={order.name}
-                  className="w-24 h-24 rounded-lg object-cover"
-                />
+                <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
+                <div className="flex justify-between items-start w-full">
+                  <div className="flex gap-4">
+                    {/* Product image */}
+                    <img
+                      src={order.image}
+                      alt={order.name}
+                      className="w-24 h-24 rounded-lg object-cover"
+                    />
 
-                <div className="flex flex-col gap-2">
-                  {/* Product name and quantity */}
-                  <div>
-                    <p className="text-2xl font-semibold">{order.name}</p>
-                    <p className="text-lg text-gray-500 mt-12">Quantity: {order.quantity}</p>
+                    <div className="flex flex-col justify-between">
+                      {/* Product name and quantity */}
+                      <div>
+                        <p className="text-2xl font-semibold">{order.name}</p>
+                        <p className="text-sm text-gray-600">Variation: Yellow Corn</p>
+                        <p className="text-lg text-gray-500 mt-4">Quantity: {order.quantity}</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Right section: Status and price */}
+                  <div className="flex flex-col items-end justify-between h-full">
+                    {order.price > 0 && (
+                      <p className="text-xl font-bold">₱{order.price.toFixed(2)}</p>
+                    )}
                   </div>
                 </div>
-              </div>
 
-              {/* Right section: Status and price */}
-              <div className="text-right space-y-2">
-              
-                {order.price > 0 && (
-                  <p className="text-xl font-bold">₱{order.price.toFixed(2)}</p>
-                )}        
-              </div>
               <div className="flex justify-end mt-5">
                   <button
                   onClick={() => navigate('/orderhistory')}
-                  className="w-[200px] text-lg hover:underline text-[#4CAE4F] font-bold py-2 px-6 rounded-full transition-all"
-                >
+                  className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
+                  >
                   View More
                 </button>
                 </div>
-            </div>
+            </div>  
                 ))
               )}
           </div>
+          <div className="group fixed bottom-10 right-10 z-50">
+            <button
+                onClick={() => navigate('/ChatPage')}
+                className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
+            >
+                <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
+            </button>
+            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+                Chats
+            </div>
+            </div>
           </div>
         </div>
       </div>

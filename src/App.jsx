@@ -17,6 +17,8 @@ import ProductDetails from "./components/LandingPage/ProductDetails";
 import OrderLayout from "./components/Layout/OrderLayout";
 import CartPage from "./components/Cart/CartPage";
 import ChatPage from "./components/Chat/ChatPage";
+import CheckoutPage from "./components/Checkout/CheckoutPage";
+import CheckoutSuccess from "./components/Checkout/CheckoutSuccess";
 
 
 function App() {
@@ -39,8 +41,8 @@ function App() {
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
         <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
-
-
+        <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
+        <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
       </Routes>
     </Router>
   );
