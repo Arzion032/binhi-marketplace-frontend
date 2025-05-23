@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 
-//ayusin ko nalang po alignment then oki na
+//Done product details
 
 
 const ProductDetails = () => {
@@ -390,7 +390,7 @@ const ProductDetails = () => {
 
 
  {/* Product Reviews */}
-      <div className="mt-16 bg-white rounded-lg p-6 w-[1320px]">
+      <div className="mt-16 bg-white rounded-3xl p-6 w-[1320px] border border-gray-500">
         <h3 className="text-xl font-bold mb-4">Product Reviews</h3>
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
           <div>
@@ -419,19 +419,21 @@ const ProductDetails = () => {
 
         {filteredReviews.map((review) => (
           <div key={review.id} className="border-b border-gray-200 pb-3 mb-5">
-            <div className="flex items-center justify-between text-sm text-gray-600">
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-2">
-                  <img src={review.profileImage} alt="Profile" className="w-8 h-8 rounded-full" />
-                  <span>{review.user}</span>
-                </div>
-              </div>
-              <span>{review.date}</span>
-            </div>
-            <div className="flex items-center gap-2 mt-2">
-              <span className="text-yellow-500 text-base">{"★".repeat(review.rating)}</span>
-              <span className="text-md text-gray-500">Variation: {review.variation}</span>
-            </div>
+           <div className="flex justify-between text-sm text-gray-600">
+  <div className="flex items-start gap-2">
+    <img src={review.profileImage} alt="Profile" className="w-8 h-8 rounded-full" />
+    <div>
+      <span>{review.user}</span>
+      <div className="text-yellow-500 text-sm mt-0.5">{"★".repeat(review.rating)}</div>
+    </div>
+  </div>
+  <span>{review.date}</span>
+</div>
+
+        <div className="text-sm text-gray-500 mt-1 mb-2">
+          Variation: <span className="text-black">{review.variation}</span>
+        </div>
+
 
             <p className="mt-2 text-gray-700 text-sm leading-relaxed">{review.comment}</p>
 
@@ -472,38 +474,39 @@ const ProductDetails = () => {
 
 <div className="flex justify-center gap-2 mt-6">
   {/* Prev Button */}
-  <button className="w-[45px] h-[50px] bg-[#D9D9D9] border-[#858585] rounded-xl border border-gray-300 text-gray-500 hover:text-green-600 hover:border-green-500">
-    &lt;
-  </button>
+<button className="w-[45px] h-[50px] bg-[#D9D9D9] border border-[#858585] rounded-xl text-gray-500 hover:bg-[#c2c2c2]">
+  &lt;
+</button>
 
-  {/* Page Numbers */}
-  {[1, 2, 3, 4, 5].map((num) => (
-    <button
-      key={num}
-      className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold ${
-        num === 1
-          ? 'bg-[#4CAE4F] text-white'
-          : 'bg-[#D9D9D9] text-[#858585] border-[#858585]'
-      }`}
-    >
-      {num}
-    </button>
-  ))}
-
-  {/* Ellipsis */}
-  <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585]" disabled>
-    ...
+{/* Page Numbers */}
+{[1, 2, 3, 4, 5].map((num) => (
+  <button
+    key={num}
+    className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
+      num === 1
+        ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
+        : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
+    }`}
+  >
+    {num}
   </button>
+))}
 
-  {/* Next Button */}
-  <button className="w-[45px] h-[50px] rounded-xl bg-[#D9D9D9] border-[#858585] text-[#858585] hover:text-green-600 hover:border-green-500">
-    &gt;
-  </button>
+{/* Ellipsis */}
+<button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
+  ...
+</button>
+
+{/* Next Button */}
+<button className="w-[45px] h-[50px] rounded-xl bg-[#D9D9D9] border border-[#858585] text-[#858585] hover:bg-[#c2c2c2]">
+  &gt;
+</button>
+
 </div>
       </div>
 
 {/* Recommendations */}
-<div className="mt-10 px-10">
+<div className="mt-10 w-[1320px]">
   <div className="flex items-center gap-2 mb-4">
     <img src="/shop-black.png" className="w-8 h-8" alt="Shop Icon" />
     <h3 className="text-xl font-bold">From the same shop</h3>
@@ -552,14 +555,13 @@ const ProductDetails = () => {
     ))}
   </div>
   </div>
-<div className="mt-10">
+<div className="mt-10 w-[1320px]">
   <div className="flex items-center gap-2 mb-4">
     <img src="/heartblack.png" className="w-8 h-8" alt="Liked heart" />
     <h3 className="text-xl font-bold">You may also like</h3>
   </div>
 </div>
-<section className="px-6 py-6 bg-[#F5F9F5]">
-  <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
     {[
       { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
       { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
@@ -602,15 +604,75 @@ const ProductDetails = () => {
       </div>
     ))}
   </div>
-</section>
 <div className="flex justify-center mt-10">
-          <button className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110">
+          <button className="text-lg font-bold bg-white border-2 hover:border-[#4CAE4F] border-gray-600 text-[#4CAE4F] [#4CAE4F] w-[500px] h-[50px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110">
             See More
           </button>
         </div>
         </div>
         </div>
       </div>
+
+<footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
+  <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
+    <div className="flex flex-col items-center">
+      <div className="flex flex-col">
+        <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
+        <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
+      </div>
+    </div>
+    <div className="mx-4">
+      <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
+      <ul className="space-y-1">
+        <li>Help Center</li>
+        <li>Payment Methods</li>
+        <li>Return & Refund</li>
+        <li>Contact Us</li>
+      </ul>
+    </div>
+    <div className="mx-4">
+      <p className="text-[15px] font-bold mb-3">ABOUT BINHI</p>
+      <ul className="space-y-1">
+        <li>About Us</li>
+        <li>Privacy Policy</li>
+        <li>Binhi Seller Center</li>
+      </ul>
+    </div>
+    <div className="mx-4">
+      <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
+      <div className="grid grid-cols-2 gap-2">
+        <img src="/cod.png" alt="COD" />
+        <img src="/gcash.png" alt="GCash" />
+        <img src="/paypal.png" alt="PayPal" />
+        <img src="/maya.png" alt="Maya" />
+      </div>
+    </div>
+    <div className="mx-4">
+      <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
+      <ul className="space-y-1">
+        <li className="flex items-center space-x-1">
+          <img src="/Facebook.png" alt="Facebook" />
+          <span>BINHI Corp.</span>
+        </li>
+        <li className="flex items-center space-x-1">
+          <img src="/Messenger.png" alt="Messenger" />
+          <span>@BINHI Corp.</span>
+        </li>
+        <li className="flex items-center space-x-1">
+          <img src="/WhatsApp.png" alt="WhatsApp" />
+          <span>BINHI Corp.</span>
+        </li>
+        <li className="flex items-center space-x-1">
+          <img src="/Instagram.png" alt="Instagram" />
+          <span>BINHI Corp.</span>
+        </li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
+  Binhi 2024, All Rights Reserved.
+</div>
       </div>
   );
 };
