@@ -213,7 +213,7 @@ const Marketplace = () => {
           <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
         </div>
 
-        <h2 className="text-center text-[30px] font-bold mb-5 relative z-10">Top Farmers of the Month</h2>
+        <h2 className="text-center text-[30px] font-bold mb-5 relative z-10 mb-10">Top Farmers of the Month</h2>
 
         <div className="flex flex-wrap justify-center gap-6 relative z-10">
           {[
@@ -245,57 +245,79 @@ const Marketplace = () => {
               img: "/333.png",
             },
           ].map((farmer, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-2xl border-[3px] border-black-200 shadow-md px-6 py-6 w-[350px] text-center flex flex-col items-center justify-between relative"
-            >
-              {/* Rank Badge */}
-              <img
-                src={`/medal-${farmer.rank}.png`}
-                alt="medal"
-                className="absolute top-4 right-4 w-8 h-8"
-              />
+<div
+  key={index}
+  className={`bg-white rounded-2xl border-[3px] border-black-200 shadow-md w-[350px] text-center flex flex-col items-center justify-between relative ${
+    index === 1 ? 'mt-[-40px]' : 'mt-0'
+  }`}
+>
+  <div className="flex flex-col items-center justify-between h-full w-full">
+                <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
+                  <div className="relative w-24 h-24">
+                    <img
+                      src={farmer.img}
+                      alt={farmer.name}
+                      className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg"
+                    />
+                    <img
+                      src={`/medal-${farmer.rank}.png`}
+                      alt="medal"
+                      className="absolute -top-0 -right-1 w-8 h-8 z-10"
+                    />
+                  </div>
+    <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
+    <p className="text-sm text-gray-500">{farmer.location}</p>
+    <div className="flex items-center gap-2 font-medium mt-1">
+      <img src="/Star.png" alt="star" className="h-5 w-5" />
+      <span className="text-black">{Number(farmer.rating).toFixed(1)}</span>
+      <span className="text-gray-500 ml-1">|</span>
+      <span className="text-gray-500 ml-2">{farmer.sold} Sold</span>
+    </div>
+    <div className="flex flex-wrap justify-center gap-2 mt-3">
+  {farmer.categories.map((cat, idx) => {
+    let baseClass = 'px-3 py-1 text-sm font-medium rounded-full';
+    let tagClass = '';
 
-              {/* Farmer Photo */}
-              <img
-                src={farmer.img}
-                alt={farmer.name}
-                className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg"
-              />
-              <h3 className="mt-4 text-[20px] font-semibold">{farmer.name}</h3>
-              <p className="text-sm text-gray-500">{farmer.location}</p>
-              <div className="flex items-center gap-1 text-yellow-500 font-medium mt-1">
-                <img src="/Star.png" alt="star" className="h-4 w-4" />
-                <span>{farmer.rating} • {farmer.sold} Sold</span>
-              </div>
-              {/* Tags */}
-              <div className="flex flex-wrap justify-center gap-2 mt-3">
-                {farmer.categories.map((cat, idx) => (
-                  <span
-                    key={idx}
-                    className="bg-green-100 text-green-800 text-xs font-semibold px-3 py-1 rounded-full"
-                  >
-                    {cat}
-                  </span>
-                ))}
-              </div>
+    switch (cat.toLowerCase()) {
+      case 'vegetables':
+      case 'root crops':      
+      case 'milks & dairy':
+        tagClass = 'bg-[#8BC34A] text-white';
+        break;
+      case 'grains':
+      case 'fruits':
+        tagClass = 'bg-[#D1A157] text-white';
+        break;
+      case 'meat':
+      case 'rice':
+        tagClass = 'bg-[#4CAE4F] text-white';
+        break;
+      default:
+        tagClass = 'bg-green-100 text-green-800';
+        break;
+    }
 
-              {/* Buttons */}
-{/* Buttons */}
-<div className="mt-6 w-full">
-  <div className="flex w-full">
-    <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 rounded-bl-2xl border-t border-r border-black">
-      <img src="/shopp.png" alt="shop" className="w-5 h-5" />
-      View Shop
-    </button>
-    <button className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2 rounded-br-2xl border-t border-black">
-      <img src="/chat.png" alt="chat" className="w-5 h-5" />
-      Chat Now
-    </button>
-  </div>
+    return (
+      <span key={idx} className={`${baseClass} ${tagClass}`}>
+        {cat}
+      </span>
+    );
+  })}
 </div>
 
+  </div>
 
+<div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
+  <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+    <img src="/shopp.png" alt="shop" className="w-5 h-5" />
+    View Shop
+  </button>
+  <button className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2">
+    <img src="/chat.png" alt="chat" className="w-5 h-5" />
+    Chat Now
+  </button>
+</div>
+ </div>
             </div>
           ))}
         </div>

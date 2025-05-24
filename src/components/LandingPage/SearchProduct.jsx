@@ -17,9 +17,9 @@ const SearchProduct = () => {
   });
 
   return (
-    <>
-      <div className="min-h-screen w-full bg-[#F5F9F5] pt-8 pb-20">
-        <div className="mx-[160px] max-w-7xl">
+      <div className="min-h-screen w-full bg-[#F5F9F5] pt-8 ">
+        <div className="mx-[85px] max-w-[1700px]">
+          {/* Header */}
           <div className="flex items-center gap-2 mb-6">
             <img src="/text-search.png" alt="search icon" className="w-8 h-8" />
             <h2 className="text-3xl font-semibold">
@@ -27,8 +27,9 @@ const SearchProduct = () => {
             </h2>
           </div>
 
+          {/* Sort By Filter Bar */}
           <div className="flex gap-4 mb-8">
-            <div className="flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full max-w-[1700px]">
+            <div className="flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full">
               <p className="text-lg font-semibold text-gray-800">Sort by</p>
               {["Relevance", "Latest", "Top Sales", "Price"].map((label, idx) => (
                 <button
@@ -45,10 +46,9 @@ const SearchProduct = () => {
               ))}
             </div>
           </div>
-        </div>
 
-        <section className="px-6 py-6 bg-[#F5F9F5]">
-          <div className="mx-[140px] max-w-[1500px] grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-[120px] gap-y-[40px]">
+          {/* Product Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-[60px] gap-y-[40px]">
             {products.map((product, index) => (
               <div
                 key={index}
@@ -86,76 +86,76 @@ const SearchProduct = () => {
             ))}
           </div>
 
+          {/* Login to See More */}
           <div className="flex justify-center mt-10">
-            <button className="text-lg font-bold bg-white border-2 border-gray-700 text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110 hover:border-[#4CAE4F]">
+            <button className="text-lg font-bold bg-white border-2 border-gray-700 text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110 hover:border-[#4CAE4F] mb-5">
               Login to see more
             </button>
           </div>
-        </section>
-      </div>
-
-      {/* Footer Section */}
-      <footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
-          <div className="flex flex-col items-center">
-            <div className="flex flex-col">
-              <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
-              <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
-            </div>
-          </div>
-          <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
-            <ul className="space-y-1">
-              <li>Help Center</li>
-              <li>Payment Methods</li>
-              <li>Return & Refund</li>
-              <li>Contact Us</li>
-            </ul>
-          </div>
-          <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">ABOUT BINHI</p>
-            <ul className="space-y-1">
-              <li>About Us</li>
-              <li>Privacy Policy</li>
-              <li>Binhi Seller Center</li>
-            </ul>
-          </div>
-          <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
-            <div className="grid grid-cols-2 gap-2">
-              <img src="/cod.png" alt="COD" />
-              <img src="/gcash.png" alt="GCash" />
-              <img src="/paypal.png" alt="PayPal" />
-              <img src="/maya.png" alt="Maya" />
-            </div>
-          </div>
-          <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
-            <ul className="space-y-1">
-              <li className="flex items-center space-x-1">
-                <img src="/Facebook.png" alt="Facebook" />
-                <span>BINHI Corp.</span>
-              </li>
-              <li className="flex items-center space-x-1">
-                <img src="/Messenger.png" alt="Messenger" />
-                <span>@BINHI Corp.</span>
-              </li>
-              <li className="flex items-center space-x-1">
-                <img src="/WhatsApp.png" alt="WhatsApp" />
-                <span>BINHI Corp.</span>
-              </li>
-              <li className="flex items-center space-x-1">
-                <img src="/Instagram.png" alt="Instagram" />
-                <span>BINHI Corp.</span>
-              </li>
-            </ul>
-          </div>
         </div>
-      </footer>
-      <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
-        Binhi 2024, All Rights Reserved.
+
+        {/* Footer Section */}
+        <footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
+          <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
+            <div className="flex flex-col items-center">
+              <div className="flex flex-col">
+                <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
+                <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
+              </div>
+            </div>
+            <div className="mx-4">
+              <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
+              <ul className="space-y-1">
+                <li>Help Center</li>
+                <li>Payment Methods</li>
+                <li>Return & Refund</li>
+                <li>Contact Us</li>
+              </ul>
+            </div>
+            <div className="mx-4">
+              <p className="text-[15px] font-bold mb-3">ABOUT BINHI</p>
+              <ul className="space-y-1">
+                <li>About Us</li>
+                <li>Privacy Policy</li>
+                <li>Binhi Seller Center</li>
+              </ul>
+            </div>
+            <div className="mx-4">
+              <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
+              <div className="grid grid-cols-2 gap-2">
+                <img src="/cod.png" alt="COD" />
+                <img src="/gcash.png" alt="GCash" />
+                <img src="/paypal.png" alt="PayPal" />
+                <img src="/maya.png" alt="Maya" />
+              </div>
+            </div>
+            <div className="mx-4">
+              <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
+              <ul className="space-y-1">
+                <li className="flex items-center space-x-1">
+                  <img src="/Facebook.png" alt="Facebook" />
+                  <span>BINHI Corp.</span>
+                </li>
+                <li className="flex items-center space-x-1">
+                  <img src="/Messenger.png" alt="Messenger" />
+                  <span>@BINHI Corp.</span>
+                </li>
+                <li className="flex items-center space-x-1">
+                  <img src="/WhatsApp.png" alt="WhatsApp" />
+                  <span>BINHI Corp.</span>
+                </li>
+                <li className="flex items-center space-x-1">
+                  <img src="/Instagram.png" alt="Instagram" />
+                  <span>BINHI Corp.</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </footer>
+        <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
+          Binhi 2024, All Rights Reserved.
+        </div>
       </div>
-    </>
   );
 };
 

@@ -17,7 +17,8 @@ import ProductDetails from "./components/LandingPage/ProductDetails";
 import OrderLayout from "./components/Layout/OrderLayout";
 import CartPage from "./components/Cart/CartPage";
 import SearchProduct from "./components/LandingPage/SearchProduct"; 
-import SearchedProductAcc from "./components/LandingPage/SearchedProductAcc"; 
+import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
+import NoResults from "./components/LandingPage/NoResults"; 
 
 
 function App() {
@@ -40,7 +41,8 @@ function App() {
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
-        <Route path="/searched-product-acc" element={<MainLayout><SearchedProductAcc /></MainLayout>} />
+        <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
+        <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
 
       </Routes>
     </Router>
