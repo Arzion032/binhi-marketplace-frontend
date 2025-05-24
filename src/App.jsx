@@ -17,6 +17,7 @@ import ProductDetails from "./components/LandingPage/ProductDetails";
 import OrderLayout from "./components/Layout/OrderLayout";
 import CartPage from "./components/Cart/CartPage";
 import SearchProduct from "./components/LandingPage/SearchProduct"; 
+import SearchedProductAcc from "./components/LandingPage/SearchedProductAcc"; 
 
 
 function App() {
@@ -39,6 +40,8 @@ function App() {
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
+        <Route path="/searched-product-acc" element={<MainLayout><SearchedProductAcc /></MainLayout>} />
+
       </Routes>
     </Router>
   );

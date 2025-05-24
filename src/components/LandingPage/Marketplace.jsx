@@ -281,14 +281,21 @@ const Marketplace = () => {
               </div>
 
               {/* Buttons */}
-              <div className="flex justify-center gap-2 mt-5">
-                <button className="flex items-center gap-2 bg-[#4CAE4F] hover:bg-green-700 text-white text-sm font-medium px-3 py-2 rounded-full transition">
-                  <img src="/shopp.png" className="w-5 h-5" alt="shop icon" /> View Shop
-                </button>
-                <button className="flex items-center gap-2 border border-[#4CAE4F] text-[#4CAE4F] hover:bg-green-50 text-sm font-medium px-3 py-2 rounded-full transition">
-                  <img src="/chat.png" className="w-5 h-5" alt="chat icon" /> Chat Now
-                </button>
-              </div>
+{/* Buttons */}
+<div className="mt-6 w-full">
+  <div className="flex w-full">
+    <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 rounded-bl-2xl border-t border-r border-black">
+      <img src="/shopp.png" alt="shop" className="w-5 h-5" />
+      View Shop
+    </button>
+    <button className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2 rounded-br-2xl border-t border-black">
+      <img src="/chat.png" alt="chat" className="w-5 h-5" />
+      Chat Now
+    </button>
+  </div>
+</div>
+
+
             </div>
           ))}
         </div>
