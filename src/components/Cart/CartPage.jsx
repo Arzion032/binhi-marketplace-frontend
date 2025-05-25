@@ -108,7 +108,7 @@ const CartPage = () => {
       <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center p-4">
         <div className="text-center">
           <img src="/empty-cart.png" alt="Empty Cart" className="w-32 h-32 mx-auto mb-4 opacity-50" />
-          <h2 className="text-2xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
+          <h2 className="text-3xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
           <p className="text-gray-500 mb-6">Add some items to get started!</p>
           <button
             onClick={() => navigate('/')}
@@ -124,14 +124,14 @@ const CartPage = () => {
   return (
     <div className="min-h-screen bg-[#F5F9F5] p-4 lg:p-10">
       <h1 className="text-4xl font-bold mb-2">Your Cart ({cartItems.length})</h1>
-      <p className="text-gray-600 mb-6">You have {cartItems.length} items in your cart, check out now!</p>
+      <p className="text-gray-600 mb-6 text-lg">You have {cartItems.length} items in your cart, check out now!</p>
 
       <div className="flex flex-col lg:flex-row gap-6">
         {/* LEFT SECTION */}
         <div className="w-full lg:w-2/3 space-y-6">
 
           {/* Header */}
-          <div className="flex px-6 py-4 bg-white rounded-full font-semibold border-2 text-sm text-gray-700">
+          <div className="flex px-6 py-4 bg-white rounded-full font-semibold border-2 text-lg text-gray-700">
             <div className="w-[10%]">ITEMS</div>
             <div className="w-[30%]">NAME</div>
             <div className="w-[15%] text-center">QUANTITY</div>
@@ -158,9 +158,9 @@ const CartPage = () => {
                 }}
               />
               <div className="flex flex-col">
-                <p className="text-base font-bold">Vinas Family</p>
+                <p className="text-lg font-bold">Vinas Family</p>
                 <Link to="/ChatPage">
-                  <button className="text-xs text-gray-500 underline hover:text-gray-700">
+                  <button className="text-base text-gray-500 underline hover:text-gray-700">
                     Click here to chat
                   </button>
                 </Link>
@@ -190,9 +190,9 @@ const CartPage = () => {
                   />
                 </div>
                 <div className="w-[30%]">
-                  <p className="font-semibold text-base">{item.name}</p>
+                  <p className="font-semibold text-lg">{item.name}</p>
                   {item.variation && (
-                    <p className="text-xs text-gray-500">Variation: {item.variation}</p>
+                    <p className="text-base text-gray-500">Variation: {item.variation}</p>
                   )}
                 </div>
                 <div className="w-[15%] flex justify-center items-center gap-2">
@@ -203,7 +203,7 @@ const CartPage = () => {
                   >
                     -
                   </button>
-                  <span className="mx-2 font-medium">{item.quantity}</span>
+                  <span className="mx-2 font-bold font-inter ">{item.quantity}</span>
                   <button 
                     onClick={() => handleQuantityChange(item.id, 1)} 
                     className="px-2 py-1 bg-[#4CAE4F] text-white rounded text-lg hover:bg-green-600 transition-colors"
@@ -211,8 +211,8 @@ const CartPage = () => {
                     +
                   </button>
                 </div>
-                <div className="w-[15%] text-center">₱{item.price.toFixed(2)}</div>
-                <div className="w-[15%] text-center font-semibold text-[#4CAE4F]">
+                <div className="w-[15%] text-center text-lg font-bold font-inter ">₱{item.price.toFixed(2)}</div>
+                <div className="w-[15%] text-center font-semibold text-[#4CAE4F] text-lg font-bold font-inter ">
                   ₱{(item.price * item.quantity).toFixed(2)}
                 </div>
                 <div className="w-[15%] text-center">
@@ -236,7 +236,7 @@ const CartPage = () => {
                 onChange={toggleSelectAll}
                 className="w-5 h-5"
               />
-              <span className="font-bold text-sm">SELECT ALL ITEMS</span>
+              <span className="font-bold text-lg">SELECT ALL ITEMS</span>
             </div>
             <button 
               onClick={handleDeleteAll}
@@ -253,10 +253,10 @@ const CartPage = () => {
         {/* RIGHT SECTION - Order Summary */}
         <div className="w-full lg:w-1/3 bg-white p-6 rounded-2xl shadow border-2 flex flex-col justify-between h-fit">
           <div>
-            <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
+            <h2 className="text-3xl font-bold mb-4">Order Summary</h2>
             <div className="w-full h-[1px] bg-gray-300 mb-4" />
             
-            <div className="space-y-4 text-base">
+            <div className="space-y-4 text-lg">
               <div className="flex justify-between">
                 <p>Selected Items:</p>
                 <p className="text-black font-medium">{selectedItems.length}</p>
@@ -265,7 +265,7 @@ const CartPage = () => {
                 <p>Subtotal</p>
                 <p className="text-black font-medium">₱{subtotal.toFixed(2)}</p>
               </div>
-              <div className="flex justify-between text-xl font-bold pt-4 border-t mt-6">
+              <div className="flex justify-between text-2xl font-bold pt-4 border-t mt-6">
                 <p>Total</p>
                 <p className="text-[#4CAE4F]">₱{total.toFixed(2)}</p>
               </div>
@@ -275,7 +275,7 @@ const CartPage = () => {
           <button
             onClick={handleCheckout}
             disabled={selectedCartItems.length === 0}
-            className={`mt-6 w-full py-3 px-4 rounded-full text-white text-lg font-semibold transition-colors ${
+            className={`mt-6 w-full py-3 px-4 rounded-full text-white text-xl font-semibold transition-colors ${
               selectedCartItems.length === 0 
                 ? 'bg-gray-400 cursor-not-allowed' 
                 : 'bg-green-600 hover:bg-green-700'

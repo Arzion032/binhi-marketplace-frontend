@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Search, SlidersHorizontal, RefreshCw, Plus, Pencil, Trash2, Copy } from 'lucide-react';
 
+ /*pahguhd*/
+
 const TABS = ['Active', 'Drafts', 'Orders'];
 
 const CATEGORIES_SUMMARY = [

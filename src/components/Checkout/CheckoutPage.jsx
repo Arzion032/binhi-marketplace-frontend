@@ -68,9 +68,9 @@ export default function CheckoutPage() {
         <div className="w-full lg:w-2/3 space-y-6">
           {/* Delivery Address */}
           <section>
-            <h2 className="text-xl font-bold">Delivery Address</h2>
-            <div className="p-4 flex gap-4 items-start">
-              <img src="/map-pin-house.png" alt="Address" className="w-15 h-15" />
+            <h2 className="text-2xl font-bold">Delivery Address</h2>
+            <div className="p-4 flex gap-4 items-start text-lg">
+              <img src="/map-pin-house.png" alt="Address" className="w-16 h-16" />
               <div>
                 <p className="font-semibold">Juan Dela Cruz</p>
                 <p>(+63) 948 122 9142</p>
@@ -81,11 +81,11 @@ export default function CheckoutPage() {
 
           {/* Product Details */}
           <section>
-            <h2 className="text-xl font-bold mb-2">Product Details</h2>
+            <h2 className="text-2xl font-bold mb-2">Product Details</h2>
             {items.map((product, index) => (
               <div key={index} className="bg-white p-4 rounded-xl border border-gray-600 mb-4">
                 <div className="flex justify-between text-sm text-black mb-2">
-                  <p className="font-medium">{product.seller}</p>
+                  <p className="font-medium text-base">{product.seller}</p>
                   <p>Order ID: {product.orderId}</p>
                 </div>
                 <div className="border mt-4 mb-3" />
@@ -100,13 +100,13 @@ export default function CheckoutPage() {
                   />
                   <div className="flex flex-col justify-between w-full">
                     <div>
-                      <p className="font-semibold text-xl">{product.name}</p>
-                      <p className="text-sm text-gray-500">Variation: {product.variation}</p>
+                      <p className="font-bold text-xl">{product.name}</p>
+                      <p className="text-lg text-gray-500">Variation: {product.variation}</p>
                     </div>
-                    <div className="text-base text-right w-full">
+                    <div className="text-lg text-right w-full">
                       <p>Price: ₱{product.price.toFixed(2)}</p>
                       <p>Quantity: ×{product.quantity}</p>
-                      <p className="text-green-600 font-semibold text-lg">Subtotal: ₱{(product.price * product.quantity).toFixed(2)}</p>
+                      <p className="text-green-600 font-semibold text-xl">Subtotal: ₱{(product.price * product.quantity).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
@@ -115,13 +115,13 @@ export default function CheckoutPage() {
           </section>
 
           {/* Payment Method */}
-          <div className="w-full max-w-md">
+          <div className="w-full max-w-lg">
             <section>
-              <h2 className="text-xl font-bold mb-1">Payment Method</h2>
-              <p className="text-sm text-black mb-4">
+              <h2 className="text-2xl font-bold mb-1">Payment Method</h2>
+              <p className="text-lg text-black mb-4">
                 Please select an option on how you want to pay your order.
               </p>
-              <div className="w-full flex max-w-sm gap-4">
+              <div className="w-full text-lg flex max-w-md gap-4">
                 {/* Cash-on-Delivery */}
                 <label
                   className={`flex-1 cursor-pointer border rounded-xl p-4 flex flex-col items-center transition-all ${
@@ -139,7 +139,7 @@ export default function CheckoutPage() {
                     className="sr-only"
                   />
                   <img src="/CODD.png" alt="COD" className="w-14 h-12" />
-                  <p className="text-[#4CAE4F] font-semibold">Cash-on-Delivery</p>
+                  <p className="text-[#4CAE4F] text-lg font-semibold">Cash-on-Delivery</p>
                 </label>
 
                 {/* GCash */}
@@ -159,12 +159,12 @@ export default function CheckoutPage() {
                     className="sr-only"
                   />
                   <img src="/GCASHH.png" alt="GCash" className="w-14 h-12" />
-                  <p className="text-blue-600 font-semibold">GCash</p>
+                  <p className="text-blue-600 text-lg font-semibold">GCash</p>
                 </label>
               </div>
 
-              <div className="flex gap-14 mt-2 pl-2 text-sm">
-                <label className="flex items-center gap-4 cursor-pointer">
+              <div className="flex gap-14 mt-2 pl-2 text-lg">
+                <label className="flex items-center gap-4 cursor-pointer font-bold">
                   <input
                     type="radio"
                     name="payment"
@@ -174,7 +174,7 @@ export default function CheckoutPage() {
                   />
                   Cash on Delivery
                 </label>
-                <label className="flex items-center gap-4 cursor-pointer">
+                <label className="flex items-center gap-4 cursor-pointer font-bold">
                   <input
                     type="radio"
                     name="payment"
@@ -191,9 +191,9 @@ export default function CheckoutPage() {
 
         {/* Right Section - Order Summary */}
         <div className="w-full lg:w-1/3 bg-white p-6 border border-gray-600 rounded-2xl flex flex-col justify-between h-full">
-          <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
+          <h2 className="text-3xl font-bold mb-4">Order Summary</h2>
           <div className="w-full h-[1px] bg-gray-300 mb-4" />
-          <div className="space-y-4 text-base">
+          <div className="space-y-4 text-lg">
             <div className="flex justify-between">
               <p>Subtotal</p>
               <p className="text-black font-medium">₱{subtotal.toFixed(0)}</p>
@@ -206,7 +206,7 @@ export default function CheckoutPage() {
               <p>Tax</p>
               <p className="text-red-600">₱{tax}</p>
             </div>
-            <div className="flex justify-between text-xl font-bold pt-4 border-t mt-6">
+            <div className="flex justify-between text-2xl font-bold pt-4 border-t mt-6">
               <p>Total</p>
               <p className="text-[#4CAE4F]">₱{total}</p>
             </div>
@@ -214,7 +214,7 @@ export default function CheckoutPage() {
 
           <button
             onClick={handleBuyNow}
-            className="mt-6 w-full py-3 px-4 rounded-full text-white text-lg font-semibold bg-green-600 hover:bg-green-700 transition-colors"
+            className="mt-6 w-full py-3 px-4 text-2xl rounded-full text-white text-lg font-semibold bg-green-600 hover:bg-green-700 transition-colors"
           >
             Buy Now ({items.length})
           </button>
