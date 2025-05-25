@@ -22,6 +22,7 @@ import CheckoutSuccess from "./components/Checkout/CheckoutSuccess";
 import SearchProduct from "./components/LandingPage/SearchProduct"; 
 import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
 import NoResults from "./components/LandingPage/NoResults"; 
+import SellerCenter from "./components/SellerCenter/SellerCenter";
 
 
 
@@ -51,6 +52,7 @@ function App() {
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
         <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
+        <Route path="/seller-center" element={<MainLayout><SellerCenter/></MainLayout>}/>
 
 
       </Routes>

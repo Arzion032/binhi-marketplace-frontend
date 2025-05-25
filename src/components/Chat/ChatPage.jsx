@@ -1,28 +1,61 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 /*Styling pu*/
 
-
 const ChatPage = () => {
+  const navigate = useNavigate();
+  const { state } = useLocation();
+
   const [conversations, setConversations] = useState([
     {
       id: 1,
-      name: 'Jinky Valdez',
-      avatar: 'avatar.png',
+      name: 'Jonathan De Vera',
+      avatar: '/seller.png',
       active: true,
-      messages: ['Is this available?']
+      messages: []
     },
     {
       id: 2,
       name: 'Juan Dela Cruz',
       avatar: 'avatar.png',
       active: false,
-      messages: ['Do you still have stock?']
+      messages: []
     }
   ]);
 
   const [selectedConvId, setSelectedConvId] = useState(1);
   const [newMessage, setNewMessage] = useState("");
+
+  // Automatically select the seller and add product info if passed
+  useEffect(() => {
+    if (state?.sellerName && state?.productName) {
+      const match = conversations.find(conv => conv.name === state.sellerName);
+      const productMessage = `Hi! I'm interested in "${state.productName}" — ${state.variation} at ₱${state.price.toFixed(2)}.`;
+
+      if (match) {
+        setConversations(prev =>
+          prev.map(conv =>
+            conv.name === state.sellerName && conv.messages.length === 0
+              ? { ...conv, messages: [productMessage] }
+              : conv
+          )
+        );
+        setSelectedConvId(match.id);
+      } else {
+        const newId = conversations.length + 1;
+        const newConv = {
+          id: newId,
+          name: state.sellerName,
+          avatar: '/seller.png',
+          active: true,
+          messages: [productMessage]
+        };
+        setConversations(prev => [...prev, newConv]);
+        setSelectedConvId(newId);
+      }
+    }
+  }, [state]);
 
   const selectedConversation = conversations.find(c => c.id === selectedConvId);
 
@@ -71,7 +104,7 @@ const ChatPage = () => {
                   <img src={conv.avatar} alt="Avatar" className="w-8 h-8 rounded-full object-cover" />
                   <div>
                     <p className="text-sm font-semibold">{conv.name}</p>
-                    <p className="text-xs text-gray-600">{conv.messages[conv.messages.length - 1]}</p>
+                    <p className="text-xs text-gray-600">{conv.messages[conv.messages.length - 1] || ""}</p>
                   </div>
                 </div>
                 <span className="text-xs text-green-500">
@@ -120,11 +153,11 @@ const ChatPage = () => {
               onKeyDown={(e) => e.key === 'Enter' && handleSend()}
             />
             <button
-            onClick={handleSend}
-            className="ml-2 bg-[#4CAE4F] hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold"
-          >
-            Send
-          </button> 
+              onClick={handleSend}
+              className="ml-2 bg-[#4CAE4F] hover:bg-green-700 text-white px-4 py-2 rounded-full text-sm font-semibold"
+            >
+              Send
+            </button> 
           </div>
         </div>
       </div>
@@ -132,4 +165,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;    
+export default ChatPage;

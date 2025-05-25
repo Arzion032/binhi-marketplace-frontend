@@ -283,13 +283,37 @@ const ProductDetails = () => {
                 <img src="/shopping-cart.png" alt="shopping cart" className="w-5 h-5" />
                 Add to Cart
               </button>
-              <button className="bg-green-500 text-white hover:bg-green-600 font-bold px-6 py-2 rounded-full w-[982px] h-[53px] flex items-center justify-center gap-2">
-                Buy Now
-                <img src="/arrow-right.png" alt="arrow right" className="w-7 h-7" />
-              </button>
+             <button
+              onClick={() => {
+                const checkoutData = {
+                  items: [
+                    {
+                      id: product.id,
+                      name: product.name,
+                      price: parseFloat(product.price.replace("₱", "")),
+                      quantity: quantity,
+                      image: mainImage,
+                      variation: selectedVariation.name,
+                      seller: product.seller.name,
+                      orderId: `PD-${Date.now()}` // dummy order ID
+                    }
+                  ],
+                  subtotal: quantity * parseFloat(product.price.replace("₱", "")),
+                  discount: 0,
+                  tax: 0,
+                  total: quantity * parseFloat(product.price.replace("₱", "")),
+                  paymentMethod: "Cash on Delivery",
+                  source: "product"
+                };
+
+                navigate('/checkoutpage', { state: { checkoutData } });
+              }}
+              className="bg-green-500 text-white hover:bg-green-600 font-bold px-6 py-2 rounded-full w-[982px] h-[53px] flex items-center justify-center gap-2"
+            >
+              Buy Now
+              <img src="/arrow-right.png" alt="arrow right" className="w-7 h-7" />
+            </button>
             </div>
-
-
 
         {/* Seller Info */}
         <div className="mt-10 border border-gray-300 rounded-3xl px-6 py-4 shadow-sm flex flex-col md:flex-row justify-between items-start gap-6 w-[1320px]">
@@ -309,11 +333,16 @@ const ProductDetails = () => {
               <h3 className="text-lg font-bold">{product.seller.name}</h3>
               <div className="text-sm text-green-600 font-medium">• Active Now</div>
               <div className="flex gap-2 mt-3">
-                <button className="text-sm bg-green-500 text-white hover:bg-green-600 font-semibold px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
+                <button 
+                  onClick={() => navigate('/chatpage', {
+                  state: { sellerName: product.seller.name }
+                })}
+                className="text-sm bg-green-500 text-white hover:bg-green-600 font-semibold px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
                   <img src="/Chat-now.png" alt="chatnow" className="w-5 h-5" />
                   Chat Now
                 </button>
-                <button className="text-sm border border-green-700 font-medium text-green-600 px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
+                <button
+                  className="text-sm border border-green-700 font-medium text-green-600 px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
                   <img src="/shop-green.png" alt="View Shop" className="w-5 h-5" />
                   View Shop
                 </button>

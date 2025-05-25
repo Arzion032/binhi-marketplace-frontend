@@ -23,8 +23,9 @@ const MainHeader = () => {
       {/* Top Header */}
       <div className="flex items-center justify-between px-8 py-4 text-sm bg-gray-100 text-gray-700">
         <div className="flex gap-4">
+          
           <a href="#" className="hover:underline">About Us</a>
-          <a href="#" className="hover:underline">Seller Center</a>
+         <Link to="/seller-center" className="hover:underline">Seller Center</Link>
         </div>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
