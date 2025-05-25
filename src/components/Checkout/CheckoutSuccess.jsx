@@ -22,8 +22,8 @@ export default function CheckoutSuccess() {
     );
   }
 
-  // Use the total from the checkout page if available, otherwise calculate it
-  const displayTotal = product.total || (product.quantity * product.price);
+  const isMultiple = Array.isArray(product.items);
+  const displayTotal = isMultiple ? product.total : product.total || (product.quantity * product.price);
 
   return (
     <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center px-6 text-center">
@@ -32,33 +32,61 @@ export default function CheckoutSuccess() {
         alt="Success" 
         className="w-15 h-15 mb-2"
         onError={(e) => {
-          e.target.style.display = 'none'; // Hide if image fails to load
+          e.target.style.display = 'none';
         }}
       />
       <h1 className="text-3xl font-bold text-gray-800">Order Successful!</h1>
       <p className="text-black mb-4">Thank you for purchasing!</p>
 
-      <div className="bg-white rounded-xl shadow-lg p-6 w-[1500px] max-w-xl border text-left mb-8">
+      <div className="bg-white rounded-xl shadow-lg p-6 w-[1500px] max-w-4xl border text-left mb-8">
         <h2 className="font-bold text-lg mb-4 text-center">Order Summary</h2>
-        
-        <div className="flex gap-4 mb-4">
-          <img 
-            src={product.image} 
-            alt="Product" 
-            className="w-20 h-20 rounded-lg object-cover"
-            onError={(e) => {
-              e.target.src = '/placeholder-image.png'; // Fallback image
-            }}
-          />
-          <div className="flex-1 text-sm">
-            <p className="font-semibold text-base">{product.name}</p>
-            <p className="text-gray-500">Variation: {product.variation}</p>
-            <p className="text-gray-700">Quantity: ×{product.quantity}</p>
-            <p className="text-gray-700">Price: ₱{product.price.toFixed(2)}</p>
-          </div>
+
+        <div className="space-y-4">
+          {isMultiple ? (
+            product.items.map((item, idx) => (
+              <div key={idx} className="flex gap-4 border-b pb-4">
+                <img 
+                  src={item.image} 
+                  alt="Product" 
+                  className="w-20 h-20 rounded-lg object-cover"
+                  onError={(e) => {
+                    e.target.src = '/placeholder-image.png';
+                  }}
+                />
+                <div className="flex-1 text-sm">
+                  <p className="font-semibold text-base">{item.name}</p>
+                  <p className="text-gray-500">Variation: {item.variation}</p>
+                  <p className="text-gray-700">Quantity: ×{item.quantity}</p>
+                  <p className="text-gray-700">Price: ₱{item.price.toFixed(2)}</p>
+                  {item.orderId && (
+                    <p className="text-xs text-gray-400 mt-1">Order ID: {item.orderId}</p>
+                  )}
+                </div>
+              </div>
+            ))
+          ) : (
+            <div className="flex gap-4 mb-4">
+              <img 
+                src={product.image} 
+                alt="Product" 
+                className="w-20 h-20 rounded-lg object-cover"
+                onError={(e) => {
+                  e.target.src = '/placeholder-image.png';
+                }}
+              />
+              <div className="flex-1 text-sm">
+                <p className="font-semibold text-base">{product.name}</p>
+                <p className="text-gray-500">Variation: {product.variation}</p>
+                <p className="text-gray-700">Quantity: ×{product.quantity}</p>
+                <p className="text-gray-700">Price: ₱{product.price.toFixed(2)}</p>
+                {product.orderId && (
+                  <p className="text-xs text-gray-400 mt-1">Order ID: {product.orderId}</p>
+                )}
+              </div>
+            </div>
+          )}
         </div>
 
-        {/* Show detailed breakdown if available */}
         {product.subtotal && (
           <div className="space-y-2 text-sm border-t pt-4">
             <div className="flex justify-between">
@@ -84,12 +112,6 @@ export default function CheckoutSuccess() {
           <span>Total</span>
           <span>₱{displayTotal.toFixed(2)}</span>
         </div>
-
-        {product.orderId && (
-          <p className="text-xs text-gray-500 text-center mt-4">
-            Order ID: {product.orderId}
-          </p>
-        )}
       </div>
 
       <div className="flex flex-col sm:flex-row gap-4">

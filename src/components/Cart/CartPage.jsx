@@ -9,9 +9,9 @@ const CartPage = () => {
   const initialItems = [
     {
       id: 1,
-      name: "Freshly Home Made Butter with Chocolate Inside",
+      name: "Premium Milk With No Exercise One Week",
       seller: "Vinas Family",
-      image: "/Butter.png",
+      image: "/milk.png",
       quantity: 1,
       price: 53.0,
       variation: "Original Flavor",
@@ -19,9 +19,9 @@ const CartPage = () => {
     },
     {
       id: 2,
-      name: "Freshly Home Made Butter with Chocolate Inside",
+      name: "Premium Farm Fresh Sweet Corn",
       seller: "Vinas Family",
-      image: "/Butter.png",
+      image: "/corn.png",
       quantity: 1,
       price: 53.0,
       variation: "Chocolate Flavor",
@@ -89,20 +89,18 @@ const CartPage = () => {
   const handleCheckout = () => {
     if (selectedCartItems.length === 0) return;
     
-    // For now, let's pass the first selected item to checkout
-    // In a real app, you might want to handle multiple items differently
-    const firstSelectedItem = selectedCartItems[0];
+    // Pass all selected items to checkout
     const checkoutData = {
-      ...firstSelectedItem,
-      // Calculate totals for checkout
-      subtotal: selectedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
+      items: selectedCartItems,
+      subtotal: subtotal,
       discount: 0,
       tax: 0,
-      total: selectedCartItems.reduce((acc, item) => acc + item.price * item.quantity, 0),
-      paymentMethod: 'Cash on Delivery'
+      total: subtotal,
+      paymentMethod: 'Cash on Delivery',
+      source: 'cart'
     };
 
-    navigate('/checkout', { state: { product: checkoutData } });
+    navigate('/checkoutpage', { state: { checkoutData } });
   };
 
   if (cartItems.length === 0) {
