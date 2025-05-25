@@ -19,6 +19,10 @@ import CartPage from "./components/Cart/CartPage";
 import ChatPage from "./components/Chat/ChatPage";
 import CheckoutPage from "./components/Checkout/CheckoutPage";
 import CheckoutSuccess from "./components/Checkout/CheckoutSuccess";
+import SearchProduct from "./components/LandingPage/SearchProduct"; 
+import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
+import NoResults from "./components/LandingPage/NoResults"; 
+
 
 
 function App() {
@@ -44,6 +48,10 @@ function App() {
         <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
         <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
         <Route path="/product_details" element={<OrderLayout><ProductDetails /></OrderLayout>} />
+        <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
+        <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
+        <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
+
 
       </Routes>
     </Router>

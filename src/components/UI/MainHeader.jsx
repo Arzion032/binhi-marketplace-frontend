@@ -1,15 +1,22 @@
-
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const MainHeader = () => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
+  const [searchInput, setSearchInput] = useState("");
+  const navigate = useNavigate();
 
   const handleLanguageChange = (e) => {
     setSelectedLang(e.target.value);
   };
 
   const flagSrc = selectedLang === "Tagalog" ? "/Flags.png" : "/us_flag.png";
+
+  const handleSearchKeyPress = (e) => {
+    if (e.key === 'Enter' && searchInput.trim()) {
+      navigate(`/search-product?query=${encodeURIComponent(searchInput.trim())}`);
+    }
+  };
 
   return (
     <header className="w-full bg-white shadow font-inter">
@@ -37,18 +44,14 @@ const MainHeader = () => {
 
       {/* Main Header */}
       <div className="w-full flex items-center justify-between px-6 py-4">
-        {/* Left: Logo */}
+        {/* Logo */}
         <Link to="/">
           <div className="flex items-center hover:scale-110">
-            <img
-              src="/Primary Logo w_ BG.png"
-              alt="Binhi Logo"
-              className="h-10 w-auto"
-            />
+            <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" className="h-10 w-auto" />
           </div>
         </Link>
 
-        {/* Center: Search */}
+        {/* Search Bar */}
         <div className="flex items-center flex-1 justify-center px-4">
           <div className="flex items-center border-2 border-black rounded-full px-3 py-1 w-full max-w-md h-10">
             <img src="/search.png" alt="Search" className="w-5 h-5 mx-2" />
@@ -56,6 +59,9 @@ const MainHeader = () => {
               type="text"
               placeholder="Search"
               className="flex-grow outline-none font-bold text-[12px]"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              onKeyPress={handleSearchKeyPress}
             />
             <button>
               <img src="/mic.png" alt="Mic" className="w-5 h-5 mx-2 hover:scale-110" />
@@ -66,7 +72,7 @@ const MainHeader = () => {
           </div>
         </div>
 
-        {/* Right: Icons */}
+        {/* Icons */}
         <div className="flex items-center gap-4">
            <Link to="/CartPage">
           <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer hover:scale-110" /></Link>
@@ -74,14 +80,9 @@ const MainHeader = () => {
           <div className="flex items-center gap-2 cursor-pointer">
             <img src="/account.png" alt="Account" className="w-10 h-10" />
             <Link to="/UserProfile">
-            <span className="text-sm font-bold">My Account</span> </Link>
-            <svg
-              className="w-4 h-4"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-            >
+              <span className="text-sm font-bold">My Account</span>
+            </Link>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>
           </div>

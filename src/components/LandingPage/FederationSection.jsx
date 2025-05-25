@@ -81,91 +81,62 @@ function FederationSection() {
 
       {activeTab === "faq" && (
         <div className="mx-[80px] mt-[20px] py-10 px-4 bg-white p-6 border rounded-xl shadow-lg text-gray-700">
-        <div className="max-w-6xl mx-auto">    
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {Array(5).fill().map((_, i) => (
-              <div
-                key={i}
-                className="bg-white border border-gray-300 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition"
-              >
-                <div className="flex items-center text-lg font-semibold mb-2">
-            <img
-              src="/qm.png"
-              alt="question mark"
-              className="w-5 h-5 mr-2 inline-block object-contain"
-            />
-            How to apply?
+          <div className="max-w-6xl mx-auto">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+              {Array(5).fill().map((_, i) => (
+                <div
+                  key={i}
+                  className="bg-white border border-gray-300 rounded-xl p-4 text-center shadow-sm hover:shadow-md transition"
+                >
+                  <div className="flex items-center text-lg font-semibold mb-2">
+                    <img
+                      src="/qm.png"
+                      alt="question mark"
+                      className="w-5 h-5 mr-2 inline-block object-contain"
+                    />
+                    How to apply?
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Lorem ipsum dolor sit amet consectetur adipiscing elit.
+                    Quisque faucibus ex sapien vitae.
+                  </p>
+                </div>
+              ))}
+            </div>
           </div>
-
-                <p className="text-sm text-gray-600">
-                  Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae.
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
         </div>
       )}
 
       {activeTab === "support" && (
         <div className="mx-[80px] mt-[20px] bg-white p-6 border rounded-xl shadow-lg text-gray-700">
-          <h3 className="text-2xl font-bold text-center mb-4">Help and our farmers to produce more quality products! </h3>
+          <h3 className="text-2xl font-bold text-center mb-4">
+            Help and our farmers to produce more quality products!
+          </h3>
           <p className="text-center font-bold mb-2">
-            Contact us with:{" "}
-            {/* <span className="text-blue-600 underline">support@bmffi.org</span> */}
+            Contact us with:
           </p>
 
-           {/* Social Icons */}
-    <div className="flex justify-center gap-2 mb-4">
-      {/* Messenger */}
-      <div className="flex items-center gap-2">
-        <img src="/Messenger.png" alt="Messenger" className="w-6 h-6" />
-      </div>
+          {/* Social Icons */}
+          <div className="flex justify-center gap-4 mb-4">
+            <img src="/Messenger.png" alt="Messenger" className="w-6 h-6" />
+            <img src="/fb.png" alt="Facebook" className="w-6 h-6" />
+            <div className="flex items-center gap-1">
+              <img src="/WhatsApp.png" alt="WhatsApp" className="w-6 h-6" />
+              <span className="text-sm font-medium">Jcell Castro</span>
+            </div>
+          </div>
 
-      {/* Facebook */}
-      <div className="flex items-center gap-2">
-        <img src="/fb.png" alt="Facebook" className="w-6 h-6" />
-      </div>
-
-      {/* WhatsApp */}
-      <div className="flex items-center gap-2">
-        <img src="/WhatsApp.png" alt="WhatsApp" className="w-6 h-6" />
-        <span className="text-sm font-medium">Jcell Castro</span>
-      </div>
-    </div>
-
-          <p className="flex justify-center gap-2 mb-2 font-bold mt-10">
-            Donate us with:{" "}
+          <p className="flex justify-center font-bold mt-10 mb-2">
+            Donate us with:
           </p>
           <div className="flex justify-center items-center gap-2">
-        <img src="/qr code.png" alt="QR" className="w-15 h-15" />
-        <span className="text-sm font-bold">GCASH <br className="font-normal"/> 0928-7272-370</span>
-      </div>
-    </div>
-      )}
-
-      {/* Stats */}
-      <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[40px]">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
-          {/* 1st Stat */}
-          <div className="flex flex-col justify-center px-4 py-4">
-            <h2 className="text-[60px] leading-tight">546+</h2>
-            <p className="text-[20px] font-bold">Registered Farmers</p>
-          </div>
-
-          {/* 2nd Stat */}
-          <div className="flex flex-col justify-center px-4 py-4">
-            <h2 className="text-[60px] leading-tight">789,900+</h2>
-            <p className="text-[20px] font-bold">Orders Delivered</p>
-          </div>
-
-          {/* 3rd Stat */}
-          <div className="flex flex-col justify-center px-4 py-4">
-            <h2 className="text-[60px] leading-tight">690+</h2>
-            <p className="text-[20px] font-bold">Food Items</p>
+            <img src="/qr code.png" alt="QR" className="w-20 h-20" />
+            <span className="text-sm font-bold">
+              GCASH <br /> 0928-7272-370
+            </span>
           </div>
         </div>
-      </section>
+      )}
     </section>
   );
 }
