@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
-import { Search, SlidersHorizontal, RefreshCw, Plus, Pencil, Trash2, Copy } from 'lucide-react';
+import { Search, SlidersHorizontal, RefreshCw, Plus, Pencil, Trash2 } from 'lucide-react';
+import SideBar from '../SideBar';
 
 const TABS = ['Active', 'Drafts', 'Orders'];
 
@@ -32,6 +33,12 @@ const BADGE_STYLES = {
 const STATUS_STYLES = {
   Pending: { color: '#92400E', background: '#FEF3C7', border: '#92400E' },
   Draft: { color: '#92400E', background: '#FEF3C7', border: '#92400E' },
+};
+
+const getTabDisplay = (tab) => {
+  if (tab === 'Active' || tab === 'Drafts') return 'Product Management';
+  if (tab === 'Orders') return 'Order Management';
+  return tab;
 };
 
 const SellerCenter = () => {
@@ -75,114 +82,338 @@ const SellerCenter = () => {
   };
 
   return (
-    <div className="p-0">
-      <div className="sticky top-0 z-30 w-full bg-[#f9fbf8] shadow-sm">
-        <div className="px-6 pb-4 pt-6">
-        <h1 className="text-4xl font-extrabold font-inter text-gray-800">Product Management</h1>
-          <ul ref={tabsRef} className="flex mt-4 border-b relative">
-            {TABS.map((t, i) => (
-              <li key={t} className="mr-10">
-                <button
-                  ref={el => (tabRefs.current[i] = el)}
-                  onClick={() => setActiveTab(t)}
-                  className={`pb-3 text-lg font-semibold w-44 ${activeTab === t ? 'text-green-600' : 'text-gray-400'}`}
-                >{t}</button>
-              </li>
-            ))}
+    <div className="flex">
+      {/* Sidebar on the left */}
+      <SideBar />
+
+      {/* Main content shifted to the right */}
+      <div className="ml-64 w-full min-h-screen" style={{ background: '#F7F8FA' }}>
+        {/* Sticky header & Marketplace-style Breadcrumb + Title */}
+        <div className="sticky top-0 z-30 w-full bg-[#f9fbf8] shadow-sm">
+          <div className="flex items-center justify-between px-6 py-3">
+            <div className="text-sm breadcrumbs font-inter text-base">
+              <ul className="flex gap-1">
+                <li>
+                  <a className="text-green-600 underline">Dashboard</a>
+                </li>
+                <li>
+                  <a className="text-green-600 underline">Marketplace</a>
+                </li>
+                <li className="text-gray-400">{getTabDisplay(activeTab)}</li>
+              </ul>
+            </div>
+            <button className="btn btn-square btn-binhi ml-4">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M5 12h.01M12 12h.01M19 12h.01"
+                />
+              </svg>
+            </button>
+          </div>
+          <div className="px-6 pb-4 h-5 flex items-center">
+            <h1 className="text-[40px] font-bold text-gray-800">Product Management</h1>
+          </div>
+          <div className="mb-4 border-b border-gray-200 relative">
+            <ul
+              ref={tabsRef}
+              className="flex -mb-px text-sm font-medium text-center"
+              role="tablist"
+            >
+              {TABS.map((t, i) => (
+                <li key={t} className="mr-10" role="presentation">
+                  <button
+                    ref={el => (tabRefs.current[i] = el)}
+                    onClick={() => setActiveTab(t)}
+                    className={`inline-block p-4 ${
+                      activeTab === t
+                        ? 'text-green-600'
+                        : 'text-gray-500 hover:text-gray-600'
+                    }`}
+                    role="tab"
+                    aria-selected={activeTab === t}
+                  >
+                    {t}
+                  </button>
+                </li>
+              ))}
+            </ul>
             <div
-              className="absolute bottom-0 h-[3px] bg-green-600 transition-all duration-300"
+              className="absolute bottom-0 h-0.5 bg-green-600 transition-all duration-300"
               style={{ left: indicator.left, width: indicator.width }}
             />
-          </ul>
-        </div>
-      </div>
-
-      <div className="flex justify-between items-center px-6 py-4">
-        <div className="flex items-center gap-2 text-gray-700">
-          <RefreshCw size={20} className="text-[#4CAE4F] w-6 h-6" />
-          <span className="text-xl font-bold font-inter text-black">{activeTab} Products ({filtered.length})</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="relative w-[270px]">
-            <Search size={18} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-black" />
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search Product"
-            className="flex items-center border-2 border-black rounded-full pl-10 px-3 py-1 w-full max-w-md h-10"/>
-            <SlidersHorizontal size={18} className="absolute right-3 top-1/2 transform -translate-y-1/2 text-black" />
           </div>
-          <button className="flex items-center gap-2 bg-[#4CAE4F] text-white font-medium text-base px-6 py-2 h-10 rounded-full">
-            <Plus size={16} /> Add Product
-          </button>
         </div>
-      </div>
 
-      <div className="flex gap-6 overflow-x-auto px-6 pb-4">
-        {CATEGORIES_SUMMARY.map(cat => (
-          <div key={cat.name} className="text-xl relative bg-white border border-gray-300 rounded-2xl flex flex-col justify-center h-[80px] w-[150px] shadow-sm">
-            <div className="absolute left-0 top-0 h-full w-3 rounded-tl-3xl rounded-bl-3xl" style={{ backgroundColor: cat.bg }} />
-            <div className="pl-4">
-              <p className="text-lg text-gray-400 font-semibold pt-2">{cat.name}</p>
-              <p className="text-2xl font-bold">{cat.count}</p>
+        {/* Toolbar: search, actions */}
+        <div className="flex items-center justify-between px-6 py-4">
+          {/* LEFT: Selection actions */}
+          {selectedRows.length > 0 ? (
+            <div className="flex items-center gap-2">
+              <button
+                className="flex items-center gap-2 border border-gray-200 rounded-2xl px-4 py-2 hover:bg-red-50"
+                style={{ color: "#dc2626" }}
+              >
+                <Trash2 size={18} stroke="#dc2626" />
+                Delete
+                <span className="text-gray-500 ml-1">
+                  {selectedRows.length} Selected
+                </span>
+              </button>
+              <button
+                onClick={() => setSelectedRows([])}
+                className="flex items-center gap-1 border border-gray-200 rounded-2xl px-4 py-2 hover:bg-gray-100"
+              >
+                ✕ Clear
+              </button>
             </div>
+          ) : (
+            <div className="flex items-center gap-2" style={{ color: "#374151" }}>
+              <RefreshCw size={20} style={{ color: "#16A34A" }} />
+              <span style={{ fontWeight: 500 }}>
+                {activeTab === "Active"
+                  ? `All Products ${filtered.length}`
+                  : activeTab === "Drafts"
+                  ? `All Drafts ${filtered.length}`
+                  : activeTab === "Orders"
+                  ? `All Orders ${filtered.length}`
+                  : ""}
+              </span>
+            </div>
+          )}
+
+          {/* RIGHT: Search, filter, add */}
+          <div className="flex items-center gap-4">
+            <div className="relative" style={{ width: "240px" }}>
+              <Search
+                size={18}
+                style={{
+                  position: "absolute",
+                  left: "0.75rem",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#6B7280",
+                }}
+              />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search Product"
+                style={{
+                  width: "100%",
+                  padding: "0.5rem 2.5rem 0.5rem 2.5rem",
+                  border: "1px solid #D1D5DB",
+                  borderRadius: "9999px",
+                  outline: "none",
+                }}
+              />
+              <SlidersHorizontal
+                size={18}
+                style={{
+                  position: "absolute",
+                  right: "0.75rem",
+                  top: "50%",
+                  transform: "translateY(-50%)",
+                  color: "#6B7280",
+                  cursor: "pointer"
+                }}
+              />
+            </div>
+            <button
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
+                padding: "0.5rem 1.2rem",
+                backgroundColor: "#16A34A",
+                color: "#fff",
+                border: "none",
+                borderRadius: "9999px",
+                fontWeight: 600,
+                fontSize: "1rem",
+                cursor: "pointer",
+                boxShadow: "0 2px 8px 0 rgba(36,185,111,0.05)"
+              }}
+            >
+              <Plus size={18} /> Add Product
+            </button>
           </div>
-        ))}
-      </div>
+        </div>
 
-      <div className="px-6 pb-6">
-        <table className="w-full text-left border-collapse bg-white rounded-xl overflow-hidden">
-          <thead className="bg-[#F9F9F9] text-black text-lg rounded-full">
-            <tr>
-              <th className="p-4"><input type="checkbox" checked={selectedRows.length === filtered.length} onChange={toggleSelectAll} className="w-5 h-5"/></th>
-              <th className="p-4">Product</th>
-              <th className="p-4">Price</th>
-              <th className="p-4">Category</th>
-              <th className="p-4">Stock</th>
-              <th className="p-4">Status</th>
-              <th className="p-4">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filtered.map(p => {
-              const catStyle = BADGE_STYLES[p.category] || BADGE_STYLES['Grains'];
-              const statStyle = STATUS_STYLES[p.status] || STATUS_STYLES['Pending'];
-              return (
-                <tr key={p.id} className={`border-t ${selectedRows.includes(p.id) ? 'bg-[#F0FDFA]' : ''}`}>
-                  <td className="p-4"><input type="checkbox" checked={selectedRows.includes(p.id)} onChange={() => toggleRow(p.id)} className="w-5 h-5" /></td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-3">
-                      <img src={p.avatar} alt={p.name} className="w-10 h-10 rounded-full object-cover" />
-                      <div>
-                        <div className="font-semibold text-lg">{p.name}</div>
-                        <div className="text-base text-gray-800">Variation: {p.variation}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="p-4 font-bold text-lg">₱{p.price.toLocaleString()}</td>
-                  <td className="p-3">
-                    <span className="text-base font-medium border px-4 py-1 rounded-full" style={{ color: catStyle.color, backgroundColor: catStyle.background, border: `1px solid ${catStyle.border}` }}>{p.category}</span>
-                  </td>
-                  <td className="p-4 text-lg font-bold">{p.stock}</td>
-                  <td className="p-3">
-                    <span className="text-base font-medium border px-4 py-1 rounded-full" style={{ color: statStyle.color, backgroundColor: statStyle.background, border: `1px solid ${statStyle.border}` }}>{p.status}</span>
-                  </td>
-                  <td className="p-4">
-                    <div className="flex items-center gap-4">
-                      <Pencil size={25} className="text-blue-600 cursor-pointer hover:scale-110 transition" />
-                      <Trash2 size={25} className="text-red-500 cursor-pointer hover:scale-110 transition" />
-                    </div>
-                  </td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-
-        <div className="flex justify-center mt-6">
-          <div className="flex items-center gap-1">
-            <button className="px-3 py-1 rounded-lg text-lg text-gray-600 hover:bg-gray-200">«</button>
-            {[1, 2, 3, 4, 5].map(n => (
-              <button key={n} className={`px-3 py-1 rounded-lg text-lg ${n === 1 ? 'bg-gray-300 text-black' : 'text-gray-600 hover:bg-gray-100'}`}>{n}</button>
+        {/* Category Summary Cards */}
+        {["Active", "Drafts"].includes(activeTab) && (
+        <div className="px-6 pb-4">
+          <div className="flex gap-4 overflow-x-auto">
+            {CATEGORIES_SUMMARY.map(cat => (
+              <div
+                key={cat.name}
+                style={{
+                  position: 'relative',
+                  border: '1px solid #858585',
+                  borderRadius: '1.6rem',
+                  minWidth: '150px',
+                  height: '80px',
+                  padding: '0 1.5rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  backgroundColor: '#FFFFFF',
+                  flex: '1',
+                  overflow: 'hidden'
+                }}
+              >
+                <div
+                  style={{
+                    position: 'absolute',
+                    left: '0',
+                    top: '0',
+                    bottom: '0',
+                    width: '20px',
+                    backgroundColor: cat.bg,
+                    borderRadius: '1.6rem 0 0 1.6rem'
+                  }}
+                />
+                <span style={{ fontSize: '0.875rem', color: '#9CA3AF', fontWeight: 500, marginLeft: '8px' }}>{cat.name}</span>
+                <span style={{ fontSize: '1.875rem', fontWeight: 900, color: '#000000', marginLeft: '8px' }}>{cat.count}</span>
+              </div>
             ))}
-            <button className="px-3 py-1 rounded-lg text-lg text-gray-600 hover:bg-gray-200">»</button>
+          </div>
+        </div>
+        )}
+
+        {/* Table */}
+        <div className="px-6 pb-6">
+          <div style={{ borderRadius: '1rem', overflow: 'hidden', minHeight: 420 }}>
+            <h2 className="px-4 pt-4 text-xl font-bold text-gray-900">
+              {["Active", "Drafts"].includes(activeTab)
+                ? "Product List"
+                : activeTab === "Orders"
+                ? "Order List"
+                : ""}
+            </h2>
+            {/* NO horizontal rule here! */}
+            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+              <thead style={{ backgroundColor: '#F7F7FB' }}>
+                <tr style={{ color: '#4B5563', fontSize: '0.875rem', fontWeight: 600 }}>
+                  <th style={{ padding: '0.75rem' }}>
+                    <input
+                      type="checkbox"
+                      className="checkbox checkbox-sm rounded"
+                      checked={selectedRows.length === filtered.length && filtered.length > 0}
+                      onChange={toggleSelectAll}
+                    />
+                  </th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Product</th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Price</th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Category</th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Stock</th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Status</th>
+                  <th style={{ padding: '0.75rem', textAlign: 'left' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((p, idx) => {
+                  const catStyle = BADGE_STYLES[p.category] || BADGE_STYLES['Grains'];
+                  const statStyle = STATUS_STYLES[p.status] || STATUS_STYLES['Pending'];
+                  const isSelected = selectedRows.includes(p.id);
+                  const rowBg =
+                    idx === 0
+                      ? { backgroundColor: '#F7F7FB' }
+                      : isSelected
+                      ? { backgroundColor: '#F0FDFA' }
+                      : {};
+                  return (
+                    <tr
+                      key={p.id}
+                      style={{
+                        ...rowBg,
+                        height: '49px'
+                      }}>
+                      <td style={{ padding: '0.75rem' }}>
+                        <input
+                          type="checkbox"
+                          className="checkbox checkbox-sm rounded"
+                          checked={isSelected}
+                          onChange={() => toggleRow(p.id)}
+                        />
+                      </td>
+                      <td style={{ padding: '0.75rem' }}>
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
+                          <img src={p.avatar} alt={p.name} style={{ width: 32, height: 32, borderRadius: '50%' }} />
+                          <div>
+                            <div style={{ fontWeight: 600, color: '#111827' }}>{p.name}</div>
+                            <div style={{ fontSize: '0.75rem', color: '#6B7280' }}>
+                              Variation: {p.variation}
+                            </div>
+                          </div>
+                        </div>
+                      </td>
+                      <td style={{ padding: '0.75rem' }}>
+                        ₱{Number(p.price).toLocaleString('en-PH', { minimumFractionDigits: 2 })}
+                      </td>
+                      <td style={{ padding: '0.75rem' }}>
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            padding: '0.25rem 0.75rem',
+                            fontSize: '0.75rem',
+                            fontWeight: 500,
+                            borderRadius: '9999px',
+                            color: catStyle.color,
+                            backgroundColor: catStyle.background,
+                            border: `1px solid ${catStyle.border}`
+                          }}
+                        >
+                          {p.category}
+                        </span>
+                      </td>
+                      <td style={{ padding: '0.75rem' }}>{p.stock}</td>
+                      <td style={{ padding: '0.75rem' }}>
+                        <span
+                          style={{
+                            display: 'inline-block',
+                            padding: '0.25rem 0.75rem',
+                            fontSize: '0.75rem',
+                            fontWeight: 500,
+                            borderRadius: '9999px',
+                            color: statStyle.color,
+                            backgroundColor: statStyle.background,
+                            border: `1px solid ${statStyle.border}`
+                          }}
+                        >
+                          {p.status}
+                        </span>
+                      </td>
+                      <td style={{ padding: '0.75rem', minWidth: 120 }}>
+                        <div className="group flex items-center gap-4">
+                          <Pencil size={20} className="text-blue-600 cursor-pointer transition-transform duration-200 group-hover:-translate-y-1" />
+                          <Trash2 size={20} className="text-red-500 cursor-pointer transition-transform duration-200 group-hover:translate-x-8" />
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
+              </tbody>
+            </table>
+            {/* Pagination */}
+            <div className="flex justify-center my-6">
+              <div className="flex items-center gap-1">
+                <button className="btn btn-sm" style={{ color: "#757575" }}>«</button>
+                {[1, 2, 3, 4, 5].map(n => (
+                  <button key={n} className={`btn btn-sm ${n === 1 ? 'bg-gray-300 text-black' : 'btn-ghost text-gray-600'}`}>{n}</button>
+                ))}
+                <button className="btn btn-sm" style={{ color: "#757575" }}>»</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>

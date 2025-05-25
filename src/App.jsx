@@ -52,7 +52,7 @@ function App() {
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
         <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
-        <Route path="/seller-center" element={<MainLayout><SellerCenter/></MainLayout>}/>
+        <Route path="/seller-center" element={<SellerCenter/>} />
 
 
       </Routes>
