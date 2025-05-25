@@ -16,20 +16,20 @@ export default function CheckoutPage() {
 
   const { items, subtotal, discount, tax, total } = checkoutData;
 
-  const handleBuyNow = () => {
-    const product = {
-      ...items[0],
-      subtotal,
-      discount,
-      tax,
-      total,
-      paymentMethod,
-    };
-
-    navigate('/checkout-success', {
-      state: { product },
-    });
-  };
+ const handleBuyNow = () => {
+  navigate('/checkout-success', {
+    state: {
+      product: {
+        items,
+        subtotal,
+        discount,
+        tax,
+        total,
+        paymentMethod,
+      },
+    },
+  });
+};
 
   return (
     <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
