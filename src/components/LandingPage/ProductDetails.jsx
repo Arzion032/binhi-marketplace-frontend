@@ -4,9 +4,6 @@ import { Link } from "react-router-dom";
 
 
 
-//Done product details
-
-
 const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();

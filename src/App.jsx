@@ -22,6 +22,8 @@ import CheckoutSuccess from "./components/Checkout/CheckoutSuccess";
 import SearchProduct from "./components/LandingPage/SearchProduct"; 
 import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
 import NoResults from "./components/LandingPage/NoResults"; 
+import MarketplaceWithAccount from "./components/LandingPageWithAccount/MarketplaceWithAccount";
+import FeaturedProducts from "./components/LandingPage/FeaturedProducts";
 
 
 
@@ -39,7 +41,6 @@ function App() {
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
         <Route path="/product/:productId" element={<MainLayout><ProductDetails /></MainLayout>} />
         <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
-        <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/landingpage" element={<MainLayout><Marketplace/></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
@@ -51,8 +52,8 @@ function App() {
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
         <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
-
-
+        <Route path="/marketplace" element={<MarketplaceWithAccount />} />
+        <Route path="/featured-products" element={<FeaturedProducts />} />
       </Routes>
     </Router>
   );

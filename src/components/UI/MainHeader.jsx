@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
-const MainHeader = () => {
+const MainHeader = ({ profileImage = "/account.png" }) => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
@@ -74,11 +74,12 @@ const MainHeader = () => {
 
         {/* Icons */}
         <div className="flex items-center gap-4">
-           <Link to="/CartPage">
-          <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer hover:scale-110" /></Link>
+          <Link to="/CartPage">
+            <img src="/cart.png" alt="Cart" className="w-5 h-5 cursor-pointer hover:scale-110" />
+          </Link>
           <img src="/bell.png" alt="Notifications" className="w-5 h-5 cursor-pointer hover:scale-110" />
           <div className="flex items-center gap-2 cursor-pointer">
-            <img src="/account.png" alt="Account" className="w-10 h-10" />
+            <img src={profileImage} alt="Account" className="w-10 h-10 rounded-full object-cover" />
             <Link to="/UserProfile">
               <span className="text-sm font-bold">My Account</span>
             </Link>

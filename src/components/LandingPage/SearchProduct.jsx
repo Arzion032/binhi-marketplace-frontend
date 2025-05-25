@@ -17,7 +17,7 @@ const SearchProduct = () => {
   });
 
   return (
-      <div className="min-h-screen w-full bg-[#F5F9F5] pt-8 ">
+        <div className="min-h-screen w-full bg-[#F5F9F5] pt-8 pb-20">
         <div className="mx-[85px] max-w-[1700px]">
           {/* Header */}
           <div className="flex items-center gap-2 mb-6">
@@ -47,18 +47,19 @@ const SearchProduct = () => {
             </div>
           </div>
 
+
           {/* Product Cards */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-x-[60px] gap-y-[40px]">
+         <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {products.map((product, index) => (
               <div
                 key={index}
-                className="w-[290px] bg-white rounded-xl shadow-md p-6 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
+                className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
               >
                 <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
                   VEGETABLE
                 </span>
                 <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
-                <p className="text-left font-semibold text-lg">{product.name}</p>
+                <p className="text-left font-semibold text-[20px]">{product.name}</p>
                 <p className="text-[#4CAE4F] text-[20px] font-bold">
                   {product.price}
                   <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2 ml-1">
@@ -70,11 +71,7 @@ const SearchProduct = () => {
                   5.0 • {product.sold} Sold
                 </div>
                 <div className="flex items-center justify-between gap-4 mt-2">
-                  <img
-                    src="/shopping-cart.png"
-                    alt="cart"
-                    className="w-6 h-6 transition-transform duration-100 hover:scale-125"
-                  />
+                  <img src="/shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
                   <button
                     onClick={() => navigate(`/product/${index}`)}
                     className="text-[20px] bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"

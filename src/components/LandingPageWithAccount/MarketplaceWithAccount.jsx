@@ -1,45 +1,52 @@
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import FederationSection from './FederationSection';
+import FederationSection from '../LandingPage/FederationSection'; // Go up one level then into LandingPage
+import MainHeader from '../UI/MainHeader'; 
 
-//Added Product Details
-//batman hello
-const Marketplace = () => {
+const MarketplaceWithAccount = () => {
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen w-full bg-white">
-      <div className="bg-[#F5F9F5] shadow-lg">  
+          <MainHeader profileImage="/333.png" />
 
-        {/*Landing Section */}
-        <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">      
-          <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-            <div className="md:w-1/2 space-y-4 text-center md:text-left">
-              <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">
-                Growth Begins <br /> with a Single Seed
-              </h1>
-              <p className="text-[20px] md:text-lg">
-                Take the first step toward a greener future.
-              </p>
-              <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                <button className="text-[20px] bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
-                  Shop Now
-                </button>
-                <button className="border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
-                  Explore →
-                </button>
-              </div>
-            </div>
 
-            <div className="md:w-1/2 flex justify-center">
-              <img
-                src="/LandingPageFarmers.png"
-                alt="Farmers"
-                className="w-full bottom-[-60px] h-auto max-w-[520px] rounded-none"
-              />
-            </div>
-          </div>
-        </section>
+      {/* Reusing landing page layout */}
+<div className="bg-[#F5F9F5] shadow-lg">
+  <section className="bg-[#4CAE4F] mx-[80px] mt-6 rounded-xl px-24 py-0 flex justify-between items-stretch text-white shadow-lg h-[300px]">
+    {/* Left Basket Image */}
+    <div className="flex items-end">
+      <img
+        src="/basket.png"
+        alt="Left Basket"
+        className="w-[280px] h-auto object-contain"
+      />
+    </div>
+
+    {/* Center Greeting Text */}
+<div className="text-center flex flex-col justify-center flex-1">
+  <h2 className="sm:text-7xl  font-bold mb-3">Hi, Juan!</h2>
+  <p className="text-2xl flex flex-col items-center gap-2">
+    <span>What product you want to find?</span>
+    <span className="flex items-center gap-1">
+      Click the
+      <img src="/search-white.png" alt="search" className="w-6 h-6 inline-block" />
+      <span className="font-bold">search bar</span> above!
+    </span>
+  </p>
+</div>
+
+
+
+    {/* Right Basket Image */}
+    <div className="flex items-end py-[98px]">
+      <img
+        src="/basket2.png"
+        alt="Right Basket"
+        className="w-[280px] h-auto object-contain"
+      />
+    </div>
+  </section>
+
 
         {/*Categories, miii*/}
         <section className="px-2 sm:px-4 py-4 mx-[60px]">
@@ -87,8 +94,8 @@ const Marketplace = () => {
         </section>
       </div>
 
-      {/*Products Section, miii*/}
-      <h1 className="bg-white text-[38px] font-bold text-center shadow-lg">
+      {/* Daily Needs */}
+    <h1 className="bg-white text-[38px] font-bold text-center shadow-lg">
         YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
       </h1>
       <section className="px-6 py-6 bg-[#F5F9F5] ">
@@ -101,7 +108,7 @@ const Marketplace = () => {
             { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
             { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
             { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-            { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
+            { name: "Premium Milk Wih No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
             { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
             { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
             { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
@@ -156,7 +163,7 @@ const Marketplace = () => {
         </div>
       </section>  
 
-      {/*Featured Products Section, miii*/}
+       {/*Featured Products Section, miii*/}
       <section className="px-6 py-6 bg-[#F5F9F5] ">
         <div className="flex items-center justify-between mx-[70px] mt-[5px] mb-[10px]">
           <div className="flex items-center gap-2">
@@ -170,8 +177,8 @@ const Marketplace = () => {
               className="text-[20px] font-bold hover:underline"
             >
               See more
-            </button>        
-            </div>
+            </button>
+        </div>
         <div className="mx-[70px] max-w-8xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-6">
           {[
             { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
@@ -337,38 +344,36 @@ const Marketplace = () => {
           </button>
         </div>
       </section>
+     {/*Federation Section, miii*/}
+          <section>
+            <container className="bg-white h-[20px]"></container>
+          </section>
+          <FederationSection/>
+    
+          {/*Counts*/}
+    <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
+            <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
+              <div className="px-4 py-4">
+                <h2 className="text-[70px] font-semibold">546+</h2>
+                <p className="text-[20px] font-normal">Registered Farmers</p>
+              </div>
+              <div className="px-4 py-4">
+                <h2 className="text-[70px] font-semibold">789,900+</h2>
+                <p className="text-[20px]">Orders Delivered</p>
+              </div>
+              <div className="px-4 py-4">
+                <h2 className="text-[70px] font-semibold">690+</h2>
+                <p className="text-[20px]">Food Items</p>
+              </div>
+            </div>
+          </section>
 
-      {/*Federation Section, miii*/}
-      <section>
-        <container className="bg-white h-[20px]"></container>
-      </section>
-      <FederationSection/>
-
-      {/*Counts*/}
-<section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
-          <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">546+</h2>
-            <p className="text-[20px] font-normal">Registered Farmers</p>
-          </div>
-          <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">789,900+</h2>
-            <p className="text-[20px]">Orders Delivered</p>
-          </div>
-          <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">690+</h2>
-            <p className="text-[20px]">Food Items</p>
-          </div>
-        </div>
-      </section>
-
+      {/* Footer */}
       <footer className="bg-[#D9D9D9] mt-6 pt-10 pb-4">
         <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
           <div className="flex flex-col items-center">
-            <div className="flex flex-col">
-              <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
-              <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
-            </div>
+            <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
+            <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
           </div>
           <div className="mx-4">
             <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
@@ -390,52 +395,41 @@ const Marketplace = () => {
           <div className="mx-4">
             <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
             <div className="grid grid-cols-2 gap-2">
-              <img src="cod.png" alt="COD" />
-              <img src="gcash.png" alt="GCash" />
-              <img src="paypal.png" alt="PayPal" />
-              <img src="maya.png" alt="Maya" />
+              <img src="/cod.png" alt="COD" />
+              <img src="/gcash.png" alt="GCash" />
+              <img src="/paypal.png" alt="PayPal" />
+              <img src="/maya.png" alt="Maya" />
             </div>
           </div>
           <div className="mx-4">
             <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
             <ul className="space-y-1">
               <li className="flex items-center space-x-1">
-                <img src="Facebook.png" alt="Facebook" />
+                <img src="/Facebook.png" alt="Facebook" />
                 <span>BINHI Corp.</span>
               </li>
               <li className="flex items-center space-x-1">
-                <img src="Messenger.png" alt="Messenger" />
+                <img src="/Messenger.png" alt="Messenger" />
                 <span>@BINHI Corp.</span>
               </li>
               <li className="flex items-center space-x-1">
-                <img src="WhatsApp.png" alt="WhatsApp" />
+                <img src="/WhatsApp.png" alt="WhatsApp" />
                 <span>BINHI Corp.</span>
               </li>
               <li className="flex items-center space-x-1">
-                <img src="Instagram.png" alt="Instagram" />
+                <img src="/Instagram.png" alt="Instagram" />
                 <span>BINHI Corp.</span>
               </li>
             </ul>
           </div>
         </div>
       </footer>
+
       <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
         Binhi 2024, All Rights Reserved.
       </div>
-
-      <div className="group fixed bottom-10 right-10 z-50">
-            <button
-                onClick={() => navigate('/ChatPage')}
-                className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
-            >
-                <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
-            </button>
-            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                Chats
-            </div>
-            </div>
     </div>
   );
 };
 
-export default Marketplace;
+export default MarketplaceWithAccount;

@@ -71,8 +71,9 @@ const SearchedFarmers = () => {
   
   return (
     <>
-      <section className="relative px-6 py-10 bg-[#F5F9F5] overflow-hidden">
-        <div className="w-full bg-[#F5F9F5] px-[80px] pt-1 pb-20">
+      {currentPage === 1 && (
+  <section className="relative px-6 py-10 bg-[#F5F9F5] overflow-hidden">
+    <div className="w-full bg-[#F5F9F5] px-[80px] pt-1 pb-20">
           <div className="flex items-center gap-2 mb-6">
         <img src="/medal.png" alt="medal icon" className="w-8 h-8" />
             <h2 className="text-3xl font-semibold">
@@ -123,7 +124,7 @@ const SearchedFarmers = () => {
           </div>
         </div>
       </section>
-
+      )}
       {/* Product Results Section */}
       <div className="w-full bg-[#F5F9F5] px-[100px] pt-10 pb-20">
         <div className="flex items-center gap-2 mb-6">
