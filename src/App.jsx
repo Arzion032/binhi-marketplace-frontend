@@ -43,6 +43,8 @@ function App() {
         <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
         <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
         <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
+        <Route path="/product_details" element={<OrderLayout><ProductDetails /></OrderLayout>} />
+
       </Routes>
     </Router>
   );
