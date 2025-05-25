@@ -1,40 +1,33 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 /*Check-out Page pu*/
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
+  const { state } = useLocation();
+  const checkoutData = state?.checkoutData;
+
   const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
 
-  const product = {
-    name: "Premium Farm Fresh Sweet Corn",
-    variation: "Yellow Corn",
-    image: "/Mais.png",
-    seller: "Carla Pasig",
-    price: 55,
-    quantity: 2,
-    orderId: "23149MF260",
-  };
+  if (!checkoutData) {
+    return <p className="text-center mt-10">No checkout data available.</p>;
+  }
 
-  const subtotal = product.price * product.quantity;
-  const discount = 53;
-  const tax = 999;
-  const total = subtotal - discount + tax;
+  const { items, subtotal, discount, tax, total } = checkoutData;
 
   const handleBuyNow = () => {
-    // Calculate the correct total for the success page
-    const orderData = {
-      ...product,
+    const product = {
+      ...items[0],
       subtotal,
       discount,
       tax,
       total,
-      paymentMethod
+      paymentMethod,
     };
 
     navigate('/checkout-success', {
-      state: { product: orderData }
+      state: { product },
     });
   };
 
@@ -50,7 +43,6 @@ export default function CheckoutPage() {
           </button>
           <p className="text-4xl font-bold">Checkout</p>
         </div>
-        
         <div className="flex items-center px-4">
           <div className="flex items-center bg-white border-2 border-black rounded-full px-3 py-1 w-[600px] h-14">
             <img src="/search.png" alt="Search" className="w-5 h-5 mx-4" />
@@ -90,34 +82,36 @@ export default function CheckoutPage() {
           {/* Product Details */}
           <section>
             <h2 className="text-xl font-bold mb-2">Product Details</h2>
-            <div className="bg-white p-4 rounded-xl border border-gray-600">
-              <div className="flex justify-between text-sm text-black mb-2">
-                <p className="font-medium">{product.seller}</p>
-                <p>Order ID: {product.orderId}</p>
-              </div>
-              <div className="border mt-4 mb-3" />
-              <div className="flex gap-4">
-                <img 
-                  src={product.image} 
-                  className="w-28 h-28 rounded-lg object-cover" 
-                  alt={product.name}
-                  onError={(e) => {
-                    e.target.src = '/placeholder-image.png'; // Fallback image
-                  }}
-                />
-                <div className="flex flex-col justify-between w-full">
-                  <div>
-                    <p className="font-semibold text-xl">{product.name}</p>
-                    <p className="text-sm text-gray-500">Variation: {product.variation}</p>
-                  </div>
-                  <div className="text-base text-right w-full">
-                    <p>Price: ₱{product.price.toFixed(2)}</p>
-                    <p>Quantity: ×{product.quantity}</p>
-                    <p className="text-green-600 font-semibold text-lg">Subtotal: ₱{subtotal.toFixed(2)}</p>
+            {items.map((product, index) => (
+              <div key={index} className="bg-white p-4 rounded-xl border border-gray-600 mb-4">
+                <div className="flex justify-between text-sm text-black mb-2">
+                  <p className="font-medium">{product.seller}</p>
+                  <p>Order ID: {product.orderId}</p>
+                </div>
+                <div className="border mt-4 mb-3" />
+                <div className="flex gap-4">
+                  <img
+                    src={product.image}
+                    className="w-28 h-28 rounded-lg object-cover"
+                    alt={product.name}
+                    onError={(e) => {
+                      e.target.src = '/placeholder-image.png';
+                    }}
+                  />
+                  <div className="flex flex-col justify-between w-full">
+                    <div>
+                      <p className="font-semibold text-xl">{product.name}</p>
+                      <p className="text-sm text-gray-500">Variation: {product.variation}</p>
+                    </div>
+                    <div className="text-base text-right w-full">
+                      <p>Price: ₱{product.price.toFixed(2)}</p>
+                      <p>Quantity: ×{product.quantity}</p>
+                      <p className="text-green-600 font-semibold text-lg">Subtotal: ₱{(product.price * product.quantity).toFixed(2)}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
+            ))}
           </section>
 
           {/* Payment Method */}
@@ -127,7 +121,6 @@ export default function CheckoutPage() {
               <p className="text-sm text-black mb-4">
                 Please select an option on how you want to pay your order.
               </p>
-
               <div className="w-full flex max-w-sm gap-4">
                 {/* Cash-on-Delivery */}
                 <label
@@ -223,7 +216,7 @@ export default function CheckoutPage() {
             onClick={handleBuyNow}
             className="mt-6 w-full py-3 px-4 rounded-full text-white text-lg font-semibold bg-green-600 hover:bg-green-700 transition-colors"
           >
-            Buy Now (1)
+            Buy Now ({items.length})
           </button>
         </div>
 
