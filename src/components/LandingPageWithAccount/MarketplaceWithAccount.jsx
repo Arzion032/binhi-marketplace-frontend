@@ -1,13 +1,20 @@
 import { useNavigate } from 'react-router-dom';
-import FederationSection from '../LandingPage/FederationSection'; // Go up one level then into LandingPage
+import FederationSection from '../LandingPage/FederationSection'; 
 import MainHeader from '../UI/MainHeader'; 
 
-const MarketplaceWithAccount = () => {
+
+  const MarketplaceWithAccount = () => {
   const navigate = useNavigate();
+  
+ const handleSearch = (query) => {
+  if (query.trim()) {
+    navigate(`/search-product-account?query=${encodeURIComponent(query.trim())}`);
+  }
+};
 
   return (
     <div className="min-h-screen w-full bg-white">
-          <MainHeader profileImage="/333.png" />
+<MainHeader profileImage="/333.png" onSearch={handleSearch} />
 
 
       {/* Reusing landing page layout */}

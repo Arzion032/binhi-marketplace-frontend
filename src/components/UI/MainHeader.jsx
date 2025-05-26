@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 
-const MainHeader = ({ profileImage = "/account.png" }) => {
+const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
   const [searchInput, setSearchInput] = useState("");
   const navigate = useNavigate();
@@ -14,8 +14,9 @@ const MainHeader = ({ profileImage = "/account.png" }) => {
 
   const handleSearchKeyPress = (e) => {
     if (e.key === 'Enter' && searchInput.trim()) {
-      navigate(`/search-product?query=${encodeURIComponent(searchInput.trim())}`);
-    }
+  onSearch?.(searchInput);
+}
+
   };
 
   return (
@@ -80,7 +81,7 @@ const MainHeader = ({ profileImage = "/account.png" }) => {
           <img src="/cart.png" alt="Cart" className="w-7 h-7 cursor-pointer hover:scale-110" /></Link>
           <img src="/bell.png" alt="Notifications" className="w-7 h-7 cursor-pointer hover:scale-110" />
           <div className="flex items-center gap-2 cursor-pointer">
-            <img src="/account.png" alt="Account" className="w-12 h-12" />
+          <img src={profileImage} alt="Account" className="w-12 h-12 rounded-full object-cover" />
 
             <Link to="/UserProfile">
               <span className="text-base font-bold">My Account</span>

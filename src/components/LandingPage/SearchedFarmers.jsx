@@ -83,7 +83,7 @@ const SearchedFarmers = () => {
           <div className="absolute inset-0 pointer-events-none">
             <img src="/confetti.png" alt="confetti" className="pt-[60px] w-full h-full object-cover" />
           </div>
-          <div className="pt-[75px] flex flex-wrap justify-center gap-6 relative z-10">
+          <div className="pl-[75px] flex flex-wrap justify-center gap-6 relative z-10">
             {farmers.slice(0, 3).map((farmer, index) => (
               <div
                 key={index}

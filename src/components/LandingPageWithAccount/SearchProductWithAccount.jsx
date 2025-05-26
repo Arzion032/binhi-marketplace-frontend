@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import MainHeader from '../UI/MainHeader';
 
-const SearchProduct = () => {
+const SearchProductWithAccount = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get('query');
 
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState("Relevance");
 
   const products = new Array(20).fill({
@@ -16,9 +18,135 @@ const SearchProduct = () => {
     image: "/Search-rice.png",
   });
 
+  const itemsPerPage = 4;
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  const paginatedProducts = useMemo(() => {
+    return products.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  }, [currentPage, products]);
+
+  const farmerTemplates = [
+    {
+      name: "Anton Benidas",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "10k",
+      rank: 2,
+      categories: ["milks & dairy", "rice", "grains"],
+      img: "/222.jpg",
+    },
+    {
+      name: "John Doe Pasig",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "12k",
+      rank: 1,
+      categories: ["fruits", "rice", "vegetables", "root crops"],
+      img: "/444.png",
+    },
+    {
+      name: "John Doe Pasig",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "12k",
+      rank: 1,
+      categories: ["fruits", "rice", "vegetables", "root crops"],
+      img: "/444.png",
+    },
+    {
+      name: "Anton Benidas",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "10k",
+      rank: 2,
+      categories: ["milks & dairy", "rice", "grains"],
+      img: "/222.jpg",
+    },
+  ];
+
+  const getCategoryClass = (cat) => {
+    switch (cat.toLowerCase()) {
+      case 'vegetables':
+      case 'root crops':
+      case 'milks & dairy':
+        return 'bg-[#8BC34A] text-white';
+      case 'grains':
+      case 'fruits':
+        return 'bg-[#D1A157] text-white';
+      case 'meat':
+      case 'rice':
+        return 'bg-[#4CAE4F] text-white';
+      default:
+        return 'bg-green-100 text-green-800';
+    }
+  };
+
   return (
-        <div className="min-h-screen w-full bg-[#F5F9F5] pt-8 pb-20">
+ <>
+    <MainHeader />
+    <div className="min-h-screen w-full bg-[#F5F9F5] pt-8">      
         <div className="mx-[85px] max-w-[1700px]">
+          <div className="mx-[200px] flex items-center gap-2 mb-6">
+            <img src="/text-search.png" alt="search icon" className="w-8 h-8" />
+            <h2 className="text-3xl font-semibold">
+              Farmer results for ‘<span className="text-green-600">{query}</span>’
+            </h2>
+          </div>
+<div className="pl-[190px] pb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-y-6 relative z-10">
+  {farmerTemplates.map((farmer, index) => (
+    <div key={index} className="px-1 pl-5"> {/* Controls spacing around card */}
+      <div className="bg-white rounded-2xl border-[3px] border-black-200 shadow-md text-center flex flex-col items-center justify-between">
+        {/* your card content here (unchanged) */}
+        <div className="flex flex-col items-center justify-between h-full w-full">
+          <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
+            <div className="relative w-24 h-24">
+              <img
+                src={farmer.img}
+                alt={farmer.name}
+                className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg"
+              />
+            </div>
+            <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
+            <p className="text-sm text-gray-500">{farmer.location}</p>
+            <div className="flex items-center gap-2 font-medium mt-1">
+              <img src="/Star.png" alt="star" className="h-5 w-5" />
+              <span className="text-black">{Number(farmer.rating).toFixed(1)}</span>
+              <span className="text-gray-500 ml-1">|</span>
+              <span className="text-gray-500 ml-2">{farmer.sold} Sold</span>
+            </div>
+            <div className="flex flex-wrap justify-center gap-2 mt-3">
+              {farmer.categories.map((cat, idx) => (
+                <span
+                  key={idx}
+                  className={`px-3 py-1 text-sm font-medium rounded-full ${getCategoryClass(cat)}`}
+                >
+                  {cat}
+                </span>
+              ))}
+            </div>
+          </div>
+          <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
+            <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+              <img src="/shopp.png" alt="shop" className="w-5 h-5" />
+              View Shop
+            </button>
+            <button className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2">
+              <img src="/chat.png" alt="chat" className="w-5 h-5" />
+              Chat Now
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  ))}
+</div>
+
+
+
+
           {/* Header */}
           <div className="mx-[200px] flex items-center gap-2 mb-6">
             <img src="/text-search.png" alt="search icon" className="w-8 h-8" />
@@ -83,13 +211,43 @@ const SearchProduct = () => {
             ))}
           </div>
 
-          {/* Login to See More */}
-          <div className="flex justify-center mt-10">
-            <button className="text-lg font-bold bg-white border-2 border-gray-700 text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110 hover:border-[#4CAE4F] mb-5">
-              Login to see more
-            </button>
-          </div>
-        </div>
+        {/* Pagination */}
+      <div className="flex justify-center gap-2 mt-6">
+        <button
+          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+          className="w-[45px] h-[50px] bg-[#D9D9D9] border border-[#858585] rounded-xl text-gray-500 hover:bg-[#c2c2c2]"
+        >
+          &lt;
+        </button>
+
+        {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+  <button
+    key={num}
+    onClick={() => setCurrentPage(num)} // this is correct
+    className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
+      currentPage === num
+        ? 'bg-[#4CAE4F] text-white border-[#4CAE4F]'
+        : 'bg-[#D9D9D9] text-[#858585] border-[#858585]'
+    }`}
+  >
+    {num}
+  </button>
+))}
+
+
+        <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
+          ...
+        </button>
+
+        <button
+          onClick={() => setCurrentPage((prev) => prev + 1)}
+          className="w-[45px] h-[50px] rounded-xl bg-[#D9D9D9] border border-[#858585] text-[#858585] hover:bg-[#c2c2c2]"
+        >
+          &gt;
+        </button>
+      </div>
+            </div>
+            
 
         {/* Footer Section */}
         <footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
@@ -153,7 +311,8 @@ const SearchProduct = () => {
           Binhi 2024, All Rights Reserved.
         </div>
       </div>
+      </>
   );
 };
 
-export default SearchProduct;
+export default SearchProductWithAccount;
