@@ -94,15 +94,6 @@ const SellerCenter = () => {
         <div className="sticky top-0 z-30 w-full bg-[#f9fbf8] shadow-sm">
           <div className="flex items-center justify-between px-6 py-3">
             <div className="text-sm breadcrumbs font-inter text-base">
-              <ul className="flex gap-1">
-                <li>
-                  <a className="text-green-600 underline">Dashboard</a>
-                </li>
-                <li>
-                  <a className="text-green-600 underline">Marketplace</a>
-                </li>
-                <li className="text-gray-400">{getTabDisplay(activeTab)}</li>
-              </ul>
             </div>
             <button className="btn btn-square btn-binhi ml-4">
               <svg
@@ -122,7 +113,7 @@ const SellerCenter = () => {
             </button>
           </div>
           <div className="px-6 pb-4 h-5 flex items-center">
-            <h1 className="text-[40px] font-bold text-gray-800">Product Management</h1>
+            <h1 className="text-4xl font-bold font-inter text-black">Product Management</h1>
           </div>
           <div className="mb-4 border-b border-gray-200 relative">
             <ul

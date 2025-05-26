@@ -15,17 +15,17 @@ const Marketplace = () => {
         <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">      
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
             <div className="md:w-1/2 space-y-4 text-center md:text-left">
-              <h1 className="text-2xl sm:text-3xl md:text-5xl font-bold leading-tight">
+              <h1 className="text-4xl sm:text-3xl md:text-5xl font-bold leading-tight">
                 Growth Begins <br /> with a Single Seed
               </h1>
-              <p className="text-[20px] md:text-lg">
+              <p className="text-xl md:text-lg">
                 Take the first step toward a greener future.
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                <button className="text-[20px] bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
+                <button className="text-xl bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
                   Shop Now
                 </button>
-                <button className="border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
+                <button className="text-lg border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
                   Explore →
                 </button>
               </div>
@@ -55,7 +55,7 @@ const Marketplace = () => {
               ].map((item, index) => (
                 <div
                   key={index}
-                  className="group p-4 text-center text-sm font-medium text-gray-700 flex flex-col items-center transition-transform duration-300"
+                  className="group p-4 text-center text-xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300"
                 >
                   {item.overlay ? (
                     <div className="relative w-18 h-18 mb-2">
@@ -77,7 +77,7 @@ const Marketplace = () => {
                       className="w-16 h-16 object-contain mb-2 transition-transform duration-100 group-hover:scale-200"
                     />
                   )}
-                  <span className="text-[20px] transition-transform duration-300 group-hover:scale-110 group-hover:font-bold">
+                  <span className="text-xl transition-transform duration-300 group-hover:scale-110 group-hover:font-bold">
                     {item.label}
                   </span>
                 </div>
@@ -88,7 +88,7 @@ const Marketplace = () => {
       </div>
 
       {/*Products Section, miii*/}
-      <h1 className="bg-white text-[38px] font-bold text-center shadow-lg">
+      <h1 className="bg-white text-4xl font-bold text-center shadow-lg p-6">
         YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
       </h1>
       <section className="px-6 py-6 bg-[#F5F9F5] ">
@@ -119,12 +119,12 @@ const Marketplace = () => {
               key={index}
               className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
             >
-              <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
+              <span className="w-[120px] text-center bg-green-100 text-green-800 text-sm font-semibold px-2 py-1 rounded-full mb-2">
                 VEGETABLE
               </span>
               <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
-              <p className="text-left font-semibold text-[20px]">{product.name}</p>
-              <p className="text-[#4CAE4F] text-[20px] font-bold">
+              <p className="text-left font-semibold text-lg">{product.name}</p>
+              <p className="text-[#4CAE4F] text-xl font-bold mt-2">
                 {product.price}{' '}
                 <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2">
                   per pc.
@@ -138,7 +138,7 @@ const Marketplace = () => {
                 <img src="shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
                 <button
                   onClick={() => navigate(`/product/${index}`)}
-                  className="text-[20px] bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
+                  className="text-xl bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
                 >
                   Buy Now
                 </button>
