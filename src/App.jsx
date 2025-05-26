@@ -24,7 +24,8 @@ import SearchedFarmers from "./components/LandingPage/SearchedFarmers";
 import NoResults from "./components/LandingPage/NoResults"; 
 import MarketplaceWithAccount from "./components/LandingPageWithAccount/MarketplaceWithAccount";
 import FeaturedProducts from "./components/LandingPage/FeaturedProducts";
-
+import SellerCenter from "./components/SellerCenter/SellerCenter";
+import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
 
 
 function App() {
@@ -54,6 +55,9 @@ function App() {
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
         <Route path="/marketplace" element={<MarketplaceWithAccount />} />
         <Route path="/featured-products" element={<FeaturedProducts />} />
+        <Route path="/seller-center" element={<SellerCenter />} />
+        <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
+
       </Routes>
     </Router>
   );

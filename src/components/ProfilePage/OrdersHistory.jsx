@@ -321,8 +321,8 @@ const OrderHistory = () => {
 
       {/* Order Details Modal */}
       {showDetails && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-          <div className="bg-white rounded-xl w-[1000px] p-6 shadow-lg relative border-t-4 border-[#4CAE4F]">
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center z-[999]">
+          <div className="bg-white rounded-xl w-[1000px] p-6 shadow-lg relative border-t-4 border-[#4CAE4F] z-[999]">
             <button
               className="absolute top-2 right-5 text-gray-500 hover:text-black text-2xl mb-2"
               onClick={() => setShowDetails(false)}

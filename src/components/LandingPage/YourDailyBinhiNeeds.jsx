@@ -3,18 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import MainHeader from '../UI/MainHeader';
 
 const itemsPerPage = 10;
-const paginatedProducts = products.slice(
-  (currentPage - 1) * itemsPerPage,
-  currentPage * itemsPerPage
-);
 
 const YourDailyBinhiNeeds = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
-
- 
-
- 
 
 
   const products = [
