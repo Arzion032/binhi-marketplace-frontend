@@ -1,6 +1,8 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { Search, SlidersHorizontal, RefreshCw, Plus, Pencil, Trash2 } from 'lucide-react';
 import Sidebar from '../Sidebar';
+import { useNavigate } from 'react-router-dom'; // Make sure this is at the top if not already
+
 
 
  /*pahguhd*/
@@ -51,6 +53,8 @@ const SellerCenter = () => {
   const tabsRef = useRef();
   const tabRefs = useRef([]);
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
+  const navigate = useNavigate();
+
 
   const updateIndicator = useCallback(() => {
     const container = tabsRef.current;
@@ -91,6 +95,17 @@ const SellerCenter = () => {
 
       {/* Main content shifted to the right */}
       <div className="ml-64 w-full min-h-screen" style={{ background: '#F7F8FA' }}>
+        <div className="flex justify-center my-6">
+      <button
+  onClick={() => navigate("/")}
+  className="flex items-center gap-2 text-black text-lg font-semibold border border-black rounded-full py-2 px-8 hover:text-green-700 transition"
+>
+  <img src="/arrow-left.png" alt="left" className="w-6 h-6" />
+   Back to Marketplace
+  <img src="/shop_black.png" alt="shop" className="w-6 h-6" />
+</button>
+      </div>
+
         {/* Sticky header & Marketplace-style Breadcrumb + Title */}
         <div className="sticky top-0 z-30 w-full bg-[#f9fbf8] shadow-sm">
           <div className="flex items-center justify-between px-6 py-3">
@@ -116,10 +131,10 @@ const SellerCenter = () => {
           <div className="px-6 pb-4 h-5 flex items-center">
             <h1 className="text-4xl font-bold font-inter text-black">Product Management</h1>
           </div>
-          <div className="mb-4 border-b border-gray-200 relative">
+          <div className="border-b border-gray-200 relative">
             <ul
               ref={tabsRef}
-              className="flex -mb-px text-sm font-medium text-center"
+              className="flex text-lg font-medium text-center"
               role="tablist"
             >
               {TABS.map((t, i) => (
@@ -127,7 +142,7 @@ const SellerCenter = () => {
                   <button
                     ref={el => (tabRefs.current[i] = el)}
                     onClick={() => setActiveTab(t)}
-                    className={`inline-block p-4 ${
+                    className={`inline-block p-10 ${
                       activeTab === t
                         ? 'text-green-600'
                         : 'text-gray-500 hover:text-gray-600'
@@ -141,7 +156,7 @@ const SellerCenter = () => {
               ))}
             </ul>
             <div
-              className="absolute bottom-0 h-0.5 bg-green-600 transition-all duration-300"
+              className="absolute bottom-0 h-1 bg-green-600 transition-all duration-300"
               style={{ left: indicator.left, width: indicator.width }}
             />
           </div>
