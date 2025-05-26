@@ -5,7 +5,7 @@ function FederationSection() {
 
   return (
     <section className="py-10 bg-gray-50">
-      <h1 className="bg-white border-2 border-gray text-[30px] md:text-[36px] text-center font-bold shadow-sm p-4">
+      <h1 className="bg-white border-2 border-gray text-3xl md:text-[36px] font-inter text-center font-black shadow-sm p-4">
         KNOW MORE ABOUT <span className="text-[#4CAE4F]">OUR FEDERATION</span>!
       </h1>
 

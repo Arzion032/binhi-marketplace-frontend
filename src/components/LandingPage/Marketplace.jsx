@@ -15,17 +15,17 @@ const Marketplace = () => {
         <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">      
           <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
             <div className="md:w-1/2 space-y-4 text-center md:text-left">
-              <h1 className="text-4xl sm:text-3xl md:text-5xl font-bold leading-tight">
+              <h1 className="text-5xl sm:text-3xl md:text-5xl font-extrabold leading-tight">
                 Growth Begins <br /> with a Single Seed
               </h1>
-              <p className="text-xl md:text-lg">
+              <p className="md:text-xl">
                 Take the first step toward a greener future.
               </p>
               <div className="flex flex-wrap justify-center md:justify-start gap-4">
                 <button className="text-xl bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
                   Shop Now
                 </button>
-                <button className="text-lg border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
+                <button className="text-xl border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
                   Explore →
                 </button>
               </div>
@@ -88,7 +88,7 @@ const Marketplace = () => {
       </div>
 
       {/*Products Section, miii*/}
-      <h1 className="bg-white text-4xl font-bold text-center shadow-lg p-6">
+      <h1 className="bg-white text-4xl font-black font-inter text-center shadow-lg p-6">
         YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
       </h1>
       <section className="px-6 py-6 bg-[#F5F9F5] ">
@@ -160,19 +160,19 @@ const Marketplace = () => {
       <section className="px-6 py-6 bg-[#F5F9F5] ">
         <div className="flex items-center justify-between mx-[70px] mt-[5px] mb-[10px]">
           <div className="flex items-center gap-2">
-            <p className="text-[36px] font-bold text-shadow-lg">Featured Products</p>
+            <p className="text-3xl font-black font-inter text-shadow-lg">Featured Products</p>
             <span className="text-[14px] font-normal text-gray-400">
               Do not miss the current offers until the end of April
             </span>
           </div>
         <button
               onClick={() => navigate('/featured-products')}
-              className="text-[20px] font-bold hover:underline"
+              className="text-[20px] font-bold hover:underline mx-100"
             >
               See more
             </button>        
             </div>
-        <div className="mx-[70px] max-w-8xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-6">
+        <div className="mx-[80px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-24 lg:grid-cols-6 gap-2">
           {[
             { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
             { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
@@ -180,7 +180,6 @@ const Marketplace = () => {
             { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
             { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
             { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" }
           ].map((product, index) => (
             <div
               key={index}
@@ -221,7 +220,7 @@ const Marketplace = () => {
           <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
         </div>
 
-        <h2 className="text-center text-[30px] font-bold mb-5 relative z-10 mb-10">Top Farmers of the Month</h2>
+        <h2 className="text-center text-3xl font-black font-inter mb-5 relative z-10 mb-16">Top Farmers of the Month</h2>
 
         <div className="flex flex-wrap justify-center gap-6 relative z-10 mt-10">
           {[
@@ -348,15 +347,15 @@ const Marketplace = () => {
 <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
           <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">546+</h2>
+            <h2 className="text-[70px] font-bold">546+</h2>
             <p className="text-[20px] font-normal">Registered Farmers</p>
           </div>
           <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">789,900+</h2>
+            <h2 className="text-[70px] font-bold">789,900+</h2>
             <p className="text-[20px]">Orders Delivered</p>
           </div>
           <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">690+</h2>
+            <h2 className="text-[70px] font-bold">690+</h2>
             <p className="text-[20px]">Food Items</p>
           </div>
         </div>
@@ -371,8 +370,8 @@ const Marketplace = () => {
             </div>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
-            <ul className="space-y-1">
+            <p className="text-lg font-black mb-3">CUSTOMER SERVICE</p>
+            <ul className="space-y-1 text-base">
               <li>Help Center</li>
               <li>Payment Methods</li>
               <li>Return & Refund</li>
@@ -380,16 +379,16 @@ const Marketplace = () => {
             </ul>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">ABOUT BINHI</p>
-            <ul className="space-y-1">
+            <p className="text-lg font-black mb-3">ABOUT BINHI</p>
+            <ul className="space-y-1 text-base">
               <li>About Us</li>
               <li>Privacy Policy</li>
               <li>Binhi Seller Center</li>
             </ul>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
-            <div className="grid grid-cols-2 gap-2">
+            <p className="text-lg font-black mb-3">PAYMENT METHODS</p>
+            <div className="grid grid-cols-2 gap-1 text-base">
               <img src="cod.png" alt="COD" />
               <img src="gcash.png" alt="GCash" />
               <img src="paypal.png" alt="PayPal" />
@@ -397,8 +396,8 @@ const Marketplace = () => {
             </div>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
-            <ul className="space-y-1">
+            <p className="text-lg font-black mb-3">FOLLOW US</p>
+            <ul className="space-y-1 text-base">
               <li className="flex items-center space-x-1">
                 <img src="Facebook.png" alt="Facebook" />
                 <span>BINHI Corp.</span>
