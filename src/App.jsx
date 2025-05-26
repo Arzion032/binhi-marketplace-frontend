@@ -26,6 +26,7 @@ import MarketplaceWithAccount from "./components/LandingPageWithAccount/Marketpl
 import FeaturedProducts from "./components/LandingPage/FeaturedProducts";
 import SellerCenter from "./components/SellerCenter/SellerCenter";
 import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
+import OrderManagement from "./components/SellerCenter/OrderManagement";
 
 
 function App() {
@@ -57,6 +58,8 @@ function App() {
         <Route path="/featured-products" element={<FeaturedProducts />} />
         <Route path="/seller-center" element={<SellerCenter />} />
         <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
+        <Route path="/order-management" element={<OrderManagement/>} />
+
 
       </Routes>
     </Router>
