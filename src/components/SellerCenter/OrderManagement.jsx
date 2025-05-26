@@ -5,13 +5,13 @@ import { useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, RefreshCw, ArrowLeft, Store, Eye, User, Package } from "lucide-react";
 
 const ORDER_CATEGORIES = [
-  { name: 'Pending', count: 35, color: '#A16207', bg: '#FEF9C3' },
-  { name: 'Confirmed', count: 41, color: '#065F46', bg: '#DCFCE7' },
-  { name: 'Processing', count: 51, color: '#1D4ED8', bg: '#DBEAFE' },
-  { name: 'Shipped', count: 60, color: '#7C3AED', bg: '#EDE9FE' },
-  { name: 'Delivered', count: 75, color: '#166534', bg: '#DCFCE7' },
-  { name: 'Cancelled', count: 35, color: '#DC2626', bg: '#FEE2E2' },
-  { name: 'Returned', count: 35, color: '#B45309', bg: '#FEF3C7' },
+  { name: 'Pending', count: 35, color: '#9E9E9E', bg: '#FEF9C3' },
+  { name: 'Confirmed', count: 41, color: '#4CAE4F', bg: '#DCFCE7' },
+  { name: 'Processing', count: 51, color: '#0038A8', bg: '#DBEAFE' },
+  { name: 'Shipped', count: 60, color: '#5E35B1', bg: '#EDE9FE' },
+  { name: 'Delivered', count: 75, color: '#26A69A', bg: '#DCFCE7' },
+  { name: 'Cancelled', count: 35, color: '#FF3B4E', bg: '#FEE2E2' },
+  { name: 'Returned', count: 35, color: '#FB8C00', bg: '#FEF3C7' },
 ];
 
 const dummyOrders = Array.from({ length: 5 }, (_, i) => ({
