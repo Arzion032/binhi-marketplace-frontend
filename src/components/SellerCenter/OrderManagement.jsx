@@ -389,7 +389,7 @@ export default function OrderManagement() {
                               setSelectedOrderStatus("");
                               setSelectedTransactionStatus("");
                             }}
-                            className="text-green-600 hover:underline text-base"
+                            className="text-green-600 hover:underline text-bases"
                           >
                             Clear all filters
                           </button>
