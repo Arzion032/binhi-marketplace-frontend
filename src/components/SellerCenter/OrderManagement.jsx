@@ -184,20 +184,6 @@ export default function OrderManagement() {
                 </svg>
                 <span className="absolute -top-1.5 -right-1 h-4 w-4 rounded-full bg-red-500 text-xs flex items-center justify-center text-white font-bold">12</span>
               </button>
-              {/* 3 dots vertical SVG */}
-              <button>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  height="28"
-                  width="28"
-                  viewBox="0 0 24 24"
-                  fill="black"
-                >
-                  <circle cx="12" cy="5" r="2" />
-                  <circle cx="12" cy="12" r="2" />
-                  <circle cx="12" cy="19" r="2" />
-                </svg>
-              </button>
             </div>
           </div>
           <div className=" h-5 flex items-center">
