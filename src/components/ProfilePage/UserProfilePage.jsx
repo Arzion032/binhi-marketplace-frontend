@@ -1,11 +1,59 @@
 import React, { useState } from 'react'
-import { useNavigate } from 'react-router-dom';
 import { Expand } from 'lucide-react';
-/*Styling pu*/
 
 const UserProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState("All");
-  const navigate = useNavigate();
+  const [isEditing, setIsEditing] = useState(false);
+
+  // Mock navigation function for demo
+  const navigate = (path) => {
+    console.log(`Navigating to: ${path}`);
+  };
+
+  // Profile data state
+  const [profileData, setProfileData] = useState({
+    fullName: "Juan Dela Cruz",
+    contactNo: "091234567891",
+    address: "Manila City",
+    email: "juandelacruz@gmail.com",
+    occupation: "Farmer"
+  });
+
+  // Temporary state for editing
+  const [editData, setEditData] = useState({...profileData});
+
+  const handleEditToggle = () => {
+    if (isEditing) {
+      // Validate required fields before saving
+      const requiredFields = ['fullName', 'contactNo', 'address', 'email'];
+      const emptyFields = requiredFields.filter(field => !editData[field].trim());
+      
+      if (emptyFields.length > 0) {
+        alert('Please fill in all required fields marked with *');
+        return;
+      }
+      
+      // Save changes
+      setProfileData({...editData});
+    } else {
+      // Start editing - copy current data to edit state
+      setEditData({...profileData});
+    }
+    setIsEditing(!isEditing);
+  };
+
+  const handleCancel = () => {
+    // Reset edit data to original profile data
+    setEditData({...profileData});
+    setIsEditing(false);
+  };
+
+  const handleInputChange = (field, value) => {
+    setEditData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
 
   const orders = [
     {
@@ -61,31 +109,91 @@ const UserProfilePage = () => {
                   <img src="Edit.png" alt="edit" className="h-8 w-8" />
                 </button>
               </div>
-              <h2 className="text-3xl font-bold mt-4">Juan Dela Cruz</h2>
-              <p className="text-xl mt-4 text-500">Farmer</p>
-              <button className="text-xl mt-4 mb-8 bg-[#4CAE4F] text-white px-6 py-2 rounded-full">Edit Profile</button>
+              <h2 className="text-3xl font-bold mt-4">
+                {isEditing ? (
+                  <div>
+                    <input
+                      type="text"
+                      value={editData.fullName}
+                      onChange={(e) => handleInputChange('fullName', e.target.value)}
+                      className={`text-3xl font-bold text-center border-2 rounded-lg px-2 py-1 ${
+                        !editData.fullName.trim() ? 'border-red-500' : 'border-gray-300'
+                      }`}
+                      required
+                    />
+                    {!editData.fullName.trim() && (
+                      <p className="text-red-500 text-sm mt-1">Full name is required</p>
+                    )}
+                  </div>
+                ) : (
+                  profileData.fullName
+                )}
+              </h2>
+              <p className="text-xl mt-4 text-500">
+                {isEditing ? (
+                  <input
+                    type="text"
+                    value={editData.occupation}
+                    onChange={(e) => handleInputChange('occupation', e.target.value)}
+                    className="text-xl text-center border-2 border-gray-300 rounded-lg px-2 py-1"
+                  />
+                ) : (
+                  profileData.occupation
+                )}
+              </p>
+              
+              {/* Edit/Save/Cancel buttons */}
+              <div className="flex gap-2 mt-4 mb-8">
+                <button 
+                  onClick={handleEditToggle}
+                  className={`text-xl px-6 py-2 rounded-full ${
+                    isEditing 
+                      ? 'bg-[#4CAE4F] text-white hover:bg-green-600' 
+                      : 'bg-[#4CAE4F] text-white hover:bg-green-600'
+                  }`}
+                >
+                  {isEditing ? 'Save Changes' : 'Edit Profile'}
+                </button>
+                {isEditing && (
+                  <button 
+                    onClick={handleCancel}
+                    className="text-xl px-6 py-2 rounded-full bg-gray-500 text-white hover:bg-gray-600"
+                  >
+                    Cancel
+                  </button>
+                )}
+              </div>
             </div>
 
             {/* Info Fields */}
             <div className="mt-6 space-y-4">
-              {["Full Name", "Contact No.", "Address", "Email"].map((label, idx) => {
-                const placeholders = [
-                  "Juan Dela Cruz",
-                  "091234567891",
-                  "Manila City",
-                  "juandelacruz@gmail.com"
-                ];
-                return (
-                  <div key={label}>
-                    <p className="text-[#858585] text-xl mb-2 font-bold">{label}</p>
-                    <input
-                      type={label === "Email" ? "email" : "text"}
-                      placeholder={placeholders[idx]}
-                      className="text-lg w-full border-2 border-gray-300 rounded-full p-4"
-                    />
-                  </div>
-                );
-              })}
+              {[
+                { label: "Full Name", field: "fullName", type: "text", required: true },
+                { label: "Contact No.", field: "contactNo", type: "text", required: true },
+                { label: "Address", field: "address", type: "text", required: true },
+                { label: "Email", field: "email", type: "email", required: true }
+              ].map(({ label, field, type, required }) => (
+                <div key={label}>
+                  <p className="text-[#858585] text-xl mb-2 font-bold">
+                    {label} {required && <span className="text-red-500">*</span>}
+                  </p>
+                  <input
+                    type={type}
+                    value={isEditing ? editData[field] : profileData[field]}
+                    onChange={isEditing ? (e) => handleInputChange(field, e.target.value) : undefined}
+                    readOnly={!isEditing}
+                    required={required}
+                    className={`text-lg w-full border-2 rounded-full p-4 ${
+                      isEditing 
+                        ? `${!editData[field].trim() && required ? 'border-red-500' : 'border-[#4CAE4F]'} bg-white focus:outline-none focus:ring-2 focus:ring-[#4CAE4F]` 
+                        : 'border-gray-300 bg-gray-50 cursor-default'
+                    }`}
+                  />
+                  {isEditing && required && !editData[field].trim() && (
+                    <p className="text-red-500 text-sm mt-1">{label} is required</p>
+                  )}
+                </div>
+              ))}
             </div>
           </div>
         </div>
