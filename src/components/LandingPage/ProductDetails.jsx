@@ -417,47 +417,46 @@ const ProductDetails = () => {
               </div>
             </div>
 
+        {/* Product Reviews */}
+              <div className="mt-16 bg-white rounded-3xl p-6 w-[1320px] border border-gray-500">
+                <h3 className="text-xl font-bold mb-4">Product Reviews</h3>
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
+                  <div>
+                    <span className="text-3xl font-bold text-gray-800">4.9</span>
+                    <span className="text-lg text-gray-600 ml-2">out of 5</span>
+                    <div className="text-yellow-500 text-4xl">★★★★★</div>
+                  </div>
+                  <div className="flex flex-wrap gap-2">
+                    {["All", "5", "4", "3", "2", "1"].map((label, idx) => (
+                      <button
+                        key={idx}
+                        onClick={() => setSelectedFilter(label)}
+                        className={`px-4 py-1 rounded-lg border text-sm w-[120px] h-[40px] ${
+                          selectedFilter === label
+                            ? "border-green-500 text-green-600 font-semibold"
+                            : "border-gray-300 text-gray-600"
+                        }`}
+                      >
+                        {label === "All" ? "All" : `${label} stars`} ({
+                          reviews.filter(r => label === "All" || r.rating === parseInt(label)).length
+                        })
+                      </button>
+                    ))}
+                  </div>
+                </div>
 
- {/* Product Reviews */}
-      <div className="mt-16 bg-white rounded-3xl p-6 w-[1320px] border border-gray-500">
-        <h3 className="text-xl font-bold mb-4">Product Reviews</h3>
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-          <div>
-            <span className="text-3xl font-bold text-gray-800">4.9</span>
-            <span className="text-lg text-gray-600 ml-2">out of 5</span>
-            <div className="text-yellow-500 text-4xl">★★★★★</div>
+                {filteredReviews.map((review) => (
+                  <div key={review.id} className="border-b border-gray-200 pb-3 mb-5">
+                  <div className="flex justify-between text-sm text-gray-600">
+          <div className="flex items-start gap-2">
+            <img src={review.profileImage} alt="Profile" className="w-8 h-8 rounded-full" />
+            <div>
+              <span>{review.user}</span>
+              <div className="text-yellow-500 text-sm mt-0.5">{"★".repeat(review.rating)}</div>
+            </div>
           </div>
-          <div className="flex flex-wrap gap-2">
-            {["All", "5", "4", "3", "2", "1"].map((label, idx) => (
-              <button
-                key={idx}
-                onClick={() => setSelectedFilter(label)}
-                className={`px-4 py-1 rounded-lg border text-sm w-[120px] h-[40px] ${
-                  selectedFilter === label
-                    ? "border-green-500 text-green-600 font-semibold"
-                    : "border-gray-300 text-gray-600"
-                }`}
-              >
-                {label === "All" ? "All" : `${label} stars`} ({
-                  reviews.filter(r => label === "All" || r.rating === parseInt(label)).length
-                })
-              </button>
-            ))}
-          </div>
+          <span>{review.date}</span>
         </div>
-
-        {filteredReviews.map((review) => (
-          <div key={review.id} className="border-b border-gray-200 pb-3 mb-5">
-           <div className="flex justify-between text-sm text-gray-600">
-  <div className="flex items-start gap-2">
-    <img src={review.profileImage} alt="Profile" className="w-8 h-8 rounded-full" />
-    <div>
-      <span>{review.user}</span>
-      <div className="text-yellow-500 text-sm mt-0.5">{"★".repeat(review.rating)}</div>
-    </div>
-  </div>
-  <span>{review.date}</span>
-</div>
 
         <div className="text-sm text-gray-500 mt-1 mb-2">
           Variation: <span className="text-black">{review.variation}</span>
