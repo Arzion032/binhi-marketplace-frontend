@@ -4,7 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
   const [searchInput, setSearchInput] = useState("");
-  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleLanguageChange = (e) => {
     setSelectedLang(e.target.value);
@@ -12,12 +12,17 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
 
   const flagSrc = selectedLang === "Tagalog" ? "/Flags.png" : "/us_flag.png";
 
-  const handleSearchKeyPress = (e) => {
-    if (e.key === 'Enter' && searchInput.trim()) {
-  onSearch?.(searchInput);
-}
 
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onSearch(searchQuery);
+    }
   };
+
+  const handleSearchClick = () => {
+    onSearch(searchQuery);
+  };
+
 
   return (
     <header className="w-full bg-white shadow font-inter">
@@ -61,14 +66,14 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
               type="text"
               placeholder="Search"
               className="flex-grow outline-none font-bold text-base"
-              value={searchInput}
-              onChange={(e) => setSearchInput(e.target.value)}
-              onKeyPress={handleSearchKeyPress}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              onKeyDown={handleKeyDown}
             />
-            <button>
+           <button onClick={handleSearchClick}>
               <img src="/mic.png" alt="Mic" className="w-7 h-7 mx-2 hover:scale-110" />
             </button>
-            <button>
+            <button onClick={handleSearchClick}>
               <img src="/camera.png" alt="Camera" className="w-7 h-7 hover:scale-110" />
             </button>
           </div>

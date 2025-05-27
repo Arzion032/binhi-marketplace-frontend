@@ -10,7 +10,7 @@ export default function CreateNewPassword() {
   const [showSuccess, setShowSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const email = location.state?.email || "your email"; // fallback
+  const email = location.state?.email || "your email"; 
 
   const isPasswordValid =
     /[A-Z]/.test(password) &&
@@ -28,7 +28,7 @@ export default function CreateNewPassword() {
       setShowSuccess(true);
       setTimeout(() => {
         navigate("/login");
-      }, 3000);
+      }, 1000);
     }
   };
 

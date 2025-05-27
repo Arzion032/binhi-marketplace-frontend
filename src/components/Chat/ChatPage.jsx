@@ -11,14 +11,14 @@ const ChatPage = () => {
     {
       id: 1,
       name: 'Jonathan De Vera',
-      avatar: '/seller.png',
+      avatar: '/111.png',
       active: true,
       messages: []
     },
     {
       id: 2,
       name: 'Juan Dela Cruz',
-      avatar: 'avatar.png',
+      avatar: '333.png',
       active: false,
       messages: []
     }
@@ -47,7 +47,7 @@ const ChatPage = () => {
         const newConv = {
           id: newId,
           name: state.sellerName,
-          avatar: '/seller.png',
+          avatar: '/111.png',
           active: true,
           messages: [productMessage]
         };
@@ -72,14 +72,14 @@ const ChatPage = () => {
 
   return (
     <div className="min-h-screen bg-[#F5F9F5] p-4 lg:p-8">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-4 mb-2">
           <p className="text-4xl font-bold">Chats</p>
         </div>
         <div></div>
       </div>
 
-      <div className="flex gap-6 h-[80vh]">
+      <div className="flex gap-6 h-[75vh]">
         {/* Sidebar */}
         <div className="w-1/3 bg-white rounded-2xl shadow border-2 border-gray-300 p-6 flex flex-col">
           <div className="mb-4">
@@ -108,7 +108,7 @@ const ChatPage = () => {
                   </div>
                 </div>
                 <span className="text-xs text-green-500">
-                  Just Now •
+                  Just Now 
                   <span className={`inline-block w-2 h-2 ml-1 rounded-full ${conv.active ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                 </span>
               </div>
@@ -125,13 +125,13 @@ const ChatPage = () => {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto mb-4 px-2 flex flex-col-reverse gap-2">
+      <div className="flex-grow px-2 flex flex-col-reverse gap-2">
             {[...selectedConversation.messages].reverse().map((msg, index) => (
               <div key={index} className="flex justify-end">
                 <div className="bg-gray-200 px-4 py-2 rounded-full max-w-[60%] text-sm">
                   {msg}
                 </div>
-                <img src="avatar2.png" alt="User" className="w-8 h-8 rounded-full ml-2 object-cover" />
+                <img src="222.png" alt="User" className="w-8 h-8 rounded-full ml-2 object-cover" />
               </div>
             ))}
           </div>
