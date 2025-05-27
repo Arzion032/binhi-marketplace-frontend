@@ -380,7 +380,7 @@ export default function OrderManagement() {
                   <tr>
                     <td colSpan="8" className="p-8 text-center text-gray-500">
                       <div className="flex flex-col items-center gap-2">
-                        <Package size={48} className="text-gray-300" />
+                        <Package size={70} className="text-gray-300" />
                         <span>No orders found</span>
                         {(search || selectedOrderStatus || selectedTransactionStatus) && (
                           <button
@@ -389,7 +389,7 @@ export default function OrderManagement() {
                               setSelectedOrderStatus("");
                               setSelectedTransactionStatus("");
                             }}
-                            className="text-green-600 hover:underline text-sm"
+                            className="text-green-600 hover:underline text-base"
                           >
                             Clear all filters
                           </button>
@@ -450,7 +450,7 @@ export default function OrderManagement() {
                           </div>
                           <div className="max-w-[250px]">
                           <p className="font-semibold text-lg ">{order.product.name}</p>
-                          <p className="text-sm text-gray-500 truncate">Variation: {order.product.variation}</p>
+                          <p className="text-sm text-gray-500">Variation: {order.product.variation}</p>
                         </div>
                         </div>
                       </td>
