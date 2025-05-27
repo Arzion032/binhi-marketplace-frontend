@@ -1,15 +1,12 @@
 import React, { useState } from 'react'
 import { Expand } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const UserProfilePage = () => {
   const [selectedTab, setSelectedTab] = useState("All");
   const [isEditing, setIsEditing] = useState(false);
-
-  // Mock navigation function for demo
-  const navigate = (path) => {
-    console.log(`Navigating to: ${path}`);
-  };
-
+  const navigate = useNavigate();
+  
   // Profile data state
   const [profileData, setProfileData] = useState({
     fullName: "Juan Dela Cruz",
@@ -62,7 +59,9 @@ const UserProfilePage = () => {
       image: "Butter.png",
       quantity: 1,
       price: 53.00,
-      status: "Delivered"
+      status: "Delivered",
+      sellerName: "Farm Fresh Co.",
+      sellerProfile: "/seller1.png"
     },
     {
       id: 2,
@@ -70,7 +69,9 @@ const UserProfilePage = () => {
       image: "Mais.png",
       quantity: 1,
       price: 53.00,
-      status: "Pending"
+      status: "Pending",
+      sellerName: "Corn Valley Farm",
+      sellerProfile: "/seller2.png"
     }
   ];
 
@@ -86,18 +87,12 @@ const UserProfilePage = () => {
         <div className="w-full md:w-1/2 space-y-4">
 
           {/* Back Button and Title - Moved above profile card */}
-          <div className="flex items-center gap-4 mb-2">
-            <button
-              className="flex items-center text-gray-600 hover:text-black"
-              onClick={() => navigate("/landingpage")}
-            >
-              <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
-            </button>
-            <p className="text-4xl font-bold font-inter">User Profile</p>
+          <div className="flex items-center gap-4 mb-2 mx-2">
+            <p className="text-4xl font-bold font-inter mx-2">User Profile</p>
           </div>
 
           {/* Left - Profile Info */}
-          <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6 w-full md:w-full h-[950px]">
+          <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6 w-full md:w-full min-h-[950px]">
             <div className="flex flex-col items-center">
               <div className="relative">
                 <img 
@@ -199,58 +194,58 @@ const UserProfilePage = () => {
         </div>
 
         {/* Right - Steps and Orders */}
-        <div className="w-full md:w-3/2 ">
+        <div className="w-full md:w-3/2">
 
-        {/* Steps Section */}
-        <div className="p-6">
-          <div className="flex items-center overflow-x-auto space-x-4">
-            {["Basic Information", "Add Profile Picture", "Upload Document", "Final Set Up"].map((step, index, array) => {
-              let imgSrc = "";
-              let status = "";
-              let statusColor = "";
+          {/* Steps Section */}
+          <div className="p-6">
+            <div className="flex items-center overflow-x-auto space-x-4">
+              {["Basic Information", "Add Profile Picture", "Upload Document", "Final Set Up"].map((step, index, array) => {
+                let imgSrc = "";
+                let status = "";
+                let statusColor = "";
 
-              if (index < 2) {
-                imgSrc = "Done.png";
-                status = "Completed";
-                statusColor = "text-green-600";
-              } else if (index === 2) {
-                imgSrc = "Circle_In progress.png";
-                status = "In Progress";
-                statusColor = "text-orange-500";
-              } else {
-                imgSrc = "Circle_NC.png";
-                status = "Not Completed";
-                statusColor = "text-gray-500";
-              }
+                if (index < 2) {
+                  imgSrc = "Done.png";
+                  status = "Completed";
+                  statusColor = "text-green-600";
+                } else if (index === 2) {
+                  imgSrc = "Circle_In progress.png";
+                  status = "In Progress";
+                  statusColor = "text-orange-500";
+                } else {
+                  imgSrc = "Circle_NC.png";
+                  status = "Not Completed";
+                  statusColor = "text-gray-500";
+                }
 
-              let lineSrc = null;
-              if (index < array.length - 1) {
-                lineSrc = index < 2 ? "GreenLine.png" : "GrayLine.png";
-              }
+                let lineSrc = null;
+                if (index < array.length - 1) {
+                  lineSrc = index < 2 ? "GreenLine.png" : "GrayLine.png";
+                }
 
-              return (
-                <div key={index} className="flex items-center">
-                  {/* Step content */}
-                  <div className="flex flex-col items-center text-center">
-                    <img src={imgSrc} alt={step} className="w-[80px] h-[80px] mb-2" />
-                    <p className="text-md text-gray-500">Step {index + 1}</p>
-                    <p className="text-xl font-bold text-black">{step}</p>
-                    <p className={`text-md ${statusColor}`}>{status}</p>
+                return (
+                  <div key={index} className="flex items-center">
+                    {/* Step content */}
+                    <div className="flex flex-col items-center text-center">
+                      <img src={imgSrc} alt={step} className="w-[80px] h-[80px] mb-2" />
+                      <p className="text-md text-gray-500">Step {index + 1}</p>
+                      <p className="text-xl font-bold text-black">{step}</p>
+                      <p className={`text-md ${statusColor}`}>{status}</p>
+                    </div>
+
+                    {/* Line between steps */}
+                    {lineSrc && (
+                      <img
+                        src={lineSrc}
+                        alt="Step Line"
+                        className="w-[200px] h-[8px] mb-[110px]"
+                      />
+                    )}
                   </div>
-
-                  {/* Line between steps */}
-                  {lineSrc && (
-                    <img
-                      src={lineSrc}
-                      alt="Step Line"
-                      className="w-[200px] h-[8px] mb-[110px]"
-                    />
-                  )}
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
 
           {/* Orders Section */}
           <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6">
@@ -273,10 +268,10 @@ const UserProfilePage = () => {
 
               {/* Expand button */}
               <button
-                onClick={() => navigate('/orderhistory')}
+                onClick={() => navigate('/OrderHistory')}
                 className="text-green hover:text-black transition-colors shrink-0 mt-2"
               >
-              <Expand size={20} />
+                <Expand size={20} />
               </button>
             </div>
                 
@@ -287,88 +282,89 @@ const UserProfilePage = () => {
                 <p className="text-center text-gray-500">No orders under "{selectedTab}"</p>
               ) : (
                 filteredOrders.map(order => (
-              <div key={order.id} className="flex flex-col border-2 border-gray-300 p-4 rounded-xl bg-white shadow-sm relative">
+                  <div key={order.id} className="flex flex-col border-2 border-gray-300 p-4 rounded-xl bg-white shadow-sm relative">
 
-              {/* Seller Info: Profile and Name */}
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-2">
-                  <img
-                    src={order.sellerProfile || "/default-profile.png"} // fallback if no image
-                    alt="Seller"
-                    className="w-8 h-8 rounded-full object-cover"
-                  />
-                  <p className="text-sm font-medium text-gray-700">{order.sellerName}</p>
-                  <button className="text-gray-500 text-base font-medium px-3 py-2 rounded-full transition">
-                    Click here to chat
-                  </button>
-                  <button className="flex items-center gap-2 hover:bg-green-700 hover:text-white text-[#4CAE4F] text-sm font-medium px-3 py-2 border border-[#4CAE4F] rounded-full transition">
-                  <img src="/shoppp.png" className="w-5 h-5" /> View Shop
-                  </button>
-                </div>
+                    {/* Seller Info: Profile and Name */}
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={order.sellerProfile || "/default-profile.png"}
+                          alt="Seller"
+                          className="w-8 h-8 rounded-full object-cover"
+                        />
+                        <p className="text-sm font-medium text-gray-700">{order.sellerName}</p>
+                        <button className="text-gray-500 text-base font-medium px-3 py-2 rounded-full transition">
+                          Click here to chat
+                        </button>
+                        <button className="flex items-center gap-2 hover:bg-green-700 hover:text-white text-[#4CAE4F] text-sm font-medium px-3 py-2 border border-[#4CAE4F] rounded-full transition">
+                          <img src="/shoppp.png" className="w-5 h-5" alt="shop" /> View Shop
+                        </button>
+                      </div>
 
-                {/* Buttons: Chat and View Shop */}
-                <div className="flex items-left gap-2">
-                  <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${
-                  order.status === "Delivered" ? "bg-[#4CAE4F]" :
-                 "bg-[#D1A157]"
-                }`}>
-                  {order.status}
-                </span>
-                </div>
-                </div>
-
-                <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
-
-                <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
-                <div className="flex justify-between items-start w-full">
-                  <div className="flex gap-4">
-                    {/* Product image */}
-                    <img
-                      src={order.image}
-                      alt={order.name}
-                      className="w-24 h-24 rounded-lg object-cover"
-                    />
-
-                    <div className="flex flex-col justify-between">
-                      {/* Product name and quantity */}
-                      <div>
-                        <p className="text-2xl font-semibold">{order.name}</p>
-                        <p className="text-sm text-gray-600">Variation: Yellow Corn</p>
-                        <p className="text-lg text-gray-500 mt-4">Quantity: {order.quantity}</p>
+                      {/* Status */}
+                      <div className="flex items-left gap-2">
+                        <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${
+                          order.status === "Delivered" ? "bg-[#4CAE4F]" : "bg-[#D1A157]"
+                        }`}>
+                          {order.status}
+                        </span>
                       </div>
                     </div>
-                  </div>
 
-                  {/* Right section: Status and price */}
-                  <div className="flex flex-col items-end justify-between h-full">
-                    {order.price > 0 && (
-                      <p className="text-xl font-bold">₱{order.price.toFixed(2)}</p>
-                    )}
-                  </div>
-                </div>
+                    {/* Single divider line */}
+                    <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
 
-              <div className="flex justify-end mt-5">
-                  <button
-                  onClick={() => navigate('/orderhistory')}
-                  className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
-                  >
-                  View More
-                </button>
-                </div>
-            </div>  
+                    <div className="flex justify-between items-start w-full">
+                      <div className="flex gap-4">
+                        {/* Product image */}
+                        <img
+                          src={order.image}
+                          alt={order.name}
+                          className="w-24 h-24 rounded-lg object-cover"
+                        />
+
+                        <div className="flex flex-col justify-between">
+                          {/* Product name and quantity */}
+                          <div>
+                            <p className="text-2xl font-semibold">{order.name}</p>
+                            <p className="text-sm text-gray-600">Variation: Yellow Corn</p>
+                            <p className="text-lg text-gray-500 mt-4">Quantity: {order.quantity}</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Right section: Price */}
+                      <div className="flex flex-col items-end justify-between h-full">
+                        {order.price > 0 && (
+                          <p className="text-xl font-bold">₱{order.price.toFixed(2)}</p>
+                        )}
+                      </div>
+                    </div>
+
+                    <div className="flex justify-end mt-5">
+                      <button
+                        onClick={() => navigate('/OrderHistory')}
+                        className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
+                      >
+                        View More
+                      </button>
+                    </div>
+                  </div>  
                 ))
               )}
-          </div>
-          <div className="group fixed bottom-10 right-10 z-50">
-            <button
+            </div>
+
+            {/* Floating Chat Button */}
+            <div className="group fixed bottom-10 right-10 z-50">
+              <button
                 onClick={() => navigate('/ChatPage')}
                 className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
-            >
+              >
                 <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
-            </button>
-            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+              </button>
+              <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                 Chats
-            </div>
+              </div>
             </div>
           </div>
         </div>
