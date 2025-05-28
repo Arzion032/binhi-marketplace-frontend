@@ -39,6 +39,7 @@ const Sidebar = () => {
             </summary>
           </details>
         </li>
+
         {/* Products Menu */}
         <li>
           <details className="group [&_summary::-webkit-details-marker]:hidden">
@@ -62,8 +63,29 @@ const Sidebar = () => {
                 </svg>
               </span>
             </summary>
+
+            {/* Products Submenu */}
+            <ul className="mt-2 space-y-1 px-4">
+              <li>
+                <Link
+                  to="/seller-center"
+                  className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                >
+                  Active
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/seller-center"
+                  className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                >
+                  Drafts
+                </Link>
+              </li>
+            </ul>
           </details>
         </li>
+
         {/* Orders Menu */}
         <li>
           <details className="group [&_summary::-webkit-details-marker]:hidden">
@@ -87,6 +109,18 @@ const Sidebar = () => {
                 </svg>
               </span>
             </summary>
+
+            {/* Orders Submenu - Only All Orders */}
+            <ul className="mt-2 space-y-1 px-4">
+              <li>
+                <Link
+                  to="/order-management"
+                  className="block rounded-lg px-4 py-2 text-sm font-medium text-gray-500 hover:bg-gray-100 hover:text-gray-700"
+                >
+                  All Orders
+                </Link>
+              </li>
+            </ul>
           </details>
         </li>
       </ul>

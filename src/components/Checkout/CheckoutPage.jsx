@@ -43,22 +43,6 @@ export default function CheckoutPage() {
           </button>
           <p className="text-4xl font-bold">Checkout</p>
         </div>
-        <div className="flex items-center px-4">
-          <div className="flex items-center bg-white border-2 border-black rounded-full px-3 py-1 w-[600px] h-14">
-            <img src="/search.png" alt="Search" className="w-5 h-5 mx-4" />
-            <input
-              type="text"
-              placeholder="Search"
-              className="flex-grow text-sm bg-white outline-none"
-            />
-            <button>
-              <img src="/mic.png" alt="Mic" className="w-5 h-5 hover:scale-110" />
-            </button>
-            <button>
-              <img src="/camera.png" alt="Camera" className="w-5 h-5 mx-4 hover:scale-110" />
-            </button>
-          </div>
-        </div>
       </div>
 
       <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
