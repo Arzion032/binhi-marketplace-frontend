@@ -168,12 +168,12 @@ const [selectedProductName, setSelectedProductName] = useState('');
           </div>
         <button
               onClick={() => navigate('/featured-products')}
-              className="text-[20px] font-bold hover:underline"
+              className="text-[20px] font-bold hover:underline mx-100"
             >
               See more
             </button>        
             </div>
-        <div className="mx-[70px] max-w-8xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-6">
+        <div className="mx-[80px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-24 lg:grid-cols-6 gap-2">
           {[
             { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
             { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
@@ -181,7 +181,6 @@ const [selectedProductName, setSelectedProductName] = useState('');
             { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
             { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
             { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" }
           ].map((product, index) => (
             <div
               key={index}
@@ -235,7 +234,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
           <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
         </div>
 
-        <h2 className="text-center text-[30px] font-bold mb-5 relative z-10 mb-10">Top Farmers of the Month</h2>
+        <h2 className="text-center text-3xl font-black font-inter mb-5 relative z-10 mb-16">Top Farmers of the Month</h2>
 
         <div className="flex flex-wrap justify-center gap-6 relative z-10 mt-10">
           {[
@@ -368,15 +367,15 @@ const [selectedProductName, setSelectedProductName] = useState('');
 <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
         <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
           <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">546+</h2>
+            <h2 className="text-[70px] font-bold">546+</h2>
             <p className="text-[20px] font-normal">Registered Farmers</p>
           </div>
           <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">789,900+</h2>
+            <h2 className="text-[70px] font-bold">789,900+</h2>
             <p className="text-[20px]">Orders Delivered</p>
           </div>
           <div className="px-4 py-4">
-            <h2 className="text-[70px] font-semibold">690+</h2>
+            <h2 className="text-[70px] font-bold">690+</h2>
             <p className="text-[20px]">Food Items</p>
           </div>
         </div>
@@ -391,8 +390,8 @@ const [selectedProductName, setSelectedProductName] = useState('');
             </div>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
-            <ul className="space-y-1">
+            <p className="text-lg font-black mb-3">CUSTOMER SERVICE</p>
+            <ul className="space-y-1 text-base">
               <li>Help Center</li>
               <li>Payment Methods</li>
               <li>Return & Refund</li>
@@ -400,16 +399,16 @@ const [selectedProductName, setSelectedProductName] = useState('');
             </ul>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">ABOUT BINHI</p>
-            <ul className="space-y-1">
+            <p className="text-lg font-black mb-3">ABOUT BINHI</p>
+            <ul className="space-y-1 text-base">
               <li>About Us</li>
               <li>Privacy Policy</li>
               <li>Binhi Seller Center</li>
             </ul>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
-            <div className="grid grid-cols-2 gap-2">
+            <p className="text-lg font-black mb-3">PAYMENT METHODS</p>
+            <div className="grid grid-cols-2 gap-1 text-base">
               <img src="cod.png" alt="COD" />
               <img src="gcash.png" alt="GCash" />
               <img src="paypal.png" alt="PayPal" />
@@ -417,8 +416,8 @@ const [selectedProductName, setSelectedProductName] = useState('');
             </div>
           </div>
           <div className="mx-4">
-            <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
-            <ul className="space-y-1">
+            <p className="text-lg font-black mb-3">FOLLOW US</p>
+            <ul className="space-y-1 text-base">
               <li className="flex items-center space-x-1">
                 <img src="Facebook.png" alt="Facebook" />
                 <span>BINHI Corp.</span>

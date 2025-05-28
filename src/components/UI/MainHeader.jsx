@@ -30,8 +30,8 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
       <div className="flex items-center justify-between px-8 py-4 text-sm bg-gray-100 text-gray-700">
         <div className="flex gap-4">
           
-          <a href="#" className="hover:underline">About Us</a>
-         <Link to="/seller-center" className="hover:underline">Seller Center</Link>
+          <a href="#" className="text-base font-semibold hover:underline">About Us</a>
+         <Link to="/seller-center" className="text-base font-semibold hover:underline">Seller Center</Link>
         </div>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
@@ -39,13 +39,13 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
             <select
               value={selectedLang}
               onChange={handleLanguageChange}
-              className="text-sm text-gray-700 border rounded px-1 py-0.5"
+              className="text-base text-gray-700 font-semibold border border-gray-300 rounded px-1 py-0.5"
             >
               <option value="Tagalog">Tagalog</option>
               <option value="English">English</option>
             </select>
           </div>
-          <a href="#" className="hover:underline">Need Help?</a>
+          <a href="#" className="text-base hover:underline font-semibold">Need Help?</a>
         </div>
       </div>
 
