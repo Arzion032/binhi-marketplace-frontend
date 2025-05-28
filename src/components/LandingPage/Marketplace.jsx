@@ -50,7 +50,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                  <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">
                    <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
                      <div className="md:w-1/2 space-y-4 text-center md:text-left">
-                       <h1 className="text-4xl sm:text-3xl md:text-5xl font-bold leading-tight">
+                       <h1 className="text-4xl sm:text-3xl md:text-5xl font-black leading-tight">
                          Growth Begins <br /> with a Single Seed
                        </h1>
                        <p className="text-xl md:text-lg">Take the first step toward a greener future.</p>
@@ -84,7 +84,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                          { label: 'Meat', background: '/meatss.png', overlay: '/meat.png' },
                          { label: 'Fruits', background: '/fruits.png', overlay: '/grapes.png' },
                        ].map((item, index) => (
-                         <div key={index} className="group p-4 text-center text-xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
+                         <div key={index} className="group p-4 text-center text-2xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
                            <div className="relative w-18 h-18 mb-2">
                              <img src={item.background} alt="background" className="w-20 h-20 object-contain transition-transform duration-300 group-hover:scale-50" />
                              <img src={item.overlay} alt="overlay" className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/6 w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-125" />
@@ -98,7 +98,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                </div>
 
                {/* Products Section */}
-          <h1 className="bg-white text-4xl font-bold text-center shadow-lg p-6">
+          <h1 className="bg-white text-4xl font-black text-center shadow-lg p-6">
             YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
           </h1>
           <div className="px-6 py-6 bg-[#F5F9F5]">
@@ -234,7 +234,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
           <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
         </div>
 
-        <h2 className="text-center text-3xl font-black font-inter mb-5 relative z-10 mb-16">Top Farmers of the Month</h2>
+        <h2 className="text-center text-3xl font-black font-inter mb-5 relative z-10 mb-[80px]">Top Farmers of the Month</h2>
 
         <div className="flex flex-wrap justify-center gap-6 relative z-10 mt-10">
           {[
@@ -437,7 +437,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
             </ul>
           </div>
         </div>
-      </footer>
+      </footer> 
       <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
         Binhi 2024, All Rights Reserved.
       </div>

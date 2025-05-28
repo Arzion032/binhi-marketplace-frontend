@@ -81,7 +81,8 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
 
         {/* Icons */}
         <div className="flex items-center gap-4">
-
+          <Link to ="/">
+          <img src="/house.png" alt="Home" className="w-7 h-7 cursor-pointer hover:scale-110"/></Link>
            <Link to="/CartPage">
           <img src="/cart.png" alt="Cart" className="w-7 h-7 cursor-pointer hover:scale-110" /></Link>
           <img src="/bell.png" alt="Notifications" className="w-7 h-7 cursor-pointer hover:scale-110" />
