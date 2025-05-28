@@ -69,7 +69,7 @@ const VerifyCode = () => {
         </div>
 
         {/* Resend Text */}
-        <p className="text-center text-md text-gray-400 mb-[325px]">
+        <p className="text-center text-sm text-gray-400 mb-[325px]">
           Didn’t receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
