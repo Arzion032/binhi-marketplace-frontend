@@ -20,7 +20,7 @@ const SearchProduct = () => {
         <div className="min-h-screen w-full bg-[#F5F9F5] pt-8 pb-20">
         <div className="mx-[85px] max-w-[1700px]">
           {/* Header */}
-          <div className="flex items-center gap-2 mb-6">
+          <div className="mx-[200px] flex items-center gap-2 mb-6">
             <img src="/text-search.png" alt="search icon" className="w-8 h-8" />
             <h2 className="text-3xl font-semibold">
               Product results for ‘<span className="text-green-600">{query}</span>’
@@ -28,7 +28,7 @@ const SearchProduct = () => {
           </div>
 
           {/* Sort By Filter Bar */}
-          <div className="flex gap-4 mb-8">
+          <div className="mx-[200px] flex gap-4 mb-8">
             <div className="flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full">
               <p className="text-lg font-semibold text-gray-800">Sort by</p>
               {["Relevance", "Latest", "Top Sales", "Price"].map((label, idx) => (

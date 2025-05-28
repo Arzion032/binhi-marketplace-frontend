@@ -1,167 +1,168 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FederationSection from './FederationSection';
 
-//Added Product Details
-//batman hello
 const Marketplace = () => {
   const navigate = useNavigate();
+  const [showToast, setShowToast] = useState(false);
+const [selectedProductName, setSelectedProductName] = useState('');
 
-  return (
-    <div className="min-h-screen w-full bg-white">
-      <div className="bg-[#F5F9F5] shadow-lg">  
+  const showModalToast = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 700);
+  };
 
-        {/*Landing Section */}
-        <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">      
-          <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-            <div className="md:w-1/2 space-y-4 text-center md:text-left">
-              <h1 className="text-5xl sm:text-3xl md:text-5xl font-extrabold leading-tight">
-                Growth Begins <br /> with a Single Seed
-              </h1>
-              <p className="md:text-xl">
-                Take the first step toward a greener future.
-              </p>
-              <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                <button className="text-xl bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
-                  Shop Now
-                </button>
-                <button className="text-xl border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
-                  Explore →
-                </button>
-              </div>
-            </div>
+  const products = [
+    { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
+    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
+    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
+    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
+    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
+    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
+    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
+    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
+    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
+    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
+    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
+    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
+    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
+    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
+    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
+    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
+    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
+    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
+    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
+    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
+  ];
 
-            <div className="md:w-1/2 flex justify-center">
-              <img
-                src="/LandingPageFarmers.png"
-                alt="Farmers"
-                className="w-full bottom-[-60px] h-auto max-w-[520px] rounded-none"
-              />
+           return (
+     <div className="min-h-screen w-full bg-white">
+      <div className="bg-[#F5F9F5] shadow-lg">
+        {showToast && (
+          <div className="fixed pt-10 inset-0 flex items-center justify-center z-50">
+            <div className="border-2 border-[#858585] bg-white rounded-3xl p-10 w-[420px] shadow-xl text-center">
+              <img src="/Checkpass.png" alt="Success" className="w-20 h-20 mx-auto mb-4" />
+                <h3 className="text-xl font-bold mb-2">{selectedProductName}</h3>
+                <p className="text-lg">has been added to your shopping cart</p>
             </div>
           </div>
-        </section>
+        )}
+                 <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">
+                   <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
+                     <div className="md:w-1/2 space-y-4 text-center md:text-left">
+                       <h1 className="text-4xl sm:text-3xl md:text-5xl font-bold leading-tight">
+                         Growth Begins <br /> with a Single Seed
+                       </h1>
+                       <p className="text-xl md:text-lg">Take the first step toward a greener future.</p>
+                       <div className="flex flex-wrap justify-center md:justify-start gap-4">
+                         <button className="text-xl bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
+                           Shop Now
+                         </button>
+                         <button 
+                          onClick={() => navigate('/featured-products')}
+                         className="text-lg border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105"
+                          >
+                            Explore →
+                         </button>
+                       </div>
+                     </div>
+                     <div className="md:w-1/2 flex justify-center">
+                       <img src="/LandingPageFarmers.png" alt="Farmers" className="w-full h-auto max-w-[520px] rounded-none" />
+                     </div>
+                   </div>
+                 </section>
 
-        {/*Categories, miii*/}
-        <section className="px-2 sm:px-4 py-4 mx-[60px]">
-          <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:grid-cols-6 gap-0">
-              {[
-                { label: 'Grains', background: '/grains.png', overlay: '/rice.png' },
-                { label: 'Vegetables', background: '/vegetable.png', overlay: '/broccoli.png' },
-                { label: 'Roots', background: '/root-crops.png', overlay: '/ginger.png' },
-                { label: 'Dairy', background: '/milks.png', overlay: '/milk-bottle.png' },
-                { label: 'Meat', background: '/meatss.png', overlay: '/meat.png' },
-                { label: 'Fruits', background: '/fruits.png', overlay: '/grapes.png' },
-              ].map((item, index) => (
+                 {/* Categories Section */}
+                 <section className="px-2 sm:px-4 py-4 mx-[60px]">
+                   <div className="max-w-7xl mx-auto">
+                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 md:grid-cols-6 gap-0">
+                       {[
+                         { label: 'Grains', background: '/grains.png', overlay: '/rice.png' },
+                         { label: 'Vegetables', background: '/vegetable.png', overlay: '/broccoli.png' },
+                         { label: 'Roots', background: '/root-crops.png', overlay: '/ginger.png' },
+                         { label: 'Dairy', background: '/milks.png', overlay: '/milk-bottle.png' },
+                         { label: 'Meat', background: '/meatss.png', overlay: '/meat.png' },
+                         { label: 'Fruits', background: '/fruits.png', overlay: '/grapes.png' },
+                       ].map((item, index) => (
+                         <div key={index} className="group p-4 text-center text-xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
+                           <div className="relative w-18 h-18 mb-2">
+                             <img src={item.background} alt="background" className="w-20 h-20 object-contain transition-transform duration-300 group-hover:scale-50" />
+                             <img src={item.overlay} alt="overlay" className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/6 w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-125" />
+                           </div>
+                           <span className="text-xl transition-transform duration-300 group-hover:scale-110 group-hover:font-bold">{item.label}</span>
+                         </div>
+                       ))}
+                     </div>
+                   </div>
+                 </section>
+               </div>
+
+               {/* Products Section */}
+          <h1 className="bg-white text-4xl font-bold text-center shadow-lg p-6">
+            YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
+          </h1>
+          <div className="px-6 py-6 bg-[#F5F9F5]">
+            <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              {products.map((product, index) => (
                 <div
                   key={index}
-                  className="group p-4 text-center text-xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300"
-                >
-                  {item.overlay ? (
-                    <div className="relative w-18 h-18 mb-2">
-                      <img
-                        src={item.background}
-                        alt="background"
-                        className="w-20 h-20 object-contain transition-transform duration-300 group-hover:scale-50"
-                      />
-                      <img
-                        src={item.overlay}
-                        alt="overlay"
-                        className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/6 w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-125"
-                      />
-                    </div>
-                  ) : (
-                    <img
-                      src={item.background}
-                      alt={item.label}
-                      className="w-16 h-16 object-contain mb-2 transition-transform duration-100 group-hover:scale-200"
-                    />
-                  )}
-                  <span className="text-xl transition-transform duration-300 group-hover:scale-110 group-hover:font-bold">
-                    {item.label}
-                  </span>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-      </div>
-
-      {/*Products Section, miii*/}
-      <h1 className="bg-white text-4xl font-black font-inter text-center shadow-lg p-6">
-        YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
-      </h1>
-      <section className="px-6 py-6 bg-[#F5F9F5] ">
-        <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-          {[
-            { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
-            { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-            { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-            { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-            { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-            { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-            { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-            { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-            { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-            { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-            { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-          ].map((product, index) => (
-            <div
-              key={index}
-              className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
-            >
-              <span className="w-[120px] text-center bg-green-100 text-green-800 text-sm font-semibold px-2 py-1 rounded-full mb-2">
-                VEGETABLE
-              </span>
-              <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
-              <p className="text-left font-semibold text-lg">{product.name}</p>
-              <p className="text-[#4CAE4F] text-xl font-bold mt-2">
-                {product.price}{' '}
-                <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2">
-                  per pc.
-                </span>
-              </p>
-              <div className="text-[20px] text-gray-600 mt-4 flex items-center gap-1">
-                <img src="/Star.png" alt="star" className="w-4 h-4" />
-                5.0 • {product.sold} Sold
-              </div>
-              <div className="flex items-center justify-between gap-4 mt-2">
-                <img src="shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
-                <button
                   onClick={() => navigate(`/product/${index}`)}
-                  className="text-xl bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
+                  className="bg-white rounded-xl shadow-md p-4 text-left cursor-pointer transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
                 >
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-        <div className="flex justify-center mt-10">
-          <button
-            onClick={() => navigate('/daily-needs')}
-            className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
-          >
-            See More
-          </button>
-        </div>
-      </section>  
+                  <span className="w-[120px] text-center bg-green-100 text-green-800 text-sm font-semibold px-2 py-1 rounded-full mb-2">
+                    VEGETABLE
+                  </span>
+                  <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
+                  <p className="text-left font-semibold text-lg">{product.name}</p>
+                  <p className="text-[#4CAE4F] text-xl font-bold mt-2">
+                    {product.price}{' '}
+                    <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2">
+                      per pc.
+                    </span>
+                  </p>
+                  <div className="text-[20px] text-gray-600 mt-4 flex items-center gap-1">
+                    <img src="/Star.png" alt="star" className="w-4 h-4" />
+                    5.0 • {product.sold} Sold
+                  </div>
+                  <div className="flex items-center justify-between gap-4 mt-2">
+                    <img
+                      src="/shopping-cart.png"
+                      alt="cart"
+                      className="w-6 h-6 transition-transform duration-100 hover:scale-125"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProductName(product.name); 
+                        showModalToast();
+                      }}
+                    />
+                         <button
+                           onClick={(e) => {
+                             e.stopPropagation();
+                             navigate(`/product/${index}`)
+                           } }
+                           className="text-xl bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
+                         >
+                           Buy Now
+                         </button>
+                       </div>
+                     </div>
+                   ))}
+  
+             </div><div className="flex justify-center mt-10">
+                 <button
+                   onClick={() => navigate('/daily-needs')}
+                   className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
+                 >
+                   See More
+                 </button>
+               </div>
 
       {/*Featured Products Section, miii*/}
       <section className="px-6 py-6 bg-[#F5F9F5] ">
         <div className="flex items-center justify-between mx-[70px] mt-[5px] mb-[10px]">
           <div className="flex items-center gap-2">
-            <p className="text-3xl font-black font-inter text-shadow-lg">Featured Products</p>
-            <span className="text-[14px] font-normal text-gray-400">
+            <p className="text-4xl font-bold text-shadow-lg">Featured Products</p>
+            <span className="text-base font-normal text-gray-400">
               Do not miss the current offers until the end of April
             </span>
           </div>
@@ -183,6 +184,7 @@ const Marketplace = () => {
           ].map((product, index) => (
             <div
               key={index}
+              onClick={() => navigate(`/product/${index}`)}
               className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
             >
               <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
@@ -201,9 +203,21 @@ const Marketplace = () => {
                 5.0 • {product.sold} Sold
               </div>
               <div className="flex items-center justify-between gap-4 mt-2">
-                <img src="shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
+                <img 
+                src="shopping-cart.png" 
+                alt="cart" 
+                className="w-6 h-6 transition-transform duration-100 hover:scale-125" 
+                onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedProductName(product.name); 
+                        showModalToast();
+                      }}
+                    />
                 <button
-                  onClick={() => navigate(`/product/${index}`)}
+                   onClick={(e) => {
+                             e.stopPropagation();
+                             navigate(`/product/${index}`)
+                           } }
                   className="text-sm bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
                 >
                   Buy Now
@@ -319,7 +333,10 @@ const Marketplace = () => {
     <img src="/shopp.png" alt="shop" className="w-5 h-5" />
     View Shop
   </button>
-  <button className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2">
+  <button 
+      onClick={() => navigate('/chatpage')}
+    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
+    >
     <img src="/chat.png" alt="chat" className="w-5 h-5" />
     Chat Now
   </button>
@@ -331,8 +348,11 @@ const Marketplace = () => {
 
         {/* See More Button */}
         <div className="flex justify-center mt-10 relative z-10">
-          <button className="bg-white border border-[#4CAE4F] text-[#4CAE4F] font-semibold w-[500px] px-8 py-2 rounded-full hover:bg-green-50 transition">
-            See More
+          <button
+          className="bg-white border border-[#4CAE4F] text-[#4CAE4F] font-semibold w-[500px] px-8 py-2 rounded-full hover:bg-green-50 transition"
+          onClick={() => navigate('/searched-farmers')}
+          >
+          See More
           </button>
         </div>
       </section>
@@ -362,7 +382,7 @@ const Marketplace = () => {
       </section>
 
       <footer className="bg-[#D9D9D9] mt-6 pt-10 pb-4">
-        <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
+       <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
           <div className="flex flex-col items-center">
             <div className="flex flex-col">
               <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
@@ -433,7 +453,8 @@ const Marketplace = () => {
                 Chats
             </div>
             </div>
-    </div>
+ </div>
+            </div> 
   );
 };
 

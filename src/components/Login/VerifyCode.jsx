@@ -25,7 +25,6 @@ const VerifyCode = () => {
     }
   };
 
-  // ✅ Navigate and pass email/phone to CreateNewPassword
   const handleSubmit = () => {
     const code = codes.join("");
     console.log("Submitted code:", code);

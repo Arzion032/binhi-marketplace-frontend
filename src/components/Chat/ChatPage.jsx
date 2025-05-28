@@ -11,14 +11,14 @@ const ChatPage = () => {
     {
       id: 1,
       name: 'Jonathan De Vera',
-      avatar: '/seller.png',
+      avatar: '/111.png',
       active: true,
       messages: ['Hello! How can I help you today?', 'I have fresh products available.']
     },
     {
       id: 2,
       name: 'Juan Dela Cruz',
-      avatar: 'avatar.png',
+      avatar: '333.png',
       active: false,
       messages: ['Hi there!', 'Thanks for your order.']
     },
@@ -62,7 +62,7 @@ const ChatPage = () => {
         const newConv = {
           id: newId,
           name: state.sellerName,
-          avatar: '/seller.png',
+          avatar: '/111.png',
           active: true,
           messages: [productMessage]
         };
@@ -115,7 +115,7 @@ const ChatPage = () => {
 
   return (
     <div className="min-h-screen bg-[#F5F9F5] p-4 lg:p-8">
-      <div className="flex justify-between items-center mb-4">
+      <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-4 mb-2">
           <p className="text-4xl font-bold mx-4">Chats</p>
         </div>
@@ -123,7 +123,7 @@ const ChatPage = () => {
         </div>
       </div>
 
-      <div className="flex gap-6 h-[80vh]">
+      <div className="flex gap-6 h-[75vh]">
         {/* Sidebar */}
         <div className="w-1/3 bg-white rounded-2xl shadow border-2 border-gray-300 p-6 flex flex-col">
           <div className="mb-4">
@@ -184,6 +184,7 @@ const ChatPage = () => {
                     <span className={`inline-block w-2 h-2 rounded-full ${conv.active ? 'bg-green-500' : 'bg-gray-400'}`}></span>
                   </div>
                 </div>
+
               ))
             ) : (
               <div className="text-center py-8">
@@ -216,6 +217,7 @@ const ChatPage = () => {
                     </span>
                   </div>
                 </div>
+
               </div>
 
               {/* Messages */}

@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
 
-
-
 const ProductDetails = () => {
   const { productId } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
+  const [showToast, setShowToast] = useState(false);
+
+  const showModalToast = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 700);
+  };
 
   const product = {
     id: productId,
@@ -47,57 +51,56 @@ const ProductDetails = () => {
   ]);
   const [selectedFilter, setSelectedFilter] = useState("All");
 
- const [reviews, setReviews] = useState([
-  {
-    id: 1,
-    user: "j******x",
-    profileImage: "/user.png",
-    date: "2025-04-12",
-    rating: 5,
-    variation: "Jasmine",
-    comment: "Very fragrant rice, great quality!",
-    images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
-    liked: false,
-    likeCount: 0,
-  },
-  {
-    id: 2,
-    user: "m******d",
-    profileImage: "/user.png",
-    date: "2025-04-10",
-    rating: 4,
-    variation: "Sinandomeng",
-    comment: "Good rice but the packaging was a bit loose.",
-    images: ["/rice2-review.png", "/rice2-review.png"],
-    liked: false,
-    likeCount: 0,
-  },
-  {
-    id: 3,
-    user: "e******a",
-    profileImage: "/user.png",
-    date: "2025-04-08",
-    rating: 5,
-    variation: "Jasmine",
-    comment: "Best rice I’ve had in a while. Highly recommended!",
-    images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
-    liked: false,
-    likeCount: 0,
-  },
-  {
-    id: 4,
-    user: "r******e",
-    profileImage: "/user.png",
-    date: "2025-04-05",
-    rating: 3,
-    variation: "Sinandomeng",
-    comment: "Not bad, but I prefer other varieties.",
-    images: ["/rice2-review.png", "/rice2-review.png"],
-    liked: false,
-    likeCount: 0,
-  },
-]);
-
+  const [reviews, setReviews] = useState([
+    {
+      id: 1,
+      user: "j******x",
+      profileImage: "/user.png",
+      date: "2025-04-12",
+      rating: 5,
+      variation: "Jasmine",
+      comment: "Very fragrant rice, great quality!",
+      images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
+      liked: false,
+      likeCount: 0,
+    },
+    {
+      id: 2,
+      user: "m******d",
+      profileImage: "/user.png",
+      date: "2025-04-10",
+      rating: 4,
+      variation: "Sinandomeng",
+      comment: "Good rice but the packaging was a bit loose.",
+      images: ["/rice2-review.png", "/rice2-review.png"],
+      liked: false,
+      likeCount: 0,
+    },
+    {
+      id: 3,
+      user: "e******a",
+      profileImage: "/user.png",
+      date: "2025-04-08",
+      rating: 5,
+      variation: "Jasmine",
+      comment: "Best rice I’ve had in a while. Highly recommended!",
+      images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
+      liked: false,
+      likeCount: 0,
+    },
+    {
+      id: 4,
+      user: "r******e",
+      profileImage: "/user.png",
+      date: "2025-04-05",
+      rating: 3,
+      variation: "Sinandomeng",
+      comment: "Not bad, but I prefer other varieties.",
+      images: ["/rice2-review.png", "/rice2-review.png"],
+      liked: false,
+      likeCount: 0,
+    },
+  ]);
 
   const filteredReviews = selectedFilter === "All"
     ? reviews
@@ -138,22 +141,19 @@ const ProductDetails = () => {
 
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5]">
+      {showToast && (
+        <div className="fixed pt-10 inset-0 flex items-center justify-center z-50">
+          <div className="border-2 border-[#858585] bg-white rounded-3xl p-10 w-[400px] shadow-xl text-center">
+            <img src="/Checkpass.png" alt="Success" className="w-20 h-20 mx-auto mb-4" />
+            <h3 className="text-xl font-bold mb-2">Items has been added to your shopping cart</h3>
+          </div>
+        </div>
+      )}
       <div className="px-6 py-2">
         <div className="pl-10 flex items-center">
           <button onClick={handleGoBack} className="flex items-center text-gray-600">
             <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
           </button>
-          <div className="flex items-center ml-16 text-md">
-            <ul className="flex items-center gap-2 text-md">
-              <li><a className="underline text-gold">Home</a></li>
-              <li className="text-xl text-gray-400">›</li>
-              <li><a className="underline text-gold">Grains</a></li>
-              <li className="text-xl text-gray-400">›</li>
-              <li><a className="underline text-gold">Automatic-Cook Rice</a></li>
-              <li className="text-xl text-gray-400">›</li>
-              <li className="text-gray-800 font-medium">{product.name}</li>
-            </ul>
-          </div>
         </div>
       </div>
 
@@ -267,49 +267,56 @@ const ProductDetails = () => {
                   <img src="/minus button.png" alt="Minus" className="w-8 h-8" />
                 </button>
                 <div className="px-4 py-1 text-xl font-bold select-none">{quantity}</div>
-                <button onClick={incrementQuantity}>
-                  <img src="/add button.png" alt="Add" className="w-8 h-8" />
-                </button>
+               <button
+              onClick={incrementQuantity}
+              disabled={quantity >= product.stock}
+              className={`disabled:opacity-50`}
+            >
+              <img src="/add button.png" alt="Add" className="w-8 h-8" />
+            </button>
               </div>
               <span className="ml-4 text-gray-500">{product.stock} stocks available</span>
             </div>
 
             {/* Action Buttons */}
             <div className="mt-10 flex gap-4">
-              <button className="border border-green-700 font-medium text-green-600 px-6 py-2 rounded-full w-[320px] h-[53px] flex items-center justify-center gap-2">
-                <img src="/shopping-cart.png" alt="shopping cart" className="w-5 h-5" />
-                Add to Cart
-              </button>
-             <button
-              onClick={() => {
-                const checkoutData = {
-                  items: [
-                    {
-                      id: product.id,
-                      name: product.name,
-                      price: parseFloat(product.price.replace("₱", "")),
-                      quantity: quantity,
-                      image: mainImage,
-                      variation: selectedVariation.name,
-                      seller: product.seller.name,
-                      orderId: `PD-${Date.now()}` // dummy order ID
-                    }
-                  ],
-                  subtotal: quantity * parseFloat(product.price.replace("₱", "")),
-                  discount: 0,
-                  tax: 0,
-                  total: quantity * parseFloat(product.price.replace("₱", "")),
-                  paymentMethod: "Cash on Delivery",
-                  source: "product"
-                };
+          <button
+            onClick={showModalToast}
+            className="border border-green-700 font-medium text-green-600 px-6 py-2 rounded-full w-[320px] h-[53px] flex items-center justify-center gap-2"
+          >
+            <img src="/shopping-cart.png" alt="shopping cart" className="w-5 h-5" />
+            Add to Cart
+          </button>
 
-                navigate('/checkoutpage', { state: { checkoutData } });
-              }}
-              className="bg-green-500 text-white hover:bg-green-600 font-bold px-6 py-2 rounded-full w-[982px] h-[53px] flex items-center justify-center gap-2"
-            >
-              Buy Now
-              <img src="/arrow-right.png" alt="arrow right" className="w-7 h-7" />
-            </button>
+          <button
+            onClick={() => {
+              const checkoutData = {
+                items: [
+                  {
+                    id: product.id,
+                    name: product.name,
+                    price: parseFloat(product.price.replace("\u20b1", "")),
+                    quantity: quantity,
+                    image: mainImage,
+                    variation: selectedVariation.name,
+                    seller: product.seller.name,
+                    orderId: `PD-${Date.now()}`,
+                  },
+                ],
+                subtotal: quantity * parseFloat(product.price.replace("\u20b1", "")),
+                discount: 0,
+                tax: 0,
+                total: quantity * parseFloat(product.price.replace("\u20b1", "")),
+                paymentMethod: "Cash on Delivery",
+                source: "product",
+              };
+              navigate('/checkoutpage', { state: { checkoutData } });
+            }}
+            className="bg-green-500 text-white hover:bg-green-600 font-bold px-6 py-2 rounded-full w-[982px] h-[53px] flex items-center justify-center gap-2"
+          >
+            Buy Now
+            <img src="/arrow-right.png" alt="arrow right" className="w-7 h-7" />
+          </button>
             </div>
 
         {/* Seller Info */}

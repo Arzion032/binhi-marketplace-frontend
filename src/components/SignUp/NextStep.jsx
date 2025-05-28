@@ -1,9 +1,11 @@
-// src/components/SignUp/NextStep.jsx
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+
 
 const NextStep = () => {
   const navigate = useNavigate();
+    const location = useLocation();
+  const email = location.state?.email || "your email"; 
 
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
@@ -61,7 +63,9 @@ const NextStep = () => {
 
           <h2 className="text-3xl font-bold">Enter Verification Code</h2>
           <p className="text-base text-gray-600 mb-5">
-            We have sent the code to <strong>juandelacruz@gmail.com</strong>
+            We have sent the code to  <br />
+          <span className="text-black font-medium">{email}</span>.
+
           </p>
 
           <p className="text-base text-black font-semibold mb-2">Enter the code</p>

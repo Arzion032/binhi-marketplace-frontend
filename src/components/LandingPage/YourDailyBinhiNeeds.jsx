@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainHeader from '../UI/MainHeader';
 
-const itemsPerPage = 10;
+const itemsPerPage = 15;
 
 const YourDailyBinhiNeeds = () => {
   const navigate = useNavigate();

@@ -7,7 +7,6 @@ const ResetPassword = () => {
   const [emailOrPhone, setEmailOrPhone] = useState("");
 
   const handleNext = () => {
-    // You can validate email/phone format here if needed
     navigate("/verify-code", { state: { email: emailOrPhone } });
   };
 

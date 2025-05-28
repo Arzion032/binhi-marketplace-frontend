@@ -1,16 +1,16 @@
-// src/components/SignUp/SignUpPage.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { Card } from "../Card";
-import { Input } from "../Input"; // Same input component as LogInPage
+import { Input } from "../Input"; 
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const [emailOrPhone, setEmailOrPhone] = useState("");
 
   const handleNext = (e) => {
     e.preventDefault();
-    navigate("/next-step");
+    navigate("/next-step", { state: { email: emailOrPhone } }); // <-- added missing comma here
   };
 
   return (
@@ -33,12 +33,13 @@ const SignUpPage = () => {
 
     <form className="mb-6" onSubmit={handleNext}>
       <div>
-        <label className="label font-semibold text-lg">Phone Number/Email</label>
-        <Input
-          type="text"
-          placeholder="Enter your Phone Number or Email"
-          className="h-12 text-lg"
-        />
+        <label className="label font-semibold text-md mb-1">Phone Number/Email</label>
+                  <Input
+                    type="text"
+                    placeholder="Enter your Phone Number or Email"
+                    value={emailOrPhone}
+                    onChange={(e) => setEmailOrPhone(e.target.value)}
+                  />
       </div>
 
       <br />

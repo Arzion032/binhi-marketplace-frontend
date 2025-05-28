@@ -1,60 +1,170 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MainHeader from '../UI/MainHeader';
 
-const FeaturedProducts = () => {
+const SearchProductWithAccount = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const query = queryParams.get('query'); 
+  const query = queryParams.get('query');
 
+  const [currentPage, setCurrentPage] = useState(1);
   const [selectedFilter, setSelectedFilter] = useState("Relevance");
   const [showPriceDropdown, setPriceDropdown] = useState(false);
+  const [products, setProducts] = useState(
+    new Array(50).fill({
+      name: "Automatic-Cook Rice from the Field of Antartica",
+      price: "₱53.00",
+      sold: 227,
+      image: "/Search-rice.png",
+    })
+  );
 
-  const [products, setProducts] = useState([
-    { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱100.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱105.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱100.00", sold: 227, image: "/brocco.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱105.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱105.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-  ]);
+  const itemsPerPage = 15;
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+
+  const paginatedProducts = useMemo(() => {
+    return products.slice(
+      (currentPage - 1) * itemsPerPage,
+      currentPage * itemsPerPage
+    );
+  }, [currentPage, products]);
+
+  const farmerTemplates = [
+    {
+      name: "Anton Benidas",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "10k",
+      rank: 2,
+      categories: ["milks & dairy", "rice", "grains"],
+      img: "/222.jpg",
+    },
+    {
+      name: "John Doe Pasig",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "12k",
+      rank: 1,
+      categories: ["fruits", "rice", "vegetables", "root crops"],
+      img: "/444.png",
+    },
+    {
+      name: "John Doe Pasig",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "12k",
+      rank: 1,
+      categories: ["fruits", "rice", "vegetables", "root crops"],
+      img: "/444.png",
+    },
+    {
+      name: "Anton Benidas",
+      location: "Macamot, Binangonan",
+      rating: 5.0,
+      sold: "10k",
+      rank: 2,
+      categories: ["milks & dairy", "rice", "grains"],
+      img: "/222.jpg",
+    },
+  ];
+
+  const getCategoryClass = (cat) => {
+    switch (cat.toLowerCase()) {
+      case 'vegetables':
+      case 'root crops':
+      case 'milks & dairy':
+        return 'bg-[#8BC34A] text-white';
+      case 'grains':
+      case 'fruits':
+        return 'bg-[#D1A157] text-white';
+      case 'meat':
+      case 'rice':
+        return 'bg-[#4CAE4F] text-white';
+      default:
+        return 'bg-green-100 text-green-800';
+    }
+  };
 
   return (
     <>
       <MainHeader />
       <div className="min-h-screen w-full bg-[#F5F9F5] pt-8">
         <div className="mx-[85px] max-w-[1700px]">
-          <div className="mx-[206px] flex items-center gap-2 mb-6">
-            <img src="/star-outline.png" alt="star icon" className="w-8 h-8" />
+          {/* Farmer Section */}
+          <div className="mx-[200px] flex items-center gap-2 mb-6">
+            <img src="/text-search.png" alt="search icon" className="w-8 h-8" />
             <h2 className="text-3xl font-semibold">
-              Featured Products{' '}
-              <span className="text-lg font-normal text-gray-400">
-                From Binangonan Municipal Farmers Federation Inc.
-              </span>
-              <span className="text-green-600">
-                {query ? `‘${query}’` : ''}
-              </span>
+              Farmer results for ‘<span className="text-green-600">{query}</span>’
             </h2>
           </div>
 
-          {/* Sort By Filter Bar */}
-          <div className="mx-[206px] flex gap-4 mb-8">
-            <div className="relative flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full z-10">
+          <div className="mx-[190px] pb-10 overflow-x-auto">
+            <div className="flex gap-4 w-max">
+              {[...farmerTemplates, ...farmerTemplates, ...farmerTemplates].map((farmer, index) => (
+                <div key={index} className="min-w-[350px]">
+                  {/* farmer card here */}
+                  <div className="bg-white rounded-2xl border-[3px] border-black-200 shadow-md text-center flex flex-col items-center justify-between h-full">
+                    <div className="flex flex-col items-center justify-between h-full w-full">
+                      <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
+                        <div className="relative w-24 h-24">
+                          <img
+                            src={farmer.img}
+                            alt={farmer.name}
+                            className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg"
+                          />
+                        </div>
+                        <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
+                        <p className="text-sm text-gray-500">{farmer.location}</p>
+                        <div className="flex items-center gap-2 font-medium mt-1">
+                          <img src="/Star.png" alt="star" className="h-5 w-5" />
+                          <span className="text-black">{Number(farmer.rating).toFixed(1)}</span>
+                          <span className="text-gray-500 ml-1">|</span>
+                          <span className="text-gray-500 ml-2">{farmer.sold} Sold</span>
+                        </div>
+                        <div className="flex flex-wrap justify-center gap-2 mt-3">
+                          {farmer.categories.map((cat, idx) => (
+                            <span
+                              key={idx}
+                              className={`px-3 py-1 text-sm font-medium rounded-full ${getCategoryClass(cat)}`}
+                            >
+                              {cat}
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
+                        <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                          <img src="/shopp.png" alt="shop" className="w-5 h-5" />
+                          View Shop
+                        </button>
+                        <button className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2">
+                          <img src="/chat.png" alt="chat" className="w-5 h-5" />
+                          Chat Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mx-[190px] text-md text-gray-400 text-left mt-2 mb-5">
+            Scroll to see more farmers →
+          </div>
+
+          {/* Product Header */}
+          <div className="mx-[200px] flex items-center gap-2 mb-6">
+            <img src="/text-search.png" alt="search icon" className="w-8 h-8" />
+            <h2 className="text-3xl font-semibold">
+              Product results for ‘<span className="text-green-600">{query}</span>’
+            </h2>
+          </div>
+
+          {/* Sort Filter Bar */}
+          <div className="mx-[200px] flex gap-4 mb-8">
+            <div className="flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full">
               <p className="text-lg font-semibold text-gray-800">Sort by</p>
               {["Relevance", "Latest", "Top Sales"].map((label, idx) => (
                 <button
@@ -69,7 +179,8 @@ const FeaturedProducts = () => {
                   {label}
                 </button>
               ))}
-              {/* Price dropdown */}
+
+              {/* Price Dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setPriceDropdown(prev => !prev)}
@@ -101,7 +212,7 @@ const FeaturedProducts = () => {
                           });
                           setProducts(sorted);
                           setSelectedFilter("Price");
-                          setShowPriceDropdown(false);
+                          setPriceDropdown(false);
                         }}
                       >
                         {cat}
@@ -115,7 +226,7 @@ const FeaturedProducts = () => {
 
           {/* Product Cards */}
           <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {products.map((product, index) => (
+            {paginatedProducts.map((product, index) => (
               <div
                 key={index}
                 className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
@@ -148,18 +259,44 @@ const FeaturedProducts = () => {
             ))}
           </div>
 
-          {/* Login to See More */}
-          <div className="flex justify-center mt-10">
+          {/* Pagination */}
+          <div className="flex justify-center gap-2 mt-6">
             <button
-              className="text-lg font-bold bg-white border-2 border-gray-700 text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110 hover:border-[#4CAE4F] mb-5"
-              onClick={() => navigate('/login')}
+              onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+              className="w-[45px] h-[50px] bg-[#D9D9D9] border border-[#858585] rounded-xl text-gray-500 hover:bg-[#c2c2c2]"
             >
-              Login to see more
+              &lt;
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((num) => (
+              <button
+                key={num}
+                onClick={() => setCurrentPage(num)}
+                className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
+                  currentPage === num
+                    ? 'bg-[#4CAE4F] text-white border-[#4CAE4F]'
+                    : 'bg-[#D9D9D9] text-[#858585] border-[#858585]'
+                }`}
+              >
+                {num}
+              </button>
+            ))}
+
+            <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
+              ...
+            </button>
+
+            <button
+              onClick={() => setCurrentPage((prev) => Math.min(prev + 1, totalPages))}
+              className="w-[45px] h-[50px] rounded-xl bg-[#D9D9D9] border border-[#858585] text-[#858585] hover:bg-[#c2c2c2]"
+            >
+              &gt;
             </button>
           </div>
+
         </div>
 
-        {/* Footer */}
+        {/* Footer Section */}
         <footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
             <div className="flex flex-col items-center">
@@ -225,4 +362,4 @@ const FeaturedProducts = () => {
   );
 };
 
-export default FeaturedProducts;
+export default SearchProductWithAccount;
