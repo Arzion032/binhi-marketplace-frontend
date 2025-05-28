@@ -1,11 +1,29 @@
-import React from "react";
+import React, { useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
-
 
 const NextStep = () => {
   const navigate = useNavigate();
-    const location = useLocation();
+  const location = useLocation(); 
   const email = location.state?.email || "your email"; 
+
+  const [codes, setCodes] = useState(new Array(6).fill("")); 
+  const inputsRef = useRef([]); 
+
+  const handleChange = (value, index) => {
+    if (!/^[0-9]?$/.test(value)) return; 
+    const newCodes = [...codes];
+    newCodes[index] = value;
+    setCodes(newCodes);
+    if (value && index < 5) {
+      inputsRef.current[index + 1].focus(); 
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !codes[index] && index > 0) {
+      inputsRef.current[index - 1].focus(); 
+    }
+  };
 
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
@@ -14,7 +32,7 @@ const NextStep = () => {
         {/* Back Button */}
         <button
           className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-black"
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/signup")}
         >
           <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
         </button>
@@ -65,25 +83,35 @@ const NextStep = () => {
           <p className="text-base text-gray-600 mb-5">
             We have sent the code to  <br />
           <span className="text-black font-medium">{email}</span>.
-
           </p>
+           <p className="text-sm font-bold text-black mt-1 mb-2">
+          Enter the code <br />
+        </p>
 
-          <p className="text-base text-black font-semibold mb-2">Enter the code</p>
-          <div className="flex justify-center gap-3 mb-4">
-            {[...Array(6)].map((_, i) => (
-              <input
-                key={i}
-                type="text"
-                maxLength={1}
-                className="w-[55px] h-[56px] text-center border-2 border-gray-300 rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-green-500"
-              />
-            ))}
-          </div>
+        {/* Code Inputs */}
+        <div className="flex justify-center gap-5 mb-4">
+          {codes.map((code, i) => (
+            <input
+              key={i}
+              ref={(el) => (inputsRef.current[i] = el)}
+              type="text"
+              inputMode="numeric"
+              maxLength="1"
+              className="w-[55px] h-[56px] text-center border-2 border-gray-300 rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              value={code}
+              onChange={(e) => handleChange(e.target.value, i)}
+              onKeyDown={(e) => handleKeyDown(e, i)}
+            />
+          ))}
+        </div>
 
-          <p className="text-md text-gray-500 mb-20">
-            Didn’t receive a code?{" "}
-            <button className="text-[#4CAE4F] font-medium hover:underline">Resend code</button>
-          </p>
+        {/* Resend Text */}
+        <p className="text-center text-md text-gray-400 mb-[80px]">
+          Didn’t receive a code?{" "}
+          <button className="text-green-600 font-medium hover:underline">
+            Resend code
+          </button>
+        </p>
 
           {/* Next Button */}
           <button

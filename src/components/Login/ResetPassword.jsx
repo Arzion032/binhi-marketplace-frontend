@@ -13,7 +13,7 @@ const ResetPassword = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/your-background.jpg')" }}>
       <div className="bg-white rounded-3xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
-        <button onClick={() => navigate("/")} className="flex items-center gap-1 text-sm text-black mb-4">
+        <button onClick={() => navigate("/login")} className="flex items-center gap-1 text-sm text-black mb-4">
           <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
         </button>
 

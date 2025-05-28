@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FederationSection from './FederationSection';
+import MainHeader from '../UI/MainHeader'; 
 
 const Marketplace = () => {
   const navigate = useNavigate();
@@ -11,6 +12,12 @@ const [selectedProductName, setSelectedProductName] = useState('');
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
   };
+
+  const handleSearch = (query) => {
+  if (query.trim()) {
+    navigate(`/search-product-account?query=${encodeURIComponent(query.trim())}`);
+  }
+};
 
   const products = [
     { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
@@ -37,6 +44,8 @@ const [selectedProductName, setSelectedProductName] = useState('');
 
            return (
      <div className="min-h-screen w-full bg-white">
+<MainHeader onSearch={handleSearch} />
+
       <div className="bg-[#F5F9F5] shadow-lg">
         {showToast && (
           <div className="fixed pt-10 inset-0 flex items-center justify-center z-50">

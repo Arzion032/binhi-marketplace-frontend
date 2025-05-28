@@ -157,7 +157,7 @@ const SetPassword = () => {
           {/* Submit Button */}
           <button
             onClick={handleSubmit}
-            className="w-[488px] h-[54px] mt-3 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition"
+            className="mt-[30px] w-[488px] h-[54px] mt-3 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition"
           >
             Next
           </button>

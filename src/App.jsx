@@ -44,8 +44,7 @@ function App() {
         <Route path="/create-new-password" element={<InitialLayout><CreateNewPassword /></InitialLayout>} />
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
         <Route path="/product/:productId" element={<MainLayout><ProductDetails /></MainLayout>} />
-        <Route path="/" element={<MainLayout><Marketplace/></MainLayout>} />
-        <Route path="/landingpage" element={<MainLayout><Marketplace/></MainLayout>} />
+        <Route path="/" element={<Marketplace/>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />

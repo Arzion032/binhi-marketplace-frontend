@@ -391,7 +391,7 @@ const barangays = {
           </div>
 
           <button
-            className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+            className="mt-[30px] w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
             onClick={handleFinish}
           >
             Finish

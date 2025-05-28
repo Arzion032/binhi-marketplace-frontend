@@ -1,17 +1,18 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Input } from "../Input";
 import { Button } from "../Button";
+import { useNavigate, useLocation } from "react-router-dom"; 
 
 export default function CreateNewPassword() {
-  const navigate = useNavigate();
+    const navigate = useNavigate();
+  const location = useLocation(); 
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const email = location.state?.email || "your email"; 
+  const [showConfirmPassword, setShowConfirmPassword] = useState("");
 
+  const email = location.state?.email || "your email"; 
   const isPasswordValid =
     /[A-Z]/.test(password) &&
     /[a-z]/.test(password) &&
@@ -42,7 +43,7 @@ export default function CreateNewPassword() {
         style={{ width: "576px", height: "731px" }}
       >
         <button
-          onClick={() => navigate("/")}
+          onClick={() => navigate("/verify-code")}
           className="flex items-center gap-1 text-sm text-black mb-4"
         >
           <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
@@ -188,36 +189,6 @@ export default function CreateNewPassword() {
           <Button onClick={handleNext}>Next</Button>
         </div>
       </div>
-
-      {/* Success Modal */}
-      {showSuccess && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-3xl p-11 w-[620px] h-[460px] shadow-xl">
-            <div className="flex flex-col items-center text-center">
-              <h3 className="text-3xl font-bold mb-4">
-                Password Reset Successfully!
-              </h3>
-              <img
-                src="/Checkpass.png"
-                alt="Success"
-                className="w-18 h-18 mb-4"
-              />
-              <p className="text-base text-gray-600 mb-3">
-                You have successfully reset the password for the account with the email <span className="font-medium">{email}</span>.
-              </p> <br/> <br/> 
-              <p className="text-sm text-gray-500 mb-4">
-                You will be redirected to Login Page in 3 <br/> seconds.
-              </p> 
-              <button 
-            className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
-            onClick={() => navigate("/login")}
-              >
-                Okay
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

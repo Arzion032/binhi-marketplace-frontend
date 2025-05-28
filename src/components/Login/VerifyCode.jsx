@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // ✅ import useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 
 const VerifyCode = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ to receive email/phone from ResetPassword
-  const email = location.state?.email || "your email"; // ✅ fallback
+  const location = useLocation();
+  const email = location.state?.email || "your email"; 
 
   const [codes, setCodes] = useState(new Array(6).fill(""));
   const inputsRef = useRef([]);
@@ -29,7 +29,7 @@ const VerifyCode = () => {
     const code = codes.join("");
     console.log("Submitted code:", code);
     navigate("/create-new-password", {
-      state: { email }, // ✅ pass the email or phone to next page
+      state: { email }, 
     });
   };
 
@@ -69,7 +69,7 @@ const VerifyCode = () => {
         </div>
 
         {/* Resend Text */}
-        <p className="text-center text-sm text-gray-400 mb-[325px]">
+        <p className="text-center text-md text-gray-400 mb-[325px]">
           Didn’t receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
