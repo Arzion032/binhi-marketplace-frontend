@@ -4,13 +4,18 @@ import { useNavigate, useLocation } from "react-router-dom";
 const VerifyCode = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const email = location.state?.email || "your email"; 
+  const email = location.state?.email || "your email";
 
   const [codes, setCodes] = useState(new Array(6).fill(""));
+  const [error, setError] = useState(""); // Error state to display message
   const inputsRef = useRef([]);
 
   const handleChange = (value, index) => {
-    if (!/^[0-9]?$/.test(value)) return;
+    if (!/^[0-9]?$/.test(value)) {
+      setError("Invalid verification code. Please try again");
+      return;
+    }
+    setError(""); // Reset error if valid input
     const newCodes = [...codes];
     newCodes[index] = value;
     setCodes(newCodes);
@@ -29,23 +34,23 @@ const VerifyCode = () => {
     const code = codes.join("");
     console.log("Submitted code:", code);
     navigate("/create-new-password", {
-      state: { email }, 
+      state: { email },
     });
   };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/your-background.jpg')" }}>
-<div className="bg-white rounded-3xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
-{/* Back Button */}
+      <div className="bg-white rounded-3xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
+        {/* Back Button */}
         <button onClick={() => navigate("/reset-password")} className="flex items-center text-sm text-black mb-4">
-        <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
+          <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
         </button>
 
         {/* Title and Info */}
         <h2 className="text-2xl font-bold text-center">Enter Verification Code</h2>
         <p className="text-md text-center text-gray-600 mt-1 mb-6">
           We have sent the code to <br />
-          <span className="text-black font-medium">{email}</span>.
+          <span className="text-black font-medium">{email}</span>.<br />
         </p>
         <p className="text-sm font-bold text-black mt-1 mb-2">
           Enter the code <br />
@@ -60,13 +65,18 @@ const VerifyCode = () => {
               type="text"
               inputMode="numeric"
               maxLength="1"
-              className="w-[55px] h-[56px] text-center border-2 border-gray-300 rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className={`w-[55px] h-[56px] text-center border-2 ${
+                error ? "border-red-500" : "border-gray-300"
+              } rounded-xl text-xl focus:outline-none focus:ring-0`} // Removed green outline when error appears
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
             />
           ))}
         </div>
+
+        {/* Error Message */}
+        {error && <p className="text-center italic text-red-500 text-sm mt-2">{error}</p>}
 
         {/* Resend Text */}
         <p className="text-center text-sm text-gray-400 mb-[325px]">
@@ -79,9 +89,8 @@ const VerifyCode = () => {
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          className="w-full py-2 rounded-full bg-green-500 text-white shadow-lg text-lg h-14
-          hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out" 
-          >
+          className="w-full py-2 rounded-full bg-green-500 text-white shadow-lg text-lg h-14 hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out"
+        >
           Next
         </button>
       </div>

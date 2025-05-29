@@ -7,12 +7,22 @@ import { Input } from "../Input";
 const SignUpPage = () => {
   const navigate = useNavigate();
   const [emailOrPhone, setEmailOrPhone] = useState("");
+  const [error, setError] = useState(""); // State to hold error message
 
-  const handleNext = (e) => {
-    e.preventDefault();
-    navigate("/next-step", { state: { email: emailOrPhone } }); // <-- added missing comma here
+  const handleNext = () => {
+    // Regular expression for validating email
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    // Regular expression for validating phone number (basic format)
+    const phoneRegex = /^[0-9]{10}$/;
+
+    // Check if input is either a valid email or phone number
+    if (!emailRegex.test(emailOrPhone) && !phoneRegex.test(emailOrPhone)) {
+      setError("Please enter correct Phone Number or Email format.");
+    } else {
+      setError(""); 
+      navigate("/next-step", { state: { email: emailOrPhone } });
+    }
   };
-
   return (
     <div className="flex items-center justify-center px-5 py-10">
       <div className="flex flex-col md:flex-row justify-between rounded-2xl overflow-hidden w-full max-w-7xl">
@@ -34,15 +44,19 @@ const SignUpPage = () => {
     <form className="mb-6" onSubmit={handleNext}>
       <div>
         <label className="label font-semibold text-md mb-1">Phone Number/Email</label>
-                  <Input
-                    type="text"
-                    placeholder="Enter your Phone Number or Email"
-                    value={emailOrPhone}
-                    onChange={(e) => setEmailOrPhone(e.target.value)}
-                  />
-      </div>
+                 <Input
+                            type="text"
+                            placeholder="Enter your Phone Number or Email"
+                            value={emailOrPhone}
+                            onChange={(e) => setEmailOrPhone(e.target.value)}
+                            className={`input input-bordered w-full ${error ? "border-2 border-red-500" : ""}`}
+                          />
+                        </div>
 
       <br />
+        {error && (
+          <p className="text-red-500 text-sm -mt-3 ml-3">{error}</p>
+        )}
       <Button className="w-full rounded-full bg-green-500 text-white text-lg h-12
           hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
         Next

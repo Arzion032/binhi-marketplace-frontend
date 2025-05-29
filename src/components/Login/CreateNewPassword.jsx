@@ -1,18 +1,20 @@
 import React, { useState } from "react";
 import { Input } from "../Input";
 import { Button } from "../Button";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function CreateNewPassword() {
-    const navigate = useNavigate();
-  const location = useLocation(); 
+  const navigate = useNavigate();
+  const location = useLocation();
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState("");
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState(""); // Add error state to handle validation errors
 
-  const email = location.state?.email || "your email"; 
+  const email = location.state?.email || "your email";
+
   const isPasswordValid =
     /[A-Z]/.test(password) &&
     /[a-z]/.test(password) &&
@@ -22,10 +24,11 @@ export default function CreateNewPassword() {
 
   const handleNext = () => {
     if (!isPasswordValid) {
-      alert("❌ Password does not meet all the requirements.");
+      setError("❌ Password does not meet all the requirements. Please try again.");
     } else if (password !== confirmPassword) {
-      alert("❌ Passwords do not match.");
+      setError("❌ The password confirmation does not match. Please try again.");
     } else {
+      setError(""); 
       setShowSuccess(true);
       setTimeout(() => {
         navigate("/login");
@@ -62,7 +65,7 @@ export default function CreateNewPassword() {
           <label className="label font-semibold">New Password</label>
           <Input
             type={showPassword ? "text" : "password"}
-            className="input input-bordered w-full"
+            className={`input input-bordered w-full ${error ? "border-red-500" : ""}`}
             placeholder="Enter new password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
@@ -88,14 +91,14 @@ export default function CreateNewPassword() {
         </div>
 
         {/* Confirm Password Field */}
-        <div className="relative mb-6">
+        <div className="relative mb-3">
           <label className="label font-semibold">Confirm Password</label>
           <Input
             type={showConfirmPassword ? "text" : "password"}
             placeholder="Confirm your password"
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
-            className="input input-bordered w-full"
+            className={`input input-bordered w-full ${error ? "border-red-500" : ""}`}
           />
           <div
             className="absolute right-3 top-[4.1rem] -translate-y-1/2 cursor-pointer"
@@ -116,6 +119,9 @@ export default function CreateNewPassword() {
             )}
           </div>
         </div>
+         {error && (
+          <p className="text-red-500 text-sm mb-2">{error}</p>
+        )}
 
         {/* Password Requirements */}
         <div className="text-md text-gray-600 mb-[25px]">
@@ -183,6 +189,7 @@ export default function CreateNewPassword() {
             <span>At least 1 number (123)</span>
           </div>
         </div>
+
 
         {/* Next Button */}
         <div className="mt-[100px]">

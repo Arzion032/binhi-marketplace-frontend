@@ -76,6 +76,7 @@ const FeaturedProducts = () => {
                   className={`px-4 py-1 pl-4 pr-3 rounded-full font-semibold text-sm border flex items-center gap-2 transition ${
                     selectedFilter === "Price"
                       ? 'bg-[#4CAE4F] text-white'
+  
                       : 'bg-white text-gray-700 border-gray-300'
                   }`}
                 >

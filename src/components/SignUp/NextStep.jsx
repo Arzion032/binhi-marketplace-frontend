@@ -6,25 +6,37 @@ const NextStep = () => {
   const location = useLocation(); 
   const email = location.state?.email || "your email"; 
 
-  const [codes, setCodes] = useState(new Array(6).fill("")); 
-  const inputsRef = useRef([]); 
-
-  const handleChange = (value, index) => {
-    if (!/^[0-9]?$/.test(value)) return; 
-    const newCodes = [...codes];
-    newCodes[index] = value;
-    setCodes(newCodes);
-    if (value && index < 5) {
-      inputsRef.current[index + 1].focus(); 
-    }
-  };
-
-  const handleKeyDown = (e, index) => {
-    if (e.key === "Backspace" && !codes[index] && index > 0) {
-      inputsRef.current[index - 1].focus(); 
-    }
-  };
-
+    const [codes, setCodes] = useState(new Array(6).fill(""));
+    const [error, setError] = useState(""); // Error state to display message
+    const inputsRef = useRef([]);
+  
+    const handleChange = (value, index) => {
+      if (!/^[0-9]?$/.test(value)) {
+        setError("Invalid verification code. Please try again");
+        return;
+      }
+      setError(""); // Reset error if valid input
+      const newCodes = [...codes];
+      newCodes[index] = value;
+      setCodes(newCodes);
+      if (value && index < 5) {
+        inputsRef.current[index + 1].focus();
+      }
+    };
+  
+    const handleKeyDown = (e, index) => {
+      if (e.key === "Backspace" && !codes[index] && index > 0) {
+        inputsRef.current[index - 1].focus();
+      }
+    };
+  
+    const handleSubmit = () => {
+      const code = codes.join("");
+      console.log("Submitted code:", code);
+      navigate("/create-new-password", {
+        state: { email },
+      });
+    };
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
       <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative " style={{ marginTop: '5 px' }}>
@@ -97,13 +109,17 @@ const NextStep = () => {
               type="text"
               inputMode="numeric"
               maxLength="1"
-              className="w-[55px] h-[56px] text-center border-2 border-gray-300 rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className={`w-[55px] h-[56px] text-center border-2 ${
+                error ? "border-red-500" : "border-gray-300"
+              } rounded-xl text-xl focus:outline-none focus:ring-0`} // Removed green outline when error appears
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
             />
           ))}
         </div>
+        {/* Error Message */}
+        {error && <p className="text-center italic text-red-500 text-sm mt-2">{error}</p>}
 
         {/* Resend Text */}
         <p className="text-center text-md text-gray-400 mb-[80px]">
@@ -114,14 +130,16 @@ const NextStep = () => {
         </p>
 
           {/* Next Button */}
-          <button
-            onClick={() => navigate("/set-password")}
-            className="w-[488px] h-[54px] mt-[110px] bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition"
-          >
-            Next
-          </button>
+
+         <button
+  onClick={() => navigate("/set-password")}
+  className={`w-[488px] h-[54px] ${error ? "mt-[60px]" : "mt-[110px]"} bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition`}
+>
+  Next
+</button>
+
         </div>
-      </div>
+    </div>
     </div>
   );
 };

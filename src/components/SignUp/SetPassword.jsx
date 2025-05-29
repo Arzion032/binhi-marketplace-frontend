@@ -1,4 +1,3 @@
-// src/components/SignUp/SetPassword.jsx
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -8,6 +7,7 @@ const SetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(""); // Add error state to handle validation errors
 
   // Password validation functionality from CreateNewPassword
   const hasUpperCase = /[A-Z]/.test(password);
@@ -23,12 +23,14 @@ const SetPassword = () => {
     hasSymbol && 
     hasMinLength;
 
-  const handleSubmit = () => {
+
+  const handleNext = () => {
     if (!isPasswordValid) {
-      alert("Password does not meet all the requirements.");
+      setError("❌ Password does not meet all the requirements.");
     } else if (password !== confirmPassword) {
-      alert("Passwords do not match!");
+      setError("❌ The password confirmation does not match.");
     } else {
+      setError(""); // Reset error if everything is valid
       navigate("/set-up");
     }
   };
@@ -45,36 +47,35 @@ const SetPassword = () => {
           <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
         </button>
 
-          {/* Step Indicator */}
-          <div className="flex justify-center mb-3">
-            <div className="flex items-center gap-4">
-              <div className="flex flex-col items-center">
-                <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
-                  1
-                </div>
-                <span className="text-green-600 mt-2">Verification</span>
+        {/* Step Indicator */}
+        <div className="flex justify-center mb-3">
+          <div className="flex items-center gap-4">
+            <div className="flex flex-col items-center">
+              <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+                1
               </div>
+              <span className="text-green-600 mt-2">Verification</span>
+            </div>
 
-              <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
+            <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
 
-              <div className="flex flex-col items-center">
+            <div className="flex flex-col items-center">
               <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
-              2
-                </div>
-                <span className="font-bold text-green-600 mt-2">Password</span>
+                2
               </div>
+              <span className="font-bold text-green-600 mt-2">Password</span>
+            </div>
 
-              <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
+            <img src="/dotgreen.png" alt="Step Flow" className="relative -top-3" />
 
-              <div className="flex flex-col items-center">
-                <div className="font-bold text-3xl text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
-                  3
-                </div>
-                <span className="text-[#D9D9D9] mt-2">Set Up</span>
+            <div className="flex flex-col items-center">
+              <div className="font-bold text-3xl text-[#D9D9D9] border-[2px] border-[#D9D9D9] w-[66px] h-[66px] flex items-center justify-center rounded-2xl">
+                3
               </div>
+              <span className="text-[#D9D9D9] mt-2">Set Up</span>
             </div>
           </div>
-
+        </div>
 
         {/* Main Content */}
         <div className="text-center mt-5">
@@ -84,15 +85,15 @@ const SetPassword = () => {
 
           <h2 className="text-3xl font-bold mb-1">Set Your Password</h2>
           <p className="text-base text-gray-600 mb-3">
-          Set your password to complete the sign up!
+            Set your password to complete the sign up!
           </p>
 
           {/* Password Input */}
           <div className="flex flex-col items-center gap-5 relative">
             <div className="relative w-[378px]">
-            <label className="block text-left text-black text-base font-bold">
-              Password
-            </label>
+              <label className="block text-left text-black text-base font-bold">
+                Password
+              </label>
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Enter your password"
@@ -110,9 +111,9 @@ const SetPassword = () => {
 
             {/* Confirm Password Input */}
             <div className="relative w-[378px]">
-            <label className="block text-left text-black text-base font-bold">
-              Confirm Password
-            </label>
+              <label className="block text-left text-black text-base font-bold">
+                Confirm Password
+              </label>
               <input
                 type={showConfirmPassword ? "text" : "password"}
                 placeholder="Re-enter your password"
@@ -129,34 +130,39 @@ const SetPassword = () => {
             </div>
           </div>
 
+          {/* Error Message */}
+          {error && (
+            <p className="text-red-500 text-sm mb-2 italic">{error}</p>
+          )}
+
           {/* Password Requirements Checklist with dynamic validation */}
           <div className="mt-2 mb-2 text-left w-[378px] mx-auto">
-          <p className="mb-2 font-medium text-gray-800">Your password must contain...</p>
+            <p className="mb-2 font-medium text-gray-800">Your password must contain...</p>
 
-          <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasMinLength ? "text-green-600" : "text-red-500"}`}>
-            <img src={hasMinLength ? "/check.png" : "/wrong.png"} alt={hasMinLength ? "check" : "wrong"} className="h-3 w-3" />
-            <span>Minimum of 8 characters</span>
-          </div>
+            <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasMinLength ? "text-green-600" : "text-red-500"}`}>
+              <img src={hasMinLength ? "/check.png" : "/wrong.png"} alt={hasMinLength ? "check" : "wrong"} className="h-3 w-3" />
+              <span>Minimum of 8 characters</span>
+            </div>
 
-          <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasUpperCase && hasLowerCase ? "text-green-600" : "text-red-500"}`}>
-            <img src={hasUpperCase && hasLowerCase ? "/check.png" : "/wrong.png"} alt={hasUpperCase && hasLowerCase ? "check" : "wrong"} className="h-3 w-3" />
-            <span>At least 1 lower and upper case letters (AaBb)</span>
-          </div>
+            <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasUpperCase && hasLowerCase ? "text-green-600" : "text-red-500"}`}>
+              <img src={hasUpperCase && hasLowerCase ? "/check.png" : "/wrong.png"} alt={hasUpperCase && hasLowerCase ? "check" : "wrong"} className="h-3 w-3" />
+              <span>At least 1 lower and upper case letters (AaBb)</span>
+            </div>
 
-          <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasSymbol ? "text-green-600" : "text-red-500"}`}>
-            <img src={hasSymbol ? "/check.png" : "/wrong.png"} alt={hasSymbol ? "check" : "wrong"} className="h-3 w-3" />
-            <span>At least 1 symbol (@#$)</span>
-          </div>
+            <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasSymbol ? "text-green-600" : "text-red-500"}`}>
+              <img src={hasSymbol ? "/check.png" : "/wrong.png"} alt={hasSymbol ? "check" : "wrong"} className="h-3 w-3" />
+              <span>At least 1 symbol (@#$)</span>
+            </div>
 
-          <div className={`flex items-center gap-2 text-sm font-medium ${hasNumber ? "text-green-600" : "text-red-500"}`}>
-            <img src={hasNumber ? "/check.png" : "/wrong.png"} alt={hasNumber ? "check" : "wrong"} className="h-3 w-3" />
-            <span>At least 1 number (123)</span>
+            <div className={`flex items-center gap-2 text-sm font-medium ${hasNumber ? "text-green-600" : "text-red-500"}`}>
+              <img src={hasNumber ? "/check.png" : "/wrong.png"} alt={hasNumber ? "check" : "wrong"} className="h-3 w-3" />
+              <span>At least 1 number (123)</span>
+            </div>
           </div>
-        </div>
 
           {/* Submit Button */}
           <button
-            onClick={handleSubmit}
+            onClick={handleNext}
             className="mt-[30px] w-[488px] h-[54px] mt-3 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition"
           >
             Next
