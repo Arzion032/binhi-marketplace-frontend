@@ -2,13 +2,20 @@ import React, { useState } from "react";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { Card } from "../Card";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom"; // ✅ import useNavigate
 
 function LogInPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate(); // ✅ initialize navigate
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
+  };
+
+  const handleLogin = (e) => {
+    e.preventDefault();
+    // ✅ navigate to marketplace with account
+    navigate("/marketplace");
   };
 
   return (
@@ -23,13 +30,14 @@ function LogInPage() {
 
         {/* Right Side */}
         <div className="md:w-[60%] flex items-center justify-center p-4 ml-[100px]">
-        <Card className="w-full max-w-xl p-12 pt-2 pb-6 rounded-3xl shadow-2xl bg-white">
-        <h2 className="pt-10 text-4xl font-bold text-center mb-4">Welcome Back to BINHI!</h2>
+          <Card className="w-full max-w-xl p-12 pt-2 pb-6 rounded-3xl shadow-2xl bg-white">
+            <h2 className="pt-10 text-4xl font-bold text-center mb-4">Welcome Back to BINHI!</h2>
             <p className="text-xl text-center mb-8">
-              Log In and don’t miss the opportunity to <br/>easily connect with BINHI!
+              Log In and don’t miss the opportunity to <br />easily connect with BINHI!
             </p>
 
-            <form className="mb-6">
+            {/* ✅ Attach handler to form */}
+            <form onSubmit={handleLogin} className="mb-6">
               <div>
                 <label className="label font-semibold text-lg">Phone Number/Email</label>
                 <Input type="text" placeholder="Enter your Phone Number or Email" className="h-12 text-lg" />
@@ -55,14 +63,13 @@ function LogInPage() {
 
                 <Link
                   to="/reset-password"
-                  className="text-[18px] text-left block mt-1 text-gray-600"
+                  className="text-lg text-left block mt-1 text-gray-600"
                 >
                   Forgot Password?
                 </Link>
               </div>
-
               <br />
-              <Button>
+              <Button type="submit">
                 Log In
               </Button>
             </form>
@@ -70,16 +77,15 @@ function LogInPage() {
             <div className="divider text-gray-500 my-6 text-sm">OR</div>
 
             <div className="flex justify-center gap-2">
-          <Button variant="outline" className="flex items-center justify-center gap-3">
-          <img src="/google.png" alt="Google Icon" className="w-6 h-6" />
-          Log In with Google
-        </Button>
+              <Button variant="outline" className="flex items-center justify-center gap-3">
+                <img src="/google.png" alt="Google Icon" className="w-6 h-6" />
+                Log In with Google
+              </Button>
 
-        {/* Facebook Button */}
-        <Button variant="outline" className="flex items-center justify-center gap-3">
-          <img src="/Facebook.png" alt="Facebook Icon" className="w-6 h-6" />
-          Log In with Facebook
-        </Button>
+              <Button variant="outline" className="flex items-center justify-center gap-3">
+                <img src="/Facebook.png" alt="Facebook Icon" className="w-6 h-6" />
+                Log In with Facebook
+              </Button>
             </div>
 
             <p className="text-center text-base mt-6">

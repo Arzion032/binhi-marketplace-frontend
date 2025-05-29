@@ -8,4 +8,42 @@
 
 body {
   font-family: 'Inter', sans-serif;
+  background-color: white !important;
+}
+
+/* Base styles */
+@layer base {
+  :root {
+    --app-accent: rgba(209, 161, 87, 1);
+    --app-background: rgba(248, 252, 248, 1);
+    --app-primary: rgba(76, 174, 79, 1);
+    --app-secondary: rgba(139, 195, 74, 1);
+    --blue: rgba(0, 56, 168, 1);
+    --body-font-family: "Inter", Helvetica;
+    --body-font-size: 16px;
+    --body-font-style: normal;
+    --body-font-weight: 400;
+    --body-heavy-font-family: "Inter", Helvetica;
+    --body-heavy-font-size: 16px;
+    --body-heavy-font-style: normal;
+    --body-heavy-font-weight: 600;
+    --body-heavy-letter-spacing: 0px;
+    --body-heavy-line-height: 22px;
+    --body-letter-spacing: 0px;
+    --body-line-height: 22px;
+    --dark-gray: rgba(133, 133, 133, 1);
+    --gray: rgba(217, 217, 217, 1);
+    --heading-1-font-family: "Inter", Helvetica;
+    --heading-1-font-size: 32px;
+    --heading-1-font-weight: 700;
+    --heading-2-font-family: "Inter", Helvetica;
+    --heading-2-font-size: 28px;
+    --heading-2-font-weight: 700;
+    --heading-3-font-family: "Inter", Helvetica;
+    --heading-3-font-size: 24px;
+    --heading-3-font-weight: 700;
+    --red: rgba(255, 59, 78, 1);
+    --text: rgba(13, 22, 13, 1);
+    --white: rgba(255, 255, 255, 1);
+  }
 }

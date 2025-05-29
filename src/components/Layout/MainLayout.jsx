@@ -1,5 +1,6 @@
 import React from "react";
 import MainHeader from "../UI/MainHeader";
+import MainFooter from "../UI/MainFooter";
 
 
 const MainLayout = ({ children }) => {
@@ -13,14 +14,21 @@ const MainLayout = ({ children }) => {
       {/* Background */}
       <div
         className="absolute inset-0 bg-cover bg-center z-20"
-        style={{ backgroundImage: "url('background.jpg')" }}
+        
       ></div>
 
       {/* Main Content */}
       <div className="relative z-20">
         {children}
       </div>
+
+      <div className="relative z-30">
+        <MainFooter />
+      </div>
+
+
     </div>
+
   );
 };
 

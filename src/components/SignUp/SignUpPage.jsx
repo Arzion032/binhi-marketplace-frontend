@@ -1,16 +1,16 @@
-// src/components/SignUp/SignUpPage.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { Card } from "../Card";
-import { Input } from "../Input"; // Same input component as LogInPage
+import { Input } from "../Input"; 
 
 const SignUpPage = () => {
   const navigate = useNavigate();
+  const [emailOrPhone, setEmailOrPhone] = useState("");
 
   const handleNext = (e) => {
     e.preventDefault();
-    navigate("/next-step");
+    navigate("/next-step", { state: { email: emailOrPhone } }); // <-- added missing comma here
   };
 
   return (
@@ -33,17 +33,18 @@ const SignUpPage = () => {
 
     <form className="mb-6" onSubmit={handleNext}>
       <div>
-        <label className="label font-semibold text-lg">Phone Number/Email</label>
-        <Input
-          type="text"
-          placeholder="Enter your Phone Number or Email"
-          className="h-12 text-lg"
-        />
+        <label className="label font-semibold text-md mb-1">Phone Number/Email</label>
+                  <Input
+                    type="text"
+                    placeholder="Enter your Phone Number or Email"
+                    value={emailOrPhone}
+                    onChange={(e) => setEmailOrPhone(e.target.value)}
+                  />
       </div>
 
       <br />
-      <Button className="w-full rounded-full bg-green-600 text-white shadow-lg text-lg h-12
-          hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
+      <Button className="w-full rounded-full bg-green-500 text-white text-lg h-12
+          hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
         Next
       </Button>
     </form>
@@ -88,9 +89,8 @@ const SignUpPage = () => {
   <a href="#" className="text-green-600 font-bold text-xl">
     Click Here!
   </a>
-
-  {/* Help Icon with Hover Image */}
-  <div className="relative group inline-block">
+{/* Help Icon with Hover Image */}
+<div className="relative group inline-block">
   {/* Circle Help Icon */}
   <img
     src="/circle-help.png"
@@ -100,21 +100,16 @@ const SignUpPage = () => {
 
   {/* Custom Tooltip */}
   <div className="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 mt-2 z-50">
-  
-  {/* Arrow */}
-  <div className="w-3 h-3 bg-white border-t border-l border-black rotate-45 -mt-2"></div>
-  
-  {/* Tooltip Box */}
-  <div className="absolute hidden group-hover:block top-full left-1/2 transform -translate-x-1/2 z-50 flex flex-col items-center">
+    {/* Arrow */}
+    <div className="absolute top-0 left-1/2 transform -translate-x-1/2 -mt-1 w-2 h-2 bg-white border-t border-l border-black rotate-45"></div>
 
-{/* Tooltip Box */}
-<div className="bg-white border border-black text-black text-sm px-4 py-2 rounded shadow-lg w-max text-center">
-  Sign up here if you’re part of the federation!
+    {/* Tooltip Box */}
+    <div className="bg-white border border-black text-black text-sm px-4 py-0 rounded-full shadow-lg w-max text-center">
+      Sign up here if you’re <br/>part of the federation!
+    </div>
+  </div>
 </div>
 
-</div>
-</div>
-</div>
 </Card>
 </div>
       </div>

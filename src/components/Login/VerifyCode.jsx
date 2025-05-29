@@ -1,10 +1,10 @@
 import React, { useRef, useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom"; // ✅ import useLocation
+import { useNavigate, useLocation } from "react-router-dom";
 
 const VerifyCode = () => {
   const navigate = useNavigate();
-  const location = useLocation(); // ✅ to receive email/phone from ResetPassword
-  const email = location.state?.email || "your email"; // ✅ fallback
+  const location = useLocation();
+  const email = location.state?.email || "your email"; 
 
   const [codes, setCodes] = useState(new Array(6).fill(""));
   const inputsRef = useRef([]);
@@ -25,12 +25,11 @@ const VerifyCode = () => {
     }
   };
 
-  // ✅ Navigate and pass email/phone to CreateNewPassword
   const handleSubmit = () => {
     const code = codes.join("");
     console.log("Submitted code:", code);
     navigate("/create-new-password", {
-      state: { email }, // ✅ pass the email or phone to next page
+      state: { email }, 
     });
   };
 
@@ -53,7 +52,7 @@ const VerifyCode = () => {
         </p>
 
         {/* Code Inputs */}
-        <div className="flex justify-center gap-7 mb-4">
+        <div className="flex justify-center gap-5 mb-4">
           {codes.map((code, i) => (
             <input
               key={i}
@@ -61,7 +60,7 @@ const VerifyCode = () => {
               type="text"
               inputMode="numeric"
               maxLength="1"
-              className="w-10 h-11 text-center border border-gray-300 rounded-lg text-lg"
+              className="w-[55px] h-[56px] text-center border-2 border-gray-300 rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-green-500"
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
@@ -70,7 +69,7 @@ const VerifyCode = () => {
         </div>
 
         {/* Resend Text */}
-        <p className="text-center text-sm text-gray-400 mb-[336px]">
+        <p className="text-center text-sm text-gray-400 mb-[325px]">
           Didn’t receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
@@ -80,9 +79,9 @@ const VerifyCode = () => {
         {/* Submit Button */}
         <button
           onClick={handleSubmit}
-          className="w-full py-2 rounded-full bg-green-600 text-white shadow-lg text-lg h-14
-        hover:bg-green-600 hover:shadow-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out"
-        >
+          className="w-full py-2 rounded-full bg-green-500 text-white shadow-lg text-lg h-14
+          hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out" 
+          >
           Next
         </button>
       </div>
