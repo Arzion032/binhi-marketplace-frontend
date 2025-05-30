@@ -25,7 +25,7 @@ const AboutUsPage = () => {
         >
           <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
         </button>
-        <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+        <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-[#4CAF50] text-white text-xl font-bold px-4 py-1 mx-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
           Chats
         </div>
       </div>

@@ -37,7 +37,7 @@ export default function CheckoutPage() {
         <div className="flex items-center gap-4">
           <button
             className="flex items-center text-gray-600 hover:text-black"
-            onClick={() => navigate("/landingpage")}
+            onClick={() => navigate("/cartpage")}
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
