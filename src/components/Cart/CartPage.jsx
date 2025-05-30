@@ -258,7 +258,7 @@ const CartPage = () => {
                 </div>
 
                 {filteredCartItems.map(item => (
-                  <div key={item.id} className="flex items-center border-t pt-4 px-6 text-sm text-gray-700">
+                  <div key={item.id} className="flex items-center border-t pt-2 px-6 text-sm text-gray-700">
                     <div className="w-[35%] flex items-center gap-2 border-r border-gray-300 pr-8">
                       <input
                         type="checkbox"
@@ -365,7 +365,7 @@ const CartPage = () => {
                 <p>Subtotal</p>
                 <p className="text-black font-bold">₱{subtotal.toFixed(2)}</p>
               </div>
-              <div className="flex justify-between text-[#4CAF50] text-2xl font-bold pt-4 border-t mt-6">
+              <div className="flex justify-between text-[#4CAF50] text-2xl font-bold pt-4 pb-6 border-t mt-6">
                 <p>Total</p>
                 <p className="text-[#4CAF50] font-bold">₱{total.toFixed(2)}</p>
               </div>
@@ -374,7 +374,7 @@ const CartPage = () => {
           <button
             onClick={handleCheckout}
             disabled={selectedCartItems.length === 0}
-            className={`mt-6 w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
+            className={`mt-full w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
               selectedCartItems.length === 0 
                 ? 'bg-gray-400 cursor-not-allowed' 
                 : 'bg-green-600 hover:bg-green-700'
