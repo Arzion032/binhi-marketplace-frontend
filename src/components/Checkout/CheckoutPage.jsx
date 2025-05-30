@@ -67,7 +67,7 @@ export default function CheckoutPage() {
           <section>
             <h2 className="text-2xl font-bold mb-2">Product Details</h2>
             {items.map((product, index) => (
-              <div key={index} className="bg-white p-4 rounded-xl border border-gray-600 mb-4">
+              <div key={index} className="bg-white p-4 rounded-xl border border-gray-400 mb-4">
                 <div className="flex justify-between text-sm text-black mb-2">
                   <p className="font-medium text-base">{product.seller}</p>
                   <p>Order ID: {product.orderId}</p>
@@ -174,7 +174,7 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right Section - Order Summary */}
-        <div className="w-full lg:w-1/3 bg-white p-6 border border-gray-600 rounded-2xl flex flex-col justify-between h-full">
+        <div className="w-full lg:w-1/3 bg-white p-6 border border-gray-400 rounded-2xl flex flex-col justify-between h-full">
           <h2 className="text-3xl font-bold mb-4">Order Summary</h2>
           <div className="w-full h-[1px] bg-gray-300 mb-4" />
           <div className="space-y-4 text-lg">

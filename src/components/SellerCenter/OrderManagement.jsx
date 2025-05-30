@@ -301,7 +301,7 @@ export default function OrderManagement() {
         {/* Filters */}
         {showFilters && (
           <div className="flex flex-wrap items-center gap-3 mb-6 px-1">
-            <div className="flex items-center gap-2 bg-white border border-gray-300 rounded-full px-4 py-2">
+            <div className="flex items-center gap-2 bg-white border border-gray-400 rounded-full px-4 py-2">
               <SlidersHorizontal size={18} className="text-blue-800" />
               <span className="text-blue-600 font-bold text-lg">Active Filters</span>
             </div>
@@ -310,7 +310,7 @@ export default function OrderManagement() {
               <select
                 value={selectedOrderStatus}
                 onChange={(e) => setSelectedOrderStatus(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 text-lg font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="appearance-none bg-white border border-gray-400 rounded-lg px-4 py-2 pr-8 text-gray-700 text-lg font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Order Status</option>
                 {ORDER_CATEGORIES.map(cat => (
@@ -326,7 +326,7 @@ export default function OrderManagement() {
               <select
                 value={selectedTransactionStatus}
                 onChange={(e) => setSelectedTransactionStatus(e.target.value)}
-                className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 text-lg font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="appearance-none bg-white border border-gray-400 rounded-lg px-4 py-2 pr-8 text-gray-700 text-lg font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
               >
                 <option value="">Transaction</option>
                 <option value="Paid">Paid</option>
@@ -343,7 +343,7 @@ export default function OrderManagement() {
                 setSelectedOrderStatus("");
                 setSelectedTransactionStatus("");
               }}
-              className="appearance-none bg-white border border-gray-300 rounded-lg px-4 py-2 pr-8 text-gray-700 text-lg font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="appearance-none bg-white border border-gray-340 rounded-lg px-4 py-2 pr-8 text-gray-700 text-lg font-medium cursor-pointer hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
             >
               ✕ Clear
             </button>
@@ -351,7 +351,7 @@ export default function OrderManagement() {
         )}
 
         {/* Orders Table with Grid Lines */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden mx-4 border border-gray-200">
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden mx-4 border border-gray-400">
           <div className="overflow-x-auto">
             <table className="w-full text-sm border-collapse">
               <thead className="bg-gray-100 text-black text-left">
@@ -374,7 +374,7 @@ export default function OrderManagement() {
                   <th className="p-4 text-lg font-bold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
+              <tbody className="divide-y divide-gray-600">
                 {filteredOrders.length === 0 ? (
                   <tr>
                     <td colSpan="8" className="p-8 text-center text-gray-500">
@@ -398,7 +398,7 @@ export default function OrderManagement() {
                   </tr>
                 ) : (
                   filteredOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50 transition-colors duration-150 border-b border-gray-100">
+                    <tr key={order.id} className="hover:bg-gray-50 transition-colors duration-150 border-b border-gray-400">
                       <td className="p-4 border-r border-gray-100">
                         <input
                           type="checkbox"

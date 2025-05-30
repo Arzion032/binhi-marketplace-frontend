@@ -226,21 +226,21 @@ const CartPage = () => {
         <div className="w-[1200px] xl:w-3/4 space-y-6">
 
           {/* Header */}
-          <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-600 text-base text-black">
-            <div className="w-[35%] text-center border-r border-gray-600 pr-4">PRODUCT NAME</div>
-            <div className="w-[12%] text-center border-r border-gray-600 px-2">VARIATION</div>
-            <div className="w-[12%] text-center border-r border-gray-600 px-2">QUANTITY</div>
+          <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-400 text-base text-black">
+            <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
+            <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
+            <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
             
-            <div className="w-[12%] text-center border-r border-gray-600 px-2">UNIT PRICE</div>
-            <div className="w-[12%] text-center border-r border-gray-600 px-2">TOTAL PRICE</div>
-            <div className="w-[10%] text-center border-r border-gray-600 px-2">UNIT MEAS.</div>
+            <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
+            <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
+            <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
             <div className="w-[7%] text-center">ACTION</div>
           </div>
 
           {filteredCartItems.length > 0 ? (
             <>
               {/* Cart Items */}
-              <div className="bg-white p-4 rounded-lg shadow border border-gray-600 space-y-4">
+              <div className="bg-white p-4 rounded-lg shadow border border-gray-400 space-y-4">
                 <div className="flex items-center gap-3 ">
                   <input 
                     type="checkbox" 
@@ -271,8 +271,8 @@ const CartPage = () => {
                 </div>
 
                 {filteredCartItems.map(item => (
-                  <div key={item.id} className="flex items-center border-t border-gray-600 pt-2 px-6 text-sm text-gray-700">
-                    <div className="w-[35%] flex items-center gap-2 border-r border-gray-600 pr-8">
+                  <div key={item.id} className="flex items-center border-t border-gray-400 pt-2 px-6 text-sm text-gray-700">
+                    <div className="w-[35%] flex items-center gap-2 border-r border-gray-400 pr-8">
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(item.id)}
@@ -293,7 +293,7 @@ const CartPage = () => {
                       <select
                         value={item.variation}
                         onChange={(e) => handleVariationChange(item.id, e.target.value)}
-                        className="w-full bg-[#4CAF50] px-2 py-1 border border-gray-600 rounded-md text-base font-medium text-white bg-hover:border-[#4CAE4F] focus:border-[#4CAE4F] focus:outline-none focus:ring-1 focus:ring-[#4CAE4F] transition-colors"
+                        className="w-full bg-[#4CAF50] px-2 py-1 border border-gray-400 rounded-md text-base font-medium text-white bg-hover:border-[#4CAE4F] focus:border-[#4CAE4F] focus:outline-none focus:ring-1 focus:ring-[#4CAE4F] transition-colors"
                       >
                         {productVariations[item.id]?.map(variation => (
                           <option key={variation} value={variation}>
@@ -302,7 +302,7 @@ const CartPage = () => {
                         ))}
                       </select>
                     </div>
-                    <div className="w-[12%] flex justify-center items-center gap-2 py-3 border-r border-gray-600">
+                    <div className="w-[12%] flex justify-center items-center gap-2 py-3 border-r border-gray-400">
                       <button 
                         onClick={() => handleQuantityChange(item.id, -1)} 
                         className="px-2 py-1 bg-gray-200 rounded text-sm hover:bg-gray-300 transition-colors"
@@ -318,7 +318,7 @@ const CartPage = () => {
                         +
                       </button>
                     </div>
-                    <div className="w-[12%] text-center text-lg font-bold border-r border-gray-600 px-2 py-3">₱{item.price.toFixed(2)}</div>
+                    <div className="w-[12%] text-center text-lg font-bold border-r border-gray-400 px-2 py-3">₱{item.price.toFixed(2)}</div>
                     <div className="w-[12%] text-center font-semibold text-[#4CAF50] text-lg font-bold border-r border-gray-600 px-2 py-3">
                       ₱{(item.price * item.quantity).toFixed(2)}
                     </div>
@@ -338,7 +338,7 @@ const CartPage = () => {
               </div>
 
               {/* Select All Footer */}
-              <div className="flex items-center justify-between w-full max-w-xs px-4 py-4 bg-white border border-gray-600 rounded-2xl shadow">
+              <div className="flex items-center justify-between w-full max-w-xs px-4 py-4 bg-white border border-gray-400 rounded-2xl shadow">
                 <div className="flex items-center gap-4">
                   <input
                     type="checkbox"
@@ -375,7 +375,7 @@ const CartPage = () => {
         </div>
 
         {/* RIGHT SECTION - Order Summary */}
-        <div className="w-[400px] bg-white p-4 rounded-lg shadow border border-gray-600 flex flex-col h-fit">
+        <div className="w-[400px] bg-white p-4 rounded-lg shadow border border-gray-400 flex flex-col h-fit">
             <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
             <div className="w-full h-[1px] bg-gray-300 mb-4" />
             

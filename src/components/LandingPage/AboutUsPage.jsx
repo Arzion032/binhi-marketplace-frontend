@@ -1,5 +1,3 @@
-import React from 'react'
-
 const AboutUsPage = () => {
   return (
     <div className="min-h-screen bg-[#F5F9F5] px-6 py-4 mx-16">
