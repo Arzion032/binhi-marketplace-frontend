@@ -39,7 +39,7 @@ const NextStep = () => {
     };
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative " style={{ marginTop: '5 px' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative flex flex-col" style={{ marginTop: '5 px' }}>
         
         {/* Back Button */}
         <button
@@ -86,7 +86,7 @@ const NextStep = () => {
 
 
         {/* Main Content */}
-        <div className="text-center">
+        <div className="text-center flex-grow flex flex-col">
           <div className="text-green-600 text-4xl mb-3">
             <img src="/lock-password-fill.png" alt="Lock Icon" className="inline w-[65px] h-[66px] " />
           </div>
@@ -111,32 +111,36 @@ const NextStep = () => {
               maxLength="1"
               className={`w-[55px] h-[56px] text-center border-2 ${
                 error ? "border-red-500" : "border-gray-300"
-              } rounded-xl text-xl focus:outline-none focus:ring-0`} // Removed green outline when error appears
+              } rounded-xl text-xl focus:outline-none focus:ring-0`}
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
             />
           ))}
         </div>
-        {/* Error Message */}
-        {error && <p className="text-center italic text-red-500 text-sm mt-2">{error}</p>}
+
+        {/* Fixed height container for error message */}
+        <div className="h-6 mb-4">
+          {error && <p className="text-center italic text-red-500 text-sm">{error}</p>}
+        </div>
 
         {/* Resend Text */}
-        <p className="text-center text-md text-gray-400 mb-[80px]">
-          Didn’t receive a code?{" "}
+        <p className="text-center text-md text-gray-400">
+          Didn't receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
           </button>
         </p>
 
-          {/* Next Button */}
+          {/* Spacer to push button to bottom */}
+        <div className="flex-grow"></div>
 
          <button
-  onClick={() => navigate("/set-password")}
-  className={`w-[488px] h-[54px] ${error ? "mt-[60px]" : "mt-[110px]"} bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition`}
->
-  Next
-</button>
+          onClick={() => navigate("/set-password")}
+          className="w-[488px] h-[54px] bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+        >
+          Next
+        </button>
 
         </div>
     </div>

@@ -42,7 +42,7 @@ export default function CreateNewPassword() {
       style={{ backgroundImage: "url('/your-background.jpg')" }}
     >
       <div
-        className="bg-white rounded-3xl shadow-2xl p-10"
+        className="bg-white rounded-3xl shadow-2xl p-10 flex flex-col"
         style={{ width: "576px", height: "731px" }}
       >
         <button
@@ -119,12 +119,16 @@ export default function CreateNewPassword() {
             )}
           </div>
         </div>
-         {error && (
-          <p className="text-red-500 text-sm mb-2">{error}</p>
-        )}
+
+        {/* Fixed height container for error message */}
+        <div className="h-6 mb-2">
+          {error && (
+            <p className="text-red-500 text-sm">{error}</p>
+          )}
+        </div>
 
         {/* Password Requirements */}
-        <div className="text-md text-gray-600 mb-[25px]">
+        <div className="text-md text-gray-600 mb-6">
           <p className="font-medium mb-2">Your Password must contain..</p>
 
           <div
@@ -191,10 +195,10 @@ export default function CreateNewPassword() {
         </div>
 
 
+        <div className="flex-grow"></div>
+
         {/* Next Button */}
-        <div className="mt-[100px]">
-          <Button onClick={handleNext}>Next</Button>
-        </div>
+        <Button onClick={handleNext}>Next</Button>
       </div>
     </div>
   );

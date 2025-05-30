@@ -6,57 +6,76 @@ const SetUp = () => {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
+  const [firstNameError, setFirstNameError] = useState("");
+  const [lastNameError, setLastNameError] = useState("");
+  const [addressError, setAddressError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
-  const [email, setEmail] = useState("user@example.com"); // You can get this from context, props, or localStorage
+  const [email, setEmail] = useState("user@example.com");
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Region");
-  
+
   // Selected address details
   const [selectedRegion, setSelectedRegion] = useState("Metro Manila");
   const [selectedProvince, setSelectedProvince] = useState("");
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedBarangay, setSelectedBarangay] = useState("");
   const [completeAddress, setCompleteAddress] = useState("");
-// Address options
-const regions = ["Metro Manila", "Mindanao", "North Luzon", "South Luzon"];
-const provinces = {
-  "Metro Manila": ["NCR First District", "NCR Second District", "NCR Third District", "NCR Fourth District"],
-  "Mindanao": ["Davao", "Zamboanga", "Bukidnon", "Misamis Oriental"],
-  "North Luzon": ["Pangasinan", "Ilocos Norte", "Ilocos Sur", "La Union"],
-  "South Luzon": ["Rizal", "Batangas", "Cavite", "Laguna", "Quezon"] 
-};
 
-const cities = {
-  "NCR First District": ["Manila", "Caloocan", "Navotas", "Malabon"],
-  "NCR Second District": ["Quezon City", "San Juan", "Marikina", "Pasig"],
-  "Davao": ["Davao City", "Tagum", "Panabo", "Digos"],
-  "Pangasinan": ["Dagupan", "Alaminos", "San Carlos", "Urdaneta"],
-  "Batangas": ["Batangas City", "Lipa", "Tanauan", "Santo Tomas"],
-  "Rizal": ["Binangonan"] 
-};
+  // Address options
+  const regions = ["Metro Manila", "Mindanao", "North Luzon", "South Luzon"];
+  const provinces = {
+    "Metro Manila": [
+      "NCR First District",
+      "NCR Second District",
+      "NCR Third District",
+      "NCR Fourth District",
+    ],
+    Mindanao: ["Davao", "Zamboanga", "Bukidnon", "Misamis Oriental"],
+    "North Luzon": ["Pangasinan", "Ilocos Norte", "Ilocos Sur", "La Union"],
+    "South Luzon": ["Rizal", "Batangas", "Cavite", "Laguna", "Quezon"],
+  };
 
-const barangays = {
-  "Manila": ["Binondo", "Ermita", "Intramuros", "Malate", "Quiapo"],
-  "Quezon City": ["Diliman", "Cubao", "Kamuning", "Novaliches", "Project 6"],
-  "Davao City": ["Poblacion", "Toril", "Buhangin", "Talomo", "Agdao"],
-  "Dagupan": ["Calmay", "Lucao", "Malued", "Tapuac", "Bonuan"],
-  "Batangas City": ["Alangilan", "Balagtas", "Kumintang", "Soro-soro", "Wawa"],
-  "Binangonan": ["Batingan", "Calumpang", "Darangan", "Mahabang Parang", "Pantok"]
-};
+  const cities = {
+    "NCR First District": ["Manila", "Caloocan", "Navotas", "Malabon"],
+    "NCR Second District": ["Quezon City", "San Juan", "Marikina", "Pasig"],
+    Davao: ["Davao City", "Tagum", "Panabo", "Digos"],
+    Pangasinan: ["Dagupan", "Alaminos", "San Carlos", "Urdaneta"],
+    "Batangas City": ["Batangas City", "Lipa", "Tanauan", "Santo Tomas"],
+    Rizal: ["Binangonan"],
+  };
 
+  const barangays = {
+    Manila: ["Binondo", "Ermita", "Intramuros", "Malate", "Quiapo"],
+    "Quezon City": ["Diliman", "Cubao", "Kamuning", "Novaliches", "Project 6"],
+    "Davao City": ["Poblacion", "Toril", "Buhangin", "Talomo", "Agdao"],
+    Dagupan: ["Calmay", "Lucao", "Malued", "Tapuac", "Bonuan"],
+    "Batangas City": [
+      "Alangilan",
+      "Balagtas",
+      "Kumintang",
+      "Soro-soro",
+      "Wawa",
+    ],
+    Binangonan: [
+      "Batingan",
+      "Calumpang",
+      "Darangan",
+      "Mahabang Parang",
+      "Pantok",
+    ],
+  };
 
-  // Update complete address when selections change
   useEffect(() => {
     let address = [];
     if (selectedBarangay) address.push(selectedBarangay);
     if (selectedCity) address.push(selectedCity);
     if (selectedProvince) address.push(selectedProvince);
     if (selectedRegion) address.push(selectedRegion);
-    
+
     setCompleteAddress(address.join(", "));
   }, [selectedRegion, selectedProvince, selectedCity, selectedBarangay]);
 
-  // Function to handle tab progression
+  // Tab progression logic same as before
   const progressToNextTab = (currentTab) => {
     switch (currentTab) {
       case "Region":
@@ -76,7 +95,6 @@ const barangays = {
     }
   };
 
-  // Selection handlers
   const handleRegionSelect = (region) => {
     setSelectedRegion(region);
     setSelectedProvince("");
@@ -100,31 +118,64 @@ const barangays = {
 
   const handleBarangaySelect = (barangay) => {
     setSelectedBarangay(barangay);
+    if (addressError) setAddressError("");  
     progressToNextTab("Barangay");
   };
 
-  // Handle finish button click
+  // Validate fields and show errors on Finish click
   const handleFinish = () => {
-    setShowSuccess(true);
-    
-    // Auto-redirect after 3 seconds
-    setTimeout(() => {
-      navigate("/login");
-    }, 3000);
+    let valid = true;
+
+    if (!firstName.trim()) {
+      setFirstNameError("* This field is required.");
+      valid = false;
+    } else {
+      setFirstNameError("");
+    }
+
+    if (!lastName.trim()) {
+      setLastNameError("* This field is required.");
+      valid = false;
+    } else {
+      setLastNameError("");
+    }
+
+    if (!completeAddress.trim()) {
+      setAddressError("* This field is required.");
+      valid = false;
+    } else {
+      setAddressError("");
+    }
+
+    if (valid) {
+      setShowSuccess(true);
+
+      // Auto-redirect after 3 seconds
+      setTimeout(() => {
+        navigate("/login");
+      }, 3000);
+    }
   };
 
   return (
-    <div
+   <div
       className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4"
       style={{ backgroundImage: 'url("/background.jpg")' }}
     >
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[740px] p-10 relative mt-10" style={{ marginTop: "5px" }}>
+      <div
+        className="bg-white rounded-3xl shadow-lg w-[1412px] h-[740px] p-10 relative mt-10"
+        style={{ marginTop: "5px" }}
+      >
         {/* Back Button */}
         <button
           className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-black"
           onClick={() => navigate("/next-step")}
         >
-          <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
+          <img
+            src="/arrow-left-s-line.png"
+            alt="Back"
+            className="w-20 h-10"
+          />
         </button>
 
         {/* Step Indicator */}
@@ -157,37 +208,59 @@ const barangays = {
           </div>
         </div>
 
-        {/* Main Content */}
+{/* Main Content */}
         <div className="text-center max-w-md mx-auto w-full">
-          <img src="/lock.png" alt="Setup Icon" className="mt-2 inline w-[55px] h-[56px]" />
+          <img
+            src="/lock.png"
+            alt="Setup Icon"
+            className="mt-2 inline w-[55px] h-[56px]"
+          />
 
           <h2 className="text-3xl font-bold mb-2 mt-2">Finish your Set Up!</h2>
-          <p className="text-gray-600 mb-4">Complete the set up to start exploring Binhi!</p>
+          <p className="text-gray-600 mb-4">
+            Complete the set up to start exploring Binhi!
+          </p>
 
           {/* First Name & Last Name */}
           <div className="flex gap-4 mb-6">
             {/* First Name */}
-            <div className="w-1/2">
-              <label className="block text-left mb-1 font-bold text-gray-700">First Name</label>
+            <div className="w-1/2 text-left">
+              <label className="block mb-1 font-bold text-gray-700">First Name</label>
               <input
                 type="text"
-                className="input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg placeholder:italic"
+                className={`input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg placeholder:italic ${
+                  firstNameError ? "border-red-500" : ""
+                }`}
                 placeholder="Ex. Juan"
                 value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
+                onChange={(e) => {
+                  setFirstName(e.target.value);
+                  if (firstNameError) setFirstNameError("");
+                }}
               />
+              {firstNameError && (
+                <p className="text-red-500 text-xs italic mt-1">{firstNameError}</p>
+              )}
             </div>
 
             {/* Last Name */}
-            <div className="w-1/2">
-              <label className="block text-left mb-1 font-bold text-gray-700">Last Name</label>
+            <div className="w-1/2 text-left">
+              <label className="block mb-1 font-bold text-gray-700">Last Name</label>
               <input
                 type="text"
-                className="input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg placeholder:italic"
+                className={`input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg placeholder:italic ${
+                  lastNameError ? "border-red-500" : ""
+                }`}
                 placeholder="Ex. Dela Cruz"
                 value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
+                onChange={(e) => {
+                  setLastName(e.target.value);
+                  if (lastNameError) setLastNameError("");
+                }}
               />
+              {lastNameError && (
+                <p className="text-red-500 text-xs italic mt-1">{lastNameError}</p>
+              )}
             </div>
           </div>
 
@@ -197,21 +270,38 @@ const barangays = {
             <div className="relative">
               <input
                 type="text"
-                className="input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg pr-10"
+                className={`input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg pr-10 ${
+                  addressError ? "border-red-500" : ""
+                }`}
                 placeholder="Barangay, Purok, Street"
                 readOnly
                 value={completeAddress}
-                onClick={() => setShowAddressModal(true)}
+                 onClick={() => {
+                setShowAddressModal(true);
+              if (addressError) setAddressError(""); 
+              }}
               />
-              <button 
+              <button
                 className="absolute right-4 top-1/2 transform -translate-y-1/2"
                 onClick={() => setShowAddressModal(true)}
               >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
                 </svg>
               </button>
             </div>
+            {addressError && (
+              <p className="text-red-500 text-xs italic mt-1">{addressError}</p>
+            )}
           </div>
 
           {/* Address Modal with Green Border and Custom Scrollbar */}
@@ -331,21 +421,10 @@ const barangays = {
               </div>
             </div>
           )}
-        {/* Map + Add Location */}
-          <div className="relative mb-4 w-full">
-            <img src="/map.png" alt="Map" className="w-full h-20 object-cover rounded-full" />
-            <button
-              className="absolute inset-0 flex items-center justify-center"
-              onClick={() => alert("Add Location Clicked!")}
-            >
-              <div className="bg-white border rounded-full px-4 py-1 text-sm font-medium shadow-md hover:bg-gray-100 transition">
-                + Add Location
-              </div>
-            </button>
-          </div>
+
 
           {/* Checkbox for Default Address with Help Icon */}
-          <div className="flex items-start justify-start gap-2 mb-4 mt-4">
+          <div className="flex items-start justify-start gap-2 mb-4 mt-[120px]">
             {/* Checkbox with Check Icon */}
             <label className="relative flex items-center cursor-pointer mt-[2px]">
               <input
@@ -389,9 +468,9 @@ const barangays = {
               </div>
             </div>
           </div>
-
+        <div className="flex-grow"></div>
           <button
-            className="mt-[30px] w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+            className="mt-[15px] w-full bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
             onClick={handleFinish}
           >
             Finish
@@ -399,28 +478,24 @@ const barangays = {
         </div>
       </div>
 
-      {/* Success Modal */}
+        {/* Success Modal */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-11 w-[620px] h-[460px] shadow-xl">
             <div className="flex flex-col items-center text-center">
-              <h3 className="text-3xl font-bold mb-4">
-                Account Created Successfully
-              </h3>
-              <img
-                src="/Checkpass.png"
-                alt="Success"
-                className="w-18 h-18 mb-4"
-              />
+              <h3 className="text-3xl font-bold mb-4">Account Created Successfully</h3>
+              <img src="/Checkpass.png" alt="Success" className="w-18 h-18 mb-4" />
               <p className="text-base text-gray-600 mb-3">
-                You have successfully created your account with <br/> the email <span className="font-medium">{email}</span>.
-              </p> <br/> <br/> 
+                You have successfully created your account with <br /> the email{" "}
+                <span className="font-medium">{email}</span>.
+              </p>{" "}
+              <br /> <br />
               <p className="text-sm text-gray-500 mb-4">
-                You will be redirected to Login Page in <br/> 3 seconds.
+                You will be redirected to Login Page in <br /> 3 seconds.
               </p>
-              <button 
-            className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
-            onClick={() => navigate("/login")}
+              <button
+                className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+                onClick={() => navigate("/login")}
               >
                 Okay
               </button>

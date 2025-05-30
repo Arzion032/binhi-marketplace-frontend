@@ -7,9 +7,8 @@ const SetPassword = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(""); // Add error state to handle validation errors
-
-  // Password validation functionality from CreateNewPassword
+  const [error, setError] = useState(""); 
+ 
   const hasUpperCase = /[A-Z]/.test(password);
   const hasLowerCase = /[a-z]/.test(password);
   const hasNumber = /\d/.test(password);
@@ -23,21 +22,20 @@ const SetPassword = () => {
     hasSymbol && 
     hasMinLength;
 
-
   const handleNext = () => {
     if (!isPasswordValid) {
-      setError("❌ Password does not meet all the requirements.");
+      setError("* Password does not meet all the requirements.");
     } else if (password !== confirmPassword) {
-      setError("❌ The password confirmation does not match.");
+      setError("* The password confirmation does not match.");
     } else {
-      setError(""); // Reset error if everything is valid
+      setError(""); 
       navigate("/set-up");
     }
   };
 
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative mt-10" style={{ marginTop: '5px' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[745px] p-10 relative flex flex-col" style={{ marginTop: '5px' }}>
 
         {/* Back Button */}
         <button
@@ -78,7 +76,7 @@ const SetPassword = () => {
         </div>
 
         {/* Main Content */}
-        <div className="text-center mt-5">
+        <div className="text-center mt-5 flex-grow flex flex-col">
           <div className="text-green-600 text-4xl mb-2">
             <img src="/lock-password-fill.png" alt="Lock Icon" className="inline w-[65px] h-[66px]" />
           </div>
@@ -130,13 +128,15 @@ const SetPassword = () => {
             </div>
           </div>
 
-          {/* Error Message */}
-          {error && (
-            <p className="text-red-500 text-sm mb-2 italic">{error}</p>
-          )}
+          {/* Fixed height container for error message */}
+          <div className="h-6 mt-2 mb-2 mr-12">
+            {error && (
+              <p className="text-red-500 text-sm italic">{error}</p>
+            )}
+          </div>
 
           {/* Password Requirements Checklist with dynamic validation */}
-          <div className="mt-2 mb-2 text-left w-[378px] mx-auto">
+          <div className="text-left w-[378px] mx-auto mb-4">
             <p className="mb-2 font-medium text-gray-800">Your password must contain...</p>
 
             <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasMinLength ? "text-green-600" : "text-red-500"}`}>
@@ -160,10 +160,11 @@ const SetPassword = () => {
             </div>
           </div>
 
-          {/* Submit Button */}
+          <div className="flex-grow"></div>
+
           <button
             onClick={handleNext}
-            className="mt-[30px] w-[488px] h-[54px] mt-3 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition"
+            className="w-[488px] h-[54px] bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
           >
             Next
           </button>

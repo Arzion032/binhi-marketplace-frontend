@@ -40,7 +40,7 @@ const VerifyCode = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-cover bg-center" style={{ backgroundImage: "url('/your-background.jpg')" }}>
-      <div className="bg-white rounded-3xl shadow-2xl p-10" style={{ width: "576px", height: "731px" }}>
+      <div className="bg-white rounded-3xl shadow-2xl p-10 flex flex-col" style={{ width: "576px", height: "731px" }}>
         {/* Back Button */}
         <button onClick={() => navigate("/reset-password")} className="flex items-center text-sm text-black mb-4">
           <img src="/arrow-left-s-line.png" alt="Back" className="w-25 h-10" />
@@ -67,7 +67,7 @@ const VerifyCode = () => {
               maxLength="1"
               className={`w-[55px] h-[56px] text-center border-2 ${
                 error ? "border-red-500" : "border-gray-300"
-              } rounded-xl text-xl focus:outline-none focus:ring-0`} // Removed green outline when error appears
+              } rounded-xl text-xl focus:outline-none focus:ring-0`}
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
@@ -75,16 +75,21 @@ const VerifyCode = () => {
           ))}
         </div>
 
-        {/* Error Message */}
-        {error && <p className="text-center italic text-red-500 text-sm mt-2">{error}</p>}
+        {/* Fixed height container for error message */}
+        <div className="h-6 text-center mb-4">
+          {error && <p className="italic text-red-500 text-sm">{error}</p>}
+        </div>
 
         {/* Resend Text */}
-        <p className="text-center text-sm text-gray-400 mb-[325px]">
-          Didn’t receive a code?{" "}
+        <p className="text-center text-sm text-gray-400">
+          Didn't receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
           </button>
         </p>
+
+
+        <div className="flex-grow"></div>
 
         {/* Submit Button */}
         <button
