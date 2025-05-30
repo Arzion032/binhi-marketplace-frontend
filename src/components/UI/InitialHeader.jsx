@@ -29,8 +29,8 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
       {/* Top Header */}
       <div className="flex items-center justify-between px-8 py-4 text-sm bg-gray-100 text-gray-700">
         <div className="flex gap-4">
-          
-          <a href="#" className="text-base font-semibold hover:underline">About Us</a>
+          <Link to="/about-us">
+          <a href="#" className="text-base font-semibold hover:underline">About Us</a></Link>
          <Link to="/seller-center" className="text-base font-semibold hover:underline">Seller Center</Link>
         </div>
         <div className="flex items-center gap-6">
