@@ -84,7 +84,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                          { label: 'Meat', background: '/meatss.png', overlay: '/meat.png' },
                          { label: 'Fruits', background: '/fruits.png', overlay: '/grapes.png' },
                        ].map((item, index) => (
-                         <div key={index} className="group p-4 text-center text-2xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
+                         <div key={index} className="group p-4 text-center text-2yxl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
                            <div className="relative w-18 h-18 mb-2">
                              <img src={item.background} alt="background" className="w-20 h-20 object-contain transition-transform duration-300 group-hover:scale-50" />
                              <img src={item.overlay} alt="overlay" className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/6 w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-125" />

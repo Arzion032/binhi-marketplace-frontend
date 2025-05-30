@@ -15,6 +15,7 @@ const CartPage = () => {
       quantity: 1,
       price: 53.0,
       variation: "Original Flavor",
+      unitMeasurement: "1 Liter",
       orderId: "23149BF001",
     },
     {
@@ -25,6 +26,7 @@ const CartPage = () => {
       quantity: 1,
       price: 53.0,
       variation: "Chocolate Flavor",
+      unitMeasurement: "500g",
       orderId: "23149BF002",
     },
     {
@@ -35,6 +37,7 @@ const CartPage = () => {
       quantity: 1,
       price: 85.0,
       variation: "Premium Flavor",
+      unitMeasurement: "250g",
       orderId: "23149BF003",
     },
   ];
@@ -205,25 +208,27 @@ const CartPage = () => {
         </div>
       )}
 
-      <div className="flex flex-col lg:flex-row gap-6 mx-10">
+      <div className="flex flex-col lg:flex-row gap-4 mx-10">
         {/* LEFT SECTION */}
-        <div className="w-full lg:w-2/3 space-y-6">
+        <div className="w-[1200px] xl:w-3/4 space-y-6">
 
           {/* Header */}
-          <div className="flex px-6 py-4 bg-white rounded-full font-semibold border-2 text-lg text-gray-700">
-            <div className="w-[10%]">ITEMS</div>
-            <div className="w-[30%]">NAME</div>
-            <div className="w-[15%] text-center">QUANTITY</div>
-            <div className="w-[15%] text-center">UNIT PRICE</div>
-            <div className="w-[15%] text-center">TOTAL PRICE</div>
-            <div className="w-[15%] text-center">ACTION</div>
+          <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border text-base text-black">
+            <div className="w-[35%] text-center border-r border-gray-300 pr-4">PRODUCT NAME</div>
+            <div className="w-[12%] text-center border-r border-gray-300 px-2">VARIATION</div>
+            <div className="w-[12%] text-center border-r border-gray-300 px-2">QUANTITY</div>
+            
+            <div className="w-[12%] text-center border-r border-gray-300 px-2">UNIT PRICE</div>
+            <div className="w-[12%] text-center border-r border-gray-300 px-2">TOTAL PRICE</div>
+            <div className="w-[10%] text-center border-r border-gray-300 px-2">UNIT MEAS.</div>
+            <div className="w-[7%] text-center">ACTION</div>
           </div>
 
           {filteredCartItems.length > 0 ? (
             <>
               {/* Cart Items */}
-              <div className="bg-white p-4 rounded-3xl shadow border space-y-4">
-                <div className="flex items-center gap-2">
+              <div className="bg-white p-4 rounded-lg shadow border space-y-4">
+                <div className="flex items-center gap-3">
                   <input 
                     type="checkbox" 
                     checked={allSelected} 
@@ -231,7 +236,7 @@ const CartPage = () => {
                     className="w-5 h-5 mx-2"
                   />
                   <img 
-                    src="/avatar.png" 
+                    src="/111.png" 
                     alt="Seller" 
                     className="w-8 h-8 rounded-full"
                     onError={(e) => {
@@ -254,7 +259,7 @@ const CartPage = () => {
 
                 {filteredCartItems.map(item => (
                   <div key={item.id} className="flex items-center border-t pt-4 px-6 text-sm text-gray-700">
-                    <div className="w-[10%] flex items-center gap-2">
+                    <div className="w-[35%] flex items-center gap-2 border-r border-gray-300 pr-8">
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(item.id)}
@@ -264,39 +269,40 @@ const CartPage = () => {
                       <img 
                         src={item.image} 
                         alt={item.name} 
-                        className="w-14 h-14 rounded-lg object-cover"
+                        className="w-12 h-12 rounded-lg object-cover"
                         onError={(e) => {
                           e.target.src = '/placeholder-product.png';
                         }}
                       />
+                      <p className="font-bold text-lg ml-2">{item.name}</p>
                     </div>
-                    <div className="w-[30%]">
-                      <p className="font-semibold text-lg">{item.name}</p>
-                      {item.variation && (
-                        <p className="text-base text-gray-500">Variation: {item.variation}</p>
-                      )}
+                    <div className="w-[12%] text-center border-r border-gray-300 px-2">
+                      <p className="text-base font-medium text-gray-600">{item.variation}</p>
                     </div>
-                    <div className="w-[15%] flex justify-center items-center gap-2">
+                    <div className="w-[12%] flex justify-center items-center gap-2 border-r border-gray-300 px-2">
                       <button 
                         onClick={() => handleQuantityChange(item.id, -1)} 
-                        className="px-2 py-1 bg-gray-200 rounded text-lg hover:bg-gray-300 transition-colors"
+                        className="px-2 py-1 bg-gray-200 rounded text-sm hover:bg-gray-300 transition-colors"
                         disabled={item.quantity <= 1}
                       >
                         -
                       </button>
-                      <span className="mx-2 font-bold font-inter ">{item.quantity}</span>
+                      <span className="mx-1 font-bold text-lg">{item.quantity}</span>
                       <button 
                         onClick={() => handleQuantityChange(item.id, 1)} 
-                        className="px-2 py-1 bg-[#4CAE4F] text-white rounded text-lg hover:bg-green-600 transition-colors"
+                        className="px-2 py-1 bg-[#4CAF50] text-white rounded text-sm hover:bg-green-600 transition-colors"
                       >
                         +
                       </button>
                     </div>
-                    <div className="w-[15%] text-center text-lg font-bold font-inter ">₱{item.price.toFixed(2)}</div>
-                    <div className="w-[15%] text-center font-semibold text-[#4CAE4F] text-lg font-bold font-inter ">
+                    <div className="w-[12%] text-center text-lg font-bold border-r border-gray-300 px-2">₱{item.price.toFixed(2)}</div>
+                    <div className="w-[12%] text-center font-semibold text-[#4CAF50] text-lg font-bold border-r border-gray-300 px-2">
                       ₱{(item.price * item.quantity).toFixed(2)}
                     </div>
-                    <div className="w-[15%] text-center">
+                    <div className="w-[10%] text-center border-r border-gray-300 px-2">
+                      <p className="text-lg font-medium text-gray-600">{item.unitMeasurement}</p>
+                    </div>
+                    <div className="w-[7%] text-center">
                       <button 
                         onClick={() => handleDelete(item.id)}
                         className="hover:scale-110 transition-transform"
@@ -309,7 +315,7 @@ const CartPage = () => {
               </div>
 
               {/* Select All Footer */}
-              <div className="flex items-center justify-between w-full max-w-md gap-4 px-4 py-4 bg-white border rounded-2xl shadow">
+              <div className="flex items-center justify-between w-full max-w-xs px-4 py-4 bg-white border rounded-2xl shadow">
                 <div className="flex items-center gap-4">
                   <input
                     type="checkbox"
@@ -317,7 +323,7 @@ const CartPage = () => {
                     onChange={toggleSelectAll}
                     className="w-5 h-5"
                   />
-                  <span className="font-bold text-lg">SELECT ALL ITEMS</span>
+                  <span className="font-bold text-sm">SELECT ALL ITEMS</span>
                 </div>
                 <button 
                   onClick={handleDeleteAll}
@@ -337,7 +343,7 @@ const CartPage = () => {
               <p className="text-gray-500 mb-4">Try adjusting your search terms</p>
               <button 
                 onClick={() => setSearchQuery('')}
-                className="px-4 py-2 bg-[#4CAE4F] text-white rounded-full hover:bg-green-700 transition-colors"
+                className="px-4 py-2 bg-[#4CAF50] text-white rounded-full hover:bg-green-700 transition-colors"
               >
                 Clear Search
               </button>
@@ -346,31 +352,29 @@ const CartPage = () => {
         </div>
 
         {/* RIGHT SECTION - Order Summary */}
-        <div className="w-full lg:w-1/3 bg-white p-6 rounded-2xl shadow border-2 flex flex-col justify-between h-fit">
-          <div>
-            <h2 className="text-3xl font-bold mb-4">Order Summary</h2>
+        <div className="w-[400px] bg-white p-4 rounded-lg shadow border flex flex-col h-fit">
+            <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
             <div className="w-full h-[1px] bg-gray-300 mb-4" />
             
-            <div className="space-y-4 text-lg">
+            <div className="space-y-2 text-lg">
               <div className="flex justify-between">
                 <p>Selected Items:</p>
-                <p className="text-black font-medium">{selectedItems.length}</p>
+                <p className="text-black font-bold">{selectedItems.length}</p>
               </div>
               <div className="flex justify-between">
                 <p>Subtotal</p>
-                <p className="text-black font-medium">₱{subtotal.toFixed(2)}</p>
+                <p className="text-black font-bold">₱{subtotal.toFixed(2)}</p>
               </div>
-              <div className="flex justify-between text-2xl font-bold pt-4 border-t mt-6">
+              <div className="flex justify-between text-[#4CAF50] text-2xl font-bold pt-4 border-t mt-6">
                 <p>Total</p>
-                <p className="text-[#4CAE4F]">₱{total.toFixed(2)}</p>
+                <p className="text-[#4CAF50] font-bold">₱{total.toFixed(2)}</p>
               </div>
             </div>
-          </div>
 
           <button
             onClick={handleCheckout}
             disabled={selectedCartItems.length === 0}
-            className={`mt-6 w-full py-3 px-4 rounded-full text-white text-xl font-semibold transition-colors ${
+            className={`mt-6 w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
               selectedCartItems.length === 0 
                 ? 'bg-gray-400 cursor-not-allowed' 
                 : 'bg-green-600 hover:bg-green-700'
@@ -385,7 +389,7 @@ const CartPage = () => {
       <div className="group fixed bottom-10 right-10 z-50">
         <button
           onClick={() => navigate('/ChatPage')}
-          className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative transition-colors"
+          className="bg-[#4CAF50] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative transition-colors"
         >
           <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
         </button>
