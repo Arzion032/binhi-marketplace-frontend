@@ -2,10 +2,18 @@ import React from 'react'
 
 const AboutUsPage = () => {
   return (
-    <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
+    <div className="min-h-screen bg-[#F5F9F5] px-6 py-4 mx-16">
         <h1 className="text-5xl font-black text-center mt-8"> About Us</h1>      
-            <section className="text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">
+            <section className="text-white px-6 py-2 md:py-2 mt-[30px] rounded-xl">
+                <div className="relative rounded-xl overflow-hidden shadow-lg mx-auto">
                 <img src ="Federation.png" alt="Federation" className="w-full" />
+                 <div className="absolute inset-0 bg-black bg-opacity-30 flex flex-col justify-center items-center text-white p-4">
+                    <p className="text-4xl font-semibold mb-1">Let’s meet</p>
+                    <h1 className="text-5xl font-extrabold text-center leading-tight">
+                    Binangonan Municipal Farmers Federation
+                    </h1>
+                </div>
+                </div>
                 <p className="text-black text-3xl font-bold text-center mt-8">MISSION</p>
                 <p className="text-2xl text-black text-center mt-2" >Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
                     Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor 
