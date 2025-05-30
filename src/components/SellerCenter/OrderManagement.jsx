@@ -26,12 +26,15 @@ const initialOrders = Array.from({ length: 5 }, (_, i) => ({
   product: {
     name: "Premium Farm Fresh Sweet Corn",
     variation: "Yellow, White",
+    unit: "kg", // Added unit measurement
     image: null,
   },
   dateOrdered: "20 Aug 1999",
   timeOrdered: "01:23:42 PM",
   orderStatus: ORDER_CATEGORIES[i % ORDER_CATEGORIES.length].name,
   transactionStatus: i === 3 ? "Paid" : i === 4 ? "Refunded" : "Pending",
+  quantity: Math.floor(Math.random() * 5) + 1, // Added quantity
+  total: (Math.random() * 200 + 50).toFixed(2), // Added total price
 }));
 
 const getStatusStyle = (status) => {
@@ -70,6 +73,11 @@ const getTransactionStatusStyle = (status) => {
   }
 };
 
+// Helper function to update category counts based on order status
+const updateCategoryCount = (orders, categoryName) => {
+  return orders.filter(order => order.orderStatus === categoryName).length;
+};
+
 export default function OrderManagement() {
   const [showFilters, setShowFilters] = useState(false);
   const [selectedOrderStatus, setSelectedOrderStatus] = useState("");
@@ -79,11 +87,15 @@ export default function OrderManagement() {
   const [selectedRows, setSelectedRows] = useState([]);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
-  // ADD THIS LINE - Missing state for notification modal
   const [notifOpen, setNotifOpen] = useState(false);
 
   const navigate = useNavigate();
+
+  // Update category counts dynamically based on current orders
+  const updatedCategories = ORDER_CATEGORIES.map(category => ({
+    ...category,
+    count: updateCategoryCount(orders, category.name)
+  }));
 
   const filteredOrders = orders.filter(order => {
     const matchesSearch = order.product.name.toLowerCase().includes(search.toLowerCase()) ||
@@ -162,7 +174,7 @@ export default function OrderManagement() {
           <div className="flex items-center justify-between px-6 py-3">
             <div></div>
             <div className="flex items-center gap-6">
-              {/* Bell notification - ADD CLICK HANDLER */}
+              {/* Bell notification */}
               <button 
                 className="relative"
                 onClick={() => setNotifOpen(true)}
@@ -211,13 +223,14 @@ export default function OrderManagement() {
           </div>
         </div>
 
-        {/* Order Categories */}
+        {/* Order Categories with Dynamic Counts */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-4 mb-8 mx-4">
-          {ORDER_CATEGORIES.map((cat) => (
+          {updatedCategories.map((cat) => (
             <div
               key={cat.name}
-              className="flex flex-col justify-center px-4 py-3 rounded-2xl border bg-white shadow-sm hover:shadow-md transition-shadow duration-200 min-h-[80px] relative overflow-hidden"
+              className="flex flex-col justify-center px-4 py-3 rounded-2xl border bg-white shadow-sm hover:shadow-md transition-shadow duration-200 min-h-[80px] relative overflow-hidden cursor-pointer"
               style={{ borderColor: '#e5e7eb' }}
+              onClick={() => setSelectedOrderStatus(selectedOrderStatus === cat.name ? "" : cat.name)}
             >
               <div
                 className="absolute left-0 top-0 bottom-0 w-4"
@@ -337,13 +350,13 @@ export default function OrderManagement() {
           </div>
         )}
 
-        {/* Orders Table */}
-        <div className="bg-white rounded-lg shadow-sm overflow-hidden mx-4">
+        {/* Orders Table with Grid Lines */}
+        <div className="bg-white rounded-lg shadow-sm overflow-hidden mx-4 border border-gray-200">
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead className="bg-gray-100 border rounded-full text-black text-left border-b">
-                <tr>
-                  <th className="p-4 w-12 ">
+            <table className="w-full text-sm border-collapse">
+              <thead className="bg-gray-100 text-black text-left">
+                <tr className="border-b border-gray-300">
+                  <th className="p-4 w-12 border-r border-gray-200">
                     <input
                       type="checkbox"
                       className="w-5 h-5 rounded border-gray-700 text-green-600 focus:ring-green-500"
@@ -352,16 +365,16 @@ export default function OrderManagement() {
                       aria-label="Select all orders"
                     />
                   </th>
-                  <th className="p-4 text-lg font-bold">Order ID</th>
-                  <th className="p-4 text-lg font-bold">Customer</th>
-                  <th className="p-4 text-lg font-bold">Product</th>
-                  <th className="p-4 text-lg font-bold">Date Ordered</th>
-                  <th className="p-4 text-lg font-bold">Order Status</th>
-                  <th className="p-4 text-lg font-bold">Transaction</th>
+                  <th className="p-4 text-lg font-bold border-r border-gray-200">Order ID</th>
+                  <th className="p-4 text-lg font-bold border-r border-gray-200">Customer</th>
+                  <th className="p-4 text-lg font-bold border-r border-gray-200">Product</th>
+                  <th className="p-4 text-lg font-bold border-r border-gray-200">Date Ordered</th>
+                  <th className="p-4 text-lg font-bold border-r border-gray-200">Order Status</th>
+                  <th className="p-4 text-lg font-bold border-r border-gray-200">Transaction</th>
                   <th className="p-4 text-lg font-bold">Actions</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-100">
+              <tbody className="divide-y divide-gray-200">
                 {filteredOrders.length === 0 ? (
                   <tr>
                     <td colSpan="8" className="p-8 text-center text-gray-500">
@@ -385,8 +398,8 @@ export default function OrderManagement() {
                   </tr>
                 ) : (
                   filteredOrders.map((order) => (
-                    <tr key={order.id} className="hover:bg-gray-50 transition-colors duration-150">
-                      <td className="p-4">
+                    <tr key={order.id} className="hover:bg-gray-50 transition-colors duration-150 border-b border-gray-100">
+                      <td className="p-4 border-r border-gray-100">
                         <input
                           type="checkbox"
                           className="w-4 h-4 rounded border-gray-300 text-green-600 focus:ring-green-500"
@@ -395,8 +408,8 @@ export default function OrderManagement() {
                           aria-label={`Select order ${order.id}`}
                         />
                       </td>
-                      <td className="p-4 font-semibold text-base text-gray-900">{order.id}</td>
-                      <td className="p-4">
+                      <td className="p-4 font-semibold text-base text-gray-900 border-r border-gray-100">{order.id}</td>
+                      <td className="p-4 border-r border-gray-100">
                         <div className="flex items-center gap-3">
                           <div className="relative">
                             {order.customer.image ? (
@@ -418,7 +431,7 @@ export default function OrderManagement() {
                           </div>
                         </div>
                       </td>
-                      <td className="p-4">
+                      <td className="p-4 border-r border-gray-100">
                         <div className="flex items-center gap-3">
                           <div className="relative">
                             {order.product.image ? (
@@ -435,18 +448,19 @@ export default function OrderManagement() {
                             )}
                           </div>
                           <div className="max-w-[250px]">
-                          <p className="font-semibold text-lg ">{order.product.name}</p>
-                          <p className="text-sm text-gray-500">Variation: {order.product.variation}</p>
-                        </div>
+                            <p className="font-semibold text-lg">{order.product.name}</p>
+                            <p className="text-sm text-gray-500">Variation: {order.product.variation}</p>
+                            <p className="text-sm text-gray-500">Unit: {order.product.unit}</p>
+                          </div>
                         </div>
                       </td>
-                      <td className="p-4">
+                      <td className="p-4 border-r border-gray-100">
                         <div>
                           <p className="font-medium text-base text-gray-900">{order.dateOrdered}</p>
                           <p className="text-sm text-gray-500">{order.timeOrdered}</p>
                         </div>
                       </td>
-                      <td className="p-4">
+                      <td className="p-4 border-r border-gray-100">
                         <span
                           className="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full"
                           style={getStatusStyle(order.orderStatus)}
@@ -454,7 +468,7 @@ export default function OrderManagement() {
                           {order.orderStatus}
                         </span>
                       </td>
-                      <td className="p-4">
+                      <td className="p-4 border-r border-gray-100">
                         <span
                           className="inline-flex items-center px-3 py-1 text-sm font-medium rounded-full"
                           style={getTransactionStatusStyle(order.transactionStatus)}
