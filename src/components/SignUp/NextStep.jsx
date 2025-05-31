@@ -6,28 +6,40 @@ const NextStep = () => {
   const location = useLocation(); 
   const email = location.state?.email || "your email"; 
 
-  const [codes, setCodes] = useState(new Array(6).fill("")); 
-  const inputsRef = useRef([]); 
-
-  const handleChange = (value, index) => {
-    if (!/^[0-9]?$/.test(value)) return; 
-    const newCodes = [...codes];
-    newCodes[index] = value;
-    setCodes(newCodes);
-    if (value && index < 5) {
-      inputsRef.current[index + 1].focus(); 
-    }
-  };
-
-  const handleKeyDown = (e, index) => {
-    if (e.key === "Backspace" && !codes[index] && index > 0) {
-      inputsRef.current[index - 1].focus(); 
-    }
-  };
-
+    const [codes, setCodes] = useState(new Array(6).fill(""));
+    const [error, setError] = useState(""); // Error state to display message
+    const inputsRef = useRef([]);
+  
+    const handleChange = (value, index) => {
+      if (!/^[0-9]?$/.test(value)) {
+        setError("Invalid verification code. Please try again");
+        return;
+      }
+      setError(""); // Reset error if valid input
+      const newCodes = [...codes];
+      newCodes[index] = value;
+      setCodes(newCodes);
+      if (value && index < 5) {
+        inputsRef.current[index + 1].focus();
+      }
+    };
+  
+    const handleKeyDown = (e, index) => {
+      if (e.key === "Backspace" && !codes[index] && index > 0) {
+        inputsRef.current[index - 1].focus();
+      }
+    };
+  
+    const handleSubmit = () => {
+      const code = codes.join("");
+      console.log("Submitted code:", code);
+      navigate("/create-new-password", {
+        state: { email },
+      });
+    };
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
-      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative " style={{ marginTop: '5 px' }}>
+      <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative flex flex-col" style={{ marginTop: '5 px' }}>
         
         {/* Back Button */}
         <button
@@ -74,7 +86,7 @@ const NextStep = () => {
 
 
         {/* Main Content */}
-        <div className="text-center">
+        <div className="text-center flex-grow flex flex-col">
           <div className="text-green-600 text-4xl mb-3">
             <img src="/lock-password-fill.png" alt="Lock Icon" className="inline w-[65px] h-[66px] " />
           </div>
@@ -97,7 +109,9 @@ const NextStep = () => {
               type="text"
               inputMode="numeric"
               maxLength="1"
-              className="w-[55px] h-[56px] text-center border-2 border-gray-300 rounded-xl text-xl focus:outline-none focus:ring-2 focus:ring-green-500"
+              className={`w-[55px] h-[56px] text-center border-2 ${
+                error ? "border-red-500" : "border-gray-300"
+              } rounded-xl text-xl focus:outline-none focus:ring-0`}
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
@@ -105,23 +119,31 @@ const NextStep = () => {
           ))}
         </div>
 
+        {/* Fixed height container for error message */}
+        <div className="h-6 mb-4">
+          {error && <p className="text-center italic text-red-500 text-sm">{error}</p>}
+        </div>
+
         {/* Resend Text */}
-        <p className="text-center text-md text-gray-400 mb-[80px]">
-          Didn’t receive a code?{" "}
+        <p className="text-center text-md text-gray-400">
+          Didn't receive a code?{" "}
           <button className="text-green-600 font-medium hover:underline">
             Resend code
           </button>
         </p>
 
-          {/* Next Button */}
-          <button
-            onClick={() => navigate("/set-password")}
-            className="w-[488px] h-[54px] mt-[110px] bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition"
-          >
-            Next
-          </button>
+          {/* Spacer to push button to bottom */}
+        <div className="flex-grow"></div>
+
+         <button
+          onClick={() => navigate("/set-password")}
+          className="w-[488px] h-[54px] bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+        >
+          Next
+        </button>
+
         </div>
-      </div>
+    </div>
     </div>
   );
 };

@@ -2,57 +2,139 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MainHeader from '../UI/MainHeader';
 
-const FeaturedProducts = () => {
+const ViewFarmers = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const query = queryParams.get('query'); 
+  const query = queryParams.get('query');
 
   const [selectedFilter, setSelectedFilter] = useState("Relevance");
   const [showPriceDropdown, setPriceDropdown] = useState(false);
+  const [products, setProducts] = useState(
+    new Array(20).fill({
+      name: "Automatic-Cook Rice from the Field of Antartica",
+      price: "₱53.00",
+      sold: 227,
+      image: "/Search-rice.png",
+    })
+  );
 
-  const [products, setProducts] = useState([
-    { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱100.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱105.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱100.00", sold: 227, image: "/brocco.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱105.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱105.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-  ]);
+  const farmer = {
+    id: 1,
+    image: "/seller.png",
+    name: "Jonathan De Vera",
+    tags: ["vegetables", "root crops", "grains", "meat"],
+    location: "Macamot, Binangonan",
+    followers: 245,
+    rating: 5.0,
+    responseRate: "95%",
+    productsSold: "9k",
+  };
 
   return (
     <>
-      <MainHeader />
-      <div className="min-h-screen w-full bg-[#F5F9F5] pt-8">
+      <div className="min-h-screen w-full bg-[#F5F9F5] pt-5">
+        {/* Farmer Profile Card */}
+    <div className="flex items-start justify-start p-6 max-w-[1320px] mx-auto mb-6">
+  {/* Left */}
+  <div className="flex items-center gap-2 p-4 w-[355px] border-2 border-gray-500 rounded-2xl">
+    <div className="relative">
+      <img src={farmer.image} alt={farmer.name} className="w-24 h-22" />
+    </div>
+    <div>
+      <h3 className="font-semibold text-lg">{farmer.name}</h3>
+      <div className="text-green-600 text-sm font-medium">• Active Now</div>
+      <div className="mt-3 flex gap-2">
+        <button
+          onClick={() => navigate(`/follow/${farmer.id}`)}
+          className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center justify-center hover:bg-green-700 transition"
+        >
+          + Follow
+        </button>
+        <button
+          onClick={() => navigate(`/chat/${farmer.id}`)}
+          className="border border-green-600 text-green-600 px-4 py-1 rounded-full text-sm flex items-center justify-center gap-1 hover:bg-green-50 transition"
+        >
+          <img src="/Chat-now.png" alt="Chat Now" className="w-4 h-4" />
+          Chat Now
+        </button>
+      </div>
+    </div>
+  </div>
+
+  {/* Right */}
+  <div className="flex flex-wrap text-md text-gray-700 ml-6 gap-[120px]">
+    <div>
+      <p className="font-semibold mb-1">What I sell?</p>
+              {/* First Row: Vegetables + Root Crops */}
+<div className="flex flex-wrap gap-2 mb-1">
+  {farmer.tags
+    .filter(tag => tag === 'vegetables' || tag === 'root crops')
+    .map((tag, index) => (
+      <span
+        key={`row1-${index}`}
+        className="px-3 py-1 text-sm font-medium rounded-full bg-[#8BC34A] text-white"
+      >
+        {tag}
+      </span>
+    ))}
+</div>
+
+{/* Second Row: Grains + Meat */}
+<div className="flex flex-wrap gap-2">
+  {farmer.tags
+    .filter(tag => tag === 'grains' || tag === 'meat')
+    .map((tag, index) => (
+      <span
+        key={`row2-${index}`}
+        className={`px-3 py-1 text-sm font-medium rounded-full ${
+          tag === 'grains' ? 'bg-[#D1A157] text-white' : 'bg-[#4CAE4F] text-white'
+        }`}
+      >
+        {tag}
+      </span>
+    ))}
+</div>
+
+</div>
+            <div className="ml-[50px] flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <img src="/map-pin.png" alt="Location" className="w-5 h-5" />
+                <span>{farmer.location}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src="/Account-seller.png" alt="Followers" className="w-5 h-5" />
+                <span>{farmer.followers} Followers</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src="/star-gray.png" alt="Rating" className="w-5 h-5" />
+                <span>{farmer.rating} Rate</span>
+              </div>
+            </div>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <img src="/Clock.png" alt="Response Rate" className="w-5 h-5" />
+                <span>{farmer.responseRate} Response Rate</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src="/group-seller.png" alt="Products Sold" className="w-5 h-5" />
+                <span>{farmer.productsSold} Products Sold</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recommended Section */}
         <div className="mx-[85px] max-w-[1700px]">
           <div className="mx-[206px] flex items-center gap-2 mb-6">
             <img src="/star-outline.png" alt="star icon" className="w-8 h-8" />
             <h2 className="text-3xl font-semibold">
-              Featured Products{' '}
-              <span className="text-lg font-normal text-gray-400">
-                From Binangonan Municipal Farmers Federation Inc.
-              </span>
-              <span className="text-green-600">
-                {query ? `‘${query}’` : ''}
-              </span>
+              Recommended for you
+              <span className="text-green-600">{query ? `‘${query}’` : ''}</span>
             </h2>
           </div>
 
-          {/* Sort By Filter Bar */}
+          {/* Sort By */}
           <div className="mx-[206px] flex gap-4 mb-8">
             <div className="relative flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full z-10">
               <p className="text-lg font-semibold text-gray-800">Sort by</p>
@@ -69,14 +151,12 @@ const FeaturedProducts = () => {
                   {label}
                 </button>
               ))}
-              {/* Price dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setPriceDropdown(prev => !prev)}
                   className={`px-4 py-1 pl-4 pr-3 rounded-full font-semibold text-sm border flex items-center gap-2 transition ${
                     selectedFilter === "Price"
                       ? 'bg-[#4CAE4F] text-white'
-  
                       : 'bg-white text-gray-700 border-gray-300'
                   }`}
                 >
@@ -87,7 +167,6 @@ const FeaturedProducts = () => {
                     className={`w-4 h-4 transition-transform duration-200 ${showPriceDropdown ? 'rotate-180' : ''}`}
                   />
                 </button>
-
                 {showPriceDropdown && (
                   <div className="absolute top-[110%] left-0 bg-white border rounded-lg shadow-md z-[999] w-max min-w-[160px]">
                     {["Low to High", "High to Low"].map((cat) => (
@@ -102,7 +181,7 @@ const FeaturedProducts = () => {
                           });
                           setProducts(sorted);
                           setSelectedFilter("Price");
-                          setShowPriceDropdown(false);
+                          setPriceDropdown(false);
                         }}
                       >
                         {cat}
@@ -114,7 +193,7 @@ const FeaturedProducts = () => {
             </div>
           </div>
 
-          {/* Product Cards */}
+          {/* Products */}
           <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {products.map((product, index) => (
               <div
@@ -149,7 +228,7 @@ const FeaturedProducts = () => {
             ))}
           </div>
 
-          {/* Login to See More */}
+          {/* Login CTA */}
           <div className="flex justify-center mt-10">
             <button
               className="text-lg font-bold bg-white border-2 border-gray-700 text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110 hover:border-[#4CAE4F] mb-5"
@@ -218,6 +297,7 @@ const FeaturedProducts = () => {
             </div>
           </div>
         </footer>
+
         <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
           Binhi 2024, All Rights Reserved.
         </div>
@@ -226,4 +306,4 @@ const FeaturedProducts = () => {
   );
 };
 
-export default FeaturedProducts;
+export default ViewFarmers;

@@ -187,18 +187,6 @@ const UserProfilePage = () => {
         {/* Left Side */}
         <div className="w-full md:w-1/2 space-y-4">
 
-<<<<<<< HEAD
-          {/* Back Button and Title - Moved above profile card */}
-          <div className="flex items-center gap-4 mb-2">
-            <button
-              className="flex items-center text-gray-600 hover:text-black"
-              onClick={() => navigate("/Marketplace")}
-            >
-              <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
-            </button>
-            <p className="text-4xl font-bold font-inter">User Profile</p>
-
-=======
           {/* Back Button and Title */}
           <div className="flex items-center gap-4 mb-2 mx-2">
             <button
@@ -208,7 +196,7 @@ const UserProfilePage = () => {
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
             <p className="text-4xl font-bold font-inter mx-2">User Profile</p>
->>>>>>> origin/kaye
+
           </div>
 
           {/* Left - Profile Info */}

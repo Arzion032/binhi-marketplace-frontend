@@ -29,6 +29,7 @@ import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
 import SearchProductWithAccount from "./components/LandingPageWithAccount/SearchProductWithAccount";
 import OrderManagement from "./components/SellerCenter/OrderManagement";
 import AboutUsPage from "./components/LandingPage/AboutUsPage";
+import ViewFarmers from "./components/LandingPage/ViewFarmers"; 
 
 
 
@@ -63,6 +64,8 @@ function App() {
         <Route path="/search-product-account" element={<SearchProductWithAccount />} />
         <Route path="/order-management" element={<OrderManagement/>} />
         <Route path="/about-us" element={<MainLayout><AboutUsPage/></MainLayout>} />
+        <Route path="/view-farmer" element={<MainLayout><ViewFarmers /></MainLayout>} />
+
 
       </Routes>
     </Router>

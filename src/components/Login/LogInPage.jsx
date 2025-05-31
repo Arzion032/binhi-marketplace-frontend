@@ -2,11 +2,11 @@ import React, { useState } from "react";
 import { Input } from "../Input";
 import { Button } from "../Button";
 import { Card } from "../Card";
-import { Link, useNavigate } from "react-router-dom"; // ✅ import useNavigate
+import { Link, useNavigate } from "react-router-dom";
 
 function LogInPage() {
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate(); // ✅ initialize navigate
+  const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
@@ -14,8 +14,22 @@ function LogInPage() {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // ✅ navigate to marketplace with account
-    navigate("/marketplace");
+
+    // Retrieve saved user data from localStorage
+    const userFirstName = localStorage.getItem("userFirstName") || "User";
+    const userLastName = localStorage.getItem("userLastName") || "";
+    const userAddress = localStorage.getItem("userAddress") || "";
+    const userEmail = localStorage.getItem("userEmail") || "";
+
+    // Navigate to marketplace and pass user info in state
+    navigate("/marketplace", {
+      state: {
+        firstName: userFirstName,
+        lastName: userLastName,
+        address: userAddress,
+        email: userEmail,
+      },
+    });
   };
 
   return (
@@ -36,7 +50,6 @@ function LogInPage() {
               Log In and don’t miss the opportunity to <br />easily connect with BINHI!
             </p>
 
-            {/* ✅ Attach handler to form */}
             <form onSubmit={handleLogin} className="mb-6">
               <div>
                 <label className="label font-semibold text-lg">Phone Number/Email</label>
@@ -61,17 +74,12 @@ function LogInPage() {
                   )}
                 </div>
 
-                <Link
-                  to="/reset-password"
-                  className="text-lg text-left block mt-1 text-gray-600"
-                >
+                <Link to="/reset-password" className="text-lg text-left block mt-1 text-gray-600">
                   Forgot Password?
                 </Link>
               </div>
               <br />
-              <Button type="submit">
-                Log In
-              </Button>
+              <Button type="submit">Log In</Button>
             </form>
 
             <div className="divider text-gray-500 my-6 text-sm">OR</div>
@@ -97,8 +105,15 @@ function LogInPage() {
 
             <p className="text-center text-md mt-8 text-black">
               By continuing, you agree to BINHI{" "}
-              <a href="#" className="underline font-bold">Terms of <br />Service</a> and{" "}
-              <a href="#" className="underline font-bold">Privacy Policy</a>.
+              <a href="#" className="underline font-bold">
+                Terms of <br />
+                Service
+              </a>{" "}
+              and{" "}
+              <a href="#" className="underline font-bold">
+                Privacy Policy
+              </a>
+              .
             </p>
           </Card>
         </div>
