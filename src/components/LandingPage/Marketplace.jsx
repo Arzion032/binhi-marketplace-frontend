@@ -110,7 +110,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
           <h1 className="bg-white text-4xl font-bold text-center shadow-lg p-6">
             YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
           </h1>
-          <div className="px-6 py-6 bg-[#F5F9F5]">
+          <div className="bg-[#F5F9F5]">
             <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
               {products.map((product, index) => (
                 <div
@@ -157,7 +157,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                      </div>
                    ))}
   
-             </div><div className="flex justify-center mt-10">
+             </div><div className="mb-10 flex justify-center mt-10">
                  <button
                    onClick={() => navigate('/daily-needs')}
                    className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
@@ -167,7 +167,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                </div>
 
       {/*Featured Products Section, miii*/}
-      <section className="px-6 py-6 bg-[#F5F9F5] ">
+      {/*<section className="px-6 py-6 bg-[#F5F9F5] ">
         <div className="flex items-center justify-between mx-[70px] mt-[5px] mb-[10px]">
           <div className="flex items-center gap-2">
             <p className="text-4xl font-bold text-shadow-lg">Featured Products</p>
@@ -235,17 +235,17 @@ const [selectedProductName, setSelectedProductName] = useState('');
             </div>
           ))}
         </div>  
-      </section>
+      </section> */}
 
       {/*Top Farners Section, miii*/}
-      <section className="relative px-6 py-10 bg-[#F5F9F5] overflow-hidden">
+      <section className="pt-[40px] relative px-6 py-10 bg-[#F5F9F5] overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
         </div>
 
-        <h2 className="text-center text-3xl font-black font-inter mb-5 relative z-10 mb-16">Top Farmers of the Month</h2>
+        <h2 className="text-center text-3xl font-black font-inter relative z-10 mb-16">Top Farmers of the Month</h2>
 
-        <div className="flex flex-wrap justify-center gap-6 relative z-10 mt-10">
+        <div className="flex flex-wrap justify-center gap-6 relative z-10 mt-[80px]">
           {[
             {
               name: "Anton Benidas",
