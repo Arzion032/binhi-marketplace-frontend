@@ -47,7 +47,7 @@ function App() {
         <Route path="/reset-password" element={<InitialLayout><ResetPassword /></InitialLayout>} />
         <Route path="/create-new-password" element={<InitialLayout><CreateNewPassword /></InitialLayout>} />
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
-        <Route path="/product/:productId" element={<MainLayout><ProductDetails /></MainLayout>} />
+        <Route path="/product/:productSlug" element={<ProductDetails />} />
         <Route path="/" element={<MainLayout onSearch={handleSearch}><Marketplace /></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
@@ -55,7 +55,6 @@ function App() {
         <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
         <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
         <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
-        <Route path="/product_details" element={<OrderLayout><ProductDetails /></OrderLayout>} />
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
         <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />

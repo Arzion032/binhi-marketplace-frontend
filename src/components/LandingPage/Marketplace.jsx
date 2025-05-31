@@ -141,14 +141,7 @@ return (
             </button>        
             </div>
         <div className="mx-[80px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-24 lg:grid-cols-6 gap-2">
-          {[
-            { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-            { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-            { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-          ].map((product, index) => (
+          {products.slice(0, 6).map((product, index) => (
              <ProductCard
                   key={index}
                   product={product}

@@ -1,20 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import api from '../../api';
+import { BASE_URL } from '../../constants';
 
 const ProductDetails = () => {
-  const { productId } = useParams();
+  const { productSlug } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [showToast, setShowToast] = useState(false);
-
+  const [product, setProduct] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
+  const [selectedVariation, setSelectedVariation] = useState(null);
+  const tags = ["vegetables", "root crops", "grains", "meat"];
   const showModalToast = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
   };
 
-  const product = {
-    id: productId,
+useEffect(() => {
+  api.get(`/products/detail/${productSlug}/`)
+    .then(res => setProduct(res.data.product))
+    .catch(err => console.error(err));
+}, [productSlug]);
+
+useEffect(() => {
+  if (product && product.images && product.images.length > 0) {
+    const main = product.images.find(img => img.is_main) || product.images[0];
+    setMainImage(main);
+    console.log("Main image set:", main);
+  }
+}, [product]);
+
+useEffect(() => {
+  if (product && product.variations && product.variations.length > 0) {
+    setSelectedVariation(product.variations[0]);
+  }
+}, [product]);
+
+useEffect(() => {
+  if (selectedVariation && selectedVariation.images && selectedVariation.images.length > 0) {
+    // Set mainImage to the main image object or fallback to first image
+    const mainImg = selectedVariation.images.find(img => img.is_main) || selectedVariation.images[0];
+    setMainImage(mainImg);
+  } else {
+    setMainImage(null); // or some fallback image object if you want
+  }
+}, [selectedVariation]);
+
+
+
+
+
+  /*const product = {
+    id: productSlug,
     name: "Automatic-Cook Rice from the Field of Antartica",
     price: "₱136",
     originalPrice: "₱963",
@@ -41,10 +80,10 @@ const ProductDetails = () => {
       tags: ["vegetables", "root crops", "grains", "meat"],
       isActive: true,
     },
-  };
+  };*/
 
-  const [selectedVariation, setSelectedVariation] = useState(product.variations[0]);
-  const [mainImage, setMainImage] = useState(product.images[0]);
+
+
   const [tasks, setTasks] = useState([
     { id: 1, text: 'Buy 2 sacks', completed: true },
     { id: 2, text: 'Follow Jonathan’s Shop', completed: false },
@@ -138,6 +177,14 @@ const ProductDetails = () => {
       )
     );
   };
+  if (!product || !mainImage) {
+    return <div>Loading...</div>;
+  }
+console.log("Product loaded:", product);
+if (product) {
+  console.log("Product images:", product.images);
+}
+console.log("mainImage:", mainImage);
 
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5]">
@@ -162,22 +209,37 @@ const ProductDetails = () => {
           {/* Left column */}
           <div>
             <div className="rounded-lg overflow-hidden mb-4">
-              <img src={mainImage} alt={product.name} className="h-[400px] object-contain" />
+              {mainImage ? (
+                <img
+                  src={BASE_URL + mainImage.image}
+                  alt={product.name}
+                  className="h-[400px] object-contain"
+                />
+              ) : (
+                <div className="h-[400px] flex items-center justify-center bg-gray-100 text-gray-400">
+                  No image available
+                </div>
+              )}
             </div>
 
             <div className="w-full max-w-[400px]">
               <div className="flex gap-4 mb-2 justify-center items-center">
-                {product.images.map((image, index) => (
+               {product && product.images && product.images.length > 0 && product.images.map((image, index) => (
                   <div
-                    key={index}
+                    key={image.id || index}
                     onClick={() => handleImageChange(image)}
                     className={`w-16 h-16 border-2 rounded-md cursor-pointer overflow-hidden ${
                       mainImage === image ? 'border-green-500' : 'border-gray-200'
                     }`}
                   >
-                    <img src={image} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
+                    <img
+                      src={BASE_URL + image.image}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                 ))}
+
               </div>
               <div className="text-center text-xs text-gray-500 mb-6">HOVER TO THE IMAGE TO ZOOM IN</div>
 
@@ -220,16 +282,16 @@ const ProductDetails = () => {
               <div className="rating rating-sm">
                 <input type="radio" readOnly className="mask mask-star-2 bg-yellow-400" checked />
               </div>
-              <span className="ml-2">{product.rating}</span>
+              <span className="ml-2">4.5</span>
               <span className="mx-3 text-gray-300">|</span>
-              <span className="text-gray-600">{product.numberrate} Ratings</span>
+              <span className="text-gray-600">1k Ratings</span>
               <span className="mx-3 text-gray-300">|</span>
-              <span className="text-gray-600">{product.sold} Sold</span>
+              <span className="text-gray-600">9k Sold</span>
             </div>
 
             <div className="mt-6">
               <div className="flex items-center">
-                <span className="text-4xl font-bold text-green-600">{product.price}</span>
+                <span className="text-4xl font-bold text-green-600">₱ {selectedVariation.unit_price}</span>
                 <span className="ml-2 px-2 py-1 border border-green-600 text-sm text-green-600 rounded">per sack</span>
                 <img src="/voucher.png" alt="voucher" className="pl-2 w-8 h-6" />
                 <span className="ml-1 text-lg text-gray-500 line-through">{product.originalPrice}</span>
@@ -237,27 +299,43 @@ const ProductDetails = () => {
             </div>
 
             <div className="mt-6 text-gray-700">{product.description}</div>
-            <div className="mt-6"><span className="font-semibold">Category:</span> <span className="font-medium pl-5">{product.category}</span></div>
+            <div className="mt-6"><span className="font-semibold">Category:</span> <span className="font-medium pl-5">{product.category_name}</span></div>
 
-            {/* Variations */}
             <div className="mt-6">
-              <div className="flex mt-2 gap-4 flex-wrap">
-                <span className="font-semibold pr-3">Variation:</span>
-                {product.variations.map((variation, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setSelectedVariation(variation)}
-                    className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
-                      selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
-                    }`}
-                  >
-                    <img src={variation.image} alt={variation.name} className="w-11 h-11 mr-2 object-contain" />
-                    <span className="whitespace-nowrap">{variation.name}</span>
+          <div className="flex mt-2 gap-4 flex-wrap">
+            <span className="font-semibold pr-3">Variation:</span>
+            {product.variations && product.variations.length > 0 && product.variations.map((variation, index) => {
+              // Find main image or first image
+              const mainImageObj = variation.images && variation.images.length > 0
+                ? variation.images.find(img => img.is_main) || variation.images[0]
+                : null;
 
-                  </div>
-                ))}
-              </div>
-            </div>
+              return (
+                <div
+                  key={variation.id || index}
+                  onClick={() => setSelectedVariation(variation)}
+                  className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
+                    selectedVariation && selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
+                  }`}
+                >
+                  {mainImageObj ? (
+                    <img
+                      src={BASE_URL + mainImageObj.image}
+                      alt={variation.name}
+                      className="w-11 h-11 mr-2 object-contain"
+                    />
+                  ) : (
+                    <div className="w-11 h-11 mr-2 bg-gray-100 flex items-center justify-center rounded">
+                      {/* placeholder or icon if no image */}
+                      <span className="text-gray-400 text-xs">No Image</span>
+                    </div>
+                  )}
+                  <span className="whitespace-nowrap">{variation.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
             {/* Quantity Selector */}
             <div className="mt-6 flex items-center">
@@ -327,19 +405,19 @@ const ProductDetails = () => {
             <div className="relative">
               <img
                 src="/seller.png"
-                alt={product.seller.name}
+                alt={product.vendor_name}
                 className="w-18 h-18 border-green-600"
               />
             </div>
 
             {/* Seller Info & Buttons */}
             <div>
-              <h3 className="text-lg font-bold">{product.seller.name}</h3>
+              <h3 className="text-lg font-bold">{product.vendor_name}</h3>
               <div className="text-sm text-green-600 font-medium">• Active Now</div>
               <div className="flex gap-2 mt-3">
                 <button 
                   onClick={() => navigate('/chatpage', {
-                  state: { sellerName: product.seller.name }
+                  state: { sellerName: product.vendor_name }
                 })}
                 className="text-sm bg-green-500 text-white hover:bg-green-600 font-semibold px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
                   <img src="/Chat-now.png" alt="chatnow" className="w-5 h-5" />
@@ -359,15 +437,18 @@ const ProductDetails = () => {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1">
                 <img src="/map-pin.png" className="w-5 h-5" alt="Location" />
-                <span>{product.seller.location}</span>
+                <span>
+                  {product.vendor_address &&
+                    `${product.vendor_address.street_address}, ${product.vendor_address.barangay}, ${product.vendor_address.city}`}
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <img src="/Account-seller.png" className="w-5 h-5" alt="Followers" />
-                <span>{product.seller.followers} Followers</span>
+                <span>500 Followers</span>
               </div>
               <div className="flex items-center gap-1">
                 <img src="/star-gray.png" className="w-5 h-5" alt="Rating" />
-                <span>{product.seller.rating} Rate</span>
+                <span>5.0 Rate</span>
               </div>
             </div>
 
@@ -375,11 +456,11 @@ const ProductDetails = () => {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1">
                 <img src="/Clock.png" className="w-5 h-5" alt="Response Rate" />
-                <span>{product.seller.responseRate} Response Rate</span>
+                <span>95% Response Rate</span>
               </div>
               <div className="flex items-center gap-1">
                 <img src="/group-seller.png" className="w-5 h-5" alt="Products Sold" />
-                <span>{product.seller.products} Products Sold</span>
+                <span>9k Products Sold</span>
               </div>
             </div>
           </div>
@@ -393,7 +474,7 @@ const ProductDetails = () => {
 
             {/* First Row: Vegetables + Root Crops */}
             <div className="flex flex-wrap gap-2 mb-1">
-              {product.seller.tags
+              {tags
                 .filter(tag => tag === 'vegetables' || tag === 'root crops')
                 .map((tag, index) => (
                   <span
@@ -407,7 +488,7 @@ const ProductDetails = () => {
 
             {/* Second Row: Grains + Meat */}
             <div className="flex flex-wrap gap-2">
-              {product.seller.tags
+              {tags
                 .filter(tag => tag === 'grains' || tag === 'meat')
                 .map((tag, index) => (
                   <span
