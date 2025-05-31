@@ -26,7 +26,7 @@ export default function CheckoutSuccess() {
   const displayTotal = isMultiple ? product.total : product.total || (product.quantity * product.price);
 
   return (
-    <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center px-6 text-center">
+    <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center border justify-center px-6 text-center">
       <img 
         src="/Done.png" 
         alt="Success" 
@@ -38,7 +38,7 @@ export default function CheckoutSuccess() {
       <h1 className="text-3xl font-bold text-gray-800">Order Successful!</h1>
       <p className="text-lg text-black mb-4">Thank you for purchasing!</p>
 
-      <div className="bg-white rounded-xl shadow-lg p-6 w-[1500px] max-w-4xl border text-left mb-8">
+      <div className="bg-white rounded-xl shadow-lg p-6 w-[1500px] max-w-4xl border border-gray-400 text-left mb-8">
         <h2 className="font-bold text-2xl mb-4 text-center">Order Summary</h2>
 
         <div className="space-y-4">

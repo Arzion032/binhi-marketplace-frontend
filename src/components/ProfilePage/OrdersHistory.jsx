@@ -1,56 +1,28 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 
 const OrderHistory = () => {
   const [selectedTab, setSelectedTab] = useState("All");
   const [showDetails, setShowDetails] = useState(false);
   const [showRefundModal, setShowRefundModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [refundReasons, setRefundReasons] = useState([]);
   const [refundNote, setRefundNote] = useState("");
   const [uploadedFile, setUploadedFile] = useState(null);
-  const [searchQuery, setSearchQuery] = useState(""); // Add search state
-  const navigate = useNavigate();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [cancelReasons, setCancelReasons] = useState([]);
+  const [cancelNote, setCancelNote] = useState("");
 
-  // Add the missing toggleReason function
-  const toggleReason = (reason) => {
-    if (refundReasons.includes(reason)) {
-      setRefundReasons(refundReasons.filter(item => item !== reason));
-    } else {
-      setRefundReasons([...refundReasons, reason]);
-    }
+  // Mock navigation function for demo
+  const navigate = (path) => {
+    console.log(`Navigating to: ${path}`);
   };
 
-  // Add the missing handleSubmitRefund function
-  const handleSubmitRefund = () => {
-    // Validate form
-    if (refundReasons.length === 0) {
-      alert("Please select at least one reason for refund");
-      return;
-    }
-    
-    // Here you would typically send the refund data to your backend
-    console.log("Submitting refund request:", {
-      orderId: selectedOrder?.id,
-      reasons: refundReasons,
-      note: refundNote,
-      file: uploadedFile
-    });
-    
-    // Close modal and show success message
-    setShowRefundModal(false);
-    alert("Refund request submitted successfully!");
-    
-    // Reset form
-    setRefundReasons([]);
-    setRefundNote("");
-    setUploadedFile(null);
-  };
-
-  const orders = [
+  // State to manage orders with ability to update status
+  const [orders, setOrders] = useState([
     {
       id: 1,
-      orderId: "23149MF260", // Added order ID for search
+      orderId: "23149MF260",
       name: "Freshly Home Made Butter with Chocolate Inside",
       image: "Butter.png",
       quantity: 1,
@@ -61,7 +33,7 @@ const OrderHistory = () => {
     },
     {
       id: 2,
-      orderId: "23149MF261", // Added order ID for search
+      orderId: "23149MF261",
       name: "Premium Farm Fresh Sweet Corn",
       image: "Mais.png",
       quantity: 1,
@@ -70,14 +42,83 @@ const OrderHistory = () => {
       sellerName: "John Farmer",
       sellerProfile: "/avatar.png"
     }
-  ];
+  ]);
+
+  const toggleReason = (reason) => {
+    if (refundReasons.includes(reason)) {
+      setRefundReasons(refundReasons.filter(item => item !== reason));
+    } else {
+      setRefundReasons([...refundReasons, reason]);
+    }
+  };
+
+  const toggleCancelReason = (reason) => {
+    if (cancelReasons.includes(reason)) {
+      setCancelReasons(cancelReasons.filter(item => item !== reason));
+    } else {
+      setCancelReasons([...cancelReasons, reason]);
+    }
+  };
+
+  const handleSubmitRefund = () => {
+    if (refundReasons.length === 0) {
+      alert("Please select at least one reason for refund");
+      return;
+    }
+    
+    console.log("Submitting refund request:", {
+      orderId: selectedOrder?.id,
+      reasons: refundReasons,
+      note: refundNote,
+      file: uploadedFile
+    });
+    
+    setShowRefundModal(false);
+    alert("Refund request submitted successfully!");
+    
+    setRefundReasons([]);
+    setRefundNote("");
+    setUploadedFile(null);
+  };
+
+  // Enhanced cancel order function that actually updates the order status
+  const handleCancelOrder = () => {
+    if (cancelReasons.length === 0) {
+      alert("Please select at least one reason for cancellation");
+      return;
+    }
+    
+    console.log("Submitting cancel request:", {
+      orderId: selectedOrder?.id,
+      reasons: cancelReasons,
+      note: cancelNote
+    });
+    
+    // Update the order status to "Cancelled"
+    setOrders(prevOrders => 
+      prevOrders.map(order => 
+        order.id === selectedOrder?.id 
+          ? { ...order, status: "Cancelled" }
+          : order
+      )
+    );
+    
+    // Update selectedOrder if details modal is open
+    if (selectedOrder) {
+      setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
+    }
+    
+    setShowCancelModal(false);
+    alert("Order cancelled successfully!");
+    
+    setCancelReasons([]);
+    setCancelNote("");
+  };
 
   // Enhanced filtering function that includes search functionality
   const filteredOrders = orders.filter(order => {
-    // First filter by tab
     const matchesTab = selectedTab === "All" || order.status === selectedTab;
     
-    // Then filter by search query
     const matchesSearch = searchQuery === "" || 
       order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.sellerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -86,18 +127,32 @@ const OrderHistory = () => {
     return matchesTab && matchesSearch;
   });
 
-  // Handle search input change
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Clear search function
   const clearSearch = () => {
     setSearchQuery("");
   };
 
+  // Function to get status color
+  const getStatusColor = (status) => {
+    switch(status) {
+      case "Delivered": return "bg-[#4CAE4F]";
+      case "Cancelled": return "bg-red-500";
+      case "Returned": return "bg-gray-500";
+      default: return "bg-[#D1A157]";
+    }
+  };
+
+  // Function to check if order can be cancelled
+  const canCancelOrder = (status) => {
+    return ["Pending", "Confirmed"].includes(status);
+  };
+
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5] px-6 py-4">
+      
       {/* Header */}
       <div className="flex mx-10 items-center justify-between gap-4 mb-4">
         <div className="flex items-center gap-4">
@@ -124,7 +179,6 @@ const OrderHistory = () => {
               value={searchQuery}
               onChange={handleSearchChange}
             />
-            {/* Clear search button */}
             {searchQuery && (
               <button
                 onClick={clearSearch}
@@ -208,9 +262,7 @@ const OrderHistory = () => {
                   {/* Status and Order ID */}
                   <div className="flex items-center gap-4">
                     <span className="text-xs text-gray-500">ID: {order.orderId}</span>
-                    <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${
-                      order.status === "Delivered" ? "bg-[#4CAE4F]" : "bg-[#D1A157]" 
-                    }`}>
+                    <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${getStatusColor(order.status)}`}>
                       {order.status}
                     </span>
                   </div>
@@ -256,6 +308,20 @@ const OrderHistory = () => {
                     Order Details
                   </button>
 
+                  {/* Cancel Order Button - Only show for cancellable orders */}
+                  {canCancelOrder(order.status) && (
+                    <button
+                      onClick={() => {
+                        setSelectedOrder(order);
+                        setShowCancelModal(true);
+                      }}
+                      className="w-[130px] hover:bg-orange-600 hover:text-white text-sm text-orange-500 font-bold py-2 px-2 border border-orange-500 rounded-full transition-all"
+                    >
+                      Cancel Order
+                    </button>
+                  )}
+
+                  {/* Request Refund Button - Only show for Delivered orders */}
                   {order.status === "Delivered" && (
                     <button
                       onClick={() => {
@@ -273,6 +339,85 @@ const OrderHistory = () => {
           )}
         </div>
       </div>
+
+      {/* Cancel Order Modal */}
+      {showCancelModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
+          <div className="bg-white rounded-2xl w-[850px] p-8 relative">
+            <button
+              className="absolute top-4 right-6 text-2xl"
+              onClick={() => setShowCancelModal(false)}
+            >
+              &times;
+            </button>
+            
+            <h2 className="text-3xl font-bold">Cancel Order</h2>
+            <p className="text-sm text-gray-600 mt-1 mb-6">Please fill the form to cancel your order.</p>
+            <hr />  
+            <p className="text-lg font-bold mt-4">Item(s) you want to cancel.</p>
+            <div className="border border-black rounded-xl mt-2 p-4">
+              <div className="flex items-center mb-3 gap-2">
+                <img src="/avatar.png" className="w-6 h-6 rounded-full" />
+                <span className="text-sm font-medium">{selectedOrder?.sellerName}</span>
+                <span className="ml-auto text-sm text-gray-500">Order ID: {selectedOrder?.orderId}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <img src={selectedOrder?.image} className="w-24 h-24 rounded-lg object-cover" />
+                <div className="flex-grow">
+                  <div className="text-lg font-semibold">{selectedOrder?.name}</div>
+                  <div className="text-sm text-gray-500 mt-1">Quantity: {selectedOrder?.quantity}</div>
+                </div>
+                <div className="border-l pl-4">
+                  <div className="font-semibold">Order Details</div>
+                  <div className="text-orange-500 mt-6">Order Amount</div>
+                  <div className="text-orange-600 font-bold text-lg">₱{selectedOrder?.price?.toFixed(2)}</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="border border-black mt-4 rounded-xl p-4">
+              <p className="text-sm font-semibold mb-2">Why do you want to cancel?</p>
+              <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm mb-4">
+                {['Changed my mind', 'Found a better deal', 'Ordered by mistake', 'Payment issues', 'Others'].map((reason) => (
+                  <label key={reason} className="flex items-center gap-2">
+                    <input
+                      type="checkbox"
+                      checked={cancelReasons.includes(reason)}
+                      onChange={() => toggleCancelReason(reason)}
+                      className="w-4 h-4"
+                    />
+                    {reason}
+                  </label>
+                ))}
+              </div>
+              <div> 
+                <p className="text-sm font-semibold mb-2">Additional Notes (Optional)</p>
+                <textarea
+                  placeholder="Tell us more about why you're cancelling this order..."
+                  className="w-full h-28 border border-black rounded-xl p-3 text-sm"
+                  value={cancelNote}
+                  onChange={(e) => setCancelNote(e.target.value)}
+                />
+              </div>
+            </div>
+
+            <div className="flex justify-end gap-4 mt-6">
+              <button
+                onClick={() => setShowCancelModal(false)}
+                className="bg-gray-500 text-white px-6 py-2 rounded-full font-bold"
+              >
+                Keep Order
+              </button>
+              <button
+                onClick={handleCancelOrder}
+                className="bg-orange-500 text-white px-6 py-4 rounded-full font-bold"
+              >
+                Cancel Order
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Refund Modal */}
       {showRefundModal && (
@@ -386,16 +531,35 @@ const OrderHistory = () => {
                 </div>
               </div>
               
-              <button 
-                onClick={() => {
-                  setShowDetails(false);
-                  setShowRefundModal(true);
-                  setSelectedOrder(selectedOrder);
-                }}
-                className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-6 py-2 rounded-full mx-4"
-              >
-                Return Refund
-              </button>
+              <div className="flex gap-2">
+                {/* Show Cancel Order button for cancellable orders */}
+                {canCancelOrder(selectedOrder.status) && (
+                  <button 
+                    onClick={() => {
+                      setShowDetails(false);
+                      setShowCancelModal(true);
+                      setSelectedOrder(selectedOrder);
+                    }}
+                    className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-6 py-2 rounded-full mx-2"
+                  >
+                    Cancel Order
+                  </button>
+                )}
+
+                {/* Show Return Refund button only for Delivered orders */}
+                {selectedOrder.status === "Delivered" && (
+                  <button 
+                    onClick={() => {
+                      setShowDetails(false);
+                      setShowRefundModal(true);
+                      setSelectedOrder(selectedOrder);
+                    }}
+                    className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-6 py-2 rounded-full mx-2"
+                  >
+                    Return Refund
+                  </button>
+                )}
+              </div>
             </div>
 
             <hr className="border-green-500 mt-2" />
@@ -403,47 +567,59 @@ const OrderHistory = () => {
 
             {/* Status Tracking with Images */}
             <div className="space-y-4 mb-6">
-              {["Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map((label, index, array) => {
-                const statusIndex = array.indexOf(selectedOrder?.status || "Pending");
-                const isActive = index <= statusIndex;
-
-                const getStatusImage = (status, active) => {
-                  if (active) {
-                    return `/${status.toLowerCase()}.png`;
-                  } else {
-                    switch(status.toLowerCase()) {
-                      case 'confirmed':
-                        return '/notconfirmed.png';
-                      case 'processing':
-                        return '/notprocessing.png';
-                      case 'shipped':
-                        return '/notshipped.png';
-                      case 'delivered':
-                        return '/notdelivered.png';
-                      default:
-                        return `/${status.toLowerCase()}.png`;
-                    }
-                  }
-                };
-
-                return (
-                  <div key={label} className="flex justify-between items-center">
-                    <div className="flex items-center gap-2">
-                      <img
-                        src={getStatusImage(label, isActive)}
-                        alt={label}
-                        className="w-12 h-12"
-                      />
-                      <p className={`${isActive ? "text-[#4CAE4F] text-lg font-semibold" : "text-gray-400 text-lg"}`}>
-                        {label}
-                      </p>
-                    </div>
-                    {isActive && (
-                      <p className="text-lg text-gray-600">03/31/2025 9:23 AM</p>
-                    )}
+              {selectedOrder.status === "Cancelled" ? (
+                // Show cancelled status
+                <div className="flex justify-between items-center">
+                  <div className="flex items-center gap-2">
+                    <img src="/cancelled.png" alt="Cancelled" className="w-12 h-12" />
+                    <p className="text-red-500 text-lg font-semibold">Order Cancelled</p>
                   </div>
-                );
-              })}
+                  <p className="text-lg text-gray-600">03/31/2025 9:23 AM</p>
+                </div>
+              ) : (
+                // Show normal status progression
+                ["Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map((label, index, array) => {
+                  const statusIndex = array.indexOf(selectedOrder?.status || "Pending");
+                  const isActive = index <= statusIndex;
+
+                  const getStatusImage = (status, active) => {
+                    if (active) {
+                      return `/${status.toLowerCase()}.png`;
+                    } else {
+                      switch(status.toLowerCase()) {
+                        case 'confirmed':
+                          return '/notconfirmed.png';
+                        case 'processing':
+                          return '/notprocessing.png';
+                        case 'shipped':
+                          return '/notshipped.png';
+                        case 'delivered':
+                          return '/notdelivered.png';
+                        default:
+                          return `/${status.toLowerCase()}.png`;
+                      }
+                    }
+                  };
+
+                  return (
+                    <div key={label} className="flex justify-between items-center">
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={getStatusImage(label, isActive)}
+                          alt={label}
+                          className="w-12 h-12"
+                        />
+                        <p className={`${isActive ? "text-[#4CAE4F] text-lg font-semibold" : "text-gray-400 text-lg"}`}>
+                          {label}
+                        </p>
+                      </div>
+                      {isActive && (
+                        <p className="text-lg text-gray-600">03/31/2025 9:23 AM</p>
+                      )}
+                    </div>
+                  );
+                })
+              )}
             </div>
 
             {/* Delivery Address */}
