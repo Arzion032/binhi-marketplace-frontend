@@ -10,14 +10,15 @@ const ViewFarmers = () => {
 
   const [selectedFilter, setSelectedFilter] = useState("Relevance");
   const [showPriceDropdown, setPriceDropdown] = useState(false);
-  const [products, setProducts] = useState(new Array(20).fill({
-    name: "Automatic-Cook Rice from the Field of Antartica",
-    price: "₱53.00",
-    sold: 227,
-    image: "/Search-rice.png",
-  }));
+  const [products, setProducts] = useState(
+    new Array(20).fill({
+      name: "Automatic-Cook Rice from the Field of Antartica",
+      price: "₱53.00",
+      sold: 227,
+      image: "/Search-rice.png",
+    })
+  );
 
-  // Dummy farmer data for the profile card
   const farmer = {
     id: 1,
     image: "/seller.png",
@@ -32,101 +33,108 @@ const ViewFarmers = () => {
 
   return (
     <>
-      {/* Farmer Profile Card */}
-      <div className="flex items-center justify-between p-6  max-w-[1320px] mx-auto mb-6">
-        {/* Left: Profile Photo and Buttons */}
-          <div className="relative">
-            <img
-              src={farmer.image}
-              alt={farmer.name}
-              className="w-24 h-24"
-            />
+      <div className="min-h-screen w-full bg-[#F5F9F5] pt-5">
+        {/* Farmer Profile Card */}
+    <div className="flex items-start justify-start p-6 max-w-[1320px] mx-auto mb-6">
+  {/* Left */}
+  <div className="flex items-center gap-2 p-4 w-[355px] border-2 border-gray-500 rounded-2xl">
+    <div className="relative">
+      <img src={farmer.image} alt={farmer.name} className="w-24 h-22" />
+    </div>
+    <div>
+      <h3 className="font-semibold text-lg">{farmer.name}</h3>
+      <div className="text-green-600 text-sm font-medium">• Active Now</div>
+      <div className="mt-3 flex gap-2">
+        <button
+          onClick={() => navigate(`/follow/${farmer.id}`)}
+          className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center justify-center hover:bg-green-700 transition"
+        >
+          + Follow
+        </button>
+        <button
+          onClick={() => navigate(`/chat/${farmer.id}`)}
+          className="border border-green-600 text-green-600 px-4 py-1 rounded-full text-sm flex items-center justify-center gap-1 hover:bg-green-50 transition"
+        >
+          <img src="/Chat-now.png" alt="Chat Now" className="w-4 h-4" />
+          Chat Now
+        </button>
+      </div>
+    </div>
+  </div>
 
-         </div>
-          <div>
-            <h3 className="font-semibold text-lg">{farmer.name}</h3>
-            <div className="text-green-600 text-sm font-medium">• Active Now</div>
-            <div className="mt-3 flex gap-2">
-              <button
-                onClick={() => navigate(`/follow/${farmer.id}`)}
-                className="bg-green-600 text-white px-4 py-1 rounded-full text-sm flex items-center justify-center hover:bg-green-700 transition"
-              >
-                + Follow
-              </button>
-              <button
-                onClick={() => navigate(`/chat/${farmer.id}`)}
-                className="border border-green-600 text-green-600 px-4 py-1 rounded-full text-sm flex items-center justify-center gap-1 hover:bg-green-50 transition"
-              >
-                <img
-                  src="/Chat-now.png"
-                  alt="Chat Now"
-                  className="w-4 h-4"
-                />
-                Chat Now
-              </button>
+  {/* Right */}
+  <div className="flex flex-wrap text-md text-gray-700 ml-6 gap-[120px]">
+    <div>
+      <p className="font-semibold mb-1">What I sell?</p>
+              {/* First Row: Vegetables + Root Crops */}
+<div className="flex flex-wrap gap-2 mb-1">
+  {farmer.tags
+    .filter(tag => tag === 'vegetables' || tag === 'root crops')
+    .map((tag, index) => (
+      <span
+        key={`row1-${index}`}
+        className="px-3 py-1 text-sm font-medium rounded-full bg-[#8BC34A] text-white"
+      >
+        {tag}
+      </span>
+    ))}
+</div>
+
+{/* Second Row: Grains + Meat */}
+<div className="flex flex-wrap gap-2">
+  {farmer.tags
+    .filter(tag => tag === 'grains' || tag === 'meat')
+    .map((tag, index) => (
+      <span
+        key={`row2-${index}`}
+        className={`px-3 py-1 text-sm font-medium rounded-full ${
+          tag === 'grains' ? 'bg-[#D1A157] text-white' : 'bg-[#4CAE4F] text-white'
+        }`}
+      >
+        {tag}
+      </span>
+    ))}
+</div>
+
+</div>
+            <div className="ml-[50px] flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <img src="/map-pin.png" alt="Location" className="w-5 h-5" />
+                <span>{farmer.location}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src="/Account-seller.png" alt="Followers" className="w-5 h-5" />
+                <span>{farmer.followers} Followers</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src="/star-gray.png" alt="Rating" className="w-5 h-5" />
+                <span>{farmer.rating} Rate</span>
+              </div>
             </div>
-          </div>
-        
-        {/* Right: Farmer Stats */}
-        <div className="flex flex-wrap gap-10 text-sm text-gray-700">
-          <div>
-            <p className="font-semibold mb-1">What I sell?</p>
-            <div className="flex gap-2 flex-wrap">
-              {farmer.tags.map((tag, i) => (
-                <span
-                  key={i}
-                  className={`px-3 py-1 rounded-full text-xs font-medium ${
-                    tag === 'grains'
-                      ? 'bg-[#D1A157] text-white'
-                      : 'bg-[#4CAE4F] text-white'
-                  }`}
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-1">
-              <img src="/map-pin.png" alt="Location" className="w-5 h-5" />
-              <span>{farmer.location}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <img src="/Account-seller.png" alt="Followers" className="w-5 h-5" />
-              <span>{farmer.followers} Followers</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <img src="/star-gray.png" alt="Rating" className="w-5 h-5" />
-              <span>{farmer.rating} Rate</span>
-            </div>
-          </div>
-          <div className="flex flex-col gap-1">
-            <div className="flex items-center gap-1">
-              <img src="/Clock.png" alt="Response Rate" className="w-5 h-5" />
-              <span>{farmer.responseRate} Response Rate</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <img src="/group-seller.png" alt="Products Sold" className="w-5 h-5" />
-              <span>{farmer.productsSold} Products Sold</span>
+            <div className="flex flex-col gap-1">
+              <div className="flex items-center gap-1">
+                <img src="/Clock.png" alt="Response Rate" className="w-5 h-5" />
+                <span>{farmer.responseRate} Response Rate</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <img src="/group-seller.png" alt="Products Sold" className="w-5 h-5" />
+                <span>{farmer.productsSold} Products Sold</span>
+              </div>
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Recommended For You Header */}
-      <div className="min-h-screen w-full bg-[#F5F9F5] pt-8">
+        {/* Recommended Section */}
         <div className="mx-[85px] max-w-[1700px]">
           <div className="mx-[206px] flex items-center gap-2 mb-6">
             <img src="/star-outline.png" alt="star icon" className="w-8 h-8" />
             <h2 className="text-3xl font-semibold">
               Recommended for you
-              <span className="text-green-600">
-                {query ? `‘${query}’` : ''}
-              </span>
+              <span className="text-green-600">{query ? `‘${query}’` : ''}</span>
             </h2>
           </div>
 
-          {/* Sort By Filter Bar */}
+          {/* Sort By */}
           <div className="mx-[206px] flex gap-4 mb-8">
             <div className="relative flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full z-10">
               <p className="text-lg font-semibold text-gray-800">Sort by</p>
@@ -143,7 +151,6 @@ const ViewFarmers = () => {
                   {label}
                 </button>
               ))}
-              {/* Price dropdown */}
               <div className="relative">
                 <button
                   onClick={() => setPriceDropdown(prev => !prev)}
@@ -160,7 +167,6 @@ const ViewFarmers = () => {
                     className={`w-4 h-4 transition-transform duration-200 ${showPriceDropdown ? 'rotate-180' : ''}`}
                   />
                 </button>
-
                 {showPriceDropdown && (
                   <div className="absolute top-[110%] left-0 bg-white border rounded-lg shadow-md z-[999] w-max min-w-[160px]">
                     {["Low to High", "High to Low"].map((cat) => (
@@ -187,7 +193,7 @@ const ViewFarmers = () => {
             </div>
           </div>
 
-          {/* Product Cards */}
+          {/* Products */}
           <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {products.map((product, index) => (
               <div
@@ -222,7 +228,7 @@ const ViewFarmers = () => {
             ))}
           </div>
 
-          {/* Login to See More */}
+          {/* Login CTA */}
           <div className="flex justify-center mt-10">
             <button
               className="text-lg font-bold bg-white border-2 border-gray-700 text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110 hover:border-[#4CAE4F] mb-5"
@@ -291,6 +297,7 @@ const ViewFarmers = () => {
             </div>
           </div>
         </footer>
+
         <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
           Binhi 2024, All Rights Reserved.
         </div>
