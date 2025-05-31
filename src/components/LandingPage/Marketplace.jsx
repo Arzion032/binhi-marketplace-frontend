@@ -234,7 +234,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
           <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
         </div>
 
-        <h2 className="text-center text-3xl font-black font-inter mb-5 relative z-10 mb-[80px]">Top Farmers of the Month</h2>
+        <h2 className="text-center bg-white text-3xl font-black font-inter relative z-10 mb-[80px] p-6">TOP FARMERS OF THE MONTH</h2>
 
         <div className="flex flex-wrap justify-center gap-6 relative z-10 mt-10">
           {[
@@ -449,7 +449,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
             >
                 <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
             </button>
-            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-[#4CAE4F] text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                 Chats
             </div>
             </div>

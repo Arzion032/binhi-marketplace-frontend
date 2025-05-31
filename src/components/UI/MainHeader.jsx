@@ -68,7 +68,7 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
         </div>
             <input
               type="text"
-              placeholder="Search"
+              placeholder="Click here to products or farmer"
               className="flex-grow outline-none font-bold text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
@@ -76,9 +76,6 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
             />
            <button onClick={handleSearchClick}>
               <img src="/mic.png" alt="Mic" className="w-7 h-7 mx-2 hover:scale-110" />
-            </button>
-            <button onClick={handleSearchClick}>
-              <img src="/camera.png" alt="Camera" className="w-7 h-7 hover:scale-110" />
             </button>
           </div>
         </div>

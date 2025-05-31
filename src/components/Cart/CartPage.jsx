@@ -163,6 +163,12 @@ const CartPage = () => {
     return (
       <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center p-4">
         <div className="text-center">
+          <button
+            className="flex items-center text-gray-600 hover:text-black"
+            onClick={() => navigate("/cartpage")}
+          >
+            <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
+          </button>
           <img src="/empty-cart.png" alt="Empty Cart" className="w-32 h-32 mx-auto mb-4 opacity-50" />
           <h2 className="text-3xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
           <p className="text-gray-500 mb-6">Add some items to get started!</p>
@@ -182,6 +188,12 @@ const CartPage = () => {
       {/* Header with Search Bar */}
       <div className="flex mx-10 items-center justify-between gap-4 mb-4">
         <div className="flex items-center gap-4">
+          <button
+            className="flex items-center text-gray-600 hover:text-black"
+            onClick={() => navigate("/cartpage")}
+          >
+            <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
+          </button>
           <div>
             <h1 className="text-4xl font-bold">Your Cart ({filteredCartItems.length})</h1>
             <p className="text-gray-600 text-lg">You have {cartItems.length} items in your cart, check out now!</p>
