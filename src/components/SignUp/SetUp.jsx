@@ -10,6 +10,7 @@ const SetUp = () => {
   const [lastNameError, setLastNameError] = useState("");
   const [addressError, setAddressError] = useState("");
   const [showSuccess, setShowSuccess] = useState(false);
+  const [countdown, setCountdown] = useState(3);
   const [email, setEmail] = useState("user@example.com");
   const [showAddressModal, setShowAddressModal] = useState(false);
   const [selectedTab, setSelectedTab] = useState("Region");
@@ -75,7 +76,26 @@ const SetUp = () => {
     setCompleteAddress(address.join(", "));
   }, [selectedRegion, selectedProvince, selectedCity, selectedBarangay]);
 
-  // Tab progression logic same as before
+  // Countdown effect for success modal redirect
+  useEffect(() => {
+    if (showSuccess) {
+      setCountdown(3); // reset countdown when modal opens
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            navigate("/login");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer); // cleanup on modal close/unmount
+    }
+  }, [showSuccess, navigate]);
+
+  // Tab progression logic
   const progressToNextTab = (currentTab) => {
     switch (currentTab) {
       case "Region":
@@ -118,7 +138,7 @@ const SetUp = () => {
 
   const handleBarangaySelect = (barangay) => {
     setSelectedBarangay(barangay);
-    if (addressError) setAddressError("");  
+    if (addressError) setAddressError("");
     progressToNextTab("Barangay");
   };
 
@@ -148,17 +168,18 @@ const SetUp = () => {
     }
 
     if (valid) {
-      setShowSuccess(true);
+      // Store user data in localStorage for retrieval after login
+      localStorage.setItem("userFirstName", firstName.trim());
+      localStorage.setItem("userLastName", lastName.trim());
+      localStorage.setItem("userAddress", completeAddress);
+      localStorage.setItem("userEmail", email);
 
-      // Auto-redirect after 3 seconds
-      setTimeout(() => {
-        navigate("/login");
-      }, 3000);
+      setShowSuccess(true);
     }
   };
 
   return (
-   <div
+    <div
       className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4"
       style={{ backgroundImage: 'url("/background.jpg")' }}
     >
@@ -171,11 +192,7 @@ const SetUp = () => {
           className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-black"
           onClick={() => navigate("/next-step")}
         >
-          <img
-            src="/arrow-left-s-line.png"
-            alt="Back"
-            className="w-20 h-10"
-          />
+          <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
         </button>
 
         {/* Step Indicator */}
@@ -197,7 +214,11 @@ const SetUp = () => {
               <span className="text-green-600 mt-2">Password</span>
             </div>
 
-            <img src="/dotfullgreen.png" alt="Step Flow" className="relative -top-3" />
+            <img
+              src="/dotfullgreen.png"
+              alt="Step Flow"
+              className="relative -top-3"
+            />
 
             <div className="flex flex-col items-center">
               <div className="font-bold text-3xl bg-[#4CAE4F] text-white w-[66px] h-[66px] flex items-center justify-center rounded-2xl shadow-lg shadow-green-700/60">
@@ -208,7 +229,7 @@ const SetUp = () => {
           </div>
         </div>
 
-{/* Main Content */}
+        {/* Main Content */}
         <div className="text-center max-w-md mx-auto w-full">
           <img
             src="/lock.png"
@@ -276,10 +297,10 @@ const SetUp = () => {
                 placeholder="Barangay, Purok, Street"
                 readOnly
                 value={completeAddress}
-                 onClick={() => {
-                setShowAddressModal(true);
-              if (addressError) setAddressError(""); 
-              }}
+                onClick={() => {
+                  setShowAddressModal(true);
+                  if (addressError) setAddressError("");
+                }}
               />
               <button
                 className="absolute right-4 top-1/2 transform -translate-y-1/2"
@@ -325,13 +346,13 @@ const SetUp = () => {
                   </button>
                 ))}
               </div>
-              
+
               {/* Tab Content with Custom Scrollbar */}
-              <div 
+              <div
                 className="max-h-48 overflow-y-auto bg-white custom-scrollbar"
                 style={{
-                  scrollbarWidth: 'thin',
-                  scrollbarColor: '#4CAE4F transparent'
+                  scrollbarWidth: "thin",
+                  scrollbarColor: "#4CAE4F transparent",
                 }}
               >
                 <style jsx global>{`
@@ -346,15 +367,15 @@ const SetUp = () => {
                     border-radius: 20px;
                   }
                 `}</style>
-                
+
                 {selectedTab === "Region" && (
                   <div>
                     {regions.map((region) => (
-                      <div 
-                        key={region} 
+                      <div
+                        key={region}
                         className={`py-2 px-4 cursor-pointer text-left ${
-                          selectedRegion === region 
-                            ? "bg-green-50 text-green-700" 
+                          selectedRegion === region
+                            ? "bg-green-50 text-green-700"
                             : "text-gray-700 hover:bg-gray-50"
                         }`}
                         onClick={() => handleRegionSelect(region)}
@@ -364,15 +385,15 @@ const SetUp = () => {
                     ))}
                   </div>
                 )}
-                
+
                 {selectedTab === "Province" && (
                   <div>
                     {provinces[selectedRegion]?.map((province) => (
-                      <div 
-                        key={province} 
+                      <div
+                        key={province}
                         className={`py-2 px-4 cursor-pointer text-left ${
-                          selectedProvince === province 
-                            ? "bg-green-50 text-green-700" 
+                          selectedProvince === province
+                            ? "bg-green-50 text-green-700"
                             : "text-gray-700 hover:bg-gray-50"
                         }`}
                         onClick={() => handleProvinceSelect(province)}
@@ -382,15 +403,15 @@ const SetUp = () => {
                     ))}
                   </div>
                 )}
-                
+
                 {selectedTab === "City" && (
                   <div>
                     {cities[selectedProvince]?.map((city) => (
-                      <div 
-                        key={city} 
+                      <div
+                        key={city}
                         className={`py-2 px-4 cursor-pointer text-left ${
-                          selectedCity === city 
-                            ? "bg-green-50 text-green-700" 
+                          selectedCity === city
+                            ? "bg-green-50 text-green-700"
                             : "text-gray-700 hover:bg-gray-50"
                         }`}
                         onClick={() => handleCitySelect(city)}
@@ -400,15 +421,15 @@ const SetUp = () => {
                     ))}
                   </div>
                 )}
-                
+
                 {selectedTab === "Barangay" && (
                   <div>
                     {barangays[selectedCity]?.map((barangay) => (
-                      <div 
-                        key={barangay} 
+                      <div
+                        key={barangay}
                         className={`py-2 px-4 cursor-pointer text-left ${
-                          selectedBarangay === barangay 
-                            ? "bg-green-50 text-green-700" 
+                          selectedBarangay === barangay
+                            ? "bg-green-50 text-green-700"
                             : "text-gray-700 hover:bg-gray-50"
                         }`}
                         onClick={() => handleBarangaySelect(barangay)}
@@ -421,7 +442,6 @@ const SetUp = () => {
               </div>
             </div>
           )}
-
 
           {/* Checkbox for Default Address with Help Icon */}
           <div className="flex items-start justify-start gap-2 mb-4 mt-[120px]">
@@ -468,7 +488,7 @@ const SetUp = () => {
               </div>
             </div>
           </div>
-        <div className="flex-grow"></div>
+          <div className="flex-grow"></div>
           <button
             className="mt-[15px] w-full bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
             onClick={handleFinish}
@@ -478,7 +498,7 @@ const SetUp = () => {
         </div>
       </div>
 
-        {/* Success Modal */}
+      {/* Success Modal */}
       {showSuccess && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white rounded-3xl p-11 w-[620px] h-[460px] shadow-xl">
@@ -488,10 +508,12 @@ const SetUp = () => {
               <p className="text-base text-gray-600 mb-3">
                 You have successfully created your account with <br /> the email{" "}
                 <span className="font-medium">{email}</span>.
-              </p>{" "}
-              <br /> <br />
+              </p>
+              <br />
+              <br />
               <p className="text-sm text-gray-500 mb-4">
-                You will be redirected to Login Page in <br /> 3 seconds.
+                You will be redirected to Login Page in <br />{" "}
+                <span className="font-bold">{countdown}</span> second{countdown !== 1 ? "s" : ""}.
               </p>
               <button
                 className="w-full mt-1 bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"

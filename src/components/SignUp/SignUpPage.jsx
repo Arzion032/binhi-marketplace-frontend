@@ -10,12 +10,9 @@ const SignUpPage = () => {
   const [error, setError] = useState(""); // State to hold error message
 
   const handleNext = () => {
-    // Regular expression for validating email
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    // Regular expression for validating phone number (basic format)
     const phoneRegex = /^[0-9]{10}$/;
 
-    // Check if input is either a valid email or phone number
     if (!emailRegex.test(emailOrPhone) && !phoneRegex.test(emailOrPhone)) {
       setError("Please enter correct Phone Number or Email format.");
     } else {
