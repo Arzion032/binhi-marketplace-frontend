@@ -346,6 +346,7 @@ const ProductDetails = () => {
                   Chat Now
                 </button>
                 <button
+                onClick={() => navigate('/view-farmer')}
                   className="text-sm border border-green-700 font-medium text-green-600 px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
                   <img src="/shop-green.png" alt="View Shop" className="w-5 h-5" />
                   View Shop
@@ -591,7 +592,7 @@ const ProductDetails = () => {
     ))}
   </div>
   </div>
-<div className="mt-10 w-[1320px]">
+{/* <div className="mt-10 w-[1320px]">
   <div className="flex items-center gap-2 mb-4">
     <img src="/heartblack.png" className="w-8 h-8" alt="Liked heart" />
     <h3 className="text-xl font-bold">You may also like</h3>
@@ -644,10 +645,10 @@ const ProductDetails = () => {
           <button className="text-lg font-bold bg-white border-2 hover:border-[#4CAE4F] border-gray-600 text-[#4CAE4F] [#4CAE4F] w-[500px] h-[50px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110">
             See More
           </button>
+        </div> */}
         </div>
         </div>
-        </div>
-      </div>
+      </div> 
 
 <footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
   <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
