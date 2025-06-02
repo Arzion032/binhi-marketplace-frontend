@@ -630,8 +630,7 @@ const combinedImages = [
         </div> 
         </div>
         </div>
-
-        </div>
+      </div> 
       </div>
   );
 };
