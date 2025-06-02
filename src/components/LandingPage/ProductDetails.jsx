@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import api from '../../api';
 import { BASE_URL } from '../../constants';
 import MainLayout from '../Layout/MainLayout';
+import VendorDetails from './Vendor Details';
 
 const ProductDetails = () => {
   const { productSlug } = useParams();
@@ -15,6 +16,7 @@ const ProductDetails = () => {
   const [selectedVariation, setSelectedVariation] = useState(null);
   const tags = ["vegetables", "root crops", "grains", "meat"];
   const [price, setPrice] = useState(null)
+  const [unit, setUnit] = useState('')
   const showModalToast = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
@@ -31,6 +33,7 @@ useEffect(() => {
     const main = product.images.find(img => img.is_main) || product.images[0];
     setMainImage(main);
     setPrice(product.min_price)
+    setUnit(product.variations[0].unit_measurement)
     console.log("Main image set:", main);
   }
 }, [product]);
@@ -43,6 +46,7 @@ useEffect(() => {
     const mainImg = selectedVariation.images.find(img => img.is_main) || selectedVariation.images[0];
     setMainImage(mainImg);
     setPrice(selectedVariation.unit_price)
+    setUnit(selectedVariation.unit_measurement)
   } else {
     setMainImage(null); // or some fallback image object if you want
   }
@@ -111,13 +115,21 @@ useEffect(() => {
     ? reviews
     : reviews.filter(review => review.rating === parseInt(selectedFilter));
 
-  const decrementQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
-  };
+const incrementQuantity = () => {
+  setQuantity(prev => {
+    console.log("prev quantity:", prev);
+    return prev + 1;
+  });
+};
 
-  const incrementQuantity = () => {
-    if (quantity < product.stock) setQuantity(quantity + 1);
-  };
+const decrementQuantity = () => {
+  setQuantity(prev => {
+    console.log("prev quantity:", prev);
+    return Math.max(1, prev - 1);
+  });
+};
+
+
 
   const handleGoBack = () => navigate(-1);
   const handleImageChange = (image) => setMainImage(image);
@@ -150,16 +162,13 @@ if (!product || !mainImage) {
     </div>
   );
 }
-console.log("Product loaded:", product);
-if (product) {
-  console.log("Product images:", product.images);
-}
-console.log("mainImage:", mainImage);
 
 const combinedImages = [
   ...(product.images || []),
   ...(product.variations?.flatMap(v => v.images) || []),
 ];
+
+console.log(product)
 
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5]">
@@ -244,7 +253,7 @@ const combinedImages = [
             <div className="mt-6">
               <div className="flex items-center">
                 <span className="text-4xl font-bold text-green-600">₱ {price}</span>
-                <span className="ml-2 px-2 py-1 border border-green-600 text-sm text-green-600 rounded">per sack</span>
+                <span className="ml-2 px-2 py-1 border border-green-600 text-sm text-green-600 rounded">{unit}</span>
                 <img src="/voucher.png" alt="voucher" className="pl-2 w-8 h-6" />
                 <span className="ml-1 text-lg text-gray-500 line-through">{product.originalPrice}</span>
               </div>
@@ -292,21 +301,25 @@ const combinedImages = [
             {/* Quantity Selector */}
             <div className="mt-6 flex items-center">
               <span className="font-semibold w-24">Quantity:</span>
-              <div className="flex items-center overflow-hidden pl-2">
-                <button onClick={decrementQuantity}>
-                  <img src="/minus button.png" alt="Minus" className="w-8 h-8" />
+                <div className="flex items-center overflow-hidden pl-2">
+                  <button
+                    type="button"
+                    onClick={decrementQuantity}
+                    className="disabled:opacity-50"
+                  >
+                    <img src="/minus button.png" alt="Minus" className="w-8 h-8" />
+                  </button>
+                  <div className="px-4 py-1 text-xl font-bold select-none">{quantity}</div>
+                  <button
+                    type="button"
+                    onClick={incrementQuantity}
+                    className="disabled:opacity-50"
+                  >
+                  <img src="/add button.png" alt="Add" className="w-8 h-8" />
                 </button>
-                <div className="px-4 py-1 text-xl font-bold select-none">{quantity}</div>
-               <button
-              onClick={incrementQuantity}
-              disabled={quantity >= product.stock}
-              className={`disabled:opacity-50`}
-            >
-              <img src="/add button.png" alt="Add" className="w-8 h-8" />
-            </button>
               </div>
-              <span className="ml-4 text-gray-500">{product.stock} stocks available</span>
             </div>
+
 
             {/* Action Buttons */}
             <div className="mt-10 flex gap-4">
@@ -350,112 +363,9 @@ const combinedImages = [
             </div>
 
         {/* Seller Info */}
-        <div className="mt-10 border border-gray-300 rounded-3xl px-6 py-4 shadow-sm flex flex-col md:flex-row justify-between items-start gap-6 w-[1320px]">
-          {/* LEFT SIDE: Image, Name, Active Now, Buttons */}
-          <div className="flex items-start gap-4">
-            {/* Seller Image */}
-            <div className="relative">
-              <img
-                src="/seller.png"
-                alt={product.vendor_name}
-                className="w-18 h-18 border-green-600"
-              />
-            </div>
 
-            {/* Seller Info & Buttons */}
-            <div>
-              <h3 className="text-lg font-bold">{product.vendor_name}</h3>
-              <div className="text-sm text-green-600 font-medium">• Active Now</div>
-              <div className="flex gap-2 mt-3">
-                <button 
-                  onClick={() => navigate('/chatpage', {
-                  state: { sellerName: product.vendor_name }
-                })}
-                className="text-sm bg-green-500 text-white hover:bg-green-600 font-semibold px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
-                  <img src="/Chat-now.png" alt="chatnow" className="w-5 h-5" />
-                  Chat Now
-                </button>
-                <button
-                  className="text-sm border border-green-700 font-medium text-green-600 px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
-                  <img src="/shop-green.png" alt="View Shop" className="w-5 h-5" />
-                  View Shop
-                </button>
-              </div>
-            </div>
-          </div>
+      <VendorDetails selectedFilter={selectedFilter} product={product} tags={tags} />     
 
-          <div className="flex gap-[150px] text-sm text-gray-700">
-            {/* LEFT COLUMN */}
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-1">
-                <img src="/map-pin.png" className="w-5 h-5" alt="Location" />
-                <span>
-                  {product.vendor_address &&
-                    `${product.vendor_address.street_address}, ${product.vendor_address.barangay}, ${product.vendor_address.city}`}
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <img src="/Account-seller.png" className="w-5 h-5" alt="Followers" />
-                <span>500 Followers</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <img src="/star-gray.png" className="w-5 h-5" alt="Rating" />
-                <span>5.0 Rate</span>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN */}
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-1">
-                <img src="/Clock.png" className="w-5 h-5" alt="Response Rate" />
-                <span>95% Response Rate</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <img src="/group-seller.png" className="w-5 h-5" alt="Products Sold" />
-                <span>9k Products Sold</span>
-              </div>
-            </div>
-          </div>
-
-              {/* Right - Tags */}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 text-sm font-medium mb-2">
-              <img src="/Artichoke.png" alt="What I sell?" className="w-5 h-5" />
-              What I sell?
-            </div>
-
-            {/* First Row: Vegetables + Root Crops */}
-            <div className="flex flex-wrap gap-2 mb-1">
-              {tags
-                .filter(tag => tag === 'vegetables' || tag === 'root crops')
-                .map((tag, index) => (
-                  <span
-                    key={`row1-${index}`}
-                    className="px-3 py-1 text-sm font-medium rounded-full bg-[#8BC34A] text-white"
-                  >
-                    {tag}
-                  </span>
-                ))}
-            </div>
-
-            {/* Second Row: Grains + Meat */}
-            <div className="flex flex-wrap gap-2">
-              {tags
-                .filter(tag => tag === 'grains' || tag === 'meat')
-                .map((tag, index) => (
-                  <span
-                    key={`row2-${index}`}
-                    className={`px-3 py-1 text-sm font-medium rounded-full ${
-                      tag === 'grains' ? 'bg-[#D1A157] text-white'
-                      : 'bg-[#4CAE4F] text-white'
-                    }`}
-                  >
-                    {tag}
-                  </span>
-                  ))}
-                </div>
-              </div>
-            </div>
 
         {/* Product Reviews */}
               <div className="mt-16 bg-white rounded-3xl p-6 w-[1320px] border border-gray-500">
