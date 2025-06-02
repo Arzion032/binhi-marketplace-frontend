@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import api from '../../api';
 import { BASE_URL } from '../../constants';
 import MainLayout from '../Layout/MainLayout';
+import VendorDetails from './Vendor Details';
 
 const ProductDetails = () => {
   const { productSlug } = useParams();
@@ -15,6 +16,7 @@ const ProductDetails = () => {
   const [selectedVariation, setSelectedVariation] = useState(null);
   const tags = ["vegetables", "root crops", "grains", "meat"];
   const [price, setPrice] = useState(null)
+  const [unit, setUnit] = useState('')
   const showModalToast = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
@@ -31,6 +33,7 @@ useEffect(() => {
     const main = product.images.find(img => img.is_main) || product.images[0];
     setMainImage(main);
     setPrice(product.min_price)
+    setUnit(product.variations[0].unit_measurement)
     console.log("Main image set:", main);
   }
 }, [product]);
@@ -43,6 +46,7 @@ useEffect(() => {
     const mainImg = selectedVariation.images.find(img => img.is_main) || selectedVariation.images[0];
     setMainImage(mainImg);
     setPrice(selectedVariation.unit_price)
+    setUnit(selectedVariation.unit_measurement)
   } else {
     setMainImage(null); // or some fallback image object if you want
   }
@@ -56,93 +60,27 @@ useEffect(() => {
   ]);
   const [selectedFilter, setSelectedFilter] = useState("All");
 
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      user: "j******x",
-      profileImage: "/user.png",
-      date: "2025-04-12",
-      rating: 5,
-      variation: "Jasmine",
-      comment: "Very fragrant rice, great quality!",
-      images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-    {
-      id: 2,
-      user: "m******d",
-      profileImage: "/user.png",
-      date: "2025-04-10",
-      rating: 4,
-      variation: "Sinandomeng",
-      comment: "Good rice but the packaging was a bit loose.",
-      images: ["/rice2-review.png", "/rice2-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-    {
-      id: 3,
-      user: "e******a",
-      profileImage: "/user.png",
-      date: "2025-04-08",
-      rating: 5,
-      variation: "Jasmine",
-      comment: "Best rice I’ve had in a while. Highly recommended!",
-      images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-    {
-      id: 4,
-      user: "r******e",
-      profileImage: "/user.png",
-      date: "2025-04-05",
-      rating: 3,
-      variation: "Sinandomeng",
-      comment: "Not bad, but I prefer other varieties.",
-      images: ["/rice2-review.png", "/rice2-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-  ]);
 
-  const filteredReviews = selectedFilter === "All"
-    ? reviews
-    : reviews.filter(review => review.rating === parseInt(selectedFilter));
+const incrementQuantity = () => {
+  setQuantity(prev => {
+    console.log("prev quantity:", prev);
+    return prev + 1;
+  });
+};
 
-  const decrementQuantity = () => {
-    if (quantity > 1) setQuantity(quantity - 1);
-  };
+const decrementQuantity = () => {
+  setQuantity(prev => {
+    console.log("prev quantity:", prev);
+    return Math.max(1, prev - 1);
+  });
+};
 
-  const incrementQuantity = () => {
-    if (quantity < product.stock) setQuantity(quantity + 1);
-  };
+
 
   const handleGoBack = () => navigate(-1);
   const handleImageChange = (image) => setMainImage(image);
 
-  const toggleTask = (id) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
-
-  const toggleLike = (id) => {
-    setReviews(prev =>
-      prev.map(review =>
-        review.id === id
-          ? {
-              ...review,
-              liked: !review.liked,
-              likeCount: review.liked ? 0 : 1,
-            }
-          : review
-      )
-    );
-  };
+ 
 if (!product || !mainImage) {
   return (
     <div className="flex justify-center mt-20">
@@ -150,16 +88,13 @@ if (!product || !mainImage) {
     </div>
   );
 }
-console.log("Product loaded:", product);
-if (product) {
-  console.log("Product images:", product.images);
-}
-console.log("mainImage:", mainImage);
 
 const combinedImages = [
   ...(product.images || []),
   ...(product.variations?.flatMap(v => v.images) || []),
 ];
+
+console.log(product)
 
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5]">
@@ -244,7 +179,7 @@ const combinedImages = [
             <div className="mt-6">
               <div className="flex items-center">
                 <span className="text-4xl font-bold text-green-600">₱ {price}</span>
-                <span className="ml-2 px-2 py-1 border border-green-600 text-sm text-green-600 rounded">per sack</span>
+                <span className="ml-2 px-2 py-1 border border-green-600 text-sm text-green-600 rounded">{unit}</span>
                 <img src="/voucher.png" alt="voucher" className="pl-2 w-8 h-6" />
                 <span className="ml-1 text-lg text-gray-500 line-through">{product.originalPrice}</span>
               </div>
@@ -292,21 +227,25 @@ const combinedImages = [
             {/* Quantity Selector */}
             <div className="mt-6 flex items-center">
               <span className="font-semibold w-24">Quantity:</span>
-              <div className="flex items-center overflow-hidden pl-2">
-                <button onClick={decrementQuantity}>
-                  <img src="/minus button.png" alt="Minus" className="w-8 h-8" />
+                <div className="flex items-center overflow-hidden pl-2">
+                  <button
+                    type="button"
+                    onClick={decrementQuantity}
+                    className="disabled:opacity-50"
+                  >
+                    <img src="/minus button.png" alt="Minus" className="w-8 h-8" />
+                  </button>
+                  <div className="px-4 py-1 text-xl font-bold select-none">{quantity}</div>
+                  <button
+                    type="button"
+                    onClick={incrementQuantity}
+                    className="disabled:opacity-50"
+                  >
+                  <img src="/add button.png" alt="Add" className="w-8 h-8" />
                 </button>
-                <div className="px-4 py-1 text-xl font-bold select-none">{quantity}</div>
-               <button
-              onClick={incrementQuantity}
-              disabled={quantity >= product.stock}
-              className={`disabled:opacity-50`}
-            >
-              <img src="/add button.png" alt="Add" className="w-8 h-8" />
-            </button>
               </div>
-              <span className="ml-4 text-gray-500">{product.stock} stocks available</span>
             </div>
+
 
             {/* Action Buttons */}
             <div className="mt-10 flex gap-4">
@@ -350,230 +289,8 @@ const combinedImages = [
             </div>
 
         {/* Seller Info */}
-        <div className="mt-10 border border-gray-300 rounded-3xl px-6 py-4 shadow-sm flex flex-col md:flex-row justify-between items-start gap-6 w-[1320px]">
-          {/* LEFT SIDE: Image, Name, Active Now, Buttons */}
-          <div className="flex items-start gap-4">
-            {/* Seller Image */}
-            <div className="relative">
-              <img
-                src="/seller.png"
-                alt={product.vendor_name}
-                className="w-18 h-18 border-green-600"
-              />
-            </div>
 
-            {/* Seller Info & Buttons */}
-            <div>
-              <h3 className="text-lg font-bold">{product.vendor_name}</h3>
-              <div className="text-sm text-green-600 font-medium">• Active Now</div>
-              <div className="flex gap-2 mt-3">
-                <button 
-                  onClick={() => navigate('/chatpage', {
-                  state: { sellerName: product.vendor_name }
-                })}
-                className="text-sm bg-green-500 text-white hover:bg-green-600 font-semibold px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
-                  <img src="/Chat-now.png" alt="chatnow" className="w-5 h-5" />
-                  Chat Now
-                </button>
-                <button
-                onClick={() => navigate('/view-farmer')}
-                  className="text-sm border border-green-700 font-medium text-green-600 px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
-                  <img src="/shop-green.png" alt="View Shop" className="w-5 h-5" />
-                  View Shop
-                </button>
-              </div>
-            </div>
-          </div>
-
-          <div className="flex gap-[150px] text-sm text-gray-700">
-            {/* LEFT COLUMN */}
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-1">
-                <img src="/map-pin.png" className="w-5 h-5" alt="Location" />
-                <span>
-                  {product.vendor_address &&
-                    `${product.vendor_address.street_address}, ${product.vendor_address.barangay}, ${product.vendor_address.city}`}
-                </span>
-              </div>
-              <div className="flex items-center gap-1">
-                <img src="/Account-seller.png" className="w-5 h-5" alt="Followers" />
-                <span>500 Followers</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <img src="/star-gray.png" className="w-5 h-5" alt="Rating" />
-                <span>5.0 Rate</span>
-              </div>
-            </div>
-
-            {/* RIGHT COLUMN */}
-            <div className="flex flex-col gap-1">
-              <div className="flex items-center gap-1">
-                <img src="/Clock.png" className="w-5 h-5" alt="Response Rate" />
-                <span>95% Response Rate</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <img src="/group-seller.png" className="w-5 h-5" alt="Products Sold" />
-                <span>9k Products Sold</span>
-              </div>
-            </div>
-          </div>
-
-              {/* Right - Tags */}
-          <div className="flex flex-col">
-            <div className="flex items-center gap-2 text-sm font-medium mb-2">
-              <img src="/Artichoke.png" alt="What I sell?" className="w-5 h-5" />
-              What I sell?
-            </div>
-
-            {/* First Row: Vegetables + Root Crops */}
-            <div className="flex flex-wrap gap-2 mb-1">
-              {tags
-                .filter(tag => tag === 'vegetables' || tag === 'root crops')
-                .map((tag, index) => (
-                  <span
-                    key={`row1-${index}`}
-                    className="px-3 py-1 text-sm font-medium rounded-full bg-[#8BC34A] text-white"
-                  >
-                    {tag}
-                  </span>
-                ))}
-            </div>
-
-            {/* Second Row: Grains + Meat */}
-            <div className="flex flex-wrap gap-2">
-              {tags
-                .filter(tag => tag === 'grains' || tag === 'meat')
-                .map((tag, index) => (
-                  <span
-                    key={`row2-${index}`}
-                    className={`px-3 py-1 text-sm font-medium rounded-full ${
-                      tag === 'grains' ? 'bg-[#D1A157] text-white'
-                      : 'bg-[#4CAE4F] text-white'
-                    }`}
-                  >
-                    {tag}
-                  </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-        {/* Product Reviews */}
-              <div className="mt-16 bg-white rounded-3xl p-6 w-[1320px] border border-gray-500">
-                <h3 className="text-xl font-bold mb-4">Product Reviews</h3>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                  <div>
-                    <span className="text-3xl font-bold text-gray-800">4.9</span>
-                    <span className="text-lg text-gray-600 ml-2">out of 5</span>
-                    <div className="text-yellow-500 text-4xl">★★★★★</div>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["All", "5", "4", "3", "2", "1"].map((label, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setSelectedFilter(label)}
-                        className={`px-4 py-1 rounded-lg border text-sm w-[120px] h-[40px] ${
-                          selectedFilter === label
-                            ? "border-green-500 text-green-600 font-semibold"
-                            : "border-gray-300 text-gray-600"
-                        }`}
-                      >
-                        {label === "All" ? "All" : `${label} stars`} ({
-                          reviews.filter(r => label === "All" || r.rating === parseInt(label)).length
-                        })
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {filteredReviews.map((review) => (
-                  <div key={review.id} className="border-b border-gray-200 pb-3 mb-5">
-                  <div className="flex justify-between text-sm text-gray-600">
-          <div className="flex items-start gap-2">
-            <img src={review.profileImage} alt="Profile" className="w-8 h-8 rounded-full" />
-            <div>
-              <span>{review.user}</span>
-              <div className="text-yellow-500 text-sm mt-0.5">{"★".repeat(review.rating)}</div>
-            </div>
-          </div>
-          <span>{review.date}</span>
-        </div>
-
-        <div className="text-sm text-gray-500 mt-1 mb-2">
-          Variation: <span className="text-black">{review.variation}</span>
-        </div>
-
-
-            <p className="mt-2 text-gray-700 text-sm leading-relaxed">{review.comment}</p>
-
-            {review.images.length > 0 && (
-              <div className="flex gap-2 mt-3">
-                {review.images.map((img, i) => (
-                  <img key={i} src={img} alt="review img" className="w-16 h-16 rounded object-cover" />
-                ))}
-              </div>
-            )}
-
-            <div className="flex justify-between items-center mt-3 text-md text-gray-500">
-              <div
-                onClick={() => toggleLike(review.id)}
-                className={`flex items-center gap-1 cursor-pointer ${
-                  review.liked ? 'text-red-500' : 'hover:text-gray-700'
-                }`}
-              >
-                <img
-                  src={review.liked ? "/heart-filled.png" : "/heart-outline.png"}
-                  className="w-5 h-5"
-                  alt="heart"
-                />
-                {review.liked ? review.likeCount : 'Helpful?'}
-              </div>
-          <div className="flex items-center gap-1 cursor-pointer group hover:text-orange-500">
-            <div className="relative w-5 h-5">
-              <img src="/shield-alert.png" className="w-5 h-5 absolute top-0 left-0 group-hover:opacity-0" />
-              <img src="/shield-alert-orange.png" className="w-5 h-5 absolute top-0 left-0 opacity-0 group-hover:opacity-100" />
-            </div>
-            Report
-          </div>
-
-
-
-            </div>
-          </div>
-        ))}
-
-<div className="flex justify-center gap-2 mt-6">
-  {/* Prev Button */}
-<button className="w-[45px] h-[50px] bg-[#D9D9D9] border border-[#858585] rounded-xl text-gray-500 hover:bg-[#c2c2c2]">
-  &lt;
-</button>
-
-{/* Page Numbers */}
-{[1, 2, 3, 4, 5].map((num) => (
-  <button
-    key={num}
-    className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
-      num === 1
-        ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
-        : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
-    }`}
-  >
-    {num}
-  </button>
-))}
-
-{/* Ellipsis */}
-<button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
-  ...
-</button>
-
-{/* Next Button */}
-<button className="w-[45px] h-[50px] rounded-xl bg-[#D9D9D9] border border-[#858585] text-[#858585] hover:bg-[#c2c2c2]">
-  &gt;
-</button>
-
-</div>
-      </div>
+      <VendorDetails selectedFilter={selectedFilter} product={product} tags={tags} />     
 
 {/* Recommendations */}
 <div className="mt-10 w-[1320px]">
