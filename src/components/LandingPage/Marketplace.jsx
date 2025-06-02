@@ -1,50 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import FederationSection from './FederationSection';
-import MainHeader from '../UI/MainHeader'; 
+import ProductCard from './ProductCard';
+import FarmerCard from './FarmerCard';
+import { BASE_URL } from "../../constants";
+import api from '../../api';
+
+const PRODUCTS_API = `${BASE_URL}/products/landing-page/`;
+
 
 const Marketplace = () => {
-  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [showToast, setShowToast] = useState(false);
-const [selectedProductName, setSelectedProductName] = useState('');
+
+  useEffect(() => {
+    api.get("/products/landing-page/")
+      .then(res => setProducts(res.data))
+      .catch(err => setError(err.message || "Error fetching products"))
+      .finally(() => setLoading(false));
+  }, []);
+
+ if (!products) {
+  return (
+    <div className="flex justify-center mt-20">
+    <span className="loading loading-spinner text-success w-[350px] h-[350px]"></span>
+    </div>
+    );
+  }
+  if (error) return <div>Error: {error}</div>;
+
 
   const showModalToast = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
   };
 
-  const handleSearch = (query) => {
-  if (query.trim()) {
-    navigate(`/search-product-account?query=${encodeURIComponent(query.trim())}`);
-  }
-};
 
-  const products = [
-    { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-  ];
-
-           return (
+return (
      <div className="min-h-screen w-full bg-white">
-<MainHeader onSearch={handleSearch} />
+
 
       <div className="bg-[#F5F9F5] shadow-lg">
         {showToast && (
@@ -59,7 +55,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                  <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">
                    <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
                      <div className="md:w-1/2 space-y-4 text-center md:text-left">
-                       <h1 className="text-4xl sm:text-3xl md:text-5xl font-bold leading-tight">
+                       <h1 className="text-4xl sm:text-3xl md:text-5xl font-black leading-tight">
                          Growth Begins <br /> with a Single Seed
                        </h1>
                        <p className="text-xl md:text-lg">Take the first step toward a greener future.</p>
@@ -93,7 +89,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
                          { label: 'Meat', background: '/meatss.png', overlay: '/meat.png' },
                          { label: 'Fruits', background: '/fruits.png', overlay: '/grapes.png' },
                        ].map((item, index) => (
-                         <div key={index} className="group p-4 text-center text-xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
+                         <div key={index} className="group p-4 text-center text-2yxl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
                            <div className="relative w-18 h-18 mb-2">
                              <img src={item.background} alt="background" className="w-20 h-20 object-contain transition-transform duration-300 group-hover:scale-50" />
                              <img src={item.overlay} alt="overlay" className="absolute top-1/4 left-1/2 transform -translate-x-1/2 -translate-y-1/6 w-12 h-12 object-contain transition-transform duration-300 group-hover:scale-125" />
@@ -107,135 +103,35 @@ const [selectedProductName, setSelectedProductName] = useState('');
                </div>
 
                {/* Products Section */}
-          <h1 className="bg-white text-4xl font-bold text-center shadow-lg p-6">
+          <h1 className="bg-white text-4xl font-black text-center shadow-lg p-6">
             YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
           </h1>
           <div className="bg-[#F5F9F5]">
             <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+              
               {products.map((product, index) => (
-                <div
+                <ProductCard
                   key={index}
-                  onClick={() => navigate(`/product/${index}`)}
-                  className="bg-white rounded-xl shadow-md p-4 text-left cursor-pointer transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
-                >
-                  <span className="w-[120px] text-center bg-green-100 text-green-800 text-sm font-semibold px-2 py-1 rounded-full mb-2">
-                    VEGETABLE
-                  </span>
-                  <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
-                  <p className="text-left font-semibold text-lg">{product.name}</p>
-                  <p className="text-[#4CAE4F] text-xl font-bold mt-2">
-                    {product.price}{' '}
-                    <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2">
-                      per pc.
-                    </span>
-                  </p>
-                  <div className="text-[20px] text-gray-600 mt-4 flex items-center gap-1">
-                    <img src="/Star.png" alt="star" className="w-4 h-4" />
-                    5.0 • {product.sold} Sold
-                  </div>
-                  <div className="flex items-center justify-between gap-4 mt-2">
-                    <img
-                      src="/shopping-cart.png"
-                      alt="cart"
-                      className="w-6 h-6 transition-transform duration-100 hover:scale-125"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedProductName(product.name); 
-                        showModalToast();
-                      }}
-                    />
-                         <button
-                           onClick={(e) => {
-                             e.stopPropagation();
-                             navigate(`/product/${index}`)
-                           } }
-                           className="text-xl bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
-                         >
-                           Buy Now
-                         </button>
-                       </div>
-                     </div>
-                   ))}
+                  product={product}
+                  onCardClick={() => navigate(`/product/${index}`)}
+                  onAddToCart={() => {
+                    setSelectedProductName(product.name);
+                    showModalToast();
+                  }}
+                  onBuyNow={() => navigate(`/product/${index}`)}
+                />
+              ))}
   
-             </div><div className="mb-10 flex justify-center mt-10">
+             </div>
+             <div className="mb-10 flex justify-center mt-10">
                  <button
                    onClick={() => navigate('/daily-needs')}
                    className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
                  >
                    See More
                  </button>
-               </div>
+            </div>
 
-      {/*Featured Products Section, miii*/}
-      {/*<section className="px-6 py-6 bg-[#F5F9F5] ">
-        <div className="flex items-center justify-between mx-[70px] mt-[5px] mb-[10px]">
-          <div className="flex items-center gap-2">
-            <p className="text-4xl font-bold text-shadow-lg">Featured Products</p>
-            <span className="text-base font-normal text-gray-400">
-              Do not miss the current offers until the end of April
-            </span>
-          </div>
-        <button
-              onClick={() => navigate('/featured-products')}
-              className="text-[20px] font-bold hover:underline mx-100"
-            >
-              See more
-            </button>        
-            </div>
-        <div className="mx-[80px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-24 lg:grid-cols-6 gap-2">
-          {[
-            { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-            { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-            { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-            { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-            { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-          ].map((product, index) => (
-            <div
-              key={index}
-              onClick={() => navigate(`/product/${index}`)}
-              className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
-            >
-              <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-                VEGETABLE
-              </span>
-              <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
-              <p className="text-left font-semibold text-[16px]">{product.name}</p>
-              <p className="text-[#4CAE4F] text-lg font-bold">
-                {product.price}{' '}
-                <span className="text-[10px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2">
-                  per pc.
-                </span>
-              </p>
-              <div className="text-sm text-gray-600 mt-4 flex items-center gap-1">
-                <img src="/Star.png" alt="star" className="w-4 h-4" />
-                5.0 • {product.sold} Sold
-              </div>
-              <div className="flex items-center justify-between gap-4 mt-2">
-                <img 
-                src="shopping-cart.png" 
-                alt="cart" 
-                className="w-6 h-6 transition-transform duration-100 hover:scale-125" 
-                onClick={(e) => {
-                        e.stopPropagation();
-                        setSelectedProductName(product.name); 
-                        showModalToast();
-                      }}
-                    />
-                <button
-                   onClick={(e) => {
-                             e.stopPropagation();
-                             navigate(`/product/${index}`)
-                           } }
-                  className="text-sm bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
-                >
-                  Buy Now
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>  
-      </section> */}
 
       {/*Top Farners Section, miii*/}
       <section className="pt-[40px] relative px-6 py-10 bg-[#F5F9F5] overflow-hidden">
@@ -243,7 +139,9 @@ const [selectedProductName, setSelectedProductName] = useState('');
           <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
         </div>
 
+
         <h2 className="text-center text-3xl font-black font-inter relative z-10 mb-16">Top Farmers of the Month</h2>
+
 
         <div className="flex flex-wrap justify-center gap-6 relative z-10 mt-[80px]">
           {[
@@ -275,85 +173,11 @@ const [selectedProductName, setSelectedProductName] = useState('');
               img: "/333.png",
             },
           ].map((farmer, index) => (
-<div
-  key={index}
-  className={`bg-white rounded-2xl border-[3px] border-black-200 shadow-md w-[350px] text-center flex flex-col items-center justify-between relative ${
-    index === 1 ? 'mt-[-40px]' : 'mt-0'
-  }`}
->
-  <div className="flex flex-col items-center justify-between h-full w-full">
-                <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
-                  <div className="relative w-24 h-24">
-                    <img
-                      src={farmer.img}
-                      alt={farmer.name}
-                      className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg"
-                    />
-                    <img
-                      src={`/medal-${farmer.rank}.png`}
-                      alt="medal"
-                      className="absolute -top-0 -right-1 w-8 h-8 z-10"
-                    />
-                  </div>
-    <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
-    <p className="text-sm text-gray-500">{farmer.location}</p>
-    <div className="flex items-center gap-2 font-medium mt-1">
-      <img src="/Star.png" alt="star" className="h-5 w-5" />
-      <span className="text-black">{Number(farmer.rating).toFixed(1)}</span>
-      <span className="text-gray-500 ml-1">|</span>
-      <span className="text-gray-500 ml-2">{farmer.sold} Sold</span>
-    </div>
-    <div className="flex flex-wrap justify-center gap-2 mt-3">
-  {farmer.categories.map((cat, idx) => {
-    let baseClass = 'px-3 py-1 text-sm font-medium rounded-full';
-    let tagClass = '';
-
-    switch (cat.toLowerCase()) {
-      case 'vegetables':
-      case 'root crops':      
-      case 'milks & dairy':
-        tagClass = 'bg-[#8BC34A] text-white';
-        break;
-      case 'grains':
-      case 'fruits':
-        tagClass = 'bg-[#D1A157] text-white';
-        break;
-      case 'meat':
-      case 'rice':
-        tagClass = 'bg-[#4CAE4F] text-white';
-        break;
-      default:
-        tagClass = 'bg-green-100 text-green-800';
-        break;
-    }
-
-    return (
-      <span key={idx} className={`${baseClass} ${tagClass}`}>
-        {cat}
-      </span>
-    );
-  })}
-</div>
-
-  </div>
-
-<div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-  <button
-  onClick={() => navigate('/view-farmer')}
-  className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
-    <img src="/shopp.png" alt="shop" className="w-5 h-5" />
-    View Shop
-  </button>
-  <button 
-      onClick={() => navigate('/chatpage')}
-    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
-    >
-    <img src="/chat.png" alt="chat" className="w-5 h-5" />
-    Chat Now
-  </button>
-</div>
- </div>
-            </div>
+          <FarmerCard
+              key={index}
+              farmer={farmer}
+              className={index === 1 ? 'mt-[-40px]' : 'mt-0'}
+          />
           ))}
         </div>
 
@@ -390,68 +214,8 @@ const [selectedProductName, setSelectedProductName] = useState('');
             <p className="text-[20px]">Food Items</p>
           </div>
         </div>
-      </section>
 
-      <footer className="bg-[#D9D9D9] mt-6 pt-10 pb-4">
-       <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
-          <div className="flex flex-col items-center">
-            <div className="flex flex-col">
-              <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
-              <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
-            </div>
-          </div>
-          <div className="mx-4">
-            <p className="text-lg font-black mb-3">CUSTOMER SERVICE</p>
-            <ul className="space-y-1 text-base">
-              <li>Help Center</li>
-              <li>Payment Methods</li>
-              <li>Return & Refund</li>
-              <li>Contact Us</li>
-            </ul>
-          </div>
-          <div className="mx-4">
-            <p className="text-lg font-black mb-3">ABOUT BINHI</p>
-            <ul className="space-y-1 text-base">
-              <li>About Us</li>
-              <li>Privacy Policy</li>
-              <li>Binhi Seller Center</li>
-            </ul>
-          </div>
-          <div className="mx-4">
-            <p className="text-lg font-black mb-3">PAYMENT METHODS</p>
-            <div className="grid grid-cols-2 gap-1 text-base">
-              <img src="cod.png" alt="COD" />
-              <img src="gcash.png" alt="GCash" />
-              <img src="paypal.png" alt="PayPal" />
-              <img src="maya.png" alt="Maya" />
-            </div>
-          </div>
-          <div className="mx-4">
-            <p className="text-lg font-black mb-3">FOLLOW US</p>
-            <ul className="space-y-1 text-base">
-              <li className="flex items-center space-x-1">
-                <img src="Facebook.png" alt="Facebook" />
-                <span>BINHI Corp.</span>
-              </li>
-              <li className="flex items-center space-x-1">
-                <img src="Messenger.png" alt="Messenger" />
-                <span>@BINHI Corp.</span>
-              </li>
-              <li className="flex items-center space-x-1">
-                <img src="WhatsApp.png" alt="WhatsApp" />
-                <span>BINHI Corp.</span>
-              </li>
-              <li className="flex items-center space-x-1">
-                <img src="Instagram.png" alt="Instagram" />
-                <span>BINHI Corp.</span>
-              </li>
-            </ul>
-          </div>
-        </div>
-      </footer>
-      <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
-        Binhi 2024, All Rights Reserved.
-      </div>
+      </section> 
 
       <div className="group fixed bottom-10 right-10 z-50">
             <button
@@ -460,7 +224,7 @@ const [selectedProductName, setSelectedProductName] = useState('');
             >
                 <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
             </button>
-            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-[#4CAE4F] text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
                 Chats
             </div>
             </div>

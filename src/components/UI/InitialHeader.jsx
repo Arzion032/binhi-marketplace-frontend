@@ -1,55 +1,94 @@
-import React, { useState } from "react";
-import AuthLabel from "../Auth/AuthLabel";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useNavigate } from "react-router-dom";
 
-const Header = () => {
+const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
+  const [searchInput, setSearchInput] = useState("");
+  const [searchQuery, setSearchQuery] = useState('');
 
   const handleLanguageChange = (e) => {
     setSelectedLang(e.target.value);
   };
 
-  // Dynamically change flag image based on selected language
-
   const flagSrc = selectedLang === "Tagalog" ? "/Flags.png" : "/us_flag.png";
 
+
+  const handleKeyDown = (e) => {
+    if (e.key === 'Enter') {
+      onSearch(searchQuery);
+    }
+  };
+
+  const handleSearchClick = () => {
+    onSearch(searchQuery);
+  };
+
+
   return (
-    <header className="w-full flex items-center justify-between px-6 py-4 bg-white shadow">
-      {/* Left side (Logo + Title) */}
-      <Link to="/">
-        <div className="flex items-center font-inter">
-          <img
-            src="/Primary Logo w_ BG.png"
-            alt="Binhi Logo"
-            className="h-10 w-15"
-          />
-          <AuthLabel />
+    <header className="w-full bg-white shadow font-inter">
+      {/* Top Header */}
+      <div className="flex items-center justify-between px-8 py-4 text-sm bg-gray-100 text-gray-700">
+        <div className="flex gap-4">
+          <Link to="/about-us">
+          <a href="#" className="text-base font-semibold hover:underline">About Us</a></Link>
+         <Link to="/seller-center" className="text-base font-semibold hover:underline">Seller Center</Link>
         </div>
-      </Link>
-
-      {/* Right side (Language Dropdown + Help) */}
-      <div className="flex items-center gap-6">
-        {/* Language Dropdown */}
-        <div className="flex items-center gap-2">
-          <img src={flagSrc} alt="Flag" className="w-5 h-4" />
-          <select
-            value={selectedLang}
-            onChange={handleLanguageChange}
-            className="text-sm text-gray-700 border rounded px-1 py-0.5"
-          >
-            <option value="Tagalog">Tagalog</option>
-            <option value="English">English</option>
-          </select>
+        <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
+            <img src={flagSrc} alt="Flag" className="w-5 h-4" />
+            <select
+              value={selectedLang}
+              onChange={handleLanguageChange}
+              className="text-base text-gray-700 font-semibold border border-gray-300 rounded px-1 py-0.5"
+            >
+              <option value="Tagalog">Tagalog</option>
+              <option value="English">English</option>
+            </select>
+          </div>
+          <a href="#" className="text-base hover:underline font-semibold">Need Help?</a>
         </div>
+      </div>
 
-        {/* Help Link */}
-        <a href="#" className="text-sm text-gray-700 hover:underline">
-          Need Help?
-        </a>
+      {/* Main Header */}
+      <div className="w-full flex items-center justify-between px-6 py-4">
+        {/* Logo */}
+        <Link to="/">
+          <div className="flex items-center hover:scale-110">
+            <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" className="h-10 w-auto" />
+          </div>
+        </Link>
+
+        {/* Icons */}
+        <div className="flex items-center gap-5">
+                  <Link to ="/"  className="relative group inline-block">
+                  <img src="/house.png" alt="Home" className="w-8 h-8 cursor-pointer hover:scale-110"/>
+                <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 bg-[#4CAF50] text-white text-lg font-bold px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      Home
+                </div></Link>
+        
+                   <Link to="/CartPage"  className="relative group inline-block">
+                  <img src="/cart.png" alt="Cart" className="w-8 h-8 cursor-pointer hover:scale-110" />
+                  <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 bg-[#4CAF50] text-white text-lg font-bold px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      Cart
+                  </div></Link>
+        
+                   <Link to="#"  className="relative group inline-block">
+                  <img src="/bell.png" alt="Notifications" className="w-8 h-8 cursor-pointer hover:scale-110" />
+                    <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 bg-[#4CAF50] text-white text-lg font-bold px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                    Notifications
+                  </div></Link>        
+        
+                  <img src={profileImage} alt="Account" className="w-12 h-12 rounded-full object-cover" />
+                    <Link to="/UserProfile" >
+                      <span className="text-lg font-bold">My Account</span>
+                    </Link>
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </div>
       </div>
     </header>
   );
 };
 
-export default Header;
-
+export default MainHeader;

@@ -184,6 +184,7 @@ const ViewOrderModal = ({ isOpen, onClose, order, onConfirm, onDisregard }) => {
           <div>
             <div className="text-[1.3rem] font-bold text-[#222A35]">{order.product.name}</div>
             <div className="text-[1rem] text-gray-600">Variation: {order.product.variation}</div>
+            <div className="text-[1rem] text-gray-600">Unit: {order.product.unit || "kg"}</div>
           </div>
         </div>
 
@@ -204,6 +205,14 @@ const ViewOrderModal = ({ isOpen, onClose, order, onConfirm, onDisregard }) => {
           <div>
             <span className="font-semibold text-black">Contact Number</span>
             <div>(+63) 948 122 9142</div>
+          </div>
+          <div>
+            <span className="font-semibold text-black">Quantity</span>
+            <div>{order.quantity || "2"} {order.product.unit || "kg"}</div>
+          </div>
+          <div>
+            <span className="font-semibold text-black">Total</span>
+            <div className="font-bold text-green-600">₱{order.total || "150.00"}</div>
           </div>
         </div>
 

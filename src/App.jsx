@@ -28,9 +28,15 @@ import SellerCenter from "./components/SellerCenter/SellerCenter";
 import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
 import SearchProductWithAccount from "./components/LandingPageWithAccount/SearchProductWithAccount";
 import OrderManagement from "./components/SellerCenter/OrderManagement";
+import AboutUsPage from "./components/LandingPage/AboutUsPage";
 import ViewFarmers from "./components/LandingPage/ViewFarmers"; 
+import NotFoundPage from "./components/UI/NotFoundPage";
 
-
+const handleSearch = (query) => {
+  if (query.trim()) {
+    navigate(`/search-product-account?query=${encodeURIComponent(query.trim())}`);
+  }
+};
 
 function App() {
   return (
@@ -44,15 +50,14 @@ function App() {
         <Route path="/reset-password" element={<InitialLayout><ResetPassword /></InitialLayout>} />
         <Route path="/create-new-password" element={<InitialLayout><CreateNewPassword /></InitialLayout>} />
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
-        <Route path="/product/:productId" element={<MainLayout><ProductDetails /></MainLayout>} />
-        <Route path="/" element={<Marketplace/>} />
+        <Route path="/product/:productSlug" element={<MainLayout><ProductDetails /></MainLayout>} />
+        <Route path="/" element={<MainLayout onSearch={handleSearch}><Marketplace /></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
         <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
         <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
         <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
-        <Route path="/product_details" element={<OrderLayout><ProductDetails /></OrderLayout>} />
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
         <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
@@ -62,8 +67,8 @@ function App() {
         <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
         <Route path="/search-product-account" element={<SearchProductWithAccount />} />
         <Route path="/order-management" element={<OrderManagement/>} />
-        <Route path="/view-farmer" element={<MainLayout><ViewFarmers /></MainLayout>} />
-
+        <Route path="/about-us" element={<MainLayout><AboutUsPage/></MainLayout>} />
+        <Route path="*" element={<MainLayout><NotFoundPage /></MainLayout>}/>
       </Routes>
     </Router>
   );

@@ -1,50 +1,55 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Link } from "react-router-dom";
+import api from '../../api';
+import { BASE_URL } from '../../constants';
+import MainLayout from '../Layout/MainLayout';
 
 const ProductDetails = () => {
-  const { productId } = useParams();
+  const { productSlug } = useParams();
   const navigate = useNavigate();
   const [quantity, setQuantity] = useState(1);
   const [showToast, setShowToast] = useState(false);
-
+  const [product, setProduct] = useState(null);
+  const [mainImage, setMainImage] = useState(null);
+  const [selectedVariation, setSelectedVariation] = useState(null);
+  const tags = ["vegetables", "root crops", "grains", "meat"];
+  const [price, setPrice] = useState(null)
   const showModalToast = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
   };
 
-  const product = {
-    id: productId,
-    name: "Automatic-Cook Rice from the Field of Antartica",
-    price: "₱136",
-    originalPrice: "₱963",
-    numberrate: 26,
-    rating: 5.0,
-    sold: 326,
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipiscing elit. Quisque faucibus ex sapien vitae pellentesque sem placerat. In id cursus mi pretium tellus duis convalis. Tempus leo eu aenean sed diam urna tempor. Pulvinar vivamus fringilla lacus nec metus bibendum egestas.",
-    category: "Grains",
-    variations: [
-      { name: "Jasmine", image: "/jasmine rice.png" },
-      { name: "Sinandomeng", image: "/sinandomeng rice.png" },
-    ],
-    stock: 26,
-    images: ["/rice-grain.png", "/rice-grain2.png", "/rice-grain3.png"],
-    seller: {
-      name: "Jonathan De Vera",
-      location: "Macamot, Binangonan",
-      followers: 245,
-      products: "9k",
-      numberrate: 26,
-      rating: 5.0,
-      responseRate: "95%",
-      tags: ["vegetables", "root crops", "grains", "meat"],
-      isActive: true,
-    },
-  };
+useEffect(() => {
+  api.get(`/products/detail/${productSlug}/`)
+    .then(res => setProduct(res.data.product))
+    .catch(err => console.error(err));
+}, [productSlug]);
 
-  const [selectedVariation, setSelectedVariation] = useState(product.variations[0]);
-  const [mainImage, setMainImage] = useState(product.images[0]);
+useEffect(() => {
+  if (product && product.images && product.images.length > 0) {
+    const main = product.images.find(img => img.is_main) || product.images[0];
+    setMainImage(main);
+    setPrice(product.min_price)
+    console.log("Main image set:", main);
+  }
+}, [product]);
+
+
+
+useEffect(() => {
+  if (selectedVariation && selectedVariation.images && selectedVariation.images.length > 0) {
+    // Set mainImage to the main image object or fallback to first image
+    const mainImg = selectedVariation.images.find(img => img.is_main) || selectedVariation.images[0];
+    setMainImage(mainImg);
+    setPrice(selectedVariation.unit_price)
+  } else {
+    setMainImage(null); // or some fallback image object if you want
+  }
+}, [selectedVariation]);
+
+
+
   const [tasks, setTasks] = useState([
     { id: 1, text: 'Buy 2 sacks', completed: true },
     { id: 2, text: 'Follow Jonathan’s Shop', completed: false },
@@ -138,6 +143,23 @@ const ProductDetails = () => {
       )
     );
   };
+if (!product || !mainImage) {
+  return (
+    <div className="flex justify-center mt-20">
+    <span className="loading loading-spinner text-success w-[350px] h-[350px]"></span>
+    </div>
+  );
+}
+console.log("Product loaded:", product);
+if (product) {
+  console.log("Product images:", product.images);
+}
+console.log("mainImage:", mainImage);
+
+const combinedImages = [
+  ...(product.images || []),
+  ...(product.variations?.flatMap(v => v.images) || []),
+];
 
   return (
     <div className="min-h-screen w-full bg-[#F5F9F5]">
@@ -162,55 +184,47 @@ const ProductDetails = () => {
           {/* Left column */}
           <div>
             <div className="rounded-lg overflow-hidden mb-4">
-              <img src={mainImage} alt={product.name} className="h-[400px] object-contain" />
-            </div>
-
-            <div className="w-full max-w-[400px]">
-              <div className="flex gap-4 mb-2 justify-center items-center">
-                {product.images.map((image, index) => (
-                  <div
-                    key={index}
-                    onClick={() => handleImageChange(image)}
-                    className={`w-16 h-16 border-2 rounded-md cursor-pointer overflow-hidden ${
-                      mainImage === image ? 'border-green-500' : 'border-gray-200'
-                    }`}
-                  >
-                    <img src={image} alt={`Thumbnail ${index + 1}`} className="w-full h-full object-cover" />
-                  </div>
-                ))}
-              </div>
-              <div className="text-center text-xs text-gray-500 mb-6">HOVER TO THE IMAGE TO ZOOM IN</div>
-
-              {/* Bundle Offers */}
-              <div className="bg-[#F1F1F1] rounded-3xl p-4 w-full md:w-[400px]">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <img src="/Discount.png" alt="Discount" className="w-10 h-10" />
-                    <h2 className="font-semibold text-lg">Bundle Offers</h2>
-                  </div>
-                  <img src="/claim.png" alt="Claim" className="w-18 h-5" />
+              {mainImage ? (
+                <img
+                  src={BASE_URL + mainImage.image}
+                  alt={product.name}
+                  className="h-[400px] object-contain"
+                />
+              ) : (
+                <div className="h-[400px] flex items-center justify-center bg-gray-100 text-gray-400">
+                  No image available
                 </div>
-                <p className="pl-[49px] text-md text-gray-600 mb-2">Complete these tasks to get a voucher!</p>
-                <ul className="space-y-2">
-                  {tasks.map((task) => (
-                    <li
-                      key={task.id}
-                      className="flex items-center gap-2 cursor-pointer"
-                      onClick={() => toggleTask(task.id)}
-                    >
-                      <img
-                        src={task.completed ? '/check.png' : '/uncheck.png'}
-                        alt={task.completed ? 'Checked' : 'Unchecked'}
-                        className="w-5 h-5"
-                      />
-                      <span className={task.completed ? 'line-through text-gray-500' : ''}>
-                        {task.text}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+              )}
             </div>
+
+           <div className="w-full max-w-[400px]">
+          <div className="flex gap-4 mb-2 justify-center items-center">
+            {product && (
+              [
+                ...(product.images || []),
+                ...(product.variations?.flatMap(v => v.images) || [])
+              ].map((image, index) => (
+                <div
+                  key={image.id || index}
+                  onClick={() => handleImageChange(image)}
+                  className={`w-16 h-16 border-2 rounded-md cursor-pointer overflow-hidden ${
+                    mainImage === image ? 'border-green-500' : 'border-gray-200'
+                  }`}
+                >
+                  <img
+                    src={BASE_URL + image.image}
+                    alt={`Thumbnail ${index + 1}`}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+              ))
+            )}
+          </div>
+          <div className="text-center text-xs text-gray-500 mb-6">
+            HOVER TO THE IMAGE TO ZOOM IN
+          </div>
+        </div>
+
           </div>
 
           {/* Right column: Product Info */}
@@ -220,16 +234,16 @@ const ProductDetails = () => {
               <div className="rating rating-sm">
                 <input type="radio" readOnly className="mask mask-star-2 bg-yellow-400" checked />
               </div>
-              <span className="ml-2">{product.rating}</span>
+              <span className="ml-2">4.5</span>
               <span className="mx-3 text-gray-300">|</span>
-              <span className="text-gray-600">{product.numberrate} Ratings</span>
+              <span className="text-gray-600">1k Ratings</span>
               <span className="mx-3 text-gray-300">|</span>
-              <span className="text-gray-600">{product.sold} Sold</span>
+              <span className="text-gray-600">9k Sold</span>
             </div>
 
             <div className="mt-6">
               <div className="flex items-center">
-                <span className="text-4xl font-bold text-green-600">{product.price}</span>
+                <span className="text-4xl font-bold text-green-600">₱ {price}</span>
                 <span className="ml-2 px-2 py-1 border border-green-600 text-sm text-green-600 rounded">per sack</span>
                 <img src="/voucher.png" alt="voucher" className="pl-2 w-8 h-6" />
                 <span className="ml-1 text-lg text-gray-500 line-through">{product.originalPrice}</span>
@@ -237,27 +251,43 @@ const ProductDetails = () => {
             </div>
 
             <div className="mt-6 text-gray-700">{product.description}</div>
-            <div className="mt-6"><span className="font-semibold">Category:</span> <span className="font-medium pl-5">{product.category}</span></div>
+            <div className="mt-6"><span className="font-semibold">Category:</span> <span className="font-medium pl-5">{product.category_name}</span></div>
 
-            {/* Variations */}
             <div className="mt-6">
-              <div className="flex mt-2 gap-4 flex-wrap">
-                <span className="font-semibold pr-3">Variation:</span>
-                {product.variations.map((variation, index) => (
-                  <div
-                    key={index}
-                    onClick={() => setSelectedVariation(variation)}
-                    className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
-                      selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
-                    }`}
-                  >
-                    <img src={variation.image} alt={variation.name} className="w-11 h-11 mr-2 object-contain" />
-                    <span className="whitespace-nowrap">{variation.name}</span>
+          <div className="flex mt-2 gap-4 flex-wrap">
+            <span className="font-semibold pr-3">Variation:</span>
+            {product.variations && product.variations.length > 0 && product.variations.map((variation, index) => {
+              // Find main image or first image
+              const mainImageObj = variation.images && variation.images.length > 0
+                ? variation.images.find(img => img.is_main) || variation.images[0]
+                : null;
 
-                  </div>
-                ))}
-              </div>
-            </div>
+              return (
+                <div
+                  key={variation.id || index}
+                  onClick={() => setSelectedVariation(variation)}
+                  className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
+                    selectedVariation && selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
+                  }`}
+                >
+                  {mainImageObj ? (
+                    <img
+                      src={BASE_URL + mainImageObj.image}
+                      alt={variation.name}
+                      className="w-11 h-11 mr-2 object-contain"
+                    />
+                  ) : (
+                    <div className="w-11 h-11 mr-2 bg-gray-100 flex items-center justify-center rounded">
+                      {/* placeholder or icon if no image */}
+                      <span className="text-gray-400 text-xs">No Image</span>
+                    </div>
+                  )}
+                  <span className="whitespace-nowrap">{variation.name}</span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
 
             {/* Quantity Selector */}
             <div className="mt-6 flex items-center">
@@ -327,19 +357,19 @@ const ProductDetails = () => {
             <div className="relative">
               <img
                 src="/seller.png"
-                alt={product.seller.name}
+                alt={product.vendor_name}
                 className="w-18 h-18 border-green-600"
               />
             </div>
 
             {/* Seller Info & Buttons */}
             <div>
-              <h3 className="text-lg font-bold">{product.seller.name}</h3>
+              <h3 className="text-lg font-bold">{product.vendor_name}</h3>
               <div className="text-sm text-green-600 font-medium">• Active Now</div>
               <div className="flex gap-2 mt-3">
                 <button 
                   onClick={() => navigate('/chatpage', {
-                  state: { sellerName: product.seller.name }
+                  state: { sellerName: product.vendor_name }
                 })}
                 className="text-sm bg-green-500 text-white hover:bg-green-600 font-semibold px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
                   <img src="/Chat-now.png" alt="chatnow" className="w-5 h-5" />
@@ -360,15 +390,18 @@ const ProductDetails = () => {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1">
                 <img src="/map-pin.png" className="w-5 h-5" alt="Location" />
-                <span>{product.seller.location}</span>
+                <span>
+                  {product.vendor_address &&
+                    `${product.vendor_address.street_address}, ${product.vendor_address.barangay}, ${product.vendor_address.city}`}
+                </span>
               </div>
               <div className="flex items-center gap-1">
                 <img src="/Account-seller.png" className="w-5 h-5" alt="Followers" />
-                <span>{product.seller.followers} Followers</span>
+                <span>500 Followers</span>
               </div>
               <div className="flex items-center gap-1">
                 <img src="/star-gray.png" className="w-5 h-5" alt="Rating" />
-                <span>{product.seller.rating} Rate</span>
+                <span>5.0 Rate</span>
               </div>
             </div>
 
@@ -376,11 +409,11 @@ const ProductDetails = () => {
             <div className="flex flex-col gap-1">
               <div className="flex items-center gap-1">
                 <img src="/Clock.png" className="w-5 h-5" alt="Response Rate" />
-                <span>{product.seller.responseRate} Response Rate</span>
+                <span>95% Response Rate</span>
               </div>
               <div className="flex items-center gap-1">
                 <img src="/group-seller.png" className="w-5 h-5" alt="Products Sold" />
-                <span>{product.seller.products} Products Sold</span>
+                <span>9k Products Sold</span>
               </div>
             </div>
           </div>
@@ -394,7 +427,7 @@ const ProductDetails = () => {
 
             {/* First Row: Vegetables + Root Crops */}
             <div className="flex flex-wrap gap-2 mb-1">
-              {product.seller.tags
+              {tags
                 .filter(tag => tag === 'vegetables' || tag === 'root crops')
                 .map((tag, index) => (
                   <span
@@ -408,7 +441,7 @@ const ProductDetails = () => {
 
             {/* Second Row: Grains + Meat */}
             <div className="flex flex-wrap gap-2">
-              {product.seller.tags
+              {tags
                 .filter(tag => tag === 'grains' || tag === 'meat')
                 .map((tag, index) => (
                   <span
@@ -555,10 +588,6 @@ const ProductDetails = () => {
       { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
       { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
       { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-
     ].map((product, index) => (
       <div
         key={index}
@@ -592,124 +621,17 @@ const ProductDetails = () => {
     ))}
   </div>
   </div>
-{/* <div className="mt-10 w-[1320px]">
-  <div className="flex items-center gap-2 mb-4">
-    <img src="/heartblack.png" className="w-8 h-8" alt="Liked heart" />
-    <h3 className="text-xl font-bold">You may also like</h3>
-  </div>
-</div>
-  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-    {[
-      { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-      { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-      { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-      { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-      { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
 
-    ].map((product, index) => (
-      <div
-        key={index}
-        className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
-      >
-        <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-          VEGETABLE
-        </span>
-        <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
-        <p className="text-left font-semibold text-[20px]">{product.name}</p>
-        <p className="text-[#4CAE4F] text-[20px] font-bold">
-          {product.price}{' '}
-          <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2">
-            per pc.
-          </span>
-        </p>
-        <div className="text-[20px] text-gray-600 mt-4 flex items-center gap-1">
-          <img src="/Star.png" alt="star" className="w-4 h-4" />
-          5.0 • {product.sold} Sold
-        </div>
-        <div className="flex items-center justify-between gap-4 mt-2">
-      <img src="/shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
-          <button
-            onClick={() => navigate(`/product/${index}`)}
-            className="text-[20px] bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
-          >
-            Buy Now
-          </button>
-        </div>
-      </div>
-    ))}
-  </div>
+
 <div className="flex justify-center mt-10">
           <button className="text-lg font-bold bg-white border-2 hover:border-[#4CAE4F] border-gray-600 text-[#4CAE4F] [#4CAE4F] w-[500px] h-[50px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110">
             See More
           </button>
-        </div> */}
+        </div> 
         </div>
         </div>
-      </div> 
 
-<footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
-  <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-1 mb-2 text-center md:text-left mx-[100px]">
-    <div className="flex flex-col items-center">
-      <div className="flex flex-col">
-        <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
-        <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
-      </div>
-    </div>
-    <div className="mx-4">
-      <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
-      <ul className="space-y-1">
-        <li>Help Center</li>
-        <li>Payment Methods</li>
-        <li>Return & Refund</li>
-        <li>Contact Us</li>
-      </ul>
-    </div>
-    <div className="mx-4">
-      <p className="text-[15px] font-bold mb-3">ABOUT BINHI</p>
-      <ul className="space-y-1">
-        <li>About Us</li>
-        <li>Privacy Policy</li>
-        <li>Binhi Seller Center</li>
-      </ul>
-    </div>
-    <div className="mx-4">
-      <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
-      <div className="grid grid-cols-2 gap-2">
-        <img src="/cod.png" alt="COD" />
-        <img src="/gcash.png" alt="GCash" />
-        <img src="/paypal.png" alt="PayPal" />
-        <img src="/maya.png" alt="Maya" />
-      </div>
-    </div>
-    <div className="mx-4">
-      <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
-      <ul className="space-y-1">
-        <li className="flex items-center space-x-1">
-          <img src="/Facebook.png" alt="Facebook" />
-          <span>BINHI Corp.</span>
-        </li>
-        <li className="flex items-center space-x-1">
-          <img src="/Messenger.png" alt="Messenger" />
-          <span>@BINHI Corp.</span>
-        </li>
-        <li className="flex items-center space-x-1">
-          <img src="/WhatsApp.png" alt="WhatsApp" />
-          <span>BINHI Corp.</span>
-        </li>
-        <li className="flex items-center space-x-1">
-          <img src="/Instagram.png" alt="Instagram" />
-          <span>BINHI Corp.</span>
-        </li>
-      </ul>
-    </div>
-  </div>
-</footer>
-<div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
-  Binhi 2024, All Rights Reserved.
-</div>
+        </div>
       </div>
   );
 };
