@@ -69,6 +69,7 @@ function App() {
         <Route path="/order-management" element={<OrderManagement/>} />
         <Route path="/about-us" element={<MainLayout><AboutUsPage/></MainLayout>} />
         <Route path="*" element={<MainLayout><NotFoundPage /></MainLayout>}/>
+        <Route path="/withAccount" element={<MarketplaceWithAccount />}/>
       </Routes>
     </Router>
   );

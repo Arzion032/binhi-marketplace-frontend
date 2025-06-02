@@ -39,7 +39,7 @@ const ProductCard = ({
         <p className="text-[#4CAE4F] text-xl font-bold mt-2">
           ₱{product.min_price}
           <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2 ml-1">
-            per pc.
+            {product.unit_measurement}
           </span>
         </p>
       {/* Rating & Sold */}
