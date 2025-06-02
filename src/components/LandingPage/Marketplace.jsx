@@ -184,7 +184,7 @@ return (
         {/* See More Button */}
         <div className="flex justify-center mt-10 relative z-10">
           <button
-          className="bg-white border border-[#4CAE4F] text-[#4CAE4F] font-semibold w-[500px] px-8 py-2 rounded-full hover:bg-green-50 transition"
+          className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
           onClick={() => navigate('/searched-farmers')}
           >
           See More

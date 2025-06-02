@@ -376,6 +376,7 @@ const combinedImages = [
                   Chat Now
                 </button>
                 <button
+                onClick={() => navigate('/view-farmer')}
                   className="text-sm border border-green-700 font-medium text-green-600 px-4 py-1 rounded-full h-[36px] flex items-center justify-center gap-2 whitespace-nowrap">
                   <img src="/shop-green.png" alt="View Shop" className="w-5 h-5" />
                   View Shop
@@ -621,14 +622,17 @@ const combinedImages = [
   </div>
   </div>
 
+
 <div className="flex justify-center mt-10">
           <button className="text-lg font-bold bg-white border-2 hover:border-[#4CAE4F] border-gray-600 text-[#4CAE4F] [#4CAE4F] w-[500px] h-[50px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110">
             See More
           </button>
+        </div> 
         </div>
         </div>
-        </div>
-      </div>
+
+      </div> 
+
       </div>
   );
 };
