@@ -518,12 +518,87 @@ console.log(product)
         </div>
         <div className="flex items-center justify-between gap-4 mt-2">
       <img src="/shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
-          <button
-            onClick={() => navigate(`/product/${index}`)}
-            className="text-[20px] bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
-          >
-            Buy Now
-          </button>
+          // Updated Buy Now button section in ProductDetails component
+<button
+  onClick={() => {
+    // Calculate weight based on unit measurement and quantity
+    const calculateItemWeight = () => {
+      const currentVariation = selectedVariation || (product.variations && product.variations[0]);
+      const unitMeasurement = currentVariation?.unit_measurement || unit;
+      
+      // Weight calculation logic based on unit measurement
+      let baseWeight = 1; // default 1kg
+      
+      if (unitMeasurement) {
+        const lowerUnit = unitMeasurement.toLowerCase();
+        
+        if (lowerUnit.includes('kg')) {
+          // Extract number from unit like "5kg", "2.5kg"
+          const match = lowerUnit.match(/(\d+\.?\d*)/);
+          baseWeight = match ? parseFloat(match[1]) : 1;
+        } else if (lowerUnit.includes('g') && !lowerUnit.includes('kg')) {
+          // Convert grams to kg, e.g., "500g" = 0.5kg
+          const match = lowerUnit.match(/(\d+\.?\d*)/);
+          baseWeight = match ? parseFloat(match[1]) / 1000 : 0.1;
+        } else if (lowerUnit.includes('lb') || lowerUnit.includes('pound')) {
+          // Convert pounds to kg (1 lb = 0.453592 kg)
+          const match = lowerUnit.match(/(\d+\.?\d*)/);
+          baseWeight = match ? parseFloat(match[1]) * 0.453592 : 1;
+        } else if (lowerUnit.includes('pc') || lowerUnit.includes('piece')) {
+          // For pieces, estimate weight based on product category
+          if (product.category_name?.toLowerCase().includes('vegetable')) {
+            baseWeight = 0.2; // 200g per piece for vegetables
+          } else if (product.category_name?.toLowerCase().includes('fruit')) {
+            baseWeight = 0.3; // 300g per piece for fruits
+          } else {
+            baseWeight = 0.5; // 500g default per piece
+          }
+        } else if (lowerUnit.includes('sack') || lowerUnit.includes('bag')) {
+          baseWeight = 25; // 25kg per sack/bag
+        } else {
+          // Default weight for unknown units
+          baseWeight = 1;
+        }
+      }
+      
+      return baseWeight;
+    };
+
+    const itemWeight = calculateItemWeight();
+    const currentVariation = selectedVariation || (product.variations && product.variations[0]);
+    const currentPrice = price || product.min_price;
+    
+    const checkoutData = {
+      items: [
+        {
+          id: product.id,
+          name: product.name,
+          price: parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
+          quantity: quantity,
+          image: BASE_URL + (mainImage?.image || ''),
+          variation: currentVariation?.name || 'Default',
+          seller: product.seller?.name || 'Unknown Seller',
+          orderId: `PD-${Date.now()}`,
+          weight: itemWeight, // Add weight property
+          unit: currentVariation?.unit_measurement || unit || 'pc'
+        },
+      ],
+      subtotal: quantity * parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
+      discount: 0,
+      tax: 0,
+      total: quantity * parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
+      paymentMethod: "Cash on Delivery",
+      source: "product",
+    };
+    
+    console.log('Checkout data with weight:', checkoutData); // For debugging
+    navigate('/checkoutpage', { state: { checkoutData } });
+  }}
+  className="bg-green-500 text-white hover:bg-green-600 font-bold px-6 py-2 rounded-full w-[982px] h-[53px] flex items-center justify-center gap-2"
+>
+  Buy Now
+  <img src="/arrow-right.png" alt="arrow right" className="w-7 h-7" />
+</button>
         </div>
       </div>
     ))}

@@ -21,6 +21,8 @@ const CartPage = () => {
       price: 53.0,
       variation: "Original Flavor",
       unitMeasurement: "1 Liter",
+      unit: "1 Liter", // Added for checkout compatibility
+      weight: 1, // Added weight for delivery calculation
       orderId: "23149BF001",
     },
     {
@@ -32,6 +34,8 @@ const CartPage = () => {
       price: 53.0,
       variation: "Chocolate Flavor",
       unitMeasurement: "500g",
+      unit: "500g", // Added for checkout compatibility
+      weight: 0.5, // Added weight for delivery calculation
       orderId: "23149BF002",
     },
     {
@@ -43,6 +47,8 @@ const CartPage = () => {
       price: 85.0,
       variation: "Premium Flavor",
       unitMeasurement: "250g",
+      unit: "250g", // Added for checkout compatibility
+      weight: 0.25, // Added weight for delivery calculation
       orderId: "23149BF003",
     },
   ];
@@ -145,9 +151,16 @@ const CartPage = () => {
   const handleCheckout = () => {
     if (selectedCartItems.length === 0) return;
     
-    // Pass all selected items to checkout
+    // Prepare checkout data with proper field mapping
     const checkoutData = {
-      items: selectedCartItems,
+      items: selectedCartItems.map(item => ({
+        ...item,
+        // Ensure both unit and unitMeasurement are available
+        unit: item.unit || item.unitMeasurement,
+        unitMeasurement: item.unitMeasurement || item.unit,
+        // Ensure weight is available for delivery calculation
+        weight: item.weight || 1, // Default to 1kg if not specified
+      })),
       subtotal: subtotal,
       discount: 0,
       tax: 0,
@@ -156,6 +169,7 @@ const CartPage = () => {
       source: 'cart'
     };
 
+    console.log('Checkout data being passed:', checkoutData); // For debugging
     navigate('/checkoutpage', { state: { checkoutData } });
   };
 
@@ -164,8 +178,8 @@ const CartPage = () => {
       <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center p-4">
         <div className="text-center">
           <button
-            className="flex items-center text-gray-600 hover:text-black"
-            onClick={() => navigate("/cartpage")}
+            className="flex items-center text-gray-600 hover:text-black mb-4"
+            onClick={() => navigate("/")}
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
@@ -190,7 +204,7 @@ const CartPage = () => {
         <div className="flex items-center gap-4">
           <button
             className="flex items-center text-gray-600 hover:text-black"
-            onClick={() => navigate("/cartpage")}
+            onClick={() => navigate("/")}
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
@@ -242,7 +256,6 @@ const CartPage = () => {
             <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
             <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
             <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
-            
             <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
             <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
             <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
@@ -336,6 +349,7 @@ const CartPage = () => {
                     </div>
                     <div className="w-[10%] text-center border-r border-gray-600 py-3 px-2">
                       <p className="text-lg font-medium text-gray-600">{item.unitMeasurement}</p>
+                      <p className="text-sm text-gray-500">Weight: {item.weight || 1}kg</p>
                     </div>
                     <div className="w-[7%] text-center">
                       <button 
@@ -395,6 +409,12 @@ const CartPage = () => {
               <div className="flex justify-between">
                 <p>Selected Items:</p>
                 <p className="text-black font-bold">{selectedItems.length}</p>
+              </div>
+              <div className="flex justify-between">
+                <p>Total Weight:</p>
+                <p className="text-black font-bold">
+                  {selectedCartItems.reduce((total, item) => total + ((item.weight || 1) * item.quantity), 0).toFixed(2)}kg
+                </p>
               </div>
               <div className="flex justify-between">
                 <p>Subtotal</p>

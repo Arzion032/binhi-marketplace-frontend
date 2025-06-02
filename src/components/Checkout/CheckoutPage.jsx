@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-/*Check-out Page pu*/
+/*Check-out Page with Delivery Method*/
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -9,27 +9,54 @@ export default function CheckoutPage() {
   const checkoutData = state?.checkoutData;
 
   const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
+  const [deliveryMethod, setDeliveryMethod] = useState('Pick-up');
+  const [pickupLocation, setPickupLocation] = useState("President's Location");
+  const [deliveryFee, setDeliveryFee] = useState(0);
+
+  // Calculate total weight of products (assuming each product has a weight property)
+  const calculateTotalWeight = () => {
+    if (!checkoutData?.items) return 0;
+    return checkoutData.items.reduce((total, item) => {
+      // Assuming each item has a weight property, default to 1kg if not specified
+      const itemWeight = item.weight || 1;
+      return total + (itemWeight * item.quantity);
+    }, 0);
+  };
+
+  // Calculate delivery fee based on weight
+  useEffect(() => {
+    if (deliveryMethod === 'Delivery') {
+      const totalWeight = calculateTotalWeight();
+      const baseFee = 30;
+      const additionalFee = Math.ceil(Math.max(0, totalWeight - 5) / 5) * 10;
+      setDeliveryFee(baseFee + additionalFee);
+    } else {
+      setDeliveryFee(0);
+    }
+  }, [deliveryMethod, checkoutData]);
 
   if (!checkoutData) {
     return <p className="text-center mt-10">No checkout data available.</p>;
   }
 
-  const { items, subtotal, discount, tax, total } = checkoutData;
+  const { items, subtotal, total } = checkoutData;
+  const newTotal = total + deliveryFee;
 
- const handleBuyNow = () => {
-  navigate('/checkout-success', {
-    state: {
-      product: {
-        items,
-        subtotal,
-        discount,
-        tax,
-        total,
-        paymentMethod,
+  const handleBuyNow = () => {
+    navigate('/checkout-success', {
+      state: {
+        product: {
+          items,
+          subtotal,
+          total: newTotal,
+          paymentMethod,
+          deliveryMethod,
+          pickupLocation: deliveryMethod === 'Pick-up' ? pickupLocation : null,
+          deliveryFee,
+        },
       },
-    },
-  });
-};
+    });
+  };
 
   return (
     <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
@@ -64,48 +91,136 @@ export default function CheckoutPage() {
           </section>
 
           {/* Product Details */}
-          <section>
-            <h2 className="text-2xl font-bold mb-2">Product Details</h2>
-            {items.map((product, index) => (
-              <div key={index} className="bg-white p-4 rounded-xl border border-gray-400 mb-4">
-                <div className="flex justify-between text-sm text-black mb-2">
-                  <p className="font-medium text-base">{product.seller}</p>
-                  <p>Order ID: {product.orderId}</p>
-                </div>
-                <div className="border mt-4 mb-3" />
-                <div className="flex gap-4">
-                  <img
-                    src={product.image}
-                    className="w-28 h-28 rounded-lg object-cover"
-                    alt={product.name}
-                    onError={(e) => {
-                      e.target.src = '/placeholder-image.png';
-                    }}
-                  />
-                  <div className="flex flex-col justify-between w-full">
-                    <div>
-                      <p className="font-bold text-xl">{product.name}</p>
-                      <p className="text-lg text-gray-500">Variation: {product.variation}</p>
-                    </div>
-                    <div className="text-lg text-right w-full">
-                      <p>Price: ₱{product.price.toFixed(2)}</p>
-                      <p>Quantity: ×{product.quantity}</p>
-                      <p className="text-green-600 font-semibold text-xl">Subtotal: ₱{(product.price * product.quantity).toFixed(2)}</p>
+            <section>
+              <h2 className="text-2xl font-bold mb-2">Product Details</h2>
+              {items.map((product, index) => (
+                <div key={index} className="bg-white p-4 rounded-xl border border-gray-400 mb-4">
+                  <div className="flex justify-between text-sm text-black mb-2">
+                    <p className="font-medium text-base">{product.seller}</p>
+                    <p>Order ID: {product.orderId}</p>
+                  </div>
+                  <div className="border mt-4 mb-3" />
+                  <div className="flex gap-4">
+                    <img
+                      src={product.image}
+                      className="w-28 h-28 rounded-lg object-cover"
+                      alt={product.name}
+                      onError={(e) => {
+                        e.target.src = '/placeholder-image.png';
+                      }}
+                    />
+                    <div className="flex flex-col justify-between w-full">
+                      <div>
+                        <p className="font-bold text-xl">{product.name}</p>
+                        <p className="text-lg text-gray-500">Variation: {product.variation}</p>
+                        <p className="text-sm text-gray-400">
+                          Unit: {product.unit} | Weight: {product.weight || 1}kg × {product.quantity} = {((product.weight || 1) * product.quantity).toFixed(2)}kg total
+                        </p>
+                      </div>
+                      <div className="text-lg text-right w-full">
+                        <p>Price: ₱{product.price.toFixed(2)} per {product.unit}</p>
+                        <p>Quantity: ×{product.quantity}</p>
+                        <p className="text-green-600 font-semibold text-xl">Subtotal: ₱{(product.price * product.quantity).toFixed(2)}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </section>
+              ))}
+            </section>
 
-          {/* Payment Method */}
-          <div className="w-full max-w-lg">
-            <section>
+          {/* Delivery Method and Payment Method Side by Side */}
+          <div className="flex flex-col lg:flex-row gap-6">
+            {/* Delivery Method */}
+            <section className="flex-1">
+              <h2 className="text-2xl font-bold mb-1">Delivery Method</h2>
+              <p className="text-lg text-black mb-4">
+                Please select an option on how you want to claim your order.
+              </p>
+              
+              {/* Main Delivery Method Selection */}
+              <div className="space-y-4 mb-6">
+                <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition-all ${
+                  deliveryMethod === 'Pick-up' 
+                    ? 'border-[#4CAE4F] bg-[#E6F4EA]' 
+                    : 'border-gray-300 bg-white hover:border-gray-400'
+                }`}>
+                  <input
+                    type="radio"
+                    name="deliveryMethod"
+                    value="Pick-up"
+                    checked={deliveryMethod === 'Pick-up'}
+                    onChange={() => setDeliveryMethod('Pick-up')}
+                    className="w-5 h-5 text-[#4CAE4F]"
+                  />
+                  <div className="flex items-center gap-3">
+                    <img src="/map-pin-house.png" alt="Pick-up" className="w-8 h-8" />
+                    <span className="text-lg font-semibold">Pick-up</span>
+                  </div>
+                </label>
+                
+                 {/* Pick-up Location Dropdown */}
+              {deliveryMethod === 'Pick-up' && (
+                <div className="ml-6 mb-4">
+                  <label className="block text-lg font-semibold text-gray-700 mb-2">Pick-up Location:</label>
+                  <select
+                    value={pickupLocation}
+                    onChange={(e) => setPickupLocation(e.target.value)}
+                    className="w-full p-3 border border-gray-300 rounded-lg bg-white hover:border-[#4CAE4F] focus:border-[#4CAE4F] focus:outline-none focus:ring-2 focus:ring-[#4CAE4F] focus:ring-opacity-20 text-lg"
+                  >
+                    <option value="President's Location">President's Location</option>
+                    <option value="Farmer's Location">Farmer's Location</option>
+                  </select>
+                </div>
+              )}
+
+                <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition-all ${
+                  deliveryMethod === 'Delivery' 
+                    ? 'border-[#4CAE4F] bg-[#E6F4EA]' 
+                    : 'border-gray-300 bg-white hover:border-gray-400'
+                }`}>
+                  <input
+                    type="radio"
+                    name="deliveryMethod"
+                    value="Delivery"
+                    checked={deliveryMethod === 'Delivery'}
+                    onChange={() => setDeliveryMethod('Delivery')}
+                    className="w-5 h-5 text-[#4CAE4F]"
+                  />
+                  <div className="flex items-center gap-3">
+                    <img src="/delivery.png" alt="Delivery" className="w-8 h-8" />
+                    <span className="text-lg font-semibold">Delivery</span>
+                    {deliveryMethod === 'Delivery' && (
+                      <span className="text-sm text-gray-600 ml-2">
+                        (Fee: ₱{deliveryFee}, Total Weight: {calculateTotalWeight()}kg)
+                      </span>
+                    )}
+                  </div>
+                </label>
+              </div>
+
+             
+
+              {/* Delivery Fee Information */}
+              {deliveryMethod === 'Delivery' && (
+                <div className="ml-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Delivery Information</h3>
+                  <div className="text-sm text-blue-700 space-y-1">
+                    <p>• Base delivery fee: ₱30</p>
+                    <p>• Additional ₱10 for every 5kg above the first 5kg</p>
+                    <p>• Total weight: {calculateTotalWeight()}kg</p>
+                    <p className="font-semibold text-base">• Your delivery fee: ₱{deliveryFee}</p>
+                  </div>
+                </div>
+              )}
+            </section>
+
+            {/* Payment Method */}
+            <section className="flex-1">
               <h2 className="text-2xl font-bold mb-1">Payment Method</h2>
               <p className="text-lg text-black mb-4">
                 Please select an option on how you want to pay your order.
               </p>
-              <div className="w-full text-lg flex max-w-md gap-4">
+              <div className="w-full text-lg flex gap-4 mb-4">
                 {/* Cash-on-Delivery */}
                 <label
                   className={`flex-1 cursor-pointer border rounded-xl p-4 flex flex-col items-center transition-all ${
@@ -147,7 +262,7 @@ export default function CheckoutPage() {
                 </label>
               </div>
 
-              <div className="flex gap-14 mt-2 pl-2 text-lg">
+              <div className="flex gap-14 pl-2 text-lg">
                 <label className="flex items-center gap-4 cursor-pointer font-bold">
                   <input
                     type="radio"
@@ -182,18 +297,28 @@ export default function CheckoutPage() {
               <p>Subtotal</p>
               <p className="text-black font-medium">₱{subtotal.toFixed(0)}</p>
             </div>
-            <div className="flex justify-between">
-              <p>Discount</p>
-              <p className="text-green-600">-₱{discount}</p>
-            </div>
-            <div className="flex justify-between">
-              <p>Tax</p>
-              <p className="text-red-600">₱{tax}</p>
-            </div>
+            {deliveryFee > 0 && (
+              <div className="flex justify-between">
+                <p>Delivery Fee</p>
+                <p className="text-orange-600">₱{deliveryFee}</p>
+              </div>
+            )}
             <div className="flex justify-between text-2xl font-bold pt-4 border-t mt-6">
               <p>Total</p>
-              <p className="text-[#4CAE4F]">₱{total}</p>
+              <p className="text-[#4CAE4F]">₱{newTotal}</p>
             </div>
+          </div>
+
+          {/* Delivery Method Summary */}
+          <div className="mt-4 p-3 bg-gray-50 rounded-lg border">
+            <p className="text-sm font-semibold text-gray-700">Selected Options:</p>
+            <p className="text-sm text-gray-600">
+              {deliveryMethod === 'Pick-up' 
+                ? `Pick-up at ${pickupLocation}` 
+                : `Delivery (₱${deliveryFee} fee)`
+              }
+            </p>
+            <p className="text-sm text-gray-600">Payment: {paymentMethod}</p>
           </div>
 
           <button
