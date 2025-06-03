@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
+import { logout } from '../../utils/auth';
 
 const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
   const [selectedLang, setSelectedLang] = useState("Tagalog");
@@ -100,10 +101,16 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
             Notifications
           </div></Link>        
 
-          <img src={profileImage} alt="Account" className="w-12 h-12 rounded-full object-cover" />
-            <Link to="/UserProfile" >
-              <span className="text-lg font-bold">My Account</span>
+
+          {/* <img src={profileImage} alt="Account" className="w-12 h-12 rounded-full object-cover" /> */}
+            <Link to="/login" >
+              <span className="text-lg font-bold">Login</span>
             </Link>
+             <div className="flex justify-end p-4">
+              <button onClick={logout} className="btn btn-error btn-sm">
+                Logout
+              </button>
+            </div>
             <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
             </svg>

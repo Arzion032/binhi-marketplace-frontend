@@ -3,15 +3,19 @@ import { Input } from "../Input";
 import { Button } from "../Button";
 import { Card } from "../Card";
 import { Link, useNavigate } from "react-router-dom";
+import api from "../../api";
 
 function LogInPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prev) => !prev);
   };
-
+/*
   const handleLogin = (e) => {
     e.preventDefault();
 
@@ -30,6 +34,34 @@ function LogInPage() {
         email: userEmail,
       },
     });
+  };
+  */
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setError(""); // reset error
+
+    try {
+      const response = await api.post("/users/login/", {
+        email,
+        password,
+      });
+
+      const { access, refresh, user_id, email: userEmail, role } = response.data;
+
+      // Store tokens in localStorage (or cookies if preferred)
+      localStorage.setItem("accessToken", access);
+      localStorage.setItem("refreshToken", refresh);
+      localStorage.setItem("userId", user_id);
+      localStorage.setItem("userEmail", userEmail);
+      localStorage.setItem("userRole", role);
+
+      // Redirect to Marketplace or Dashboard
+      navigate("/marketplace");
+    } catch (err) {
+      console.error(err);
+      setError("Invalid email or password.");
+    }
   };
 
   return (
@@ -53,7 +85,14 @@ function LogInPage() {
             <form onSubmit={handleLogin} className="mb-6">
               <div>
                 <label className="label font-semibold text-lg">Phone Number/Email</label>
-                <Input type="text" placeholder="Enter your Phone Number or Email" className="h-12 text-lg" />
+                <Input 
+                  type="text" 
+                  placeholder="Enter your Phone Number or Email"
+                  onChange={(e) => setEmail(e.target.value)} 
+                  required
+                  className="h-12 text-lg"
+                  value={email} 
+                  />
               </div>
 
               <div className="relative">
@@ -61,6 +100,9 @@ function LogInPage() {
                 <Input
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your Password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
                   className="pr-12 h-12 text-lg"
                 />
                 <div

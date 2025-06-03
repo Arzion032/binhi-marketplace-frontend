@@ -5,6 +5,7 @@ import ProductCard from './ProductCard';
 import FarmerCard from './FarmerCard';
 import { BASE_URL } from "../../constants";
 import api from '../../api';
+import WelcomeScreen from './WelcomeScreen';
 
 const PRODUCTS_API = `${BASE_URL}/products/landing-page/`;
 
@@ -52,30 +53,8 @@ return (
             </div>
           </div>
         )}
-                 <section className="bg-[#4CAE4F] text-white px-6 py-2 md:py-2 mx-[80px] mt-[30px] rounded-xl">
-                   <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-2">
-                     <div className="md:w-1/2 space-y-4 text-center md:text-left">
-                       <h1 className="text-4xl sm:text-3xl md:text-5xl font-black leading-tight">
-                         Growth Begins <br /> with a Single Seed
-                       </h1>
-                       <p className="text-xl md:text-lg">Take the first step toward a greener future.</p>
-                       <div className="flex flex-wrap justify-center md:justify-start gap-4">
-                         <button className="text-xl bg-white text-green-600 font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105">
-                           Shop Now
-                         </button>
-                         <button 
-                          onClick={() => navigate('/featured-products')}
-                         className="text-lg border border-white font-medium px-6 py-2 rounded-full hover:translate-x-2 hover:scale-105"
-                          >
-                            Explore →
-                         </button>
-                       </div>
-                     </div>
-                     <div className="md:w-1/2 flex justify-center">
-                       <img src="/LandingPageFarmers.png" alt="Farmers" className="w-full h-auto max-w-[520px] rounded-none" />
-                     </div>
-                   </div>
-                 </section>
+
+                 <WelcomeScreen />
 
                  {/* Categories Section */}
                  <section className="px-2 sm:px-4 py-4 mx-[60px]">

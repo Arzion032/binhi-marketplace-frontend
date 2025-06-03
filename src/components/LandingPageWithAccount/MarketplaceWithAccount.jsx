@@ -2,6 +2,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import FederationSection from '../LandingPage/FederationSection'; 
 import MainHeader from '../UI/MainHeader'; 
 import React, { useState, useEffect } from 'react';
+import WelcomeScreen from '../LandingPage/WelcomeScreen';
 
 const MarketplaceWithAccount = () => {
   const navigate = useNavigate();
@@ -73,38 +74,7 @@ const MarketplaceWithAccount = () => {
           </div>
         )} 
         
-        <section className="bg-[#4CAE4F] mx-[80px] mt-6 rounded-xl px-24 py-0 flex justify-between items-stretch text-white shadow-lg h-[300px]">
-          {/* Left Basket Image */}
-          <div className="flex items-end">
-            <img
-              src="/basket.png"
-              alt="Left Basket"
-              className="w-[280px] h-auto object-contain"
-            />
-          </div>
-
-          {/* Center Greeting Text - Updated to use dynamic name */}
-          <div className="text-center flex flex-col justify-center flex-1">
-            <h2 className="sm:text-7xl font-bold mb-3">Hi, {userName}!</h2>
-            <p className="text-2xl flex flex-col items-center gap-2">
-              <span>What product you want to find?</span>
-              <span className="flex items-center gap-1">
-                Click the
-                <img src="/search-white.png" alt="search" className="w-6 h-6 inline-block" />
-                <span className="font-bold">search bar</span> above!
-              </span>
-            </p>
-          </div>
-
-          {/* Right Basket Image */}
-          <div className="flex items-end py-[98px]">
-            <img
-              src="/basket2.png"
-              alt="Right Basket"
-              className="w-[280px] h-auto object-contain"
-            />
-          </div>
-        </section>
+        <WelcomeScreen name={userName}/>
 
         {/*Categories, miii*/}
         <section className="px-2 sm:px-4 py-4 mx-[60px]">

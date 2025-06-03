@@ -31,6 +31,7 @@ import OrderManagement from "./components/SellerCenter/OrderManagement";
 import AboutUsPage from "./components/LandingPage/AboutUsPage";
 import ViewFarmers from "./components/LandingPage/ViewFarmers"; 
 import NotFoundPage from "./components/UI/NotFoundPage";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const handleSearch = (query) => {
   if (query.trim()) {
@@ -54,7 +55,7 @@ function App() {
         <Route path="/" element={<MainLayout onSearch={handleSearch}><Marketplace /></MainLayout>} />
         <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
-        <Route path="/cartpage" element={<OrderLayout><CartPage /></OrderLayout>} />
+        <Route path="/cartpage" element={<ProtectedRoute><OrderLayout><CartPage /></OrderLayout></ProtectedRoute>} />
         <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
         <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
         <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
