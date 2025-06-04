@@ -7,9 +7,6 @@ import { BASE_URL } from "../../constants";
 import api from '../../api';
 import WelcomeScreen from './WelcomeScreen';
 
-const PRODUCTS_API = `${BASE_URL}/products/landing-page/`;
-
-
 const Marketplace = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
