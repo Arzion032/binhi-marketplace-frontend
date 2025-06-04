@@ -15,31 +15,31 @@ const SearchedFarmers = () => {
 
   const farmerTemplates = [
     {
-      name: "Anton Benidas",
+      name: "Macamot Farmers Association",
       location: "Macamot, Binangonan",
       rating: 5.0,
       sold: "10k",
       rank: 2,
       categories: ["milks & dairy", "rice", "grains"],
-      img: "/222.jpg",
+      img: "/444.png",
     },
     {
-      name: "John Doe Pasig",
-      location: "Macamot, Binangonan",
+      name: "Pantok Farmers Association",
+      location: "Pantok, Binangonan",
       rating: 5.0,
       sold: "12k",
       rank: 1,
       categories: ["fruits", "rice", "vegetables", "root crops"],
-      img: "/444.png",
+      img: "/555.png",
     },
     {
-      name: "Jonathan De Vera",
-      location: "Macamot, Binangonan",
+      name: "Tagpos Farmers Association",
+      location: "Tagpos, Binangonan",
       rating: 5.0,
       sold: "9k",
       rank: 3,
       categories: ["fruits", "root crops", "meat"],
-      img: "/555.png",
+      img: "/222.png",
     },
   ];
 
@@ -77,11 +77,11 @@ const SearchedFarmers = () => {
           <div className="flex items-center gap-2 mb-6">
         <img src="/medal.png" alt="medal icon" className="w-8 h-8" />
             <h2 className="text-3xl font-semibold">
-              Top Farmers of the Month ‘<span className="text-green-600">{query}</span>’
+              Top Associations of the Month ‘<span className="text-green-600">{query}</span>’
             </h2>
           </div>
           <div className="absolute inset-0 pointer-events-none">
-            <img src="/confetti.png" alt="confetti" className="pt-[60px] w-full h-full object-cover" />
+            <img src="/confetti.png" alt="confetti" className="pt-[75px] w-full h-full object-cover" />
           </div>
           <div className="pt-[75px] flex flex-wrap justify-center gap-6 relative z-10">
             {farmers.slice(0, 3).map((farmer, index) => (
@@ -92,7 +92,7 @@ const SearchedFarmers = () => {
                 <div className="flex flex-col items-center justify-between h-full w-full">
                   <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
                     <div className="relative w-24 h-24">
-                      <img src={farmer.img} alt={farmer.name} className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg" />
+                      <img src={farmer.img} alt={farmer.name} className="w-24 h-24 object-cover" />
                     </div>
                     <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
                     <p className="text-sm text-gray-500">{farmer.location}</p>
@@ -228,7 +228,7 @@ const SearchedFarmers = () => {
                   <img
                     src={farmer.img}
                     alt={farmer.name}
-                    className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg"
+                    className="w-24 h-24 object-cover"
                   />
                 </div>
                 <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>

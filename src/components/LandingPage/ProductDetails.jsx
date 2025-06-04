@@ -76,13 +76,6 @@ const decrementQuantity = () => {
   const handleGoBack = () => navigate(-1);
   const handleImageChange = (image) => setMainImage(image);
 
-  const toggleTask = (id) => {
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === id ? { ...task, completed: !task.completed } : task
-      )
-    );
-  };
 
 if (!product || !mainImage) {
   return (
@@ -424,9 +417,7 @@ console.log(product)
         </div> 
         </div>
         </div>
-
       </div> 
-
       </div>
   );
 };

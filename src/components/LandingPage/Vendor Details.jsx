@@ -10,7 +10,7 @@ const VendorDetails = ({ product, tags }) => {
       <div className="flex items-start gap-4">
         <div className="relative">
           <img
-            src="/seller.png"
+            src="/111.png"
             alt={product.vendor_name}
             className="w-18 h-18 border-green-600"
           />
@@ -49,22 +49,7 @@ const VendorDetails = ({ product, tags }) => {
                 `${product.vendor_address.street_address}, ${product.vendor_address.barangay}, ${product.vendor_address.city}`}
             </span>
           </div>
-          <div className="flex items-center gap-1">
-            <img src="/Account-seller.png" className="w-5 h-5" alt="Followers" />
-            <span>500 Followers</span>
-          </div>
-          <div className="flex items-center gap-1">
-            <img src="/star-gray.png" className="w-5 h-5" alt="Rating" />
-            <span>5.0 Rate</span>
-          </div>
-        </div>
-
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-1">
-            <img src="/Clock.png" className="w-5 h-5" alt="Response Rate" />
-            <span>95% Response Rate</span>
-          </div>
-          <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1">
             <img src="/group-seller.png" className="w-5 h-5" alt="Products Sold" />
             <span>9k Products Sold</span>
           </div>
@@ -84,7 +69,7 @@ const VendorDetails = ({ product, tags }) => {
             .map((tag, index) => (
               <span
                 key={`row1-${index}`}
-                className="px-3 py-1 text-sm font-medium rounded-full bg-[#8BC34A] text-white"
+                className="px-5 py-1 text-sm font-medium rounded-full bg-[#8BC34A] text-white"
               >
                 {tag}
               </span>
@@ -97,7 +82,7 @@ const VendorDetails = ({ product, tags }) => {
             .map((tag, index) => (
               <span
                 key={`row2-${index}`}
-                className={`px-3 py-1 text-sm font-medium rounded-full ${
+                className={`px-5 py-1 text-sm font-medium rounded-full ${
                   tag === "grains"
                     ? "bg-[#D1A157] text-white"
                     : "bg-[#4CAE4F] text-white"

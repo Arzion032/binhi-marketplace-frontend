@@ -49,6 +49,28 @@ const UserProfilePage = () => {
     confirmPassword: ''
   });
 
+ // Password visibility states
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
+
+  // Password validation states
+  const [passwordError, setPasswordError] = useState('');
+
+  // Password validation logic from SetPassword.jsx
+  const hasUpperCase = /[A-Z]/.test(passwordData.newPassword);
+  const hasLowerCase = /[a-z]/.test(passwordData.newPassword);
+  const hasNumber = /\d/.test(passwordData.newPassword);
+  const hasSymbol = /[^A-Za-z0-9]/.test(passwordData.newPassword);
+  const hasMinLength = passwordData.newPassword.length >= 8;
+  
+  const isPasswordValid = 
+    hasUpperCase && 
+    hasLowerCase && 
+    hasNumber && 
+    hasSymbol && 
+    hasMinLength;
+    
   const handleEditClick = () => {
     setEditData({...profileData});
     setShowEditModal(true);
@@ -92,9 +114,20 @@ const UserProfilePage = () => {
       ...prev,
       [field]: value
     }));
+    
+    // Clear error when user starts typing
+    if (passwordError) {
+      setPasswordError('');
+    }
   };
 
   const handleChangePassword = () => {
+    setPasswordData({
+      currentPassword: '',
+      newPassword: '',
+      confirmPassword: ''
+    });
+    setPasswordError('');
     setShowPasswordModal(true);
   };
 
@@ -108,28 +141,39 @@ const UserProfilePage = () => {
       newPassword: '',
       confirmPassword: ''
     });
+    setPasswordError('');
     setShowPasswordModal(false);
     setShowPasswordConfirm(false);
   };
 
+
   const handlePasswordConfirm = () => {
+    // Check if all fields are filled
     if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
-      alert('Please fill in all password fields');
+      setPasswordError('* Please fill in all password fields.');
       return;
     }
     
+    // Validate new password using the logic from SetPassword.jsx
+    if (!isPasswordValid) {
+      setPasswordError('* New password does not meet all the requirements.');
+      return;
+    }
+    
+    // Check if new passwords match
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      alert('New passwords do not match');
+      setPasswordError('* The password confirmation does not match.');
       return;
     }
     
-    setShowPasswordModal(false);
+  setShowPasswordModal(false);
     setShowPasswordSuccessModal(true);
     setPasswordData({
       currentPassword: '',
       newPassword: '',
       confirmPassword: ''
     });
+    setPasswordError('');
   };
 
   const orders = [
@@ -545,7 +589,7 @@ const UserProfilePage = () => {
         </div>
       </Modal>
 
-      {/* Change Password Modal */}
+    {/* Enhanced Change Password Modal with validation */}
       <Modal isOpen={showPasswordModal} onClose={() => setShowPasswordConfirm(true)}>
         <div className="text-center">
           <h2 className="text-2xl font-bold">Change Password</h2>
@@ -554,45 +598,109 @@ const UserProfilePage = () => {
           <div className="space-y-4">
             <div className="text-left">
               <label className="block text-lg font-medium mb-1">Current Password *</label>
-              <input
-                type="password"
-                value={passwordData.currentPassword}
-                onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                placeholder="Enter your current password"
-              />
+              <div className="relative">
+                <input
+                  type={showCurrentPassword ? "text" : "password"}
+                  value={passwordData.currentPassword}
+                  onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10"
+                  placeholder=""
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowCurrentPassword(!showCurrentPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  <img
+                    src={showCurrentPassword ? "/Visible.png" : "/NotVisible.png"}
+                    alt="Toggle"
+                    className="w-5 h-4"
+                  />
+                </button>
+              </div>
             </div>
             
             <div className="text-left">
               <label className="block text-lg font-medium mb-1">New Password *</label>
-              <input
-                type="password"
-                value={passwordData.newPassword}
-                onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                placeholder="Enter your new password"
-              />
+              <div className="relative">
+                <input
+                  type={showNewPassword ? "text" : "password"}
+                  value={passwordData.newPassword}
+                  onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10"
+                  placeholder=""
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowNewPassword(!showNewPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  <img
+                    src={showNewPassword ? "/Visible.png" : "/NotVisible.png"}
+                    alt="Toggle"
+                    className="w-5 h-4"
+                  />
+                </button>
+              </div>
             </div>
             
             <div className="text-left">
               <label className="block text-lg font-medium mb-1">Re-enter Password *</label>
-              <input
-                type="password"
-                value={passwordData.confirmPassword}
-                onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                placeholder="Re-enter your new password"
-              />
+              <div className="relative">
+                <input
+                  type={showConfirmNewPassword ? "text" : "password"}
+                  value={passwordData.confirmPassword}
+                  onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10"
+                  placeholder=""
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  <img
+                    src={showConfirmNewPassword ? "/Visible.png" : "/NotVisible.png"}
+                    alt="Toggle"
+                    className="w-5 h-4"
+                  />
+                </button>
+              </div>
+            </div>
+
+            {/* Fixed height container for error message */}
+            <div className="h-6 mb-2">
+              {passwordError && (
+                <p className="text-red-500 text-sm italic text-left">{passwordError}</p>
+              )}
             </div>
             
-            <div className="text-left text-sm text-gray-600">
-              <p>Your password must contain:</p>
-              <ul className="list-disc list-inside mt-1 space-y-1">
-                <li>Minimum of 8 characters</li>
-                <li>At least one uppercase and lowercase</li>
-                <li>At least one number and special character</li>
-              </ul>
-            </div>
+            {/* Password Requirements Validation - Only show if user has started typing */}
+            {passwordData.newPassword.length > 0 && (
+              <div className="text-left text-sm">
+                <p className="mb-2 font-medium text-gray-800">Your password must contain...</p>
+
+                <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasMinLength ? "text-green-600" : "text-red-500"}`}>
+                  <img src={hasMinLength ? "/check.png" : "/wrong.png"} alt={hasMinLength ? "check" : "wrong"} className="h-3 w-3" />
+                  <span>Minimum of 8 characters</span>
+                </div>
+
+                <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasUpperCase && hasLowerCase ? "text-green-600" : "text-red-500"}`}>
+                  <img src={hasUpperCase && hasLowerCase ? "/check.png" : "/wrong.png"} alt={hasUpperCase && hasLowerCase ? "check" : "wrong"} className="h-3 w-3" />
+                  <span>At least 1 lower and upper case letters (AaBb)</span>
+                </div>
+
+                <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasSymbol ? "text-green-600" : "text-red-500"}`}>
+                  <img src={hasSymbol ? "/check.png" : "/wrong.png"} alt={hasSymbol ? "check" : "wrong"} className="h-3 w-3" />
+                  <span>At least 1 symbol (@#$)</span>
+                </div>
+
+                <div className={`flex items-center gap-2 text-sm font-medium ${hasNumber ? "text-green-600" : "text-red-500"}`}>
+                  <img src={hasNumber ? "/check.png" : "/wrong.png"} alt={hasNumber ? "check" : "wrong"} className="h-3 w-3" />
+                  <span>At least 1 number (123)</span>
+                </div>
+              </div>
+            )}
           </div>
           
           <div className="flex gap-3 mt-6">
@@ -611,7 +719,6 @@ const UserProfilePage = () => {
           </div>
         </div>
       </Modal>
-
       {/* Password Confirm Discard Modal */}
       <Modal isOpen={showPasswordConfirm} onClose={() => setShowPasswordConfirm(false)} showCloseButton={false}>
         <div className="text-center">
