@@ -58,7 +58,7 @@ function LogInPage() {
       localStorage.setItem("userName", username);
 
       // Redirect to Marketplace or Dashboard
-      navigate("/marketplace");
+      navigate("/");
     } catch (err) {
       console.error(err);
       setError("Invalid email or password.");

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { logout } from '../../utils/auth';
 
 const MainHeader = ({ profileImage = "/account.png", notProfileImage = "/default-avatar.png", onSearch }) => {
@@ -8,6 +8,10 @@ const MainHeader = ({ profileImage = "/account.png", notProfileImage = "/default
   const [searchQuery, setSearchQuery] = useState('');
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
+const location = useLocation();
+const hideSearchBarOnPaths = ["/cart-page", "/checkoutpage", "/user-profile"]; // add more as needed
+
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -68,26 +72,29 @@ const MainHeader = ({ profileImage = "/account.png", notProfileImage = "/default
           </div>
         </Link>
 
-        {/* Search Bar */}
-        <div className="flex items-center flex-1 justify-center px-4">
-          <div className="flex items-center relative group inline-block border-2 border-black rounded-full px-3 py-1 w-full max-w-md h-10">
-            <img src="/search.png" alt="Search" className="w-7 h-7 mx-1" />
-            <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 bg-[#4CAF50] text-white text-lg font-bold px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-              Search
+        
+        {/* Search Bar - hidden on listed pages */}
+        {!hideSearchBarOnPaths.includes(location.pathname) && (
+          <div className="flex items-center flex-1 justify-center px-4">
+            <div className="flex items-center relative group inline-block border-2 border-black rounded-full px-3 py-1 w-full max-w-md h-10">
+              <img src="/search.png" alt="Search" className="w-7 h-7 mx-1" />
+              <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 bg-[#4CAF50] text-white text-lg font-bold px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                Search
+              </div>
+              <input
+                type="text"
+                placeholder="Click here to products or farmer"
+                className="flex-grow outline-none font-bold text-base"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                onKeyDown={handleKeyDown}
+              />
+              <button onClick={handleSearchClick}>
+                <img src="/mic.png" alt="Mic" className="w-7 h-7 mx-2 hover:scale-110" />
+              </button>
             </div>
-            <input
-              type="text"
-              placeholder="Click here to products or farmer"
-              className="flex-grow outline-none font-bold text-base"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              onKeyDown={handleKeyDown}
-            />
-            <button onClick={handleSearchClick}>
-              <img src="/mic.png" alt="Mic" className="w-7 h-7 mx-2 hover:scale-110" />
-            </button>
           </div>
-        </div>
+        )}
 
         {/* Icons */}
         <div className="flex items-center gap-5">

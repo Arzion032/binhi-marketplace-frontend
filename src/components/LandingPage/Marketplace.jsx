@@ -6,6 +6,7 @@ import FarmerCard from './FarmerCard';
 import { BASE_URL } from "../../constants";
 import api from '../../api';
 import WelcomeScreen from './WelcomeScreen';
+import LoadingScreen from '../UI/LoadingScreen';
 
 const Marketplace = () => {
   const [products, setProducts] = useState([]);
@@ -22,9 +23,7 @@ const Marketplace = () => {
 
  if (!products) {
   return (
-    <div className="flex justify-center mt-20">
-    <span className="loading loading-spinner text-success w-[350px] h-[350px]"></span>
-    </div>
+    <LoadingScreen/>
     );
   }
   if (error) return <div>Error: {error}</div>;
