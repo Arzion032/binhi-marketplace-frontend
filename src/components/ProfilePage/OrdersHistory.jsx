@@ -1,100 +1,6 @@
-import React, { useState } from 'react';
-
-const OrderHistory = () => {
-  const [selectedTab, setSelectedTab] = useState("All");
-  const [showDetails, setShowDetails] = useState(false);
-  const [showRefundModal, setShowRefundModal] = useState(false);
-  const [showCancelModal, setShowCancelModal] = useState(false);
-  const [selectedOrder, setSelectedOrder] = useState(null);
-  const [refundReasons, setRefundReasons] = useState([]);
-  const [refundNote, setRefundNote] = useState("");
-  const [uploadedFile, setUploadedFile] = useState(null);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [cancelReasons, setCancelReasons] = useState([]);
-  const [cancelNote, setCancelNote] = useState("");
-
-  // Mock navigation function for demo
-  const navigate = (path) => {
-    console.log(`Navigating to: ${path}`);
-  };
-
-  // State to manage orders with ability to update status
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      orderId: "23149MF260",
-      name: "Freshly Home Made Butter with Chocolate Inside",
-      image: "Butter.png",
-      quantity: 1,
-      price: 53.0,
-      status: "Delivered",
-      sellerName: "Carla Pasig",
-      sellerProfile: "/avatar.png"
-    },
-    {
-      id: 2,
-      orderId: "23149MF261",
-      name: "Premium Farm Fresh Sweet Corn",
-      image: "Mais.png",
-      quantity: 1,
-      price: 53.0,
-      status: "Pending",
-      sellerName: "John Farmer",
-      sellerProfile: "/avatar.png"
-    }
-  ]);
-
-  const toggleReason = (reason) => {
-    if (refundReasons.includes(reason)) {
-      setRefundReasons(refundReasons.filter(item => item !== reason));
-    } else {
-      setRefundReasons([...refundReasons, reason]);
-    }
-  };
-
-  const toggleCancelReason = (reason) => {
-    if (cancelReasons.includes(reason)) {
-      setCancelReasons(cancelReasons.filter(item => item !== reason));
-    } else {
-      setCancelReasons([...cancelReasons, reason]);
-    }
-  };
-
-  const handleSubmitRefund = () => {
-    if (refundReasons.length === 0) {
-      alert("Please select at least one reason for refund");
-      return;
-    }
+const handleCancelOrder = (cancelData) => {
+    console.log("Submitting cancel request:", cancelData);
     
-    console.log("Submitting refund request:", {
-      orderId: selectedOrder?.id,
-      reasons: refundReasons,
-      note: refundNote,
-      file: uploadedFile
-    });
-    
-    setShowRefundModal(false);
-    alert("Refund request submitted successfully!");
-    
-    setRefundReasons([]);
-    setRefundNote("");
-    setUploadedFile(null);
-  };
-
-  // Enhanced cancel order function that actually updates the order status
-  const handleCancelOrder = () => {
-    if (cancelReasons.length === 0) {
-      alert("Please select at least one reason for cancellation");
-      return;
-    }
-    
-    console.log("Submitting cancel request:", {
-      orderId: selectedOrder?.id,
-      reasons: cancelReasons,
-      note: cancelNote
-    });
-    
-    // Update the order status to "Cancelled"
     setOrders(prevOrders => 
       prevOrders.map(order => 
         order.id === selectedOrder?.id 
@@ -103,26 +9,122 @@ const OrderHistory = () => {
       )
     );
     
-    // Update selectedOrder if details modal is open
     if (selectedOrder) {
       setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
     }
     
     setShowCancelModal(false);
     alert("Order cancelled successfully!");
-    
-    setCancelReasons([]);
-    setCancelNote("");
+  };import React, { useState } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import OrderDetailsModal from './OrderDetailsModal';
+import ReturnRefundModal from './ReturnRefundModal';
+import CancelOrderModal from './CancelOrderModal';
+
+const OrderHistory = () => {
+  const [selectedTab, setSelectedTab] = useState("All");
+  const [showViewOrderModal, setShowViewOrderModal] = useState(false);
+  const [showReturnRefundModal, setShowReturnRefundModal] = useState(false);
+  const [showCancelModal, setShowCancelModal] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  // Mock navigation function for demo
+  const navigate = (path) => {
+    console.log(`Navigating to: ${path}`);
   };
 
-  // Enhanced filtering function that includes search functionality
+  // Enhanced state with delivery fee, weight, and variations
+  const [orders, setOrders] = useState([
+    {
+      id: 1,
+      orderId: "23149MF260",
+      name: "Freshly Home Made Butter with Chocolate Inside",
+      image: "Butter.png",
+      quantity: 1,
+      price: 53.0,
+      weight: 0.5, // in kg
+      variation: "Dark Chocolate",
+      status: "Delivered",
+      sellerName: "Carla Pasig",
+      sellerProfile: "/avatar.png",
+      deliveryFee: 15.0,
+      orderDate: "2025-03-31",
+      deliveryAddress: {
+        name: "Juan Dela Cruz",
+        phone: "(+63) 948 122 9142",
+        address: "Brgy. Mambog Binangonan, Rizal, 1940"
+      }
+    },
+    {
+      id: 2,
+      orderId: "23149MF261",
+      name: "Premium Farm Fresh Sweet Corn",
+      image: "Mais.png",
+      quantity: 2,
+      price: 35.0,
+      weight: 1.2, // in kg
+      variation: "Yellow Corn",
+      status: "Pending",
+      sellerName: "John Farmer",
+      sellerProfile: "/avatar.png",
+      deliveryFee: 20.0,
+      orderDate: "2025-04-01",
+      deliveryAddress: {
+        name: "Juan Dela Cruz",
+        phone: "(+63) 948 122 9142",
+        address: "Brgy. Mambog Binangonan, Rizal, 1940"
+      }
+    },
+    {
+      id: 3,
+      orderId: "23149MF262",
+      name: "Organic Free-Range Eggs",
+      image: "Butter.png", // Using butter as placeholder
+      quantity: 1,
+      price: 120.0,
+      weight: 0.8, // in kg
+      variation: "Large Size (12 pieces)",
+      status: "Delivered",
+      sellerName: "Maria Santos",
+      sellerProfile: "/avatar.png",
+      deliveryFee: 25.0,
+      orderDate: "2025-03-28",
+      deliveryAddress: {
+        name: "Juan Dela Cruz",
+        phone: "(+63) 948 122 9142",
+        address: "Brgy. Mambog Binangonan, Rizal, 1940"
+      }
+    }
+  ]);
+
+  const handleCancelOrder = (cancelData) => {
+    console.log("Submitting cancel request:", cancelData);
+    
+    setOrders(prevOrders => 
+      prevOrders.map(order => 
+        order.id === selectedOrder?.id 
+          ? { ...order, status: "Cancelled" }
+          : order
+      )
+    );
+    
+    if (selectedOrder) {
+      setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
+    }
+    
+    setShowCancelModal(false);
+    alert("Order cancelled successfully!");
+  };
+
   const filteredOrders = orders.filter(order => {
     const matchesTab = selectedTab === "All" || order.status === selectedTab;
     
     const matchesSearch = searchQuery === "" || 
       order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
       order.sellerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.orderId.toLowerCase().includes(searchQuery.toLowerCase());
+      order.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      order.variation.toLowerCase().includes(searchQuery.toLowerCase());
     
     return matchesTab && matchesSearch;
   });
@@ -135,7 +137,6 @@ const OrderHistory = () => {
     setSearchQuery("");
   };
 
-  // Function to get status color
   const getStatusColor = (status) => {
     switch(status) {
       case "Delivered": return "bg-[#4CAE4F]";
@@ -145,9 +146,21 @@ const OrderHistory = () => {
     }
   };
 
-  // Function to check if order can be cancelled
   const canCancelOrder = (status) => {
     return ["Pending", "Confirmed"].includes(status);
+  };
+
+  // Calculate total for each order
+  const calculateTotal = (order) => {
+    const subtotal = order.price * order.quantity;
+    return subtotal + order.deliveryFee;
+  };
+
+  // Handler for successful refund submission
+  const handleRefundSuccess = (refundData) => {
+    console.log("Refund request submitted:", refundData);
+    setShowReturnRefundModal(false);
+    alert("Refund request submitted successfully!");
   };
 
   return (
@@ -157,7 +170,7 @@ const OrderHistory = () => {
       <div className="flex mx-10 items-center justify-between gap-4 mb-4">
         <div className="flex items-center gap-4">
           <button
-            onClick={() => navigate('/userprofile')}
+            onClick={() => navigate('/UserProfile')}
             className="text-gray-600 hover:text-black"
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
@@ -170,12 +183,12 @@ const OrderHistory = () => {
         </div>
 
         <div className="flex items-center px-4">
-          <div className="flex items-center bg-white border-2 border-black rounded-full px-3 py-1 w-[600px] h-14 relative">
-            <img src="/search.png" alt="Search" className="w-5 h-5 mx-4" />
+          <div className="flex items-center bg-white border-2 border-black rounded-full px-3 py-1 w-[700px] h-14 relative">
+            <img src="/search.png" alt="Search" className="w-8 h-8 mx-4" />
             <input
               type="text"
-              placeholder="Search by Seller Name, Order ID, or Product Name"
-              className="flex-grow text-sm bg-white outline-none"
+              placeholder="Click here to search Association, Products, or Variation"
+              className="flex-grow text-lg bg-white outline-none"
               value={searchQuery}
               onChange={handleSearchChange}
             />
@@ -189,10 +202,7 @@ const OrderHistory = () => {
               </button>
             )}
             <button>
-              <img src="/mic.png" alt="Mic" className="w-5 h-5 hover:scale-110" />
-            </button>
-            <button>
-              <img src="/camera.png" alt="Camera" className="w-5 h-5 mx-4 hover:scale-110" />
+              <img src="/mic.png" alt="Mic" className="w-8 h-8 hover:scale-110" />
             </button>
           </div>
         </div>
@@ -242,7 +252,7 @@ const OrderHistory = () => {
           ) : (
             filteredOrders.map(order => (
               <div key={order.id} className="flex flex-col border-2 border-gray-300 transition p-4 rounded-xl bg-white shadow-sm relative">
-                {/* Seller Info: Profile and Name */}
+                {/* Seller Info */}
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
                     <img
@@ -259,7 +269,6 @@ const OrderHistory = () => {
                     </button>
                   </div>
 
-                  {/* Status and Order ID */}
                   <div className="flex items-center gap-4">
                     <span className="text-xs text-gray-500">ID: {order.orderId}</span>
                     <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${getStatusColor(order.status)}`}>
@@ -272,7 +281,6 @@ const OrderHistory = () => {
                 
                 <div className="flex justify-between items-start w-full">
                   <div className="flex gap-4">
-                    {/* Product image */}
                     <img
                       src={order.image}
                       alt={order.name}
@@ -280,20 +288,21 @@ const OrderHistory = () => {
                     />
 
                     <div className="flex flex-col justify-between">
-                      {/* Product name and quantity */}
                       <div>
                         <p className="text-2xl font-semibold">{order.name}</p>
-                        <p className="text-sm text-gray-600">Variation: Yellow Corn</p>
-                        <p className="text-lg text-gray-500 mt-4">Quantity: {order.quantity}</p>
+                        <p className="text-sm text-gray-600">Variation: {order.variation}</p>
+                        <p className="text-sm text-gray-600">Weight: {order.weight} kg</p>
+                        <p className="text-lg text-gray-500 mt-2">Quantity: {order.quantity}</p>
                       </div>
                     </div>
                   </div>
 
-                  {/* Right section: Status and price */}
                   <div className="flex flex-col items-end justify-between h-full">
-                    {order.price > 0 && (
-                      <p className="text-xl font-bold">₱{order.price.toFixed(2)}</p>
-                    )}
+                    <div className="text-right">
+                      <p className="text-sm text-gray-500">Unit Price: ₱{order.price.toFixed(2)}</p>
+                      <p className="text-sm text-gray-500">Delivery: ₱{order.deliveryFee.toFixed(2)}</p>
+                      <p className="text-xl font-bold text-[#4CAE4F] mt-2">Total: ₱{calculateTotal(order).toFixed(2)}</p>
+                    </div>
                   </div>
                 </div>
                 
@@ -301,14 +310,13 @@ const OrderHistory = () => {
                   <button
                     onClick={() => {
                       setSelectedOrder(order);
-                      setShowDetails(true);
+                      setShowViewOrderModal(true);
                     }}
                     className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
                   >
                     Order Details
                   </button>
 
-                  {/* Cancel Order Button - Only show for cancellable orders */}
                   {canCancelOrder(order.status) && (
                     <button
                       onClick={() => {
@@ -321,12 +329,11 @@ const OrderHistory = () => {
                     </button>
                   )}
 
-                  {/* Request Refund Button - Only show for Delivered orders */}
                   {order.status === "Delivered" && (
                     <button
                       onClick={() => {
                         setSelectedOrder(order);
-                        setShowRefundModal(true);
+                        setShowReturnRefundModal(true);
                       }}
                       className="w-[150px] hover:bg-red-600 hover:text-white text-sm text-red-500 font-bold py-2 px-2 border border-red-500 rounded-full transition-all"
                     >
@@ -341,315 +348,43 @@ const OrderHistory = () => {
       </div>
 
       {/* Cancel Order Modal */}
-      {showCancelModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-          <div className="bg-white rounded-2xl w-[850px] p-8 relative">
-            <button
-              className="absolute top-4 right-6 text-2xl"
-              onClick={() => setShowCancelModal(false)}
-            >
-              &times;
-            </button>
-            
-            <h2 className="text-3xl font-bold">Cancel Order</h2>
-            <p className="text-sm text-gray-600 mt-1 mb-6">Please fill the form to cancel your order.</p>
-            <hr />  
-            <p className="text-lg font-bold mt-4">Item(s) you want to cancel.</p>
-            <div className="border border-black rounded-xl mt-2 p-4">
-              <div className="flex items-center mb-3 gap-2">
-                <img src="/avatar.png" className="w-6 h-6 rounded-full" />
-                <span className="text-sm font-medium">{selectedOrder?.sellerName}</span>
-                <span className="ml-auto text-sm text-gray-500">Order ID: {selectedOrder?.orderId}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <img src={selectedOrder?.image} className="w-24 h-24 rounded-lg object-cover" />
-                <div className="flex-grow">
-                  <div className="text-lg font-semibold">{selectedOrder?.name}</div>
-                  <div className="text-sm text-gray-500 mt-1">Quantity: {selectedOrder?.quantity}</div>
-                </div>
-                <div className="border-l pl-4">
-                  <div className="font-semibold">Order Details</div>
-                  <div className="text-orange-500 mt-6">Order Amount</div>
-                  <div className="text-orange-600 font-bold text-lg">₱{selectedOrder?.price?.toFixed(2)}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="border border-black mt-4 rounded-xl p-4">
-              <p className="text-sm font-semibold mb-2">Why do you want to cancel?</p>
-              <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm mb-4">
-                {['Changed my mind', 'Found a better deal', 'Ordered by mistake', 'Payment issues', 'Others'].map((reason) => (
-                  <label key={reason} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={cancelReasons.includes(reason)}
-                      onChange={() => toggleCancelReason(reason)}
-                      className="w-4 h-4"
-                    />
-                    {reason}
-                  </label>
-                ))}
-              </div>
-              <div> 
-                <p className="text-sm font-semibold mb-2">Additional Notes (Optional)</p>
-                <textarea
-                  placeholder="Tell us more about why you're cancelling this order..."
-                  className="w-full h-28 border border-black rounded-xl p-3 text-sm"
-                  value={cancelNote}
-                  onChange={(e) => setCancelNote(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-4 mt-6">
-              <button
-                onClick={() => setShowCancelModal(false)}
-                className="bg-gray-500 text-white px-6 py-2 rounded-full font-bold"
-              >
-                Keep Order
-              </button>
-              <button
-                onClick={handleCancelOrder}
-                className="bg-orange-500 text-white px-6 py-4 rounded-full font-bold"
-              >
-                Cancel Order
-              </button>
-            </div>
-          </div>
-        </div>
+      {showCancelModal && selectedOrder && (
+        <CancelOrderModal
+          order={selectedOrder}
+          onClose={() => setShowCancelModal(false)}
+          onConfirm={handleCancelOrder}
+          calculateTotal={calculateTotal}
+        />
       )}
 
-      {/* Refund Modal */}
-      {showRefundModal && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center">
-          <div className="bg-white rounded-2xl w-[850px] p-8 relative">
-            <button
-              className="absolute top-4 right-6 text-2xl"
-              onClick={() => setShowRefundModal(false)}
-            >
-              &times;
-            </button>
-            
-            <h2 className="text-3xl font-bold">Request a Refund</h2>
-            <p className="text-sm text-gray-600 mt-1 mb-6">Please fill the form to request a refund.</p>
-            <hr />  
-            <p className="text-lg font-bold mt-4">Item(s) you want to refund.</p>
-            <div className="border border-black rounded-xl mt-2 p-4">
-              <div className="flex items-center mb-3 gap-2">
-                <img src="/avatar.png" className="w-6 h-6 rounded-full" />
-                <span className="text-sm font-medium">{selectedOrder?.sellerName}</span>
-                <span className="ml-auto text-sm text-gray-500">Order ID: {selectedOrder?.orderId}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <img src={selectedOrder?.image} className="w-24 h-24 rounded-lg object-cover" />
-                <div className="flex-grow">
-                  <div className="text-lg font-semibold">{selectedOrder?.name}</div>
-                  <div className="text-sm text-gray-500 mt-1">Quantity: {selectedOrder?.quantity}</div>
-                </div>
-                <div className="border-l pl-4">
-                  <div className="font-semibold">Refund Details</div>
-                  <div className="text-green-500 mt-6">Refund Amount</div>
-                  <div className="text-green-600 font-bold text-lg">₱{selectedOrder?.price?.toFixed(2)}</div>
-                </div>
-              </div>
-            </div>
-
-            <div className="border border-black mt-4 rounded-xl p-4">
-              <p className="text-sm font-semibold mb-2">Why do you want to refund?</p>
-              <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm mb-4">
-                {['Wrong item received', 'Item is damaged/defective', 'Missing parts/accessories', 'Item did not arrive', 'Others'].map((reason) => (
-                  <label key={reason} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={refundReasons.includes(reason)}
-                      onChange={() => toggleReason(reason)}
-                      className="w-4 h-4"
-                    />
-                    {reason}
-                  </label>
-                ))}
-              </div>
-              <div className="flex gap-4">
-                <div> 
-                  <p className="text-sm font-semibold mb-2">Remarks or Notes</p>
-                  <textarea
-                    placeholder="Remarks or Notes"
-                    className="flex-1 h-28 border border-black rounded-xl p-3 text-sm"
-                    value={refundNote}
-                    onChange={(e) => setRefundNote(e.target.value)}
-                  />
-                </div>
-                <div className="w-1/2">
-                  <p className="text-sm font-semibold mb-2">Upload Image or Video</p>
-                  <label className="h-28 border-2 border-black border-dashed rounded-xl flex items-center justify-center text-center text-sm text-gray-500 cursor-pointer">
-                    <input
-                      type="file"
-                      className="hidden"
-                      onChange={(e) => setUploadedFile(e.target.files[0])}
-                    />
-                    Click here to choose a file or drag & drop it here
-                  </label>
-                  {uploadedFile && <p className="text-sm text-gray-600 mt-1">File: {uploadedFile.name}</p>}
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end gap-4 mt-6">
-              <button
-                onClick={() => setShowRefundModal(false)}
-                className="bg-red-500 text-white px-6 py-2 rounded-full font-bold"
-              >
-                Cancel Request
-              </button>
-              <button
-                onClick={handleSubmitRefund}
-                className="bg-[#4CAE4F] text-white px-6 py-4 rounded-full font-bold"
-              >
-                Submit Request
-              </button>
-            </div>
-          </div>
-        </div>
+      {/* View Order Modal */}
+      {showViewOrderModal && selectedOrder && (
+        <OrderDetailsModal
+          showDetails={showViewOrderModal}  // <- Changed from order to showDetails
+          setShowDetails={setShowViewOrderModal}  // <- Changed from onClose to setShowDetails
+          selectedOrder={selectedOrder}
+          setShowCancelModal={() => {
+            setShowViewOrderModal(false);
+            setShowCancelModal(true);
+          }}
+          setShowRefundModal={() => {  // <- Changed from onRequestRefund to setShowRefundModal
+            setShowViewOrderModal(false);
+            setShowReturnRefundModal(true);
+          }}
+          canCancelOrder={canCancelOrder}
+        />
       )}
 
-      {/* Order Details Modal */}
-      {showDetails && selectedOrder && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center z-[999]">
-          <div className="bg-white rounded-xl w-[1000px] p-6 shadow-lg relative border-t-4 border-[#4CAE4F] z-[999]">
-            <button
-              className="absolute top-2 right-5 text-gray-500 hover:text-black text-2xl mb-2"
-              onClick={() => setShowDetails(false)}
-            >
-              &times;
-            </button>
-            <div className="flex justify-between items-center mb-2 mt-2">
-              <div className="flex items-center gap-2">
-                <img src="/receipt.png" alt="Receipt" className="w-8 h-8" />
-                <div>
-                  <h2 className="text-3xl font-bold">Order Details</h2>
-                  <p className="text-sm text-gray-500">Order ID: {selectedOrder?.orderId}</p>
-                </div>
-              </div>
-              
-              <div className="flex gap-2">
-                {/* Show Cancel Order button for cancellable orders */}
-                {canCancelOrder(selectedOrder.status) && (
-                  <button 
-                    onClick={() => {
-                      setShowDetails(false);
-                      setShowCancelModal(true);
-                      setSelectedOrder(selectedOrder);
-                    }}
-                    className="bg-orange-500 hover:bg-orange-600 text-white text-sm font-semibold px-6 py-2 rounded-full mx-2"
-                  >
-                    Cancel Order
-                  </button>
-                )}
-
-                {/* Show Return Refund button only for Delivered orders */}
-                {selectedOrder.status === "Delivered" && (
-                  <button 
-                    onClick={() => {
-                      setShowDetails(false);
-                      setShowRefundModal(true);
-                      setSelectedOrder(selectedOrder);
-                    }}
-                    className="bg-red-600 hover:bg-red-700 text-white text-sm font-semibold px-6 py-2 rounded-full mx-2"
-                  >
-                    Return Refund
-                  </button>
-                )}
-              </div>
-            </div>
-
-            <hr className="border-green-500 mt-2" />
-            <div className="border-t border-gray-300 mb-4" />
-
-            {/* Status Tracking with Images */}
-            <div className="space-y-4 mb-6">
-              {selectedOrder.status === "Cancelled" ? (
-                // Show cancelled status
-                <div className="flex justify-between items-center">
-                  <div className="flex items-center gap-2">
-                    <img src="/cancelled.png" alt="Cancelled" className="w-12 h-12" />
-                    <p className="text-red-500 text-lg font-semibold">Order Cancelled</p>
-                  </div>
-                  <p className="text-lg text-gray-600">03/31/2025 9:23 AM</p>
-                </div>
-              ) : (
-                // Show normal status progression
-                ["Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map((label, index, array) => {
-                  const statusIndex = array.indexOf(selectedOrder?.status || "Pending");
-                  const isActive = index <= statusIndex;
-
-                  const getStatusImage = (status, active) => {
-                    if (active) {
-                      return `/${status.toLowerCase()}.png`;
-                    } else {
-                      switch(status.toLowerCase()) {
-                        case 'confirmed':
-                          return '/notconfirmed.png';
-                        case 'processing':
-                          return '/notprocessing.png';
-                        case 'shipped':
-                          return '/notshipped.png';
-                        case 'delivered':
-                          return '/notdelivered.png';
-                        default:
-                          return `/${status.toLowerCase()}.png`;
-                      }
-                    }
-                  };
-
-                  return (
-                    <div key={label} className="flex justify-between items-center">
-                      <div className="flex items-center gap-2">
-                        <img
-                          src={getStatusImage(label, isActive)}
-                          alt={label}
-                          className="w-12 h-12"
-                        />
-                        <p className={`${isActive ? "text-[#4CAE4F] text-lg font-semibold" : "text-gray-400 text-lg"}`}>
-                          {label}
-                        </p>
-                      </div>
-                      {isActive && (
-                        <p className="text-lg text-gray-600">03/31/2025 9:23 AM</p>
-                      )}
-                    </div>
-                  );
-                })
-              )}
-            </div>
-
-            {/* Delivery Address */}
-            <div className="bg-gray-100 p-4 text-lg rounded-xl mb-6">
-              <div className="flex items-center gap-2 mb-2">
-                <img src="/pin.png" alt="Pin" className="w-8 h-8" />
-                <p className="text-[#4CAE4F] font-semibold">Delivery Address</p>
-              </div>
-              <p>Juan Dela Cruz</p>
-              <p>(+63) 948 122 9142</p>
-              <p>Brgy. Mambog Binangonan, Rizal, 1940</p>
-            </div>
-
-            {/* Price Summary */}
-            <div className="text-lg space-y-1">
-              <div className="flex justify-between">
-                <p className="text-gray-500">Subtotal</p>
-                <p className="font-medium">₱53.00</p>
-              </div>
-              <div className="flex justify-between">
-                <p className="text-gray-500">Discount</p>
-                <p className="font-medium">₱0.00</p>
-              </div>
-              <div className="flex justify-between text-xl font-bold mt-2">
-                <p>TOTAL</p>
-                <p>₱53.00</p>
-              </div>
-            </div>
-          </div>
-        </div>
+      {/* Return Refund Modal */}
+      {showReturnRefundModal && selectedOrder && (
+        <ReturnRefundModal  // <- Changed from ReturnRefund to ReturnRefundModal
+          showRefundModal={showReturnRefundModal}
+          setShowRefundModal={setShowReturnRefundModal}
+          selectedOrder={selectedOrder}
+          calculateTotal={calculateTotal}
+          showCancelModal={false}
+          setShowCancelModal={() => {}}
+        />  
       )}
 
       <div className="group fixed bottom-10 right-10 z-50">

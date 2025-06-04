@@ -3,7 +3,6 @@ import React, { useState } from "react";
 import Sidebar from "../Sidebar";
 import { useNavigate } from "react-router-dom";
 import { Search, SlidersHorizontal, RefreshCw, ArrowLeft, Store, User, Package, Trash2, Eye } from "lucide-react";
-import ViewOrderModal from "./ViewOrderModal";
 import NotifModal from './NotifModal';
 
 const ORDER_CATEGORIES = [

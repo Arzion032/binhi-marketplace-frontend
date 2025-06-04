@@ -157,7 +157,7 @@ export default function CheckoutPage() {
                     <span className="text-lg font-semibold">Pick-up</span>
                   </div>
                 </label>
-                
+
                  {/* Pick-up Location Dropdown */}
               {deliveryMethod === 'Pick-up' && (
                 <div className="ml-6 mb-4">
