@@ -4,17 +4,12 @@ import api, { BASE_URL } from '../../api';
 import LoadingScreen from '../UI/LoadingScreen';
 
 const CartPage = () => {
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-  
-  // Define available variations for each product
-  const productVariations = {
-    1: ["Original Flavor", "Chocolate Flavor", "Strawberry Flavor", "Vanilla Flavor"],
-    2: ["Chocolate Flavor", "Sweet Flavor", "Spicy Flavor", "Original Flavor"],
-    3: ["Premium Flavor", "Classic Flavor", "Rich Flavor", "Light Flavor"]
-  };
 
   useEffect(() => {
     api.get("/cart/my_cart/")
@@ -22,52 +17,65 @@ const CartPage = () => {
       .catch(err => setError(err.message || "Error fetching cart items"))
       .finally(() => setLoading(false));
   }, []);
-  
-  const initialItems = [
-    {
-      id: 1,
-      name: "Premium Milk With No Exercise One Week",
-      seller: "Vinas Family",
-      image: "/milk.png",
-      quantity: 1,
-      price: 53.0,
-      variation: "Original Flavor",
-      unitMeasurement: "1 Liter",
-      unit: "1 Liter", // Added for checkout compatibility
-      weight: 1, // Added weight for delivery calculation
-      orderId: "23149BF001",
-    },
-    {
-      id: 2,
-      name: "Premium Farm Fresh Sweet Corn",
-      seller: "Vinas Family",
-      image: "/corn.png",
-      quantity: 1,
-      price: 53.0,
-      variation: "Chocolate Flavor",
-      unitMeasurement: "500g",
-      unit: "500g", // Added for checkout compatibility
-      weight: 0.5, // Added weight for delivery calculation
-      orderId: "23149BF002",
-    },
-    {
-      id: 3,
-      name: "Freshly Home Made Butter with Chocolate Inside",
-      seller: "Vinas Family",
-      image: "/Butter.png",
-      quantity: 1,
-      price: 85.0,
-      variation: "Premium Flavor",
-      unitMeasurement: "250g",
-      unit: "250g", // Added for checkout compatibility
-      weight: 0.25, // Added weight for delivery calculation
-      orderId: "23149BF003",
-    },
-  ];
 
 
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const filteredCartItems = cartItems
+  .map(vendorGroup => {
+    const matchingItems = vendorGroup.items.filter(item => {
+      const variationName = item.variation.name.toLowerCase();
+      const productName = item.variation.product.name.toLowerCase();
+      const vendorName = vendorGroup.vendor_name.toLowerCase();
+
+      const query = searchQuery.toLowerCase();
+
+      return (
+        variationName.includes(query) ||
+        productName.includes(query) ||
+        vendorName.includes(query)
+      );
+    });
+
+    if (matchingItems.length > 0) {
+      return {
+        vendor_id: vendorGroup.vendor_id,
+        vendor_name: vendorGroup.vendor_name,
+        items: matchingItems,
+      };
+    }
+
+    return null;
+  })
+  .filter(group => group !== null);
+
+  const allCartItems = filteredCartItems.flatMap(vendor => vendor.items);
+  const selectedCartItems = allCartItems.filter(item =>
+    selectedItems.includes(item.variation.id)
+  );
+  const subtotal = selectedCartItems.reduce((sum, item) => {
+    const price = Number(item.variation.unit_price) || 0;
+    const qty = Number(item.quantity) || 1;
+    return sum + price * qty;
+  }, 0);
+  const total = subtotal
+
+  const handleItemSelect = (itemId) => {
+  setSelectedItems(prev => {
+    const updated = prev.includes(itemId)
+      ? prev.filter(id => id !== itemId)
+      : [...prev, itemId];
+
+    return updated; // ✅ Must return the new array!
+  });
+};
+
+useEffect(() => {
+  console.log('subtotal', subtotal);
+  console.log('selectedItems', selectedItems);
+  console.log('selectedCartItems', selectedCartItems);
+  console.log('all cart', allCartItems)
+}, [selectedCartItems, selectedItems]); // ✅ correct array syntax
+
+
 
   const handleQuantityChange = (id, amount) => {
     setCartItems(prev =>
@@ -113,42 +121,21 @@ const CartPage = () => {
     }
   };
 
-  const handleItemSelect = (itemId) => {
-    setSelectedItems(prev =>
-      prev.includes(itemId)
-        ? prev.filter(id => id !== itemId)
-        : [...prev, itemId]
-    );
-  };
 
-  // Search functionality
-const filteredCartItems = cartItems
-  .map(vendorGroup => {
-    const matchingItems = vendorGroup.items.filter(item => {
-      const variationName = item.variation.name.toLowerCase();
-      const productName = item.variation.product.name.toLowerCase();
-      const vendorName = vendorGroup.vendor_name.toLowerCase();
 
-      const query = searchQuery.toLowerCase();
+// Fix the loading fallback return
+if (loading) {
+  return <LoadingScreen />;
+}
 
-      return (
-        variationName.includes(query) ||
-        productName.includes(query) ||
-        vendorName.includes(query)
-      );
-    });
-
-    if (matchingItems.length > 0) {
-      return {
-        vendor_id: vendorGroup.vendor_id,
-        vendor_name: vendorGroup.vendor_name,
-        items: matchingItems,
-      };
-    }
-
-    return null;
-  })
-  .filter(group => group !== null);
+// Fix null check
+if (!cartItems || !Array.isArray(cartItems)) {
+  return (
+    <div className="min-h-screen flex items-center justify-center text-red-500">
+      Error loading cart items.
+    </div>
+  );
+}
 
 
   const handleSearch = (e) => {
@@ -183,36 +170,6 @@ const filteredCartItems = cartItems
     alert('Camera search feature coming soon!');
   };
 
-  const selectedCartItems = filteredCartItems.filter(item => selectedItems.includes(item.id));
-  const subtotal = selectedCartItems.reduce((sum, item) => {
-    return sum + item.price * item.quantity;
-  }, 0);
-  const total = subtotal;
-
-  const handleCheckout = () => {
-    if (selectedCartItems.length === 0) return;
-    
-    // Prepare checkout data with proper field mapping
-    const checkoutData = {
-      items: selectedCartItems.map(item => ({
-        ...item,
-        // Ensure both unit and unitMeasurement are available
-        unit: item.unit || item.unitMeasurement,
-        unitMeasurement: item.unitMeasurement || item.unit,
-        // Ensure weight is available for delivery calculation
-        weight: item.weight || 1, // Default to 1kg if not specified
-      })),
-      subtotal: subtotal,
-      discount: 0,
-      tax: 0,
-      total: subtotal,
-      paymentMethod: 'Cash on Delivery',
-      source: 'cart'
-    };
-
-    console.log('Checkout data being passed:', checkoutData); // For debugging
-    navigate('/checkoutpage', { state: { checkoutData } });
-  };
 
   if (cartItems.length === 0) {
     return (
@@ -255,8 +212,8 @@ return (
         </button>
         <div>
           <h1 className="text-4xl font-bold">Your Cart</h1>
-          <p className="text-gray-600 text-lg">You have {cartItems.length} vendors in your cart, check out now!</p>
-
+          You have {cartItems.reduce((total, vendor) => total + vendor.items.length, 0)} items in your cart, check out now!
+          
         </div>
       </div>
       <div className="flex items-center px-4">
@@ -452,7 +409,7 @@ return (
           </div>
 
           <button
-            onClick={handleCheckout}
+            onClick={handleSearch}
             disabled={selectedCartItems.length === 0}
             className={`mt-full w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
               selectedCartItems.length === 0 
