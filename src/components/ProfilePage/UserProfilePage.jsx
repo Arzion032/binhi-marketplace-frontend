@@ -1,16 +1,14 @@
 import React, { useState } from 'react'
-import { Expand, X, Check } from 'lucide-react';
-
+import { X, Check } from 'lucide-react';
 
 const UserProfilePage = () => {
-  const [selectedTab, setSelectedTab] = useState("All");
   const [isEditing, setIsEditing] = useState(false);
   
   // Updated navigate function - you can replace this with your actual routing logic
   const navigate = (path) => {
     // For React Router, you would use: navigate(path);
     // For Next.js, you would use: router.push(path);
-    // For now, this is a placeholder that actually navigates to order history
+    // For now, this is a placeholder
     if (path === '/OrderHistory') {
       // Replace this with your actual navigation logic
       window.location.href = '/OrderHistory';
@@ -22,21 +20,19 @@ const UserProfilePage = () => {
   };
   
   // Modal states
-  const [showEditModal, setShowEditModal] = useState(false);
   const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showPasswordSuccessModal, setShowPasswordSuccessModal] = useState(false);
-  const [pendingAction, setPendingAction] = useState(null);
   
   // Profile data state
   const [profileData, setProfileData] = useState({
-    fullName: "Juan Dela Cruz",
+    fullName: "Hulo Daranagan Farmers Association",
     contactNo: "091234567891",
-    address: "Manila City",
+    address: "Darangan, Binangonan City",
     email: "juandelacruz@gmail.com",
-    occupation: "Farmer"
+    occupation: "Association"
   });
 
   // Temporary state for editing
@@ -48,45 +44,29 @@ const UserProfilePage = () => {
     newPassword: '',
     confirmPassword: ''
   });
-
- // Password visibility states
+  
+  // Password visibility states
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
-
-  // Password validation states
   const [passwordError, setPasswordError] = useState('');
 
-  // Password validation logic from SetPassword.jsx
-  const hasUpperCase = /[A-Z]/.test(passwordData.newPassword);
-  const hasLowerCase = /[a-z]/.test(passwordData.newPassword);
-  const hasNumber = /\d/.test(passwordData.newPassword);
-  const hasSymbol = /[^A-Za-z0-9]/.test(passwordData.newPassword);
-  const hasMinLength = passwordData.newPassword.length >= 8;
-  
-  const isPasswordValid = 
-    hasUpperCase && 
-    hasLowerCase && 
-    hasNumber && 
-    hasSymbol && 
-    hasMinLength;
-    
   const handleEditClick = () => {
     setEditData({...profileData});
-    setShowEditModal(true);
+    setIsEditing(true);
   };
 
-  const handleModalDiscard = () => {
+  const handleDiscard = () => {
     setShowConfirmDiscard(true);
   };
 
   const confirmDiscard = () => {
     setEditData({...profileData});
-    setShowEditModal(false);
+    setIsEditing(false);
     setShowConfirmDiscard(false);
   };
 
-  const handleModalConfirm = () => {
+  const handleConfirm = () => {
     // Validate required fields
     const requiredFields = ['fullName', 'contactNo', 'address', 'email'];
     const emptyFields = requiredFields.filter(field => !editData[field].trim());
@@ -98,7 +78,7 @@ const UserProfilePage = () => {
     
     // Save changes
     setProfileData({...editData});
-    setShowEditModal(false);
+    setIsEditing(false);
     setShowSuccessModal(true);
   };
 
@@ -114,20 +94,9 @@ const UserProfilePage = () => {
       ...prev,
       [field]: value
     }));
-    
-    // Clear error when user starts typing
-    if (passwordError) {
-      setPasswordError('');
-    }
   };
 
   const handleChangePassword = () => {
-    setPasswordData({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
-    });
-    setPasswordError('');
     setShowPasswordModal(true);
   };
 
@@ -146,62 +115,38 @@ const UserProfilePage = () => {
     setShowPasswordConfirm(false);
   };
 
+  const isNewPasswordValid =
+    /[A-Z]/.test(passwordData.newPassword) &&
+    /[a-z]/.test(passwordData.newPassword) &&
+    /\d/.test(passwordData.newPassword) &&
+    /[^A-Za-z0-9]/.test(passwordData.newPassword) &&
+    passwordData.newPassword.length >= 8;
 
   const handlePasswordConfirm = () => {
-    // Check if all fields are filled
     if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
-      setPasswordError('* Please fill in all password fields.');
+      setPasswordError('Please fill in all password fields');
       return;
     }
     
-    // Validate new password using the logic from SetPassword.jsx
-    if (!isPasswordValid) {
-      setPasswordError('* New password does not meet all the requirements.');
+    if (!isNewPasswordValid) {
+      setPasswordError('New password does not meet all the requirements. Please try again.');
       return;
     }
     
-    // Check if new passwords match
     if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setPasswordError('* The password confirmation does not match.');
+      setPasswordError('The password confirmation does not match. Please try again.');
       return;
     }
     
-  setShowPasswordModal(false);
+    setPasswordError('');
+    setShowPasswordModal(false);
     setShowPasswordSuccessModal(true);
     setPasswordData({
       currentPassword: '',
       newPassword: '',
       confirmPassword: ''
     });
-    setPasswordError('');
   };
-
-  const orders = [
-    {
-      id: 1,
-      name: "Freshly Home Made Butter with Chocolate Inside",
-      image: "Butter.png",
-      quantity: 1,
-      price: 53.00,
-      status: "Delivered",
-      sellerName: "Farm Fresh Co.",
-      sellerProfile: "/seller1.png"
-    },
-    {
-      id: 2,
-      name: "Premium Farm Fresh Sweet Corn",
-      image: "Mais.png",
-      quantity: 1,
-      price: 53.00,
-      status: "Pending",
-      sellerName: "Corn Valley Farm",
-      sellerProfile: "/seller2.png"
-    }
-  ];
-
-  const filteredOrders = selectedTab === "All"
-    ? orders
-    : orders.filter(order => order.status === selectedTab);
 
   // Modal Component
   const Modal = ({ isOpen, onClose, children, showCloseButton = true }) => {
@@ -226,341 +171,150 @@ const UserProfilePage = () => {
 
   return (
     <div className="min-h-screen bg-[#F5F9F5]">
-      <div className="mx-10 p-4 flex flex-col md:flex-row gap-6">
+      <div className="mx-auto p-6">
 
-        {/* Left Side */}
-        <div className="w-full md:w-1/2 space-y-4">
-
-          {/* Back Button and Title */}
-          <div className="flex items-center gap-4 mb-2 mx-2">
-            <button
+        {/* Back Button and Title */}
+        <div className="flex items-center gap-4 mb-8">
+          <button
             className="flex items-center text-gray-600 hover:text-black"
             onClick={() => navigate("/cartpage")}
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
-            <p className="text-4xl font-bold font-inter mx-2">User Profile</p>
+          <p className="text-4xl font-black font-inter">User Profile</p>
+        </div>
 
-          </div>
-
-          {/* Left - Profile Info */}
-          <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6 w-full md:w-full min-h-[950px]">
-            <div className="flex flex-col items-center">
-              <div className="relative">
+        {/* Expanded Profile Section */}
+        <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-8">
+          <div className="flex flex-col lg:flex-row gap-8">
+            
+            {/* Left Side - Profile Picture and Basic Info */}
+            <div className="lg:w-1/3 flex flex-col items-center">
+              <div className="relative mb-6">
                 <img 
-                  src="333.png" 
+                  src="111.png" 
                   alt="Profile" 
-                  className="w-28 h-28 mt-5 rounded-full object-cover" 
+                  className="w-40 h-40 rounded-full object-cover border-4 border-gray-200" 
                 />
-                <button className="absolute bottom-0 right-0 bg-white p-1 rounded-full shadow-lg">
-                  <img src="Edit.png" alt="edit" className="h-8 w-8" />
+                <button className="absolute bottom-2 right-2 bg-white p-2 rounded-full shadow-lg border-2 border-gray-200 hover:bg-gray-50">
+                  <img src="Edit.png" alt="edit" className="h-6 w-6" />
                 </button>
               </div>
-              <h2 className="text-3xl font-bold mt-4">{profileData.fullName}</h2>
-              <p className="text-xl mt-4 text-500">{profileData.occupation}</p>
               
-              {/* Edit Profile Button */}
-              <div className="flex gap-2 mt-4 mb-8">
+              <h2 className="text-3xl font-bold text-center mb-2">{isEditing ? editData.fullName : profileData.fullName}</h2>
+              <p className="text-xl text-gray-600 text-center mb-6">{profileData.occupation}</p>
+              
+              {/* Edit Profile Button or Action Buttons */}
+              {!isEditing ? (
                 <button 
                   onClick={handleEditClick}
-                  className="text-xl px-6 py-2 rounded-full bg-[#4CAE4F] text-white hover:bg-green-600"
+                  className="text-lg px-8 py-3 rounded-full bg-[#4CAE4F] text-white hover:bg-green-600 transition-colors font-semibold"
                 >
                   Edit Profile
                 </button>
-              </div>
-            </div>
-
-            {/* Info Fields */}
-            <div className="mt-6 space-y-4">
-              {[
-                { label: "Full Name", field: "fullName", type: "text", required: true },
-                { label: "Contact No.", field: "contactNo", type: "text", required: true },
-                { label: "Address", field: "address", type: "text", required: true },
-                { label: "Email", field: "email", type: "email", required: true }
-              ].map(({ label, field, type, required }) => (
-                <div key={label}>
-                  <p className="text-[#858585] text-xl mb-2 font-bold">
-                    {label} {required && <span className="text-red-500">*</span>}
-                  </p>
-                  <input
-                    type={type}
-                    value={profileData[field]}
-                    readOnly
-                    className="text-lg w-full border-2 border-gray-300 bg-gray-50 cursor-default rounded-full p-4"
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* Right - Steps and Orders */}
-        <div className="w-full md:w-3/2">
-
-          {/* Steps Section */}
-          <div className="p-6">
-            <div className="flex items-center overflow-x-auto space-x-4">
-              {["Basic Information", "Add Profile Picture", "Upload Document", "Final Set Up"].map((step, index, array) => {
-                let imgSrc = "";
-                let status = "";
-                let statusColor = "";
-
-                if (index < 2) {
-                  imgSrc = "Done.png";
-                  status = "Completed";
-                  statusColor = "text-green-600";
-                } else if (index === 2) {
-                  imgSrc = "Circle_In progress.png";
-                  status = "In Progress";
-                  statusColor = "text-orange-500";
-                } else {
-                  imgSrc = "Circle_NC.png";
-                  status = "Not Completed";
-                  statusColor = "text-gray-500";
-                }
-
-                let lineSrc = null;
-                if (index < array.length - 1) {
-                  lineSrc = index < 2 ? "GreenLine.png" : "GrayLine.png";
-                }
-
-                return (
-                  <div key={index} className="flex items-center">
-                    <div className="flex flex-col items-center text-center">
-                      <img src={imgSrc} alt={step} className="w-[80px] h-[80px] mb-2" />
-                      <p className="text-md text-gray-500">Step {index + 1}</p>
-                      <p className="text-xl font-bold text-black">{step}</p>
-                      <p className={`text-md ${statusColor}`}>{status}</p>
-                    </div>
-
-                    {lineSrc && (
-                      <img
-                        src={lineSrc}
-                        alt="Step Line"
-                        className="w-[200px] h-[8px] mb-[110px]"
-                      />
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* Orders Section */}
-          <div className="bg-white border-2 border-gray-300 rounded-xl shadow-md p-6">
-            <div className="flex justify-between items-start border-b pb-4 gap-3">
-              <div className="flex flex-wrap gap-16 flex-1">
-                {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map(tab => (
-                  <button 
-                    key={tab}
-                    onClick={() => setSelectedTab(tab)}
-                    className={`text-lg px-3 py-1 rounded-full transition-all duration-200 ${
-                      selectedTab === tab 
-                        ? "bg-[#4CAE4F] text-white font-semibold" 
-                        : "text-gray-600 hover:text-green-600"
-                    }`}
-                  >
-                    {tab}
-                  </button>
-                ))}
-              </div>
-
-              <button
-                onClick={() => navigate('/OrderHistory')}
-                className="text-green hover:text-black transition-colors shrink-0 mt-2"
-              >
-                <Expand size={20} />
-              </button>
-            </div>
-                
-            {/* Order Items */}
-            <div className="mt-6 space-y-6">
-              {filteredOrders.length === 0 ? (
-                <p className="text-center text-gray-500">No orders under "{selectedTab}"</p>
               ) : (
-                filteredOrders.map(order => (
-                  <div key={order.id} className="flex flex-col border-2 border-gray-300 p-4 rounded-xl bg-white shadow-sm relative">
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-2">
-                        <img
-                          src={order.sellerProfile || "/default-profile.png"}
-                          alt="Seller"
-                          className="w-8 h-8 rounded-full object-cover"
-                        />
-                        <p className="text-sm font-medium text-gray-700">{order.sellerName}</p>
-                        <button className="text-gray-500 text-base font-medium px-3 py-2 rounded-full transition">
-                          Click here to chat
-                        </button>
-                        <button className="flex items-center gap-2 hover:bg-green-700 hover:text-white text-[#4CAE4F] text-sm font-medium px-3 py-2 border border-[#4CAE4F] rounded-full transition">
-                          <img src="/shoppp.png" className="w-5 h-5" alt="shop" /> View Shop
-                        </button>
-                      </div>
-
-                      <div className="flex items-left gap-2">
-                        <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${
-                          order.status === "Delivered" ? "bg-[#4CAE4F]" : "bg-[#D1A157]"
-                        }`}>
-                          {order.status}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
-
-                    <div className="flex justify-between items-start w-full">
-                      <div className="flex gap-4">
-                        <img
-                          src={order.image}
-                          alt={order.name}
-                          className="w-24 h-24 rounded-lg object-cover"
-                        />
-
-                        <div className="flex flex-col justify-between">
-                          <div>
-                            <p className="text-2xl font-semibold">{order.name}</p>
-                            <p className="text-sm text-gray-600">Variation: Yellow Corn</p>
-                            <p className="text-lg text-gray-500 mt-4">Quantity: {order.quantity}</p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col items-end justify-between h-full">
-                        {order.price > 0 && (
-                          <p className="text-xl font-bold">₱{order.price.toFixed(2)}</p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex justify-end mt-5">
-                      <button
-                        onClick={() => navigate('/OrderHistory')}
-                        className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
-                      >
-                        View More
-                      </button>
-                    </div>
-                  </div>  
-                ))
+                <div className="flex gap-3 w-full">
+                  <button
+                    onClick={handleDiscard}
+                    className="flex-1 bg-red-500 text-white py-3 rounded-full hover:bg-red-600 transition-colors font-semibold"
+                  >
+                    Disregard
+                  </button>
+                  <button
+                    onClick={handleConfirm}
+                    className="flex-1 bg-green-500 text-white py-3 rounded-full hover:bg-green-600 transition-colors font-semibold"
+                  >
+                    Confirm
+                  </button>
+                </div>
               )}
             </div>
 
-            {/* Floating Chat Button */}
-            <div className="group fixed bottom-10 right-10 z-50">
-              <button
-                onClick={() => navigate('/ChatPage')}
-                className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
-              >
-                <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
-              </button>
-              <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
-                Chats
+            {/* Right Side - Profile Information */}
+            <div className="lg:w-2/3">
+              <h3 className="text-2xl font-bold mb-6 text-gray-800">Profile Information</h3>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {[
+                  { label: "Full Name", field: "fullName", type: "text", required: true },
+                  { label: "Email Address", field: "email", type: "email", required: true },
+                  { label: "Contact Number", field: "contactNo", type: "text", required: true },
+                ].map(({ label, field, type, required }) => (
+                  <div key={label} className="space-y-2">
+                    <label className="block text-gray-700 text-lg font-semibold">
+                      {label} {required && <span className="text-red-500">*</span>}
+                    </label>
+                    <div className="relative">
+                      <input
+                        type={type}
+                        value={isEditing ? editData[field] : profileData[field]}
+                        onChange={isEditing ? (e) => handleInputChange(field, e.target.value) : undefined}
+                        readOnly={!isEditing}
+                        className={`w-full text-lg border-2 rounded-lg p-4 focus:outline-none ${
+                          isEditing 
+                            ? 'border-gray-300 bg-white focus:border-green-500' 
+                            : 'border-gray-300 bg-gray-50 cursor-default'
+                        }`}
+                      />
+                    </div>
+                  </div>
+                ))}
+                
+                {/* Address - Full Width */}
+                <div className="md:col-span-2 space-y-2">
+                  <label className="block text-gray-700 text-lg font-semibold">
+                    Address <span className="text-red-500">*</span>
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={isEditing ? editData.address : profileData.address}
+                      onChange={isEditing ? (e) => handleInputChange('address', e.target.value) : undefined}
+                      readOnly={!isEditing}
+                      className={`w-full text-lg border-2 rounded-lg p-4 focus:outline-none ${
+                        isEditing 
+                          ? 'border-gray-300 bg-white focus:border-green-500' 
+                          : 'border-gray-300 bg-gray-50 cursor-default'
+                      }`}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Additional Information Section */}
+              <div className="mt-8 pt-6 border-t border-gray-200">
+                <h4 className="text-xl font-bold mb-4 text-gray-800">Account Settings</h4>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                    <div>
+                      <p className="font-semibold text-gray-800">Password</p>
+                    </div>
+                    <button
+                      onClick={handleChangePassword}
+                      className="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700 transition-colors"
+                    >
+                      Change Password
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
+          </div>
+        </div>
+
+        {/* Floating Chat Button */}
+        <div className="group fixed bottom-10 right-10 z-50">
+          <button
+            onClick={() => navigate('/ChatPage')}
+            className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative transition-colors"
+          >
+            <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
+          </button>
+          <div className="absolute right-16 top-1/2 transform -translate-y-1/2 bg-black text-white text-lg font-semibold px-3 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity">
+            Chats
           </div>
         </div>
       </div>
-
-      {/* Edit Profile Modal */}
-      <Modal isOpen={showEditModal} onClose={() => setShowConfirmDiscard(true)}>
-        <div className="text-center mx-4">
-          <h2 className="text-3xl font-bold">Edit Profile Information</h2>
-          <p className="text-gray-600 mb-6">Need to change some information, go for it!</p>
-          
-          <div className="space-y-4">
-            <div className="flex gap-2">
-              <div className="flex-1">
-                <label className="block text-left text-lg font-medium mb-1">First Name *</label>
-                <input
-                  type="text"
-                  value={editData.fullName.split(' ')[0] || ''}
-                  onChange={(e) => {
-                    const lastName = editData.fullName.split(' ').slice(1).join(' ');
-                    handleInputChange('fullName', `${e.target.value} ${lastName}`.trim());
-                  }}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                  placeholder="Juan"
-                />
-              </div>
-              <div className="flex-1">
-                <label className="block text-left text-lg font-medium mb-1">Last Name *</label>
-                <input
-                  type="text"
-                  value={editData.fullName.split(' ').slice(1).join(' ') || ''}
-                  onChange={(e) => {
-                    const firstName = editData.fullName.split(' ')[0] || '';
-                    handleInputChange('fullName', `${firstName} ${e.target.value}`.trim());
-                  }}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2"
-                  placeholder="Dela Cruz"
-                />
-              </div>
-            </div>
-            
-            <div className="text-left">
-              <label className="block text-lg font-medium mb-1">Password *</label>
-              <div className="flex gap-2">
-                <input
-                  type="password"
-                  value="************"
-                  readOnly
-                  className="flex-1 border border-gray-300 rounded-lg px-3 py-2 bg-gray-50 cursor-not-allowed"
-                />
-                <button
-                  onClick={handleChangePassword}
-                  className="bg-gray-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-gray-700 transition-colors"
-                >
-                  Change Password
-                </button>
-              </div>
-            </div>
-            
-            <div className="text-left">
-              <label className="block text-lg font-medium mb-1">Email *</label>
-              <input
-                type="email"
-                value={editData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-              />
-            </div>
-            
-            <div className="text-left">
-              <label className="block text-lg font-medium mb-1">Contact Number *</label>
-              <input
-                type="text"
-                value={editData.contactNo}
-                onChange={(e) => handleInputChange('contactNo', e.target.value)}
-                className="w-full border border-gray-300 rounded-full px-3 py-2"
-              />
-            </div>
-            
-            <div className="text-left">
-              <label className="block text-lg font-medium mb-1">Address *</label>
-              <input
-                type="text"
-                value={editData.address}
-                onChange={(e) => handleInputChange('address', e.target.value)}
-                className="w-full border border-gray-300 rounded-lg px-3 py-2"
-              />
-            </div>
-          </div>
-          
-          <div className="flex gap-3 mt-6">
-            <button
-              onClick={handleModalDiscard}
-              className="flex-1 bg-red-500 text-white py-3 rounded-full hover:bg-red-600"
-            >
-              Disregard
-            </button>
-            <button
-              onClick={handleModalConfirm}
-              className="flex-1 bg-green-500 text-white py-3 rounded-full hover:bg-green-600"
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </Modal>
 
       {/* Confirm Discard Modal */}
       <Modal isOpen={showConfirmDiscard} onClose={() => setShowConfirmDiscard(false)} showCloseButton={false}>
@@ -570,7 +324,7 @@ const UserProfilePage = () => {
           </div>
           <h2 className="text-xl font-bold mb-2">Disregard editing profile?</h2>
           <p className="text-gray-600 mb-2">This action cannot be undone.</p>
-          <p className="text-gray-600 mb-6">The equipment details will be lost.</p>
+          <p className="text-gray-600 mb-6">The profile changes will be lost.</p>
           
           <div className="flex gap-3">
             <button
@@ -589,13 +343,14 @@ const UserProfilePage = () => {
         </div>
       </Modal>
 
-    {/* Enhanced Change Password Modal with validation */}
+      {/* Change Password Modal */}
       <Modal isOpen={showPasswordModal} onClose={() => setShowPasswordConfirm(true)}>
         <div className="text-center">
           <h2 className="text-2xl font-bold">Change Password</h2>
           <p className="text-gray-600 mb-6">Enter your current password and choose a new one</p>
           
           <div className="space-y-4">
+            {/* Current Password */}
             <div className="text-left">
               <label className="block text-lg font-medium mb-1">Current Password *</label>
               <div className="relative">
@@ -604,22 +359,22 @@ const UserProfilePage = () => {
                   value={passwordData.currentPassword}
                   onChange={(e) => handlePasswordChange('currentPassword', e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10"
-                  placeholder=""
+                  placeholder="Enter your current password"
                 />
-                <button
-                  type="button"
+                <div
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                   onClick={() => setShowCurrentPassword(!showCurrentPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  <img
-                    src={showCurrentPassword ? "/Visible.png" : "/NotVisible.png"}
-                    alt="Toggle"
-                    className="w-5 h-4"
-                  />
-                </button>
+                  {showCurrentPassword ? (
+                    <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
+                  ) : (
+                    <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
+                  )}
+                </div>
               </div>
             </div>
             
+            {/* New Password */}
             <div className="text-left">
               <label className="block text-lg font-medium mb-1">New Password *</label>
               <div className="relative">
@@ -628,22 +383,22 @@ const UserProfilePage = () => {
                   value={passwordData.newPassword}
                   onChange={(e) => handlePasswordChange('newPassword', e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10"
-                  placeholder=""
+                  placeholder="Enter your new password"
                 />
-                <button
-                  type="button"
+                <div
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                   onClick={() => setShowNewPassword(!showNewPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  <img
-                    src={showNewPassword ? "/Visible.png" : "/NotVisible.png"}
-                    alt="Toggle"
-                    className="w-5 h-4"
-                  />
-                </button>
+                  {showNewPassword ? (
+                    <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
+                  ) : (
+                    <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
+                  )}
+                </div>
               </div>
             </div>
             
+            {/* Confirm New Password */}
             <div className="text-left">
               <label className="block text-lg font-medium mb-1">Re-enter Password *</label>
               <div className="relative">
@@ -652,55 +407,72 @@ const UserProfilePage = () => {
                   value={passwordData.confirmPassword}
                   onChange={(e) => handlePasswordChange('confirmPassword', e.target.value)}
                   className="w-full border border-gray-300 rounded-lg px-3 py-2 pr-10"
-                  placeholder=""
+                  placeholder="Re-enter your new password"
                 />
-                <button
-                  type="button"
+                <div
+                  className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer"
                   onClick={() => setShowConfirmNewPassword(!showConfirmNewPassword)}
-                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 hover:text-gray-700"
                 >
-                  <img
-                    src={showConfirmNewPassword ? "/Visible.png" : "/NotVisible.png"}
-                    alt="Toggle"
-                    className="w-5 h-4"
-                  />
-                </button>
+                  {showConfirmNewPassword ? (
+                    <img src="/eye-open.png" alt="Hide password" className="w-[28px] h-[22px]" />
+                  ) : (
+                    <img src="/eye-closed.png" alt="Show password" className="w-[28px] h-[22px]" />
+                  )}
+                </div>
               </div>
-            </div>
-
-            {/* Fixed height container for error message */}
-            <div className="h-6 mb-2">
-              {passwordError && (
-                <p className="text-red-500 text-sm italic text-left">{passwordError}</p>
-              )}
             </div>
             
-            {/* Password Requirements Validation - Only show if user has started typing */}
-            {passwordData.newPassword.length > 0 && (
-              <div className="text-left text-sm">
-                <p className="mb-2 font-medium text-gray-800">Your password must contain...</p>
-
-                <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasMinLength ? "text-green-600" : "text-red-500"}`}>
-                  <img src={hasMinLength ? "/check.png" : "/wrong.png"} alt={hasMinLength ? "check" : "wrong"} className="h-3 w-3" />
-                  <span>Minimum of 8 characters</span>
-                </div>
-
-                <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasUpperCase && hasLowerCase ? "text-green-600" : "text-red-500"}`}>
-                  <img src={hasUpperCase && hasLowerCase ? "/check.png" : "/wrong.png"} alt={hasUpperCase && hasLowerCase ? "check" : "wrong"} className="h-3 w-3" />
-                  <span>At least 1 lower and upper case letters (AaBb)</span>
-                </div>
-
-                <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${hasSymbol ? "text-green-600" : "text-red-500"}`}>
-                  <img src={hasSymbol ? "/check.png" : "/wrong.png"} alt={hasSymbol ? "check" : "wrong"} className="h-3 w-3" />
-                  <span>At least 1 symbol (@#$)</span>
-                </div>
-
-                <div className={`flex items-center gap-2 text-sm font-medium ${hasNumber ? "text-green-600" : "text-red-500"}`}>
-                  <img src={hasNumber ? "/check.png" : "/wrong.png"} alt={hasNumber ? "check" : "wrong"} className="h-3 w-3" />
-                  <span>At least 1 number (123)</span>
-                </div>
+            {/* Fixed height container for error message */}
+            <div className="h-6 mb-2">{passwordError && <p className="text-red-500 text-sm">{passwordError}</p>}</div>
+            
+            {/* Password Requirements */}
+            <div className="text-left text-sm text-gray-600">
+              <p className="font-medium mb-2">Your new password must contain:</p>
+              
+              <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${
+                passwordData.newPassword.length >= 8 ? "text-green-600" : "text-red-500"
+              }`}>
+                <img
+                  src={passwordData.newPassword.length >= 8 ? "/check.png" : "/wrong.png"}
+                  alt="check"
+                  className="h-3 w-3"
+                />
+                <span>Minimum of 8 characters</span>
               </div>
-            )}
+
+              <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${
+                /[A-Z]/.test(passwordData.newPassword) && /[a-z]/.test(passwordData.newPassword) ? "text-green-600" : "text-red-500"
+              }`}>
+                <img
+                  src={/[A-Z]/.test(passwordData.newPassword) && /[a-z]/.test(passwordData.newPassword) ? "/check.png" : "/wrong.png"}
+                  alt="check"
+                  className="h-3 w-3"
+                />
+                <span>At least 1 lower and upper case letters (AaBb)</span>
+              </div>
+
+              <div className={`flex items-center gap-2 text-sm font-medium mb-1 ${
+                /[^A-Za-z0-9]/.test(passwordData.newPassword) ? "text-green-600" : "text-red-500"
+              }`}>
+                <img
+                  src={/[^A-Za-z0-9]/.test(passwordData.newPassword) ? "/check.png" : "/wrong.png"}
+                  alt="check"
+                  className="h-3 w-3"
+                />
+                <span>At least 1 symbol (@#$)</span>
+              </div>
+
+              <div className={`flex items-center gap-2 text-sm font-medium ${
+                /\d/.test(passwordData.newPassword) ? "text-green-600" : "text-red-500"
+              }`}>
+                <img
+                  src={/\d/.test(passwordData.newPassword) ? "/check.png" : "/wrong.png"}
+                  alt="check"
+                  className="h-3 w-3"
+                />
+                <span>At least 1 number (123)</span>
+              </div>
+            </div>
           </div>
           
           <div className="flex gap-3 mt-6">
@@ -719,6 +491,7 @@ const UserProfilePage = () => {
           </div>
         </div>
       </Modal>
+
       {/* Password Confirm Discard Modal */}
       <Modal isOpen={showPasswordConfirm} onClose={() => setShowPasswordConfirm(false)} showCloseButton={false}>
         <div className="text-center">
@@ -789,7 +562,7 @@ const UserProfilePage = () => {
               Back
             </button>
             <button
-              onClick={() => setShowPasswordSuccessModal(false)}
+              onClick={() => setShowPasswordSuccessModal(false)}      
               className="flex-1 bg-green-500 text-white py-3 rounded-full hover:bg-green-600"
             >
               Done

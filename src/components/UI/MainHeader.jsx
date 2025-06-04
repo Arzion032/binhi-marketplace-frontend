@@ -83,7 +83,7 @@ const hideSearchBarOnPaths = ["/cart-page", "/checkoutpage", "/user-profile"]; /
               </div>
               <input
                 type="text"
-                placeholder="Click here to products or farmer"
+                placeholder="Click here to search products or association"
                 className="flex-grow outline-none font-bold text-base"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
@@ -109,6 +109,13 @@ const hideSearchBarOnPaths = ["/cart-page", "/checkoutpage", "/user-profile"]; /
             <img src="/cart.png" alt="Cart" className="w-8 h-8 cursor-pointer hover:scale-110" />
             <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 bg-[#4CAF50] text-white text-lg font-bold px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
               Cart
+            </div>
+          </Link>
+
+           <Link to="/OrderHistory" className="relative group inline-block">
+            <img src="/history.png" alt="Order History" className="w-8 h-8 cursor-pointer hover:scale-110" />
+            <div className="absolute left-1/2 top-full mt-4 -translate-x-1/2 bg-[#4CAF50] text-white text-lg font-bold px-4 py-1 rounded-full opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+              Order History
             </div>
           </Link>
 
