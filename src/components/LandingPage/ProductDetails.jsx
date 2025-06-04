@@ -53,67 +53,11 @@ useEffect(() => {
 }, [selectedVariation]);
 
 
-
   const [tasks, setTasks] = useState([
     { id: 1, text: 'Buy 2 sacks', completed: true },
-    { id: 2, text: 'Follow Jonathan’s Shop', completed: false },
+    { id: 2, text: 'Follow Jonathan\'s Shop', completed: false },
   ]);
   const [selectedFilter, setSelectedFilter] = useState("All");
-
-  const [reviews, setReviews] = useState([
-    {
-      id: 1,
-      user: "j******x",
-      profileImage: "/user.png",
-      date: "2025-04-12",
-      rating: 5,
-      variation: "Jasmine",
-      comment: "Very fragrant rice, great quality!",
-      images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-    {
-      id: 2,
-      user: "m******d",
-      profileImage: "/user.png",
-      date: "2025-04-10",
-      rating: 4,
-      variation: "Sinandomeng",
-      comment: "Good rice but the packaging was a bit loose.",
-      images: ["/rice2-review.png", "/rice2-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-    {
-      id: 3,
-      user: "e******a",
-      profileImage: "/user.png",
-      date: "2025-04-08",
-      rating: 5,
-      variation: "Jasmine",
-      comment: "Best rice I’ve had in a while. Highly recommended!",
-      images: ["/rice-review.png", "/rice-review.png", "/rice-review.png", "/rice-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-    {
-      id: 4,
-      user: "r******e",
-      profileImage: "/user.png",
-      date: "2025-04-05",
-      rating: 3,
-      variation: "Sinandomeng",
-      comment: "Not bad, but I prefer other varieties.",
-      images: ["/rice2-review.png", "/rice2-review.png"],
-      liked: false,
-      likeCount: 0,
-    },
-  ]);
-
-  const filteredReviews = selectedFilter === "All"
-    ? reviews
-    : reviews.filter(review => review.rating === parseInt(selectedFilter));
 
 const incrementQuantity = () => {
   setQuantity(prev => {
@@ -129,8 +73,6 @@ const decrementQuantity = () => {
   });
 };
 
-
-
   const handleGoBack = () => navigate(-1);
   const handleImageChange = (image) => setMainImage(image);
 
@@ -142,19 +84,6 @@ const decrementQuantity = () => {
     );
   };
 
-  const toggleLike = (id) => {
-    setReviews(prev =>
-      prev.map(review =>
-        review.id === id
-          ? {
-              ...review,
-              liked: !review.liked,
-              likeCount: review.liked ? 0 : 1,
-            }
-          : review
-      )
-    );
-  };
 if (!product || !mainImage) {
   return (
     <div className="flex justify-center mt-20">
@@ -366,125 +295,8 @@ console.log(product)
 
       <VendorDetails selectedFilter={selectedFilter} product={product} tags={tags} />     
 
-        {/* Product Reviews */}
-              <div className="mt-16 bg-white rounded-3xl p-6 w-[1320px] border border-gray-500">
-                <h3 className="text-xl font-bold mb-4">Product Reviews</h3>
-                <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6 gap-4">
-                  <div>
-                    <span className="text-3xl font-bold text-gray-800">4.9</span>
-                    <span className="text-lg text-gray-600 ml-2">out of 5</span>
-                    <div className="text-yellow-500 text-4xl">★★★★★</div>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {["All", "5", "4", "3", "2", "1"].map((label, idx) => (
-                      <button
-                        key={idx}
-                        onClick={() => setSelectedFilter(label)}
-                        className={`px-4 py-1 rounded-lg border text-sm w-[120px] h-[40px] ${
-                          selectedFilter === label
-                            ? "border-green-500 text-green-600 font-semibold"
-                            : "border-gray-300 text-gray-600"
-                        }`}
-                      >
-                        {label === "All" ? "All" : `${label} stars`} ({
-                          reviews.filter(r => label === "All" || r.rating === parseInt(label)).length
-                        })
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {filteredReviews.map((review) => (
-                  <div key={review.id} className="border-b border-gray-200 pb-3 mb-5">
-                  <div className="flex justify-between text-sm text-gray-600">
-          <div className="flex items-start gap-2">
-            <img src={review.profileImage} alt="Profile" className="w-8 h-8 rounded-full" />
-            <div>
-              <span>{review.user}</span>
-              <div className="text-yellow-500 text-sm mt-0.5">{"★".repeat(review.rating)}</div>
-            </div>
-          </div>
-          <span>{review.date}</span>
-        </div>
-
-        <div className="text-sm text-gray-500 mt-1 mb-2">
-          Variation: <span className="text-black">{review.variation}</span>
-        </div>
-
-
-            <p className="mt-2 text-gray-700 text-sm leading-relaxed">{review.comment}</p>
-
-            {review.images.length > 0 && (
-              <div className="flex gap-2 mt-3">
-                {review.images.map((img, i) => (
-                  <img key={i} src={img} alt="review img" className="w-16 h-16 rounded object-cover" />
-                ))}
-              </div>
-            )}
-
-            <div className="flex justify-between items-center mt-3 text-md text-gray-500">
-              <div
-                onClick={() => toggleLike(review.id)}
-                className={`flex items-center gap-1 cursor-pointer ${
-                  review.liked ? 'text-red-500' : 'hover:text-gray-700'
-                }`}
-              >
-                <img
-                  src={review.liked ? "/heart-filled.png" : "/heart-outline.png"}
-                  className="w-5 h-5"
-                  alt="heart"
-                />
-                {review.liked ? review.likeCount : 'Helpful?'}
-              </div>
-          <div className="flex items-center gap-1 cursor-pointer group hover:text-orange-500">
-            <div className="relative w-5 h-5">
-              <img src="/shield-alert.png" className="w-5 h-5 absolute top-0 left-0 group-hover:opacity-0" />
-              <img src="/shield-alert-orange.png" className="w-5 h-5 absolute top-0 left-0 opacity-0 group-hover:opacity-100" />
-            </div>
-            Report
-          </div>
-
-
-
-            </div>
-          </div>
-        ))}
-
-<div className="flex justify-center gap-2 mt-6">
-  {/* Prev Button */}
-<button className="w-[45px] h-[50px] bg-[#D9D9D9] border border-[#858585] rounded-xl text-gray-500 hover:bg-[#c2c2c2]">
-  &lt;
-</button>
-
-{/* Page Numbers */}
-{[1, 2, 3, 4, 5].map((num) => (
-  <button
-    key={num}
-    className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
-      num === 1
-        ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
-        : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
-    }`}
-  >
-    {num}
-  </button>
-))}
-
-{/* Ellipsis */}
-<button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
-  ...
-</button>
-
-{/* Next Button */}
-<button className="w-[45px] h-[50px] rounded-xl bg-[#D9D9D9] border border-[#858585] text-[#858585] hover:bg-[#c2c2c2]">
-  &gt;
-</button>
-
-</div>
-      </div>
-
 {/* Recommendations */}
-<div className="mt-10 w-[1320px]">
+<div className="mt-10 w-full">
   <div className="flex items-center gap-2 mb-4">
     <img src="/shop-black.png" className="w-8 h-8" alt="Shop Icon" />
     <h3 className="text-xl font-bold">From the same shop</h3>
@@ -518,12 +330,86 @@ console.log(product)
         </div>
         <div className="flex items-center justify-between gap-4 mt-2">
       <img src="/shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
-          <button
-            onClick={() => navigate(`/product/${index}`)}
-            className="text-[20px] bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
-          >
-            Buy Now
-          </button>
+<button
+  onClick={() => {
+    // Calculate weight based on unit measurement and quantity
+    const calculateItemWeight = () => {
+      const currentVariation = selectedVariation || (product.variations && product.variations[0]);
+      const unitMeasurement = currentVariation?.unit_measurement || unit;
+      
+      // Weight calculation logic based on unit measurement
+      let baseWeight = 1; // default 1kg
+      
+      if (unitMeasurement) {
+        const lowerUnit = unitMeasurement.toLowerCase();
+        
+        if (lowerUnit.includes('kg')) {
+          // Extract number from unit like "5kg", "2.5kg"
+          const match = lowerUnit.match(/(\d+\.?\d*)/);
+          baseWeight = match ? parseFloat(match[1]) : 1;
+        } else if (lowerUnit.includes('g') && !lowerUnit.includes('kg')) {
+          // Convert grams to kg, e.g., "500g" = 0.5kg
+          const match = lowerUnit.match(/(\d+\.?\d*)/);
+          baseWeight = match ? parseFloat(match[1]) / 1000 : 0.1;
+        } else if (lowerUnit.includes('lb') || lowerUnit.includes('pound')) {
+          // Convert pounds to kg (1 lb = 0.453592 kg)
+          const match = lowerUnit.match(/(\d+\.?\d*)/);
+          baseWeight = match ? parseFloat(match[1]) * 0.453592 : 1;
+        } else if (lowerUnit.includes('pc') || lowerUnit.includes('piece')) {
+          // For pieces, estimate weight based on product category
+          if (product.category_name?.toLowerCase().includes('vegetable')) {
+            baseWeight = 0.2; // 200g per piece for vegetables
+          } else if (product.category_name?.toLowerCase().includes('fruit')) {
+            baseWeight = 0.3; // 300g per piece for fruits
+          } else {
+            baseWeight = 0.5; // 500g default per piece
+          }
+        } else if (lowerUnit.includes('sack') || lowerUnit.includes('bag')) {
+          baseWeight = 25; // 25kg per sack/bag
+        } else {
+          // Default weight for unknown units
+          baseWeight = 1;
+        }
+      }
+      
+      return baseWeight;
+    };
+
+    const itemWeight = calculateItemWeight();
+    const currentVariation = selectedVariation || (product.variations && product.variations[0]);
+    const currentPrice = price || product.min_price;
+    
+    const checkoutData = {
+      items: [
+        {
+          id: product.id,
+          name: product.name,
+          price: parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
+          quantity: quantity,
+          image: BASE_URL + (mainImage?.image || ''),
+          variation: currentVariation?.name || 'Default',
+          seller: product.seller?.name || 'Unknown Seller',
+          orderId: `PD-${Date.now()}`,
+          weight: itemWeight, // Add weight property
+          unit: currentVariation?.unit_measurement || unit || 'pc'
+        },
+      ],
+      subtotal: quantity * parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
+      discount: 0,
+      tax: 0,
+      total: quantity * parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
+      paymentMethod: "Cash on Delivery",
+      source: "product",
+    };
+    
+    console.log('Checkout data with weight:', checkoutData); // For debugging
+    navigate('/checkoutpage', { state: { checkoutData } });
+  }}
+  className="bg-green-500 text-white hover:bg-green-600 font-bold px-6 py-2 rounded-full w-[982px] h-[53px] flex items-center justify-between gap-2"
+>
+  Buy Now
+  <img src="/arrow-right.png" alt="arrow right" className="w-7 h-7" />
+</button>
         </div>
       </div>
     ))}

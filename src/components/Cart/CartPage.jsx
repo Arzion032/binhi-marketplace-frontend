@@ -33,6 +33,8 @@ const CartPage = () => {
       price: 53.0,
       variation: "Original Flavor",
       unitMeasurement: "1 Liter",
+      unit: "1 Liter", // Added for checkout compatibility
+      weight: 1, // Added weight for delivery calculation
       orderId: "23149BF001",
     },
     {
@@ -44,6 +46,8 @@ const CartPage = () => {
       price: 53.0,
       variation: "Chocolate Flavor",
       unitMeasurement: "500g",
+      unit: "500g", // Added for checkout compatibility
+      weight: 0.5, // Added weight for delivery calculation
       orderId: "23149BF002",
     },
     {
@@ -55,6 +59,8 @@ const CartPage = () => {
       price: 85.0,
       variation: "Premium Flavor",
       unitMeasurement: "250g",
+      unit: "250g", // Added for checkout compatibility
+      weight: 0.25, // Added weight for delivery calculation
       orderId: "23149BF003",
     },
   ];
@@ -186,9 +192,16 @@ const filteredCartItems = cartItems
   const handleCheckout = () => {
     if (selectedCartItems.length === 0) return;
     
-    // Pass all selected items to checkout
+    // Prepare checkout data with proper field mapping
     const checkoutData = {
-      items: selectedCartItems,
+      items: selectedCartItems.map(item => ({
+        ...item,
+        // Ensure both unit and unitMeasurement are available
+        unit: item.unit || item.unitMeasurement,
+        unitMeasurement: item.unitMeasurement || item.unit,
+        // Ensure weight is available for delivery calculation
+        weight: item.weight || 1, // Default to 1kg if not specified
+      })),
       subtotal: subtotal,
       discount: 0,
       tax: 0,
@@ -197,6 +210,7 @@ const filteredCartItems = cartItems
       source: 'cart'
     };
 
+    console.log('Checkout data being passed:', checkoutData); // For debugging
     navigate('/checkoutpage', { state: { checkoutData } });
   };
 
@@ -205,8 +219,8 @@ const filteredCartItems = cartItems
       <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center p-4">
         <div className="text-center">
           <button
-            className="flex items-center text-gray-600 hover:text-black"
-            onClick={() => navigate("/cartpage")}
+            className="flex items-center text-gray-600 hover:text-black mb-4"
+            onClick={() => navigate("/")}
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
@@ -242,6 +256,7 @@ return (
         <div>
           <h1 className="text-4xl font-bold">Your Cart</h1>
           <p className="text-gray-600 text-lg">You have {cartItems.length} vendors in your cart, check out now!</p>
+
         </div>
       </div>
       <div className="flex items-center px-4">
@@ -322,6 +337,7 @@ return (
                 Click here to chat
               </button>
             </Link>
+
           </div>
           <button className="flex items-center gap-2 hover:bg-green-50 text-[#4CAE4F] border border-[#4CAE4F] text-sm font-medium px-3 py-2 rounded-full transition-colors">
             <img src="/shoppp.png" className="w-5 h-5" alt="Shop" /> 
@@ -350,6 +366,7 @@ return (
                   onError={(e) => { e.target.src = '/placeholder-product.png'; }}
                 />
                 <p className="font-bold text-lg ml-2">{product.name}</p>
+
               </div>
 
               <div className="w-[12%] text-center border-r border-gray-600 py-3 px-2">
@@ -413,6 +430,7 @@ return (
 
       {/* RIGHT SECTION - Order Summary */}
         <div className="w-[400px] bg-white p-4 rounded-lg shadow border border-gray-400 flex flex-col h-fit">
+
           <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
           <div className="w-full h-[1px] bg-gray-300 mb-4" />
           
@@ -420,6 +438,7 @@ return (
             <div className="flex justify-between">
               <p>Selected Items:</p>
               <p className="text-black font-bold">{selectedItems.length}</p>
+
             </div>
             <div className="flex justify-between">
               <p>Subtotal</p>
