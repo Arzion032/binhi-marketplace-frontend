@@ -5,12 +5,12 @@ function FederationSection() {
 
   return (
     <section className="bg-gray-50">
-      <h1 className="bg-white border-2 border-gray text-3xl md:text-[36px] font-inter text-center font-black shadow-sm p-4">
+      <h1 className="bg-white border-2 border-gray text-3xl md:text-[36px] font-inter text-center font-black shadow-sm p-7">
         KNOW MORE ABOUT <span className="text-[#4CAE4F]">OUR FEDERATION</span>!
       </h1>
 
       {/* Tabs */}
-      <div className="bg-white border-2 border-gray flex justify-center gap-4 mb-8 shadow-sm p-4">
+      <div className="bg-white border-1 border-gray flex justify-center gap-4 mb-8 shadow-sm p-4">
         <button
           onClick={() => setActiveTab("who")}
           className={`px-6 py-2 rounded-full border font-medium ${
