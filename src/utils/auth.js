@@ -5,5 +5,6 @@ export const logout = () => {
   localStorage.removeItem("userId");
   localStorage.removeItem("userEmail");
   localStorage.removeItem("userRole");
+  localStorage.removeItem("userName");
   window.location.href = "/";
 };

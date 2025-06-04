@@ -47,7 +47,7 @@ function LogInPage() {
         password,
       });
 
-      const { access, refresh, user_id, email: userEmail, role } = response.data;
+      const { access, refresh, user_id, email: userEmail, role, username } = response.data;
 
       // Store tokens in localStorage (or cookies if preferred)
       localStorage.setItem("accessToken", access);
@@ -55,6 +55,7 @@ function LogInPage() {
       localStorage.setItem("userId", user_id);
       localStorage.setItem("userEmail", userEmail);
       localStorage.setItem("userRole", role);
+      localStorage.setItem("userName", username);
 
       // Redirect to Marketplace or Dashboard
       navigate("/marketplace");

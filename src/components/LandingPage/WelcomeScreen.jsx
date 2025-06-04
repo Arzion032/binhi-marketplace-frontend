@@ -4,11 +4,28 @@ import { useNavigate } from 'react-router-dom';
 const WelcomeScreen = ({ name }) => {
   const navigate = useNavigate();
   const [isLoggedIn, setIsLoggedIn] = useState(null);
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    const email = localStorage.getItem("userEmail");
+    const username = localStorage.getItem("userName");
+    if (token) {
+      setIsLoggedIn(true);
+      setUserEmail(email || "User");
+      setUserName(username || "User");
+ 
+    }
+  }, []);
 
   useEffect(() => {
     const token = localStorage.getItem("accessToken");
     setIsLoggedIn(!!token);
   }, []);
+
+  
 
   if (isLoggedIn === null) return null; // Optional: loading state
 
@@ -29,7 +46,7 @@ const WelcomeScreen = ({ name }) => {
           {/* Center Greeting Text */}
           <div className="text-center flex flex-col justify-center flex-1">
             <h2 className="sm:text-7xl font-bold mb-3">
-              Hi, {name || "User"}!
+              Hi, {userName || "User"}!
             </h2>
             <p className="text-2xl flex flex-col items-center gap-2">
               <span>What product you want to find?</span>
