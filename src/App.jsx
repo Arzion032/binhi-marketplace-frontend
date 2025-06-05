@@ -29,9 +29,10 @@ import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
 import SearchProductWithAccount from "./components/LandingPageWithAccount/SearchProductWithAccount";
 import OrderManagement from "./components/SellerCenter/OrderManagement";
 import AboutUsPage from "./components/LandingPage/AboutUsPage";
-import ViewFarmers from "./components/LandingPage/ViewFarmers"; 
+import ViewAssociation from "./components/LandingPage/ViewAssociation"; 
 import NotFoundPage from "./components/UI/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
+import Associations from "./components/LandingPage/Associations";
 
 const handleSearch = (query) => {
   if (query.trim()) {
@@ -65,12 +66,15 @@ function App() {
         <Route path="/marketplace" element={<MarketplaceWithAccount />} />
         <Route path="/featured-products" element={<FeaturedProducts />} />
         <Route path="/seller-center" element={<SellerCenter />} />
+        <Route path="/view-association" element={<ViewAssociation />} />
         <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
         <Route path="/search-product-account" element={<SearchProductWithAccount />} />
         <Route path="/order-management" element={<OrderManagement/>} />
         <Route path="/about-us" element={<MainLayout><AboutUsPage/></MainLayout>} />
         <Route path="*" element={<MainLayout><NotFoundPage /></MainLayout>}/>
         <Route path="/withAccount" element={<MarketplaceWithAccount />}/>
+        <Route path="/associations" element={<Associations />}/>
+
       </Routes>
     </Router>
   );

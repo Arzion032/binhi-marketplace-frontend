@@ -31,41 +31,43 @@ const SearchProductWithAccount = () => {
   }, [currentPage, products]);
 
   const farmerTemplates = [
-    {
-      name: "Anton Benidas",
-      location: "Macamot, Binangonan",
-      rating: 5.0,
+     {
+      name: "Pantok Farmers Association",
+      location: "Pantok, Binangonan",
       sold: "10k",
       rank: 2,
       categories: ["milks & dairy", "rice", "grains"],
-      img: "/222.jpg",
+      img: "/555.png",
+      gridImg: "/Pantok.png",
+      place: "Pantok"
     },
     {
-      name: "John Doe Pasig",
+      name: "Macamot Farmers Association",
       location: "Macamot, Binangonan",
-      rating: 5.0,
       sold: "12k",
       rank: 1,
       categories: ["fruits", "rice", "vegetables", "root crops"],
       img: "/444.png",
+      gridImg: "/Macamot.png",
+      place: "Macamot"
     },
-    {
-      name: "John Doe Pasig",
-      location: "Macamot, Binangonan",
-      rating: 5.0,
-      sold: "12k",
-      rank: 1,
-      categories: ["fruits", "rice", "vegetables", "root crops"],
-      img: "/444.png",
+   {
+      name: "Hulo Farmers Association",
+      location: "Hulo, Binangonan",
+      sold: "6k",
+      rank: 6,
+      categories: ["rice", "root crops"],
+      img: "/Hulo.png",
+      place: "Hulo"
     },
-    {
-      name: "Anton Benidas",
-      location: "Macamot, Binangonan",
-      rating: 5.0,
-      sold: "10k",
-      rank: 2,
-      categories: ["milks & dairy", "rice", "grains"],
-      img: "/222.jpg",
+   {
+      name: "Kaymaputi Farmers Guild",
+      location: "Kaymaputi, Binangonan",
+      sold: "1.5k",
+      rank: 11,
+      categories: ["rice", "grains"],
+      img: "/Kaymaputi.png",
+      place: "Kaymaputi"
     },
   ];
 
@@ -107,19 +109,16 @@ const SearchProductWithAccount = () => {
                   <div className="bg-white rounded-2xl border-[3px] border-black-200 shadow-md text-center flex flex-col items-center justify-between h-full">
                     <div className="flex flex-col items-center justify-between h-full w-full">
                       <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
-                        <div className="relative w-24 h-24">
-                          <img
-                            src={farmer.img}
-                            alt={farmer.name}
-                            className="w-24 h-24 object-cover rounded-full border-4 border-white shadow-lg"
-                          />
-                        </div>
+                     <div className="relative w-24 h-24">
+                    <img
+                      src={farmer.gridImg || farmer.img}
+                      alt={farmer.name}
+                      className="w-24 h-24 object-cover"
+                    />
+                  </div>
                         <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
                         <p className="text-sm text-gray-500">{farmer.location}</p>
                         <div className="flex items-center gap-2 font-medium mt-1">
-                          <img src="/Star.png" alt="star" className="h-5 w-5" />
-                          <span className="text-black">{Number(farmer.rating).toFixed(1)}</span>
-                          <span className="text-gray-500 ml-1">|</span>
                           <span className="text-gray-500 ml-2">{farmer.sold} Sold</span>
                         </div>
                         <div className="flex flex-wrap justify-center gap-2 mt-3">

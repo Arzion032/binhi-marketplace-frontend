@@ -55,27 +55,24 @@ const Marketplace = () => {
 
   const farmerTemplates = [
     {
-      name: "Macamot Farmers Association",
-      location: "Macamot, Binangonan",
-      rating: 5.0,
+      name: "Pantok Farmers Association",
+      location: "Pantok, Binangonan",
       sold: "10k",
       rank: 2,
       categories: ["milks & dairy", "rice", "grains"],
-      img: "/444.png",
+      img: "/555.png",
     },
     {
-      name: "Pantok Farmers Association",
-      location: "Pantok, Binangonan",
-      rating: 5.0,
+      name: "Macamot Farmers Association",
+      location: "Macamot, Binangonan",
       sold: "12k",
       rank: 1,
       categories: ["fruits", "rice", "vegetables", "root crops"],
-      img: "/555.png",
+      img: "/444.png",
     },
     {
       name: "Tagpos Farmers Association",
       location: "Tagpos, Binangonan",
-      rating: 5.0,
       sold: "9k",
       rank: 3,
       categories: ["fruits", "root crops", "meat"],
@@ -105,7 +102,7 @@ const Marketplace = () => {
         {/* Categories Section */}
         <section className="px-2 sm:px-4 py-4 mx-[60px]">
           <div className="max-w-7xl mx-auto">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-0">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-0">
               {[
                 { label: 'Grains', background: '/grains.png', overlay: '/rice.png' },
                 { label: 'Vegetables', background: '/vegetable.png', overlay: '/broccoli.png' },
@@ -113,6 +110,7 @@ const Marketplace = () => {
                 { label: 'Dairy', background: '/milks.png', overlay: '/milk-bottle.png' },
                 { label: 'Meat', background: '/meatss.png', overlay: '/meat.png' },
                 { label: 'Fruits', background: '/fruits.png', overlay: '/grapes.png' },
+                { label: 'Fish', background: '/fish.png', overlay: '/fishy.png' },
               ].map((item, index) => (
                 <div key={index} className="group p-4 text-center text-2xl font-medium text-gray-700 flex flex-col items-center transition-transform duration-300">
                   <div className="relative w-18 h-18 mb-2">
@@ -177,9 +175,6 @@ const Marketplace = () => {
                     <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
                     <p className="text-sm text-gray-500">{farmer.location}</p>
                     <div className="flex items-center gap-2 font-medium mt-1">
-                      <img src="/Star.png" alt="star" className="h-5 w-5" />
-                      <span className="text-black">{Number(farmer.rating).toFixed(1)}</span>
-                      <span className="text-gray-500 ml-1">|</span>
                       <span className="text-gray-500 ml-2">{farmer.sold} Sold</span>
                     </div>
                     <div className="flex flex-wrap justify-center gap-2 mt-3">
@@ -193,8 +188,11 @@ const Marketplace = () => {
                       <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                       View Shop
                     </button>
-                    <button className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2">
-                      <img src="/chat.png" alt="chat" className="w-5 h-5" />
+                    <button 
+                    onClick={() => navigate('/chatpage')}
+                    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
+                    >
+                      <img src="/chat.png" alt="chat" className="w-5 h-5" />        
                       Chat Now
                     </button>
                   </div>
@@ -207,17 +205,14 @@ const Marketplace = () => {
           <div className="flex justify-center mt-10 relative z-10">
             <button
               className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
-              onClick={() => navigate('/searched-farmers')}
+              onClick={() => navigate('/associations')}
             >
               See More
             </button>
           </div>
         </section>
 
-        {/*Federation Section*/}
-        <section>
-        </section>
-        <FederationSection/>
+
 
         {/*Counts*/}
         <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
