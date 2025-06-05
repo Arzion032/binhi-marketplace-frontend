@@ -4,94 +4,82 @@ import api, { BASE_URL } from '../../api';
 import LoadingScreen from '../UI/LoadingScreen';
 
 const CartPage = () => {
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    api.get("/cart/my_cart/")
-      .then(res => setCartItems(res.data))
-      .catch(err => setError(err.message || "Error fetching cart items"))
-      .finally(() => setLoading(false));
-  }, []);
-
-
-  const filteredCartItems = cartItems
-  .map(vendorGroup => {
-    const matchingItems = vendorGroup.items.filter(item => {
-      const variationName = item.variation.name.toLowerCase();
-      const productName = item.variation.product.name.toLowerCase();
-      const vendorName = vendorGroup.vendor_name.toLowerCase();
-
-      const query = searchQuery.toLowerCase();
-
-      return (
-        variationName.includes(query) ||
-        productName.includes(query) ||
-        vendorName.includes(query)
-      );
-    });
-
-    if (matchingItems.length > 0) {
-      return {
-        vendor_id: vendorGroup.vendor_id,
-        vendor_name: vendorGroup.vendor_name,
-        items: matchingItems,
-      };
-    }
-
-    return null;
-  })
-  .filter(group => group !== null);
-
-  const allCartItems = filteredCartItems.flatMap(vendor => vendor.items);
-  const selectedCartItems = allCartItems.filter(item =>
-    selectedItems.includes(item.variation.id)
-  );
-  const subtotal = selectedCartItems.reduce((sum, item) => {
-    const price = Number(item.variation.unit_price) || 0;
-    const qty = Number(item.quantity) || 1;
-    return sum + price * qty;
-  }, 0);
-  const total = subtotal
-
-  const handleItemSelect = (itemId) => {
-  setSelectedItems(prev => {
-    const updated = prev.includes(itemId)
-      ? prev.filter(id => id !== itemId)
-      : [...prev, itemId];
-
-    return updated; // ✅ Must return the new array!
-  });
-};
+  const [productVariations, setProductVariations] = useState({});
 
 useEffect(() => {
-  console.log('subtotal', subtotal);
-  console.log('selectedItems', selectedItems);
-  console.log('selectedCartItems', selectedCartItems);
-  console.log('all cart', allCartItems)
-}, [selectedCartItems, selectedItems]); // ✅ correct array syntax
+  api.get("/cart/my_cart/")
+    .then(res => {
+      setCartItems(res.data);
+
+      // Fix: Map productId -> variations
+      const variationMap = {};
+      res.data.forEach(vendor => {
+        vendor.items.forEach(item => {
+          const productId = item.variation.product.id;
+          const variations = item.variation.product.variations || [];
+          variationMap[productId] = variations;
+        });
+      });
+      setProductVariations(variationMap); // productId -> [{id, name}]
+    })
+    .catch(err => setError(err.message || "Error fetching cart items"))
+    .finally(() => setLoading(false));
+}, []);
+  
 
 
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleQuantityChange = (id, amount) => {
-    setCartItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, quantity: Math.max(1, item.quantity + amount) } : item
+const handleQuantityChange = (variationId, amount) => {
+  setCartItems(prev =>
+    prev.map(vendor => ({
+      ...vendor,
+      items: vendor.items.map(item =>
+        item.variation.id === variationId
+          ? { ...item, quantity: Math.max(1, item.quantity + amount) }
+          : item
       )
-    );
-  };
+    }))
+  );
+};
 
-  const handleVariationChange = (id, newVariation) => {
+const handleVariationChange = async (oldVarId, newVariationId) => {
+  try {
+    const response = await api.patch(`/cart/update_cartitem/${oldVarId}/`, {
+      variation_id: newVariationId
+    });
+    
+    // The response contains the updated cart item with new variation data
+    const updatedItem = response.data;
+    
+    // Update the local state
     setCartItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, variation: newVariation } : item
-      )
+      prev.map(vendor => ({
+        ...vendor,
+        items: vendor.items.map(item => {
+          if (item.variation.id === oldVarId) {
+            return {
+              ...item,
+              variation: updatedItem.variation,
+              quantity: updatedItem.quantity,
+              total_price: updatedItem.total_price
+            };
+          }
+          return item;
+        })
+      }))
     );
-  };
+    
+  } catch (error) {
+    console.error('Error updating variation:', error);
+    // Handle error (show toast, etc.)
+  }
+};
 
   const handleDelete = (id) => {
     setCartItems(prev => prev.filter(item => item.id !== id));
@@ -121,21 +109,42 @@ useEffect(() => {
     }
   };
 
+  const handleItemSelect = (itemId) => {
+    setSelectedItems(prev =>
+      prev.includes(itemId)
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
 
+  // Search functionality
+const filteredCartItems = cartItems
+  .map(vendorGroup => {
+    const matchingItems = vendorGroup.items.filter(item => {
+      const variationName = item.variation.name.toLowerCase();
+      const productName = item.variation.product.name.toLowerCase();
+      const vendorName = vendorGroup.vendor_name.toLowerCase();
 
-// Fix the loading fallback return
-if (loading) {
-  return <LoadingScreen />;
-}
+      const query = searchQuery.toLowerCase();
 
-// Fix null check
-if (!cartItems || !Array.isArray(cartItems)) {
-  return (
-    <div className="min-h-screen flex items-center justify-center text-red-500">
-      Error loading cart items.
-    </div>
-  );
-}
+      return (
+        variationName.includes(query) ||
+        productName.includes(query) ||
+        vendorName.includes(query)
+      );
+    });
+
+    if (matchingItems.length > 0) {
+      return {
+        vendor_id: vendorGroup.vendor_id,
+        vendor_name: vendorGroup.vendor_name,
+        items: matchingItems,
+      };
+    }
+
+    return null;
+  })
+  .filter(group => group !== null);
 
 
   const handleSearch = (e) => {
@@ -170,6 +179,51 @@ if (!cartItems || !Array.isArray(cartItems)) {
     alert('Camera search feature coming soon!');
   };
 
+  const selectedCartItems = filteredCartItems.filter(item => selectedItems.includes(item.id));
+  const calculateSubtotal = () => {
+    let subtotal = 0;
+    
+    filteredCartItems.forEach(vendorGroup => {
+      vendorGroup.items.forEach(item => {
+        // Check if this item is selected
+        if (selectedItems.includes(item.variation.id)) {
+          const unitPrice = parseFloat(item.variation.unit_price);
+          const quantity = item.quantity;
+          subtotal += unitPrice * quantity;
+        }
+      });
+    });
+    
+    return subtotal;
+  };
+
+  const subtotal = calculateSubtotal();
+  const total = subtotal;
+
+  const handleCheckout = () => {
+    if (selectedCartItems.length === 0) return;
+    
+    // Prepare checkout data with proper field mapping
+    const checkoutData = {
+      items: selectedCartItems.map(item => ({
+        ...item,
+        // Ensure both unit and unitMeasurement are available
+        unit: item.unit || item.unitMeasurement,
+        unitMeasurement: item.unitMeasurement || item.unit,
+        // Ensure weight is available for delivery calculation
+        weight: item.weight || 1, // Default to 1kg if not specified
+      })),
+      subtotal: subtotal,
+      discount: 0,
+      tax: 0,
+      total: subtotal,
+      paymentMethod: 'Cash on Delivery',
+      source: 'cart'
+    };
+
+    console.log('Checkout data being passed:', checkoutData); // For debugging
+    navigate('/checkoutpage', { state: { checkoutData } });
+  };
 
   if (cartItems.length === 0) {
     return (
@@ -212,8 +266,8 @@ return (
         </button>
         <div>
           <h1 className="text-4xl font-bold">Your Cart</h1>
-          You have {cartItems.reduce((total, vendor) => total + vendor.items.length, 0)} items in your cart, check out now!
-          
+          <p className="text-gray-600 text-lg">You have {cartItems.length} vendors in your cart, check out now!</p>
+
         </div>
       </div>
       <div className="flex items-center px-4">
@@ -327,7 +381,21 @@ return (
               </div>
 
               <div className="w-[12%] text-center border-r border-gray-600 py-3 px-2">
-                <p className="text-base font-medium">{variation.name}</p>
+                <select
+                    value={item.variation.id}
+                    onChange={(e) => {
+                      console.log("old:", item.variation.id);
+                      console.log("new:", e.target.value);
+                      handleVariationChange(item.variation.id, e.target.value);
+                    }}
+                    className="w-full bg-[#4CAF50] px-2 py-1 border border-gray-400 rounded-md text-base font-medium text-white focus:border-[#4CAE4F] focus:outline-none focus:ring-1 focus:ring-[#4CAE4F] transition-colors"
+                  >
+                    {productVariations[item.variation.product.id]?.map(v => (
+                      <option key={v.id} value={v.id}>
+                        {v.name}
+                      </option>
+                    ))}
+                  </select>
               </div>
 
               <div className="w-[12%] flex justify-center items-center gap-2 py-3 border-r border-gray-400">
@@ -409,7 +477,7 @@ return (
           </div>
 
           <button
-            onClick={handleSearch}
+            onClick={handleCheckout}
             disabled={selectedCartItems.length === 0}
             className={`mt-full w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
               selectedCartItems.length === 0 
