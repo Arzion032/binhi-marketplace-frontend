@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api, { BASE_URL } from '../../api';
 import LoadingScreen from '../UI/LoadingScreen';
@@ -19,33 +19,34 @@ const CartPage = () => {
   }, []);
 
 
-  const filteredCartItems = cartItems
-  .map(vendorGroup => {
-    const matchingItems = vendorGroup.items.filter(item => {
-      const variationName = item.variation.name.toLowerCase();
-      const productName = item.variation.product.name.toLowerCase();
-      const vendorName = vendorGroup.vendor_name.toLowerCase();
+const filteredCartItems = useMemo(() => {
+  return cartItems
+    .map(vendorGroup => {
+      const matchingItems = vendorGroup.items.filter(item => {
+        const variationName = item.variation.name.toLowerCase();
+        const productName = item.variation.product.name.toLowerCase();
+        const vendorName = vendorGroup.vendor_name.toLowerCase();
+        const query = searchQuery.toLowerCase();
 
-      const query = searchQuery.toLowerCase();
+        return (
+          variationName.includes(query) ||
+          productName.includes(query) ||
+          vendorName.includes(query)
+        );
+      });
 
-      return (
-        variationName.includes(query) ||
-        productName.includes(query) ||
-        vendorName.includes(query)
-      );
-    });
+      if (matchingItems.length > 0) {
+        return {
+          vendor_id: vendorGroup.vendor_id,
+          vendor_name: vendorGroup.vendor_name,
+          items: matchingItems,
+        };
+      }
 
-    if (matchingItems.length > 0) {
-      return {
-        vendor_id: vendorGroup.vendor_id,
-        vendor_name: vendorGroup.vendor_name,
-        items: matchingItems,
-      };
-    }
-
-    return null;
-  })
-  .filter(group => group !== null);
+      return null;
+    })
+    .filter(group => group !== null);
+}, [cartItems, searchQuery]);
 
   const allCartItems = filteredCartItems.flatMap(vendor => vendor.items);
   const selectedCartItems = allCartItems.filter(item =>
@@ -76,26 +77,12 @@ useEffect(() => {
 }, [selectedCartItems, selectedItems]); // ✅ correct array syntax
 
 
-
-  const handleQuantityChange = (id, amount) => {
-    setCartItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, quantity: Math.max(1, item.quantity + amount) } : item
-      )
-    );
-  };
-
   const handleVariationChange = (id, newVariation) => {
     setCartItems(prev =>
       prev.map(item =>
         item.id === id ? { ...item, variation: newVariation } : item
       )
     );
-  };
-
-  const handleDelete = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-    setSelectedItems(prev => prev.filter(itemId => itemId !== id));
   };
 
   const handleDeleteAll = () => {
@@ -170,6 +157,19 @@ if (!cartItems || !Array.isArray(cartItems)) {
     alert('Camera search feature coming soon!');
   };
 
+const handleQuantityChange = (id, amount) => {
+  setCartItems(prev =>
+    prev.map(vendorGroup => ({
+      ...vendorGroup,
+      items: vendorGroup.items.map(item =>
+        item.variation.id === id
+          ? { ...item, quantity: Math.max(1, item.quantity + amount) }
+          : item
+      )
+    }))
+  );
+};
+
 
   if (cartItems.length === 0) {
     return (
@@ -194,11 +194,34 @@ if (!cartItems || !Array.isArray(cartItems)) {
       </div>
     );
   }
+
 if (!cartItems){
   <LoadingScreen />
 }
 
 console.log(selectedItems)
+
+const handleDelete = async (variationId) => {
+  try {
+    await api.delete(`/cart/remove_cartitem/${variationId}/`);
+
+    // Optimistically update the local state
+    setCartItems(prev =>
+      prev.map(vendorGroup => {
+        const updatedItems = vendorGroup.items.filter(item => item.variation.id !== variationId);
+        return {
+          ...vendorGroup,
+          items: updatedItems
+        };
+      }).filter(group => group.items.length > 0) // remove empty vendor groups
+    );
+  } catch (err) {
+    console.error("Error deleting item:", err);
+    alert("Failed to delete item. Please try again.");
+  }
+};
+
+
 return (
   <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
     {/* Header with Search Bar */}
@@ -318,7 +341,7 @@ return (
                 />
                 <img 
                   src={BASE_URL + variation.main_image} 
-                  alt={product.name} 
+                  alt={product.name}
                   className="w-12 h-12 rounded-lg object-cover"
                   onError={(e) => { e.target.src = '/placeholder-product.png'; }}
                 />
