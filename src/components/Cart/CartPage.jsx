@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import api, { BASE_URL } from '../../api';
 import LoadingScreen from '../UI/LoadingScreen';
+import OrderSummary from './OrderSummary';
+import CartItemsList from './CartItemsList';
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -9,6 +11,11 @@ const CartPage = () => {
   const [error, setError] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [productVariations, setProductVariations] = useState({});
+  const debounceTimers = useRef({});
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const quantityMap = useRef({});
+
 
 useEffect(() => {
   api.get("/cart/my_cart/")
@@ -31,22 +38,67 @@ useEffect(() => {
 }, []);
   
 
-
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const getItemByVariationId = (variationId) => {
+  for (const vendor of cartItems) {
+    const found = vendor.items.find(item => item.variation.id === variationId);
+    if (found) return found;
+  }
+  return null;
+};
 
 const handleQuantityChange = (variationId, amount) => {
+  // 1. Track the latest quantity manually
+  let newQuantity = 1;
+
   setCartItems(prev =>
     prev.map(vendor => ({
       ...vendor,
-      items: vendor.items.map(item =>
-        item.variation.id === variationId
-          ? { ...item, quantity: Math.max(1, item.quantity + amount) }
-          : item
-      )
+      items: vendor.items.map(item => {
+        if (item.variation.id === variationId) {
+          newQuantity = Math.max(1, item.quantity + amount);
+          quantityMap.current[variationId] = newQuantity;
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      })
     }))
   );
+
+  // 2. Debounce the backend PATCH
+  if (debounceTimers.current[variationId]) {
+    clearTimeout(debounceTimers.current[variationId]);
+  }
+
+  debounceTimers.current[variationId] = setTimeout(async () => {
+    try {
+      const response = await api.patch(`/cart/update_cartitem/${variationId}/`, {
+        quantity: quantityMap.current[variationId]
+      });
+
+      const updated = response.data;
+
+      // 3. Sync total price and confirmed quantity
+      setCartItems(prev =>
+        prev.map(vendor => ({
+          ...vendor,
+          items: vendor.items.map(item =>
+            item.variation.id === variationId
+              ? {
+                  ...item,
+                  quantity: updated.quantity,
+                  total_price: updated.total_price
+                }
+              : item
+          )
+        }))
+      );
+    } catch (err) {
+      console.error("Failed to update quantity:", err);
+    }
+  }, 500);
 };
+
+
 
 const handleVariationChange = async (oldVarId, newVariationId) => {
   try {
@@ -82,7 +134,7 @@ const handleVariationChange = async (oldVarId, newVariationId) => {
 };
 
   const handleDelete = (id) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
+    setCartItems(prev => prev.filter(item => item.variation.id !== id));
     setSelectedItems(prev => prev.filter(itemId => itemId !== id));
   };
 
@@ -178,8 +230,16 @@ const filteredCartItems = cartItems
     // Camera search functionality - placeholder for now
     alert('Camera search feature coming soon!');
   };
+ const allCartItemsCopy = filteredCartItems.flatMap(vendor =>
+  vendor.items.map(item => ({
+    ...item,
+    vendor_id: vendor.vendor_id,
+    vendor_name: vendor.vendor_name,
+  }))
+);
+  const allCartItems = filteredCartItems.flatMap(vendor => vendor.items);
+  const selectedCartItems = allCartItemsCopy.filter(item => selectedItems.includes(item.variation.id));
 
-  const selectedCartItems = filteredCartItems.filter(item => selectedItems.includes(item.id));
   const calculateSubtotal = () => {
     let subtotal = 0;
     
@@ -201,17 +261,12 @@ const filteredCartItems = cartItems
   const total = subtotal;
 
   const handleCheckout = () => {
-    if (selectedCartItems.length === 0) return;
+    if (selectedItems.length === 0) return;
     
     // Prepare checkout data with proper field mapping
     const checkoutData = {
       items: selectedCartItems.map(item => ({
         ...item,
-        // Ensure both unit and unitMeasurement are available
-        unit: item.unit || item.unitMeasurement,
-        unitMeasurement: item.unitMeasurement || item.unit,
-        // Ensure weight is available for delivery calculation
-        weight: item.weight || 1, // Default to 1kg if not specified
       })),
       subtotal: subtotal,
       discount: 0,
@@ -224,8 +279,10 @@ const filteredCartItems = cartItems
     console.log('Checkout data being passed:', checkoutData); // For debugging
     navigate('/checkoutpage', { state: { checkoutData } });
   };
-
-  if (cartItems.length === 0) {
+if (loading){
+  <LoadingScreen />
+}
+  if (cartItems && cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center p-4">
         <div className="text-center">
@@ -248,11 +305,8 @@ const filteredCartItems = cartItems
       </div>
     );
   }
-if (!cartItems){
-  <LoadingScreen />
-}
 
-console.log(selectedItems)
+
 return (
   <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
     {/* Header with Search Bar */}
@@ -266,7 +320,7 @@ return (
         </button>
         <div>
           <h1 className="text-4xl font-bold">Your Cart</h1>
-          <p className="text-gray-600 text-lg">You have {cartItems.length} vendors in your cart, check out now!</p>
+          <p className="text-gray-600 text-lg">You have {allCartItems.length} items in your cart, check out now!</p>
 
         </div>
       </div>
@@ -305,192 +359,35 @@ return (
     )}
 
     <div className="flex flex-col lg:flex-row gap-4 mx-10">
-      {/* LEFT SECTION */}
-      <div className="w-[1200px] xl:w-3/4 space-y-6">
-        {/* Header */}
-        <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-400 text-base text-black">
-          <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
-          <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
-          <div className="w-[7%] text-center">ACTION</div>
-        </div>
 
-       {filteredCartItems.length > 0 ? (
-  filteredCartItems.map((vendorGroup) => {
-    const allSelectedForVendor = vendorGroup.items.every(item =>
-      selectedItems.includes(item.variation.id)
-    );
-
-    return (
-      <div key={vendorGroup.vendor_id} className="bg-white p-4 rounded-lg shadow border border-gray-400 space-y-4">
-        {/* Vendor Header */}
-        <div className="flex items-center gap-3">
-          <input 
-            type="checkbox" 
-            checked={allSelectedForVendor} 
-            onChange={() => toggleVendorSelectAll(vendorGroup)} 
-            className="w-5 h-5 mx-2"
+          {/* LEFT SECTION */}
+          <CartItemsList
+            filteredCartItems={filteredCartItems}
+            selectedItems={selectedItems}
+            productVariations={productVariations}
+            selectedCartItems={selectedCartItems}
+            allCartItems={allCartItems}
+            toggleVendorSelectAll={toggleVendorSelectAll}
+            handleItemSelect={handleItemSelect}
+            handleVariationChange={handleVariationChange}
+            handleQuantityChange={handleQuantityChange}
+            handleDelete={handleDelete}
+            setSearchQuery={setSearchQuery}
           />
 
-          <img 
-            src="/111.png" 
-            alt="Seller" 
-            className="w-12 h-12 rounded-full"
-            onError={(e) => { e.target.src = '/placeholder-avatar.png'; }}
+          {/* RIGHT SECTION - Order Summary */}
+          <OrderSummary
+            subtotal={subtotal}
+            total={total}
+            handleCheckout={handleCheckout}
+            selectedItems={selectedItems}
           />
-          <div className="flex flex-col">
-            <p className="text-lg font-bold">{vendorGroup.vendor_name}</p>
-            <Link to="/ChatPage">
-              <button className="text-base text-gray-500 underline hover:text-gray-700">
-                Click here to chat
-              </button>
-            </Link>
-
-          </div>
-          <button className="flex items-center gap-2 hover:bg-green-50 text-[#4CAE4F] border border-[#4CAE4F] text-sm font-medium px-3 py-2 rounded-full transition-colors">
-            <img src="/shoppp.png" className="w-5 h-5" alt="Shop" /> 
-            View Shop
-          </button>
         </div>
 
-        {/* Items under this vendor */}
-        {vendorGroup.items.map((item) => {
-          const variation = item.variation;
-          const product = variation.product;
-
-          return (
-            <div key={variation.id} className="flex items-center border-t border-gray-400 pt-2 px-6 text-sm text-gray-700">
-              <div className="w-[35%] flex items-center gap-2 border-r border-gray-400 pr-8">
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(variation.id)}
-                  onChange={() => handleItemSelect(variation.id)}
-                  className="w-4 h-4"
-                />
-                <img 
-                  src={BASE_URL + variation.main_image} 
-                  alt={product.name} 
-                  className="w-12 h-12 rounded-lg object-cover"
-                  onError={(e) => { e.target.src = '/placeholder-product.png'; }}
-                />
-                <p className="font-bold text-lg ml-2">{product.name}</p>
-
-              </div>
-
-              <div className="w-[12%] text-center border-r border-gray-600 py-3 px-2">
-                <select
-                    value={item.variation.id}
-                    onChange={(e) => {
-                      console.log("old:", item.variation.id);
-                      console.log("new:", e.target.value);
-                      handleVariationChange(item.variation.id, e.target.value);
-                    }}
-                    className="w-full bg-[#4CAF50] px-2 py-1 border border-gray-400 rounded-md text-base font-medium text-white focus:border-[#4CAE4F] focus:outline-none focus:ring-1 focus:ring-[#4CAE4F] transition-colors"
-                  >
-                    {productVariations[item.variation.product.id]?.map(v => (
-                      <option key={v.id} value={v.id}>
-                        {v.name}
-                      </option>
-                    ))}
-                  </select>
-              </div>
-
-              <div className="w-[12%] flex justify-center items-center gap-2 py-3 border-r border-gray-400">
-                <button 
-                  onClick={() => handleQuantityChange(variation.id, -1)} 
-                  className="px-2 py-1 bg-gray-200 rounded text-sm hover:bg-gray-300 transition-colors"
-                  disabled={item.quantity <= 1}
-                >−</button>
-                <span className="mx-1 font-bold text-lg">{item.quantity}</span>
-                <button 
-                  onClick={() => handleQuantityChange(variation.id, 1)} 
-                  className="px-2 py-1 bg-[#4CAF50] text-white rounded text-sm hover:bg-green-600 transition-colors"
-                >+</button>
-              </div>
-
-              <div className="w-[12%] text-center text-lg font-bold border-r border-gray-400 px-2 py-3">
-                ₱{parseFloat(variation.unit_price).toFixed(2)}
-              </div>
-
-              <div className="w-[12%] text-center font-semibold text-[#4CAF50] text-lg font-bold border-r border-gray-600 px-2 py-3">
-                ₱{(parseFloat(variation.unit_price) * item.quantity).toFixed(2)}
-              </div>
-
-              <div className="w-[10%] text-center border-r border-gray-600 py-3 px-2">
-                <p className="text-lg font-medium text-gray-600">pcs</p>
-              </div>
-
-              <div className="w-[7%] text-center">
-                <button 
-                  onClick={() => handleDelete(variation.id)}
-                  className="hover:scale-110 transition-transform"
-                >
-                  <img src="/trash.png" alt="Delete" className="w-5 h-5 inline-block" />
-                </button>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    );
-  })
-) : (
-  <div className="bg-white p-8 rounded-3xl shadow border text-center">
-    <img src="/search-not-found.png" alt="No Results" className="w-24 h-24 mx-auto mb-4 opacity-50" />
-    <h3 className="text-2xl font-bold text-gray-600 mb-2">No items found</h3>
-    <p className="text-gray-500 mb-4">Try adjusting your search terms</p>
-    <button 
-      onClick={() => setSearchQuery('')}
-      className="px-4 py-2 bg-[#4CAF50] text-white rounded-full hover:bg-green-700 transition-colors"
-    >
-      Clear Search
-    </button>
-  </div>
-)}
-
-      </div>
-
-      {/* RIGHT SECTION - Order Summary */}
-        <div className="w-[400px] bg-white p-4 rounded-lg shadow border border-gray-400 flex flex-col h-fit">
-
-          <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-          <div className="w-full h-[1px] bg-gray-300 mb-4" />
-          
-          <div className="space-y-2 text-lg">
-            <div className="flex justify-between">
-              <p>Selected Items:</p>
-              <p className="text-black font-bold">{selectedItems.length}</p>
-
-            </div>
-            <div className="flex justify-between">
-              <p>Subtotal</p>
-              <p className="text-black font-bold">₱{isNaN(subtotal) ? '0.00' : subtotal.toFixed(2)}</p>
-
-            </div>
-            <div className="flex justify-between text-[#4CAF50] text-2xl font-bold pt-4 pb-6 border-t border-gray-600">
-              <p>Total</p>
-              <p className="text-[#4CAF50] font-bold">₱{isNaN(total) ? '0.00' : total.toFixed(2)}</p>
-            </div>
-          </div>
-
-          <button
-            onClick={handleCheckout}
-            disabled={selectedCartItems.length === 0}
-            className={`mt-full w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
-              selectedCartItems.length === 0 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-green-600 hover:bg-green-700'
-            }`}
-          >
-            Buy Now ({selectedCartItems.length})
-          </button>
-        </div>
+  
       {/* (Your existing summary panel can stay as is) */}
     </div>
-  </div>
+
 );
 
 };

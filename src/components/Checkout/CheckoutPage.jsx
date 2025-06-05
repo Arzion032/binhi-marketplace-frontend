@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { BASE_URL } from '../../constants';
 
 /*Check-out Page with Delivery Method*/
 
-export default function CheckoutPage() {
+export default function CheckoutPage({}) {
   const navigate = useNavigate();
   const { state } = useLocation();
   const checkoutData = state?.checkoutData;
@@ -12,28 +13,6 @@ export default function CheckoutPage() {
   const [deliveryMethod, setDeliveryMethod] = useState('Pick-up');
   const [pickupLocation, setPickupLocation] = useState("President's Location");
   const [deliveryFee, setDeliveryFee] = useState(0);
-
-  // Calculate total weight of products (assuming each product has a weight property)
-  const calculateTotalWeight = () => {
-    if (!checkoutData?.items) return 0;
-    return checkoutData.items.reduce((total, item) => {
-      // Assuming each item has a weight property, default to 1kg if not specified
-      const itemWeight = item.weight || 1;
-      return total + (itemWeight * item.quantity);
-    }, 0);
-  };
-
-  // Calculate delivery fee based on weight
-  useEffect(() => {
-    if (deliveryMethod === 'Delivery') {
-      const totalWeight = calculateTotalWeight();
-      const baseFee = 30;
-      const additionalFee = Math.ceil(Math.max(0, totalWeight - 5) / 5) * 10;
-      setDeliveryFee(baseFee + additionalFee);
-    } else {
-      setDeliveryFee(0);
-    }
-  }, [deliveryMethod, checkoutData]);
 
   if (!checkoutData) {
     return <p className="text-center mt-10">No checkout data available.</p>;
@@ -96,15 +75,15 @@ export default function CheckoutPage() {
               {items.map((product, index) => (
                 <div key={index} className="bg-white p-4 rounded-xl border border-gray-400 mb-4">
                   <div className="flex justify-between text-sm text-black mb-2">
-                    <p className="font-medium text-base">{product.seller}</p>
-                    <p>Order ID: {product.orderId}</p>
+                    <p className="font-medium text-base">{product.vendor_name}</p>
+                    <p>Order ID: 123</p>
                   </div>
                   <div className="border mt-4 mb-3" />
                   <div className="flex gap-4">
                     <img
-                      src={product.image}
+                      src={BASE_URL + product.variation.main_image}
                       className="w-28 h-28 rounded-lg object-cover"
-                      alt={product.name}
+                      alt={product.variation.product.name}
                       onError={(e) => {
                         e.target.src = '/placeholder-image.png';
                       }}
@@ -112,15 +91,15 @@ export default function CheckoutPage() {
                     <div className="flex flex-col justify-between w-full">
                       <div>
                         <p className="font-bold text-xl">{product.name}</p>
-                        <p className="text-lg text-gray-500">Variation: {product.variation}</p>
+                        <p className="text-lg text-gray-500">Variation: {product.variation.name}</p>
                         <p className="text-sm text-gray-400">
-                          Unit: {product.unit} | Weight: {product.weight || 1}kg × {product.quantity} = {((product.weight || 1) * product.quantity).toFixed(2)}kg total
+                          Unit: per kg
                         </p>
                       </div>
                       <div className="text-lg text-right w-full">
-                        <p>Price: ₱{product.price.toFixed(2)} per {product.unit}</p>
+                        <p>Price: ₱{parseFloat(product.variation.unit_price).toFixed(2)} per pc</p>
                         <p>Quantity: ×{product.quantity}</p>
-                        <p className="text-green-600 font-semibold text-xl">Subtotal: ₱{(product.price * product.quantity).toFixed(2)}</p>
+                        <p className="text-green-600 font-semibold text-xl">Subtotal: ₱{(product.variation.unit_price * product.quantity).toFixed(2)}</p>
                       </div>
                     </div>
                   </div>
@@ -191,7 +170,7 @@ export default function CheckoutPage() {
                     <span className="text-lg font-semibold">Delivery</span>
                     {deliveryMethod === 'Delivery' && (
                       <span className="text-sm text-gray-600 ml-2">
-                        (Fee: ₱{deliveryFee}, Total Weight: {calculateTotalWeight()}kg)
+                        (Fee: ₱500, Total Weight: 500kg)
                       </span>
                     )}
                   </div>
@@ -207,7 +186,7 @@ export default function CheckoutPage() {
                   <div className="text-sm text-blue-700 space-y-1">
                     <p>• Base delivery fee: ₱30</p>
                     <p>• Additional ₱10 for every 5kg above the first 5kg</p>
-                    <p>• Total weight: {calculateTotalWeight()}kg</p>
+                    <p>• Total weight: 150kg</p>
                     <p className="font-semibold text-base">• Your delivery fee: ₱{deliveryFee}</p>
                   </div>
                 </div>

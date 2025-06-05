@@ -38,7 +38,18 @@ useEffect(() => {
   }
 }, [product]);
 
-
+const handleAddToCart = async () => {
+  try {
+    const response = await api.post("/cart/add_to_cart/", {
+      variation_id: selectedVariation.id,
+      quantity: quantity.toString(), // make sure it's a string if backend expects it
+    });
+    console.log("Item added:", response.data);
+    showModalToast(); // show success toast/modal
+  } catch (error) {
+    console.error("Failed to add to cart:", error.response?.data || error.message);
+  }
+};
 
 useEffect(() => {
   if (selectedVariation && selectedVariation.images && selectedVariation.images.length > 0) {
@@ -246,7 +257,7 @@ console.log(product)
             {/* Action Buttons */}
             <div className="mt-10 flex gap-4">
           <button
-            onClick={showModalToast}
+            onClick={handleAddToCart}
             className="border border-green-700 font-medium text-green-600 px-6 py-2 rounded-full w-[320px] h-[53px] flex items-center justify-center gap-2"
           >
             <img src="/shopping-cart.png" alt="shopping cart" className="w-5 h-5" />
