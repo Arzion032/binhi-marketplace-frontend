@@ -15,12 +15,12 @@ const OrderSummary = ({subtotal, total, handleCheckout, selectedItems}) => {
             </div>
             <div className="flex justify-between">
               <p>Subtotal</p>
-              <p className="text-black font-bold">₱{isNaN(subtotal) ? '0.00' : subtotal.toFixed(2)}</p>
+              <p className="text-black font-bold">₱{isNaN(subtotal) ? '0.00' : subtotal.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
 
             </div>
             <div className="flex justify-between text-[#4CAF50] text-2xl font-bold pt-4 pb-6 border-t border-gray-600">
               <p>Total</p>
-              <p className="text-[#4CAF50] font-bold">₱{isNaN(total) ? '0.00' : total.toFixed(2)}</p>
+              <p className="text-[#4CAF50] font-bold">₱{isNaN(total) ? '0.00' : total.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             </div>
           </div>
 
@@ -33,7 +33,7 @@ const OrderSummary = ({subtotal, total, handleCheckout, selectedItems}) => {
                 : 'bg-green-600 hover:bg-green-700'
             }`}
           >
-            Buy Now ({selectedItems.length})
+            Check Out ({selectedItems.length})
           </button>
         </div>
   )

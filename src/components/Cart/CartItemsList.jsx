@@ -131,11 +131,11 @@ const CartItemsList = ({
                     </div>
 
                     <div className="w-[12%] text-center text-lg font-bold border-r border-gray-400 px-2 py-3">
-                      ₱{parseFloat(variation.unit_price).toFixed(2)}
+                      ₱{parseFloat(variation.unit_price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
 
                     <div className="w-[12%] text-center font-semibold text-[#4CAF50] text-lg font-bold border-r border-gray-600 px-2 py-3">
-                      ₱{(parseFloat(variation.unit_price) * item.quantity).toFixed(2)}
+                      ₱{(parseFloat(variation.unit_price) * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
 
                     <div className="w-[10%] text-center border-r border-gray-600 py-3 px-2">

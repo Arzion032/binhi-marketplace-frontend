@@ -17,8 +17,8 @@ import ProductDetails from "./components/LandingPage/ProductDetails";
 import OrderLayout from "./components/Layout/OrderLayout";
 import CartPage from "./components/Cart/CartPage";
 import ChatPage from "./components/Chat/ChatPage";
-import CheckoutPage from "./components/Checkout/CheckoutPage";
-import CheckoutSuccess from "./components/Checkout/CheckoutSuccess";
+import CheckOutPage from "./components/Checkout/CheckOutPage";
+import CheckOutSuccess from "./components/Checkout/CheckOutSuccess";
 import SearchProduct from "./components/LandingPage/SearchProduct"; 
 import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
 import NoResults from "./components/LandingPage/NoResults"; 
@@ -58,8 +58,8 @@ function App() {
         <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
         <Route path="/cartpage" element={<ProtectedRoute><OrderLayout><CartPage /></OrderLayout></ProtectedRoute>} />
         <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
-        <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
-        <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
+        <Route path="/checkoutpage" element={<MainLayout><CheckOutPage/></MainLayout>} />
+        <Route path="/checkout-success" element={<MainLayout><CheckOutSuccess /></MainLayout>} />
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
         <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />

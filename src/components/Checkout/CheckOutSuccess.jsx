@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 
 /*Check-out Success with Delivery Fee and Weight Display*/
 
-export default function CheckoutSuccess() {
+export default function CheckOutSuccess() {
   const { state } = useLocation();
   const navigate = useNavigate();
   const { product } = state || {};
