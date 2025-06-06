@@ -34,12 +34,10 @@ const MainFooter = () => {
 
           {/* Payment Methods */}
           <div>
-            <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
+            <p className="text-[15px] flex-col font-bold mb-3">PAYMENT METHODS</p>
             <div className="grid grid-cols-2 gap-2">
               <img src="/cod.png" alt="COD" />
               <img src="/gcash.png" alt="GCash" />
-              <img src="/paypal.png" alt="PayPal" />
-              <img src="/maya.png" alt="Maya" />
             </div>
           </div>
 

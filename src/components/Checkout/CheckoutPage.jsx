@@ -84,7 +84,7 @@ export default function CheckoutPage() {
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
-          <p className="text-4xl font-black">Checkout</p>
+          <p className="text-4xl font-bold">Checkout</p>
         </div>
       </div>
 

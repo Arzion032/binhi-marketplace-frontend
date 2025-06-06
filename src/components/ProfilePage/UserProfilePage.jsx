@@ -161,7 +161,7 @@ const UserProfilePage = () => {
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
-          <p className="text-4xl font-black font-inter">User Profile</p>
+          <p className="text-4xl font-bold font-inter">User Profile</p>
         </div>
 
         {/* Expanded Profile Section */}
