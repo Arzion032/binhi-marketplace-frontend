@@ -4,7 +4,6 @@ import api, { BASE_URL } from '../../api';
 import LoadingScreen from '../UI/LoadingScreen';
 import OrderSummary from './OrderSummary';
 import CartItemsList from './CartItemsList';
-import DeleteModal from './DeleteModal'; // 
 
 const CartPage = () => {
   const navigate = useNavigate();
@@ -139,26 +138,7 @@ const handleVariationChange = async (oldVarId, newVariationId) => {
     setSelectedItems(prev => prev.filter(itemId => itemId !== id));
   };
 
-  // Updated handleDeleteAll to show modal
   const handleDeleteAll = () => {
-    const selectedItemsToDelete = cartItems.filter(item => selectedItems.includes(item.id));
-    if (selectedItemsToDelete.length > 0) {
-      setDeleteTarget('multiple');
-      setShowDeleteModal(true);
-    }
-  };
-
-  // Handle single item deletion confirmation
-  const confirmSingleDelete = () => {
-    if (itemToDelete) {
-      setCartItems(prev => prev.filter(item => item.id !== itemToDelete.id));
-      setSelectedItems(prev => prev.filter(itemId => itemId !== itemToDelete.id));
-      setItemToDelete(null);
-    }
-  };
-
-  // Handle multiple items deletion confirmation
-  const confirmMultipleDelete = () => {
     const selectedItemsToDelete = cartItems.filter(item => selectedItems.includes(item.id));
     if (selectedItemsToDelete.length > 0) {
       const remainingItems = cartItems.filter(item => !selectedItems.includes(item.id));
@@ -167,30 +147,17 @@ const handleVariationChange = async (oldVarId, newVariationId) => {
     }
   };
 
-  // Handle delete confirmation based on target type
-  const handleDeleteConfirm = () => {
-    if (deleteTarget === 'single') {
-      confirmSingleDelete();
-    } else if (deleteTarget === 'multiple') {
-      confirmMultipleDelete();
-    }
-    setDeleteTarget(null);
-  };
 
-  // Handle delete modal cancellation
-  const handleDeleteCancel = () => {
-    setShowDeleteModal(false);
-    setDeleteTarget(null);
-    setItemToDelete(null);
-  };
+  const toggleVendorSelectAll = (vendorGroup) => {
+    const vendorItemIds = vendorGroup.items.map(item => item.variation.id);
+    const allSelected = vendorItemIds.every(id => selectedItems.includes(id));
 
-  const allSelected = selectedItems.length === cartItems.length && cartItems.length > 0;
-
-  const toggleSelectAll = () => {
     if (allSelected) {
-      setSelectedItems([]);
+      // Deselect all this vendor's items
+      setSelectedItems(prev => prev.filter(id => !vendorItemIds.includes(id)));
     } else {
-      setSelectedItems(cartItems.map(item => item.id));
+      // Add all this vendor's items
+      setSelectedItems(prev => [...new Set([...prev, ...vendorItemIds])]);
     }
   };
 
@@ -203,11 +170,34 @@ const handleVariationChange = async (oldVarId, newVariationId) => {
   };
 
   // Search functionality
-  const filteredCartItems = cartItems.filter(item =>
-    item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.seller.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    item.variation.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+const filteredCartItems = cartItems
+  .map(vendorGroup => {
+    const matchingItems = vendorGroup.items.filter(item => {
+      const variationName = item.variation.name.toLowerCase();
+      const productName = item.variation.product.name.toLowerCase();
+      const vendorName = vendorGroup.vendor_name.toLowerCase();
+
+      const query = searchQuery.toLowerCase();
+
+      return (
+        variationName.includes(query) ||
+        productName.includes(query) ||
+        vendorName.includes(query)
+      );
+    });
+
+    if (matchingItems.length > 0) {
+      return {
+        vendor_id: vendorGroup.vendor_id,
+        vendor_name: vendorGroup.vendor_name,
+        items: matchingItems,
+      };
+    }
+
+    return null;
+  })
+  .filter(group => group !== null);
+
 
   const handleSearch = (e) => {
     setSearchQuery(e.target.value);
@@ -302,7 +292,7 @@ if (loading){
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
-          <img src="/frown.png" alt="Empty Cart" className="w-32 h-32 mx-auto mb-4 opacity-50" />
+          <img src="/empty-cart.png" alt="Empty Cart" className="w-32 h-32 mx-auto mb-4 opacity-50" />
           <h2 className="text-3xl font-bold text-gray-600 mb-2">Your cart is empty</h2>
           <p className="text-gray-500 mb-6">Add some items to get started!</p>
           <button
@@ -354,19 +344,19 @@ return (
       </div>
     </div>
 
-      <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
+    <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
 
-      {/* Search Results Info */}
-      {searchQuery && (
-        <div className="mx-10 mb-4">
-          <p className="text-lg text-gray-600">
-            {filteredCartItems.length === 0 
-              ? `No items found for "${searchQuery}"` 
-              : `Showing ${filteredCartItems.length} of ${cartItems.length} items for "${searchQuery}"`
-            }
-          </p>
-        </div>
-      )}
+    {/* Search Results Info */}
+    {searchQuery && (
+      <div className="mx-10 mb-4">
+        <p className="text-lg text-gray-600">
+          {filteredCartItems.length === 0 
+            ? `No items found for "${searchQuery}"` 
+            : `Showing results for "${searchQuery}"`
+          }
+        </p>
+      </div>
+    )}
 
     <div className="flex flex-col lg:flex-row gap-4 mx-10">
 

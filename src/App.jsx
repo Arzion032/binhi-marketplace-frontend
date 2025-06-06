@@ -18,7 +18,7 @@ import OrderLayout from "./components/Layout/OrderLayout";
 import CartPage from "./components/Cart/CartPage";
 import ChatPage from "./components/Chat/ChatPage";
 import CheckOutPage from "./components/CheckOut/CheckOutPage";
-import CheckOutSuccess from "./components/Checkout/CheckOutSuccess";
+import CheckOutSuccess from "./components/CheckOut/CheckOutSuccess";
 import SearchProduct from "./components/LandingPage/SearchProduct"; 
 import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
 import NoResults from "./components/LandingPage/NoResults"; 
