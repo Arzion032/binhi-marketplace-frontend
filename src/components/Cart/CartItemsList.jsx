@@ -13,7 +13,8 @@ const CartItemsList = ({
   handleVariationChange,
   handleQuantityChange,
   handleDelete,
-  setSearchQuery
+  setSearchQuery,
+  cartItems
 }) => {
   return (
     <div className="w-[1200px] xl:w-3/4 space-y-6">
@@ -80,7 +81,8 @@ const CartItemsList = ({
                         onChange={() => {handleItemSelect(variation.id); 
                             console.log('Selected Cart Items:', selectedCartItems);
                             console.log('All Cart Items:', allCartItems);
-                            console.log('Filter Items:', filteredCartItems)}}
+                            console.log('Filter Items:', filteredCartItems);
+                            console.log('cart Items', cartItems)}}
 
                             className="w-4 h-4"
                       />
@@ -137,7 +139,7 @@ const CartItemsList = ({
                     </div>
 
                     <div className="w-[10%] text-center border-r border-gray-600 py-3 px-2">
-                      <p className="text-lg font-medium text-gray-600">pcs</p>
+                      <p className="text-lg font-medium text-gray-600">{variation.unit_measurement}</p>
                     </div>
 
                     <div className="w-[7%] text-center">
