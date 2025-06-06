@@ -270,7 +270,6 @@ const OrderHistory = () => {
                   </div>
 
                   <div className="flex items-center gap-4">
-                    <span className="text-xs text-gray-500">ID: {order.orderId}</span>
                     <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${getStatusColor(order.status)}`}>
                       {order.status}
                     </span>
@@ -292,16 +291,14 @@ const OrderHistory = () => {
                         <p className="text-2xl font-semibold">{order.name}</p>
                         <p className="text-sm text-gray-600">Variation: {order.variation}</p>
                         <p className="text-sm text-gray-600">Weight: {order.weight} kg</p>
-                        <p className="text-lg text-gray-500 mt-2">Quantity: {order.quantity}</p>
+                        <p className="text-sm text-gray-500">Quantity: {order.quantity}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-end justify-between h-full">
                     <div className="text-right">
-                      <p className="text-sm text-gray-500">Unit Price: ₱{order.price.toFixed(2)}</p>
-                      <p className="text-sm text-gray-500">Delivery: ₱{order.deliveryFee.toFixed(2)}</p>
-                      <p className="text-xl font-bold text-[#4CAE4F] mt-2">Total: ₱{calculateTotal(order).toFixed(2)}</p>
+                      <p className="text-xl font-black text-[#4CAE4F] mt-2">Total: ₱{calculateTotal(order).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
