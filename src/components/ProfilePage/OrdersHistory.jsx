@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import OrderDetailsModal from './OrderDetailsModal';
@@ -17,6 +18,26 @@ const OrderHistory = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true)
 
+
+  const handleCancelOrder = (cancelData) => {
+    console.log("Submitting cancel request:", cancelData);
+    
+    setOrders(prevOrders => 
+      prevOrders.map(order => 
+        order.id === selectedOrder?.id 
+          ? { ...order, status: "Cancelled" }
+          : order
+      )
+    );
+    
+    if (selectedOrder) {
+      setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
+    }
+    
+    setShowCancelModal(false);
+    alert("Order cancelled successfully!");
+  };
+  
   useEffect(() => {
     const fetchOrderHistory = async () => {
       try {
@@ -38,24 +59,6 @@ const OrderHistory = () => {
     console.log(`Navigating to: ${path}`);
   };
 
-  const handleCancelOrder = (cancelData) => {
-    console.log("Submitting cancel request:", cancelData);
-    
-    setOrders(prevOrders => 
-      prevOrders.map(order => 
-        order.id === selectedOrder?.id 
-          ? { ...order, status: "Cancelled" }
-          : order
-      )
-    );
-    
-    if (selectedOrder) {
-      setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
-    }
-    
-    setShowCancelModal(false);
-    alert("Order cancelled successfully!");
-  };
 
   const filteredOrders = orders.filter(order => {
     const matchesTab = selectedTab === "All" || order.status === selectedTab;
@@ -96,11 +99,27 @@ const OrderHistory = () => {
     return subtotal + order.deliveryFee;
   };
 
-  // Handler for successful refund submission
-  const handleRefundSuccess = (refundData) => {
-    console.log("Refund request submitted:", refundData);
-    setShowReturnRefundModal(false);
-    alert("Refund request submitted successfully!");
+   const handleVoiceSearch = () => {
+    // Voice search functionality - placeholder for now
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new window.webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setSearchQuery(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
+
+      recognition.start();
+    } else {
+      alert('Voice search is not supported in your browser');
+    }
   };
 
   return (
@@ -141,7 +160,7 @@ const OrderHistory = () => {
                 ✕
               </button>
             )}
-            <button>
+            <button onClick={handleVoiceSearch}>
               <img src="/mic.png" alt="Mic" className="w-8 h-8 hover:scale-110" />
             </button>
           </div>
@@ -151,7 +170,7 @@ const OrderHistory = () => {
       <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
 
       {/* Orders Section */}
-      <div className="bg-white mx-10 border-2 border-gray-300 rounded-xl shadow-md p-6">
+      <div className="bg-white mx-10 border-2 border-gray-300 rounded-xl p-6">
         <div className="flex justify-between items-start border-b pb-4 gap-2">
           <div className="flex flex-wrap gap-[100px] mx-10 flex-1">
             {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"].map(tab => (
@@ -191,6 +210,7 @@ const OrderHistory = () => {
             </div>
           ) : (
             filteredOrders.map(order => (
+
               <OrderItem
                   key={order.id}
                   order={order}
@@ -201,6 +221,7 @@ const OrderHistory = () => {
                   canCancelOrder={canCancelOrder}
                   getStatusColor={getStatusColor}
                 />
+
             ))
           )}
         </div>
@@ -249,7 +270,7 @@ const OrderHistory = () => {
       <div className="group fixed bottom-10 right-10 z-50">
         <button
           onClick={() => navigate('/ChatPage')}
-          className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
+          className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full relative"
         >
           <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
         </button>
