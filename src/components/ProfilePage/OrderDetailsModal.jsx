@@ -27,7 +27,7 @@ const OrderDetailsModal = ({
           <div className="flex items-center gap-2">
             <img src="/receipt.png" alt="Receipt" className="w-8 h-8" />
             <div>
-              <h2 className="text-3xl font-bold">Order Details</h2>
+              <h2 className="text-3xl font-black">Order Details</h2>
               <p className="text-sm text-gray-600 mt-1">Order ID: {selectedOrder?.orderId}</p>
             </div>
           </div>
@@ -53,7 +53,7 @@ const OrderDetailsModal = ({
                 }}
                 className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2 rounded-full"
               >
-                Return Refund
+                Request Refund
               </button>
             )}
           </div>
@@ -72,14 +72,14 @@ const OrderDetailsModal = ({
           </div>
           <button
             onClick={() => setShowProductDetails(true)}
-            className="bg-blue-500 hover:bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-full"
+            className="bg-[#4CAE4F] hover:bg-blue-600 text-white text-sm font-bold px-4 py-2 rounded-full"
           >
             View Details
           </button>
         </div>
 
         {/* Status Tracking with Images */}
-        <div className="border border-black rounded-xl p-4 mb-4">
+        <div className="border border-gray-400 rounded-xl p-4 mb-4">
           <p className="text-sm font-semibold mb-4">Order Status</p>
           <div className="space-y-4">
             {selectedOrder.status === "Cancelled" ? (
@@ -149,21 +149,24 @@ const OrderDetailsModal = ({
           </div>
           <button
             onClick={() => setShowDeliveryAddress(true)}
-            className="bg-green-500 hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-full"
+            className="bg-[#4CAE4F] hover:bg-green-600 text-white text-sm font-bold px-4 py-2 rounded-full"
           >
             View Address
           </button>
         </div>
 
         {/* Price Summary */}
-        <div className="border border-black rounded-xl p-4">
-          <p className="text-sm font-semibold mb-2">Order Summary</p>
+        <div className="border border-gray-400 rounded-xl p-4">
           <div className="space-y-1">
             <div className="flex justify-between text-sm">
-              <p className="text-gray-500">Subtotal</p>
+              <p className="text-black">Subtotal</p>
               <p>₱53.00</p>
             </div>
-            <div className="flex justify-between font-black mt-2">
+            <div className="flex justify-between text-sm">
+              <p className="text-black">Delivery Fee</p>
+              <p>₱53.00</p>
+            </div>
+            <div className="flex justify-between text-[#4CAE4F] text-2xl font-black mt-2">
               <p>TOTAL</p>
               <p>₱53.00</p>
             </div>

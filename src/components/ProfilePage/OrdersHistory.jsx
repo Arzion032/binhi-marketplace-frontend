@@ -16,7 +16,6 @@ const handleCancelOrder = (cancelData) => {
     setShowCancelModal(false);
     alert("Order cancelled successfully!");
   };import React, { useState } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
 import OrderDetailsModal from './OrderDetailsModal';
 import ReturnRefundModal from './ReturnRefundModal';
 import CancelOrderModal from './CancelOrderModal';
@@ -156,11 +155,27 @@ const OrderHistory = () => {
     return subtotal + order.deliveryFee;
   };
 
-  // Handler for successful refund submission
-  const handleRefundSuccess = (refundData) => {
-    console.log("Refund request submitted:", refundData);
-    setShowReturnRefundModal(false);
-    alert("Refund request submitted successfully!");
+   const handleVoiceSearch = () => {
+    // Voice search functionality - placeholder for now
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new window.webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setSearchQuery(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
+
+      recognition.start();
+    } else {
+      alert('Voice search is not supported in your browser');
+    }
   };
 
   return (
@@ -201,7 +216,7 @@ const OrderHistory = () => {
                 ✕
               </button>
             )}
-            <button>
+            <button onClick={handleVoiceSearch}>
               <img src="/mic.png" alt="Mic" className="w-8 h-8 hover:scale-110" />
             </button>
           </div>
@@ -211,7 +226,7 @@ const OrderHistory = () => {
       <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
 
       {/* Orders Section */}
-      <div className="bg-white mx-10 border-2 border-gray-300 rounded-xl shadow-md p-6">
+      <div className="bg-white mx-10 border-2 border-gray-300 rounded-xl p-6">
         <div className="flex justify-between items-start border-b pb-4 gap-2">
           <div className="flex flex-wrap gap-[100px] mx-10 flex-1">
             {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"].map(tab => (
@@ -251,7 +266,7 @@ const OrderHistory = () => {
             </div>
           ) : (
             filteredOrders.map(order => (
-              <div key={order.id} className="flex flex-col border-2 border-gray-300 transition p-4 rounded-xl bg-white shadow-sm relative">
+              <div key={order.id} className="flex flex-col border-2 border-gray-300 transition p-4 rounded-xl bg-white relative">
                 {/* Seller Info */}
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
@@ -291,14 +306,14 @@ const OrderHistory = () => {
                         <p className="text-2xl font-semibold">{order.name}</p>
                         <p className="text-sm text-gray-600">Variation: {order.variation}</p>
                         <p className="text-sm text-gray-600">Weight: {order.weight} kg</p>
-                        <p className="text-sm text-gray-500">Quantity: {order.quantity}</p>
+                        <p className="text-sm text-gray-600">Quantity: {order.quantity}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="flex flex-col items-end justify-between h-full">
                     <div className="text-right">
-                      <p className="text-xl font-black text-[#4CAE4F] mt-2">Total: ₱{calculateTotal(order).toFixed(2)}</p>
+                      <p className="text-xl font-extrabold text-[#4CAE4F] mt-2">Total: ₱{calculateTotal(order).toFixed(2)}</p>
                     </div>
                   </div>
                 </div>
@@ -387,7 +402,7 @@ const OrderHistory = () => {
       <div className="group fixed bottom-10 right-10 z-50">
         <button
           onClick={() => navigate('/ChatPage')}
-          className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
+          className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full relative"
         >
           <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
         </button>

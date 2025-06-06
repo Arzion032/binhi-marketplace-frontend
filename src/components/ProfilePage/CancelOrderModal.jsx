@@ -49,12 +49,12 @@ const CancelOrderModal = ({ order, onClose, onConfirm, calculateTotal }) => {
           &times;
         </button>
         
-        <h2 className="text-3xl font-bold">Cancel Order</h2>
+        <h2 className="text-3xl font-black">Cancel Order</h2>
         <p className="text-sm text-gray-600 mt-1 mb-6">Please fill the form to cancel your order.</p>
         <hr />  
         
         <p className="text-lg font-bold mt-4">Item(s) you want to cancel.</p>
-        <div className="border border-black rounded-xl mt-2 p-4">
+        <div className="border border-gray-400 rounded-xl mt-2 p-4">
           <div className="flex items-center mb-3 gap-2">
             <img src="/avatar.png" className="w-6 h-6 rounded-full" alt="Seller" />
             <span className="text-sm font-medium">{order.sellerName}</span>
@@ -79,7 +79,7 @@ const CancelOrderModal = ({ order, onClose, onConfirm, calculateTotal }) => {
           </div>
         </div>
 
-        <div className="border border-black mt-4 rounded-xl p-4">
+        <div className="border border-gray-400 mt-4 rounded-xl p-4">
           <p className="text-sm font-semibold mb-2">Why do you want to cancel?</p>
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm mb-4">
             {['Changed my mind', 'Found a better deal', 'Ordered by mistake', 'Payment issues', 'Others'].map((reason) => (
@@ -99,7 +99,7 @@ const CancelOrderModal = ({ order, onClose, onConfirm, calculateTotal }) => {
             <p className="text-sm font-semibold mb-2">Additional Notes (Optional)</p>
             <textarea
               placeholder="Tell us more about why you're cancelling this order..."
-              className="w-full h-28 border border-black rounded-xl p-3 text-sm"
+              className="w-full h-28 border border-gray-400 rounded-xl p-3 text-sm"
               value={cancelNote}
               onChange={(e) => setCancelNote(e.target.value)}
             />

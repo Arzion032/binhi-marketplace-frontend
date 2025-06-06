@@ -45,23 +45,23 @@ export default function CheckoutSuccess() {
       <img 
         src="/Done.png" 
         alt="Success" 
-        className="w-18 h-18 mb-2"
+        className="w-18 h-18 mb-2 mt-6"
         onError={(e) => {
           e.target.style.display = 'none';
         }}
       />
-      <h1 className="text-3xl font-bold text-gray-800">Order Successful!</h1>
-      <p className="text-lg text-black mb-4">Thank you for purchasing!</p>
+      <h1 className="text-3xl font-bold text-black">Order Successful!</h1>
+      <p className="text-base text-black mb-4">Thank you for purchasing!</p>
 
-      <div className="bg-white rounded-xl shadow-lg p-6 w-[1500px] max-w-4xl border border-gray-400 text-left mb-8">
-        <h2 className="font-bold text-2xl mb-4 text-center">Order Summary</h2>
+      <div className="bg-white rounded-xl p-6 w-[1500px] max-w-4xl border-2 border-gray-300 text-left mb-8">
+        <h2 className="font-bold text-xl mb-2">Order Summary</h2>
 
         {/* Delivery Method and Payment Method Info */}
-        <div className="bg-gray-50 rounded-lg p-4 mb-4 border">
+        <div className="bg-gray-50 rounded-lg p-4 mb-4 border bg-green-50 border border-green-600">
           <div className="grid grid-cols-2 gap-4 text-sm">
             <div>
-              <p className="font-semibold text-gray-700">Delivery Method:</p>
-              <p className="text-gray-600">
+              <p className="font-semibold text-black">Delivery Method:</p>
+              <p className="text-black">
                 {product.deliveryMethod === 'Pick-up' 
                   ? `Pick-up at ${product.pickupLocation || 'Selected Location'}` 
                   : 'Delivery'
@@ -69,8 +69,8 @@ export default function CheckoutSuccess() {
               </p>
             </div>
             <div>
-              <p className="font-semibold text-gray-700">Payment Method:</p>
-              <p className="text-gray-600">{product.paymentMethod || 'Cash on Delivery'}</p>
+              <p className="font-semibold text-black">Payment Method:</p>
+              <p className="text-black">{product.paymentMethod || 'Cash on Delivery'}</p>
             </div>
           </div>
         </div>
@@ -89,12 +89,9 @@ export default function CheckoutSuccess() {
                 />
                 <div className="flex-1 text-sm">
                   <p className="font-semibold text-lg">{item.name}</p>
-                  <p className="text-gray-500">Variation: {item.variation}</p>
-                  <p className="text-gray-700">Quantity: ×{item.quantity}</p>
-                  <p className="text-gray-700">Unit Weight: {item.weight || 1}kg</p>
-                  <p className="text-gray-700">Total Weight: {((item.weight || 1) * item.quantity).toFixed(2)}kg</p>
-                  <p className="text-gray-700">Price: ₱{item.price.toFixed(2)} each</p>
-                  <p className="font-semibold text-green-600">Subtotal: ₱{(item.price * item.quantity).toFixed(2)}</p>
+                  <p className="text-black">Variation: {item.variation}</p>
+                  <p className="text-black">Quantity: ×{item.quantity}</p>
+                  <p className="text-black">Total Weight: {((item.weight || 1) * item.quantity).toFixed(2)}kg</p>
                 </div>
               </div>
             ))
@@ -108,7 +105,7 @@ export default function CheckoutSuccess() {
                   e.target.src = '/placeholder-image.png';
                 }}
               />
-              <div className="flex-1 text-sm">
+              <div className="flex text-sm">
                 <p className="font-semibold text-base">{product.name}</p>
                 <p className="text-gray-500">Variation: {product.variation}</p>
                 <p className="text-gray-700">Quantity: ×{product.quantity}</p>
@@ -121,7 +118,7 @@ export default function CheckoutSuccess() {
         </div>
 
         {/* Order Summary Calculations */}
-        <div className="space-y-2 text-lg border-t pt-4">
+        <div className="text-base border-t pt-2">
           <div className="flex justify-between">
             <span>Total Weight:</span>
             <span className="font-semibold">{totalWeight.toFixed(2)}kg</span>
@@ -130,33 +127,20 @@ export default function CheckoutSuccess() {
           {product.subtotal && (
             <div className="flex justify-between">
               <span>Subtotal:</span>
-              <span>₱{product.subtotal.toFixed(2)}</span>
+              <span className="font-semibold">₱{product.subtotal.toFixed(2)}</span>
             </div>
           )}
           
           {product.deliveryFee !== undefined && product.deliveryFee > 0 && (
-            <div className="flex justify-between text-orange-600">
+            <div className="flex justify-between">
               <span>Delivery Fee:</span>
-              <span>₱{product.deliveryFee.toFixed(2)}</span>
+              <span className="font-semibold">₱{product.deliveryFee.toFixed(2)}</span>
             </div>
           )}
-          
-          {product.discount > 0 && (
-            <div className="flex justify-between text-green-600">
-              <span>Discount:</span>
-              <span>-₱{product.discount.toFixed(2)}</span>
-            </div>
-          )}
-          
-          {product.tax > 0 && (
-            <div className="flex justify-between text-red-600">
-              <span>Tax:</span>
-              <span>₱{product.tax.toFixed(2)}</span>
-            </div>
-          )}
+        
         </div>
 
-        <div className="border-t mt-2 pt-4 flex justify-between text-2xl font-bold text-green-600">
+        <div className="border-t mt-2 pt-4 flex justify-between text-2xl font-black text-[#4CAE4F] ">
           <span>Total</span>
           <span>₱{displayTotal.toFixed(2)}</span>
         </div>
@@ -178,13 +162,13 @@ export default function CheckoutSuccess() {
       <div className="flex flex-col sm:flex-row gap-4">
         <button
           onClick={() => navigate('/')}
-          className="px-12 py-3 rounded-full border-2 border-[#4CAE4F] text-[#4CAE4F] hover:bg-[#E6F4EA] transition-colors font-medium mb-2"
+          className="px-12 py-3 rounded-full border-2 border-[#4CAE4F] text-[#4CAE4F] hover:bg-[#E6F4EA] transition-colors font-medium mb-6"
         >
           Back to Home
         </button>
         <button
           onClick={() => navigate('/orderhistory')}
-          className="px-12 py-3 rounded-full bg-[#4CAE4F] text-white hover:bg-green-700 transition-colors font-medium mb-2"
+          className="px-12 py-3 rounded-full bg-[#4CAE4F] text-white hover:bg-green-700 transition-colors font-medium mb-6"
         >
           Check my Orders
         </button>

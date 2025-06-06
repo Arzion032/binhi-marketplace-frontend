@@ -1,7 +1,8 @@
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-/*Check-out Page with Delivery Method*/
+/*Check-out Page with Delivery Method - Products grouped by shop*/
 
 export default function CheckoutPage() {
   const navigate = useNavigate();
@@ -12,6 +13,20 @@ export default function CheckoutPage() {
   const [deliveryMethod, setDeliveryMethod] = useState('Pick-up');
   const [pickupLocation, setPickupLocation] = useState("President's Location");
   const [deliveryFee, setDeliveryFee] = useState(0);
+
+  // Group items by seller/shop
+  const groupItemsByShop = () => {
+    if (!checkoutData?.items) return {};
+    
+    return checkoutData.items.reduce((groups, item) => {
+      const shop = item.seller || 'Unknown Shop';
+      if (!groups[shop]) {
+        groups[shop] = [];
+      }
+      groups[shop].push(item);
+      return groups;
+    }, {});
+  };
 
   // Calculate total weight of products (assuming each product has a weight property)
   const calculateTotalWeight = () => {
@@ -41,6 +56,7 @@ export default function CheckoutPage() {
 
   const { items, subtotal, total } = checkoutData;
   const newTotal = total + deliveryFee;
+  const groupedItems = groupItemsByShop();
 
   const handleBuyNow = () => {
     navigate('/checkout-success', {
@@ -68,81 +84,91 @@ export default function CheckoutPage() {
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
-          <p className="text-4xl font-bold">Checkout</p>
+          <p className="text-4xl font-black">Checkout</p>
         </div>
       </div>
 
-      <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
+      <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-4" />
 
       <div className="flex flex-col lg:flex-row gap-6 mx-10">
         {/* Left Section */}
         <div className="w-full lg:w-2/3 space-y-6">
           {/* Delivery Address */}
           <section>
-            <h2 className="text-2xl font-bold">Delivery Address</h2>
+            <h2 className="text-xl font-bold">Delivery Address</h2>
             <div className="p-4 flex gap-4 items-start text-lg">
-              <img src="/map-pin-house.png" alt="Address" className="w-16 h-16" />
+              <img src="/map-pin-house.png" alt="Address" className="w-24 h-24"  />
               <div>
-                <p className="font-semibold">Juan Dela Cruz</p>
+                <p className="">Juan Dela Cruz</p>
                 <p>(+63) 948 122 9142</p>
                 <p>Brgy. Mambog Binangonan, Rizal, 1940</p>
               </div>
             </div>
           </section>
 
-          {/* Product Details */}
-            <section>
-              <h2 className="text-2xl font-bold mb-2">Product Details</h2>
-              {items.map((product, index) => (
-                <div key={index} className="bg-white p-4 rounded-xl border border-gray-400 mb-4">
-                  <div className="flex justify-between text-sm text-black mb-2">
-                    <p className="font-medium text-base">{product.seller}</p>
-                    <p>Order ID: {product.orderId}</p>
-                  </div>
-                  <div className="border mt-4 mb-3" />
-                  <div className="flex gap-4">
-                    <img
-                      src={product.image}
-                      className="w-28 h-28 rounded-lg object-cover"
-                      alt={product.name}
-                      onError={(e) => {
-                        e.target.src = '/placeholder-image.png';
-                      }}
-                    />
-                    <div className="flex flex-col justify-between w-full">
-                      <div>
-                        <p className="font-bold text-xl">{product.name}</p>
-                        <p className="text-lg text-gray-500">Variation: {product.variation}</p>
-                        <p className="text-sm text-gray-400">
-                          Unit: {product.unit} | Weight: {product.weight || 1}kg × {product.quantity} = {((product.weight || 1) * product.quantity).toFixed(2)}kg total
-                        </p>
-                      </div>
-                      <div className="text-lg text-right w-full">
-                        <p>Price: ₱{product.price.toFixed(2)} per {product.unit}</p>
-                        <p>Quantity: ×{product.quantity}</p>
-                        <p className="text-green-600 font-semibold text-xl">Subtotal: ₱{(product.price * product.quantity).toFixed(2)}</p>
+          {/* Product Details - Grouped by Shop */}
+          <section>
+            <h2 className="text-xl font-bold mb-2">Product Details</h2>
+            {Object.entries(groupedItems).map(([shopName, shopItems], shopIndex) => (
+              <div key={shopIndex} className="bg-white p-4 rounded-lg border-2 border-gray-300 mb-4">
+                {/* Shop Header */}
+                <div className="flex justify-between items-center mb-3 pb-2 border-b border-gray-200">
+                  <p className="font-bold text-lg text-gray-800">{shopName}</p>
+                  <p className="text-sm text-gray-600">
+                    {shopItems.length} item{shopItems.length > 1 ? 's' : ''}
+                  </p>
+                </div>
+                
+                {/* Shop Items */}
+                <div className="space-y-3">
+                  {shopItems.map((product, index) => (
+                    <div key={index} className="flex gap-3 p-2 rounded-md hover:bg-gray-50">
+                      <img
+                        src={product.image}
+                        className="w-16 h-16 rounded-md object-cover flex-shrink-0"
+                        alt={product.name}
+                        onError={(e) => {
+                          e.target.src = '/placeholder-image.png';
+                        }}
+                      />
+                      <div className="flex-1 min-w-0">
+                        <div className="flex justify-between items-start">
+                          <div className="flex-1 min-w-0 pr-2">
+                            <p className="font-semibold text-base text-black truncate">{product.name}</p>
+                            <p className="text-sm text-black">{product.variation}</p>
+                            {/* <p className="text-xs text-black">
+                              {product.unit} | {product.weight || 1}kg × {product.quantity} = {((product.weight || 1) * product.quantity).toFixed(1)}kg
+                            </p> */}
+                          </div>
+                          <div className="text-right flex-shrink-0">
+                            <p className="text-sm text-gray-600">₱{product.price.toFixed(2)}</p>
+                            <p className="text-sm text-gray-600">×{product.quantity}</p>
+                            <p className="text-black font-bold">₱{(product.price * product.quantity).toFixed(2)}</p>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+                  ))}
                 </div>
-              ))}
-            </section>
+              </div>
+            ))}
+          </section>
 
           {/* Delivery Method and Payment Method Side by Side */}
           <div className="flex flex-col lg:flex-row gap-6">
             {/* Delivery Method */}
             <section className="flex-1">
-              <h2 className="text-2xl font-bold mb-1">Delivery Method</h2>
-              <p className="text-lg text-black mb-4">
+              <h2 className="text-xl font-bold mb-1">Delivery Method</h2>
+              <p className="text-base text-black mb-4">
                 Please select an option on how you want to claim your order.
               </p>
               
               {/* Main Delivery Method Selection */}
               <div className="space-y-4 mb-6">
-                <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition-all ${
+                <label className={`flex items-center gap-4 p-2 border-2 rounded-xl cursor-pointer transition-all ${
                   deliveryMethod === 'Pick-up' 
                     ? 'border-[#4CAE4F] bg-[#E6F4EA]' 
-                    : 'border-gray-300 bg-white hover:border-gray-400'
+                    : 'border-gray-300 bg-white hover:border-[#4CAE4F]'
                 }`}>
                   <input
                     type="radio"
@@ -150,7 +176,7 @@ export default function CheckoutPage() {
                     value="Pick-up"
                     checked={deliveryMethod === 'Pick-up'}
                     onChange={() => setDeliveryMethod('Pick-up')}
-                    className="w-5 h-5 text-[#4CAE4F]"
+                    className="w-5 h-5 text-[#4CAE4F] m-2"
                   />
                   <div className="flex items-center gap-3">
                     <img src="/map-pin-house.png" alt="Pick-up" className="w-8 h-8" />
@@ -160,23 +186,23 @@ export default function CheckoutPage() {
 
                  {/* Pick-up Location Dropdown */}
               {deliveryMethod === 'Pick-up' && (
-                <div className="ml-6 mb-4">
-                  <label className="block text-lg font-semibold text-gray-700 mb-2">Pick-up Location:</label>
+                <div className="mb-4">
+                  <label className="block text-base font-semibold text-gray-700 mb-2">Pick-up Location:</label>
                   <select
                     value={pickupLocation}
                     onChange={(e) => setPickupLocation(e.target.value)}
-                    className="w-full p-3 border border-gray-300 rounded-lg bg-white hover:border-[#4CAE4F] focus:border-[#4CAE4F] focus:outline-none focus:ring-2 focus:ring-[#4CAE4F] focus:ring-opacity-20 text-lg"
+                    className="w-full p-3 border-2 border-gray-300 rounded-lg bg-white hover:border-[#4CAE4F] focus:border-[#4CAE4F] focus:outline-none focus:ring-2 focus:ring-[#4CAE4F] focus:ring-opacity-20 text-base"
                   >
-                    <option value="President's Location">President's Location</option>
-                    <option value="Farmer's Location">Farmer's Location</option>
+                    <option value="President's Location" className="p-4">President's Location</option>
+                    <option value="Farmer's Location" className="p-4">Farmer's Location</option>
                   </select>
                 </div>
               )}
 
-                <label className={`flex items-center gap-4 p-4 border rounded-xl cursor-pointer transition-all ${
+                <label className={`flex items-center gap-4 p-2 border-2 rounded-xl cursor-pointer transition-all ${
                   deliveryMethod === 'Delivery' 
                     ? 'border-[#4CAE4F] bg-[#E6F4EA]' 
-                    : 'border-gray-300 bg-white hover:border-gray-400'
+                    : 'border-gray-300 bg-white hover:border-[#4CAE4F]'
                 }`}>
                   <input
                     type="radio"
@@ -184,7 +210,7 @@ export default function CheckoutPage() {
                     value="Delivery"
                     checked={deliveryMethod === 'Delivery'}
                     onChange={() => setDeliveryMethod('Delivery')}
-                    className="w-5 h-5 text-[#4CAE4F]"
+                    className="w-5 h-5 text-[#4CAE4F] m-2"
                   />
                   <div className="flex items-center gap-3">
                     <img src="/delivery.png" alt="Delivery" className="w-8 h-8" />
@@ -197,36 +223,21 @@ export default function CheckoutPage() {
                   </div>
                 </label>
               </div>
-
-             
-
-              {/* Delivery Fee Information */}
-              {deliveryMethod === 'Delivery' && (
-                <div className="ml-6 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-2">Delivery Information</h3>
-                  <div className="text-sm text-blue-700 space-y-1">
-                    <p>• Base delivery fee: ₱30</p>
-                    <p>• Additional ₱10 for every 5kg above the first 5kg</p>
-                    <p>• Total weight: {calculateTotalWeight()}kg</p>
-                    <p className="font-semibold text-base">• Your delivery fee: ₱{deliveryFee}</p>
-                  </div>
-                </div>
-              )}
             </section>
 
             {/* Payment Method */}
             <section className="flex-1">
-              <h2 className="text-2xl font-bold mb-1">Payment Method</h2>
-              <p className="text-lg text-black mb-4">
+              <h2 className="text-xl font-bold mb-1">Payment Method</h2>
+              <p className="text-base text-black mb-4">
                 Please select an option on how you want to pay your order.
               </p>
               <div className="w-full text-lg flex gap-4 mb-4">
                 {/* Cash-on-Delivery */}
                 <label
-                  className={`flex-1 cursor-pointer border rounded-xl p-4 flex flex-col items-center transition-all ${
+                  className={`flex-1 cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center transition-all ${
                     paymentMethod === 'Cash on Delivery'
                       ? 'border-[#4CAE4F] bg-[#E6F4EA]'
-                      : 'border-gray-300 bg-white hover:border-gray-400'
+                      : 'border-gray-300 bg-white hover:border-[#4CAE4F]'
                   }`}
                 >
                   <input
@@ -237,16 +248,16 @@ export default function CheckoutPage() {
                     onChange={() => setPaymentMethod('Cash on Delivery')}
                     className="sr-only"
                   />
-                  <img src="/CODD.png" alt="COD" className="w-14 h-12" />
-                  <p className="text-[#4CAE4F] text-lg font-semibold">Cash-on-Delivery</p>
+                  <img src="/CODD.png" alt="COD" className="w-10 h-8" />
+                  <p className="text-[#4CAE4F] text-base font-semibold">Cash-on-Delivery</p>
                 </label>
 
                 {/* GCash */}
                 <label
-                  className={`flex-1 cursor-pointer border rounded-xl p-4 flex flex-col items-center transition-all ${
+                  className={`flex-1 cursor-pointer border-2 rounded-xl p-4 flex flex-col items-center transition-all ${
                     paymentMethod === 'GCash'
                       ? 'border-[#4CAE4F] bg-[#E6F4EA]'
-                      : 'border-gray-300 bg-white hover:border-gray-400'
+                      : 'border-gray-300 bg-white hover:border-[#4CAE4F]'
                   }`}
                 >
                   <input
@@ -257,12 +268,12 @@ export default function CheckoutPage() {
                     onChange={() => setPaymentMethod('GCash')}
                     className="sr-only"
                   />
-                  <img src="/GCASHH.png" alt="GCash" className="w-14 h-12" />
-                  <p className="text-blue-600 text-lg font-semibold">GCash</p>
+                  <img src="/GCASHH.png" alt="GCash" className="w-10 h-8" />
+                  <p className="text-blue-600 text-base font-semibold">GCash</p>
                 </label>
               </div>
 
-              <div className="flex gap-14 pl-2 text-lg">
+              <div className="flex gap-14 pl-5 text-base">
                 <label className="flex items-center gap-4 cursor-pointer font-bold">
                   <input
                     type="radio"
@@ -273,7 +284,7 @@ export default function CheckoutPage() {
                   />
                   Cash on Delivery
                 </label>
-                <label className="flex items-center gap-4 cursor-pointer font-bold">
+                <label className="flex items-center pl-12 gap-4 cursor-pointer font-bold">
                   <input
                     type="radio"
                     name="payment"
@@ -289,41 +300,53 @@ export default function CheckoutPage() {
         </div>
 
         {/* Right Section - Order Summary */}
-        <div className="w-full lg:w-1/3 bg-white p-6 border border-gray-400 rounded-2xl flex flex-col justify-between h-full">
-          <h2 className="text-3xl font-bold mb-4">Order Summary</h2>
+        <div className="w-full xl:w-1/3 bg-white p-6 border-2 border-gray-300 rounded-2xl flex flex-col justify-between h-full">
+          <h2 className="text-2xl text-center font-bold mb-4">Order Summary</h2>
           <div className="w-full h-[1px] bg-gray-300 mb-4" />
+          
           <div className="space-y-4 text-lg">
             <div className="flex justify-between">
               <p>Subtotal</p>
-              <p className="text-black font-medium">₱{subtotal.toFixed(0)}</p>
+              <p className="text-black font-bold">₱{subtotal.toFixed(0)}</p>
             </div>
             {deliveryFee > 0 && (
               <div className="flex justify-between">
                 <p>Delivery Fee</p>
-                <p className="text-orange-600">₱{deliveryFee}</p>
+                <p className="font-bold">₱{deliveryFee}</p>
               </div>
             )}
             <div className="flex justify-between text-2xl font-bold pt-4 border-t mt-6">
-              <p>Total</p>
-              <p className="text-[#4CAE4F]">₱{newTotal}</p>
+              <p className="text-[#4CAE4F] font-black">Total</p>
+              <p className="text-[#4CAE4F] font-black">₱{newTotal}</p>
             </div>
           </div>
 
+          {/* Delivery Information moved here */}
+          {deliveryMethod === 'Delivery' && (
+            <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+              <h3 className="text-sm font-semibold text-blue-800 mb-2">Delivery Information:  </h3>
+              <div className="text-sm text-blue-700 space-y-1">
+                <p>• Base delivery fee: ₱30</p>
+                <p>• Additional ₱10 for every 5kg above the first 5kg</p>
+              </div>
+            </div>
+          )}
+
           {/* Delivery Method Summary */}
-          <div className="mt-4 p-3 bg-gray-50 rounded-lg border">
-            <p className="text-sm font-semibold text-gray-700">Selected Options:</p>
-            <p className="text-sm text-gray-600">
+          <div className="mt-4 p-3 bg-green-50 rounded-lg border border-green-200">
+            <p className="text-sm font-semibold text-green-700 mb-2">Selected Options:</p>
+            <p className="text-sm text-green-600">
               {deliveryMethod === 'Pick-up' 
                 ? `Pick-up at ${pickupLocation}` 
-                : `Delivery (₱${deliveryFee} fee)`
+                : `• Delivery (₱${deliveryFee} fee)`
               }
             </p>
-            <p className="text-sm text-gray-600">Payment: {paymentMethod}</p>
+            <p className="text-sm text-green-600"> • Payment: {paymentMethod}</p>
           </div>
 
           <button
             onClick={handleBuyNow}
-            className="mt-6 w-full py-3 px-4 text-2xl rounded-full text-white text-lg font-semibold bg-green-600 hover:bg-green-700 transition-colors"
+            className="mt-6 w-full py-3 px-4 text-3xl rounded-full text-white text-lg font-bold bg-[#4CAE4F] hover:bg-green-700 transition-colors"
           >
             Buy Now ({items.length})
           </button>
@@ -345,3 +368,4 @@ export default function CheckoutPage() {
     </div>
   );
 }
+
