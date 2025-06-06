@@ -8,7 +8,6 @@ const YourDailyBinhiNeeds = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
 
-
   const products = [
     { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
     { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
@@ -30,13 +29,67 @@ const YourDailyBinhiNeeds = () => {
     { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
     { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
     { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-];
+  ];
 
-    
- const paginatedProducts = products.slice(
+  // Calculate total pages
+  const totalPages = Math.ceil(products.length / itemsPerPage);
+  
+  // Get paginated products
+  const paginatedProducts = products.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+  // Generate page numbers for pagination
+  const getPageNumbers = () => {
+    const pages = [];
+    const maxPagesToShow = 5;
+    
+    if (totalPages <= maxPagesToShow) {
+      // Show all pages if total is less than or equal to max
+      for (let i = 1; i <= totalPages; i++) {
+        pages.push(i);
+      }
+    } else {
+      // Show smart pagination
+      if (currentPage <= 3) {
+        // Show first 5 pages
+        for (let i = 1; i <= maxPagesToShow; i++) {
+          pages.push(i);
+        }
+      } else if (currentPage >= totalPages - 2) {
+        // Show last 5 pages
+        for (let i = totalPages - maxPagesToShow + 1; i <= totalPages; i++) {
+          pages.push(i);
+        }
+      } else {
+        // Show current page and 2 pages on each side
+        for (let i = currentPage - 2; i <= currentPage + 2; i++) {
+          pages.push(i);
+        }
+      }
+    }
+    
+    return pages;
+  };
+
+  const handlePageChange = (page) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  const handlePrevious = () => {
+    if (currentPage > 1) {
+      setCurrentPage(currentPage - 1);
+    }
+  };
+
+  const handleNext = () => {
+    if (currentPage < totalPages) {
+      setCurrentPage(currentPage + 1);
+    }
+  };
 
   return (
     <>
@@ -47,11 +100,11 @@ const YourDailyBinhiNeeds = () => {
         </h1>
 
         {/* Products Grid */}
-        <section className="px-6 py-6 bg-[#F5F9F5]">
+        <section className="px-6 py-6 bg-[#F5F9F5] min-h-[600px]">
           <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
             {paginatedProducts.map((product, index) => (
               <div
-                key={index}
+                key={`${currentPage}-${index}`}
                 className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
               >
                 <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
@@ -72,7 +125,7 @@ const YourDailyBinhiNeeds = () => {
                 <div className="flex items-center justify-between gap-4 mt-2">
                   <img src="/shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
                   <button
-                    onClick={() => navigate(`/product/${index}`)}
+                    onClick={() => navigate(`/product/${(currentPage - 1) * itemsPerPage + index}`)}
                     className="text-[20px] bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
                   >
                     Buy Now
@@ -82,39 +135,57 @@ const YourDailyBinhiNeeds = () => {
             ))}
           </div>
 
-          <div className="flex justify-center gap-2 mt-6">
-        <button
-          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
-          className="w-[45px] h-[50px] bg-[#D9D9D9] border border-[#858585] rounded-xl text-gray-500 hover:bg-[#c2c2c2]"
-        >
-          &lt;
-        </button>
+          {/* Pagination */}
+          <div className="flex justify-center gap-2 mt-8 mb-4">
+            <button
+              onClick={handlePrevious}
+              disabled={currentPage === 1}
+              className={`w-[45px] h-[50px] border rounded-xl text-gray-500 transition-colors duration-150 ${
+                currentPage === 1
+                  ? 'bg-[#E5E5E5] border-[#CCCCCC] text-[#CCCCCC] cursor-not-allowed'
+                  : 'bg-[#D9D9D9] border-[#858585] hover:bg-[#c2c2c2]'
+              }`}
+            >
+              &lt;
+            </button>
 
-        {[1, 2, 3, 4, 5].map((num) => (
-          <button
-            key={num}
-            onClick={() => setCurrentPage(num)}
-            className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
-              currentPage === num
-                ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
-                : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
-            }`}
-          >
-            {num}
-          </button>
-        ))}
+            {getPageNumbers().map((pageNum) => (
+              <button
+                key={pageNum}
+                onClick={() => handlePageChange(pageNum)}
+                className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
+                  currentPage === pageNum
+                    ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
+                    : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
+                }`}
+              >
+                {pageNum}
+              </button>
+            ))}
 
-        <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
-          ...
-        </button>
+            {totalPages > 5 && currentPage < totalPages - 2 && (
+              <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
+                ...
+              </button>
+            )}
 
-        <button
-          onClick={() => setCurrentPage((prev) => prev + 1)}
-          className="w-[45px] h-[50px] rounded-xl bg-[#D9D9D9] border border-[#858585] text-[#858585] hover:bg-[#c2c2c2]"
-        >
-          &gt;
-        </button>
-      </div>
+            <button
+              onClick={handleNext}
+              disabled={currentPage === totalPages}
+              className={`w-[45px] h-[50px] rounded-xl border transition-colors duration-150 ${
+                currentPage === totalPages
+                  ? 'bg-[#E5E5E5] border-[#CCCCCC] text-[#CCCCCC] cursor-not-allowed'
+                  : 'bg-[#D9D9D9] border-[#858585] text-[#858585] hover:bg-[#c2c2c2]'
+              }`}
+            >
+              &gt;
+            </button>
+          </div>
+
+          {/* Page Info */}
+          <div className="text-center text-gray-600 text-sm mb-4">
+            Page {currentPage} of {totalPages} ({products.length} total items)
+          </div>
         </section>
 
         {/* Footer */}
