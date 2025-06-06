@@ -15,8 +15,7 @@ export default function CheckoutPage({}) {
   const [deliveryMethod, setDeliveryMethod] = useState('Pick-up');
   const [pickupLocation, setPickupLocation] = useState("President's Location");
   const [deliveryFee, setDeliveryFee] = useState(0);
-
-    const [userData, setUserData] = useState(null);
+  const [userData, setUserData] = useState(null);
 
   useEffect(() => {
     api.get(`${BASE_URL}/users/me/`, {
@@ -35,8 +34,24 @@ export default function CheckoutPage({}) {
   const { items, subtotal, total } = checkoutData;
   const newTotal = total + deliveryFee;
 
-  const handleBuyNow = () => {
-    navigate('/checkout-success', {
+const handleBuyNow = async () => {
+  try {
+    const variationIds = items.map((item) => item.variation.id);
+    const shippingAddress =
+      deliveryMethod === "Pick-up" ? pickupLocation : "Delivery Address";
+
+    const requestData = {
+      variation_ids: variationIds,
+      shipping_address: shippingAddress,
+      payment_method: paymentMethod,
+      delivery_method: deliveryMethod,
+    };
+
+    console.log("Request Payload:", requestData);  // Log the request data
+
+    const response = await api.post("/orders/confirm/", requestData);
+
+    navigate("/checkout-success", {
       state: {
         product: {
           items,
@@ -44,12 +59,17 @@ export default function CheckoutPage({}) {
           total: newTotal,
           paymentMethod,
           deliveryMethod,
-          pickupLocation: deliveryMethod === 'Pick-up' ? pickupLocation : null,
+          pickupLocation: deliveryMethod === "Pick-up" ? pickupLocation : null,
           deliveryFee,
         },
       },
     });
-  };
+  } catch (error) {
+    console.error("Checkout failed:", error);
+    alert("There was an error while confirming your order. Please try again.");
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
@@ -96,8 +116,6 @@ export default function CheckoutPage({}) {
            
         </div>
 
-       
-
         <CheckOutSidebar
           subtotal={subtotal}
           deliveryFee={deliveryFee}
@@ -111,7 +129,6 @@ export default function CheckoutPage({}) {
           setPaymentMethod={setPaymentMethod}
           handleBuyNow={handleBuyNow}
         />
-
 
         {/* Chat Button */}
         <div className="group fixed bottom-10 right-10 z-50">

@@ -13,7 +13,7 @@ const MainLayout = ({ children }) => {
 
       {/* Background */}
       <div className="absolute inset-0 bg-cover bg-center z-20"></div>
-
+      
       {/* Main Content */}
       <main className="relative z-20 flex-grow">
         {children}
