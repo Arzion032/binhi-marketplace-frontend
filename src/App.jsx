@@ -29,7 +29,7 @@ import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
 import SearchProductWithAccount from "./components/LandingPageWithAccount/SearchProductWithAccount";
 import OrderManagement from "./components/SellerCenter/OrderManagement";
 import AboutUsPage from "./components/LandingPage/AboutUsPage";
-import ViewAssociation from "./components/LandingPage/ViewAssociation"; 
+import ViewShop from "./components/LandingPage/ViewShop"; 
 import NotFoundPage from "./components/UI/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Associations from "./components/LandingPage/Associations";
@@ -66,7 +66,7 @@ function App() {
         <Route path="/marketplace" element={<MarketplaceWithAccount />} />
         <Route path="/featured-products" element={<FeaturedProducts />} />
         <Route path="/seller-center" element={<SellerCenter />} />
-        <Route path="/view-association" element={<ViewAssociation />} />
+        <Route path="/view-shop" element={<ViewShop />} />
         <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
         <Route path="/search-product-account" element={<SearchProductWithAccount />} />
         <Route path="/order-management" element={<OrderManagement/>} />

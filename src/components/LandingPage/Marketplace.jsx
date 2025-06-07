@@ -23,8 +23,6 @@ const Marketplace = () => {
       .finally(() => setLoading(false));
   }, []);
 
-
-
   // Show error if there's an error
   if (error) return <div>Error: {error}</div>;
 
@@ -80,6 +78,41 @@ const Marketplace = () => {
   const farmers = Array.from({ length: 20 }, (_, i) => {
     return { ...farmerTemplates[i % farmerTemplates.length] };
   });
+
+  const handleViewShop = (farmer) => {
+    navigate('/view-shop', {
+      state: {
+        associationData: {
+          id: farmer.rank,
+          img: farmer.img,
+          name: farmer.name,
+          tags: farmer.categories,
+          location: farmer.location,
+          followers: farmer.followers,
+          rating: farmer.rating,
+          responseRate: farmer.responseRate,
+          productsSold: farmer.productsSold,
+        }
+      }
+    });
+  };
+
+  // Function to handle chat navigation with association data
+{/* const handleChatWithAssociation = (farmer) => {
+    navigate('/ChatPage', {
+      state: {
+        isAssociation: true,
+        associationName: farmer.name,
+        associationLocation: farmer.location,
+        associationCategories: farmer.categories,
+        associationAvatar: farmer.img,
+        associationSold: farmer.sold,
+        associationRank: farmer.rank,
+        associationPlace: farmer.location
+      }
+    });
+  };
+  */}
 
   return (
     <div className="min-h-screen w-full bg-white">
@@ -180,17 +213,12 @@ const Marketplace = () => {
                       ))}
                     </div>
                   </div>
-                  <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                    <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                  <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-gray-600">
+                    <button
+                    onClick={() => handleViewShop(farmer)}
+                    className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-full border-r">
                       <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                       View Shop
-                    </button>
-                    <button 
-                    onClick={() => navigate('/chatpage')}
-                    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
-                    >
-                      <img src="/chat.png" alt="chat" className="w-5 h-5" />        
-                      Chat Now
                     </button>
                   </div>
                 </div>
@@ -208,8 +236,6 @@ const Marketplace = () => {
             </button>
           </div>
         </section>
-
-
 
         {/*Counts*/}
         <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">

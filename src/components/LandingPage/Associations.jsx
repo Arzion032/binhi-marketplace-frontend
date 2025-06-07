@@ -16,9 +16,8 @@ const Associations = () => {
   const [showPlaceDropdown, setShowPlaceDropdown] = useState(false);
   const itemsPerPage = 10;
 
-  // Expanded farmer data with more variety
   const allFarmers = [
-  {
+    {
       name: "Pantok Farmers Association",
       location: "Pantok, Binangonan",
       sold: "10k",
@@ -26,7 +25,11 @@ const Associations = () => {
       categories: ["milks & dairy", "rice", "grains"],
       img: "/555.png",
       gridImg: "/Pantok.png",
-      place: "Pantok"
+      place: "Pantok",
+      followers: 245,
+      rating: 5.0,
+      responseRate: "95%",
+      productsSold: "10k"
     },
     {
       name: "Macamot Farmers Association",
@@ -36,7 +39,11 @@ const Associations = () => {
       categories: ["fruits", "rice", "vegetables", "root crops"],
       img: "/444.png",
       gridImg: "/Macamot.png",
-      place: "Macamot"
+      place: "Macamot",
+      followers: 312,
+      rating: 4.9,
+      responseRate: "98%",
+      productsSold: "12k"
     },
     {
       name: "Tagpos Farmers Association",
@@ -46,7 +53,11 @@ const Associations = () => {
       categories: ["fruits", "root crops", "meat"],
       img: "/222.png",
       gridImg: "/Tagpos.png",
-      place: "Tagpos"
+      place: "Tagpos",
+      followers: 198,
+      rating: 4.8,
+      responseRate: "92%",
+      productsSold: "9k"
     },
     {
       name: "Bilibiran Farmers Association",
@@ -55,7 +66,11 @@ const Associations = () => {
       rank: 4,
       categories: ["vegetables", "grains"],
       img: "/Bilibiran.png",
-      place: "Bilibiran"
+      place: "Bilibiran",
+      followers: 167,
+      rating: 4.7,
+      responseRate: "90%",
+      productsSold: "8k"
     },
     {
       name: "Samahang Magsasaka ng Darangan",
@@ -64,7 +79,11 @@ const Associations = () => {
       rank: 5,
       categories: ["fruits", "vegetables"],
       img: "/Darangan.png",
-      place: "Darangan"
+      place: "Darangan",
+      followers: 134,
+      rating: 4.6,
+      responseRate: "88%",
+      productsSold: "7k"
     },
     {
       name: "Hulo Farmers Association",
@@ -73,7 +92,11 @@ const Associations = () => {
       rank: 6,
       categories: ["rice", "root crops"],
       img: "/Hulo.png",
-      place: "Hulo"
+      place: "Hulo",
+      followers: 123,
+      rating: 4.5,
+      responseRate: "85%",
+      productsSold: "6k"
     },
     {
       name: "Pugad St. Monique Farmers Association",
@@ -82,7 +105,11 @@ const Associations = () => {
       rank: 7,
       categories: ["vegetables", "fruits"],
       img: "/Pugad.png",
-      place: "Pugad"
+      place: "Pugad",
+      followers: 98,
+      rating: 4.4,
+      responseRate: "82%",
+      productsSold: "5k"
     },
     {
       name: "Tabing Dagat Farmers Association",
@@ -91,7 +118,11 @@ const Associations = () => {
       rank: 8,
       categories: ["meat", "milks & dairy"],
       img: "/Tabingdagat.png",
-      place: "T.Dagat"
+      place: "T.Dagat",
+      followers: 87,
+      rating: 4.3,
+      responseRate: "80%",
+      productsSold: "4k"
     },
     {
       name: "Kaykansa Farmers Collective",
@@ -100,7 +131,11 @@ const Associations = () => {
       rank: 9,
       categories: ["grains", "vegetables"],
       img: "/Kaykansa.png",
-      place: "Kaykansa"
+      place: "Kaykansa",
+      followers: 76,
+      rating: 4.2,
+      responseRate: "78%",
+      productsSold: "3k"
     },
     {
       name: "Kaysapon Agricultural Society",
@@ -109,7 +144,11 @@ const Associations = () => {
       rank: 10,
       categories: ["fruits", "root crops"],
       img: "/Kaysapon.png",
-      place: "Kaysapon"
+      place: "Kaysapon",
+      followers: 65,
+      rating: 4.1,
+      responseRate: "75%",
+      productsSold: "2k"
     },
     {
       name: "Kaymaputi Farmers Guild",
@@ -118,7 +157,11 @@ const Associations = () => {
       rank: 11,
       categories: ["rice", "grains"],
       img: "/Kaymaputi.png",
-      place: "Kaymaputi"
+      place: "Kaymaputi",
+      followers: 54,
+      rating: 4.0,
+      responseRate: "72%",
+      productsSold: "1.5k"
     },
     {
       name: "Pila-pila Farmers Association",
@@ -127,7 +170,11 @@ const Associations = () => {
       rank: 12,
       categories: ["vegetables", "milks & dairy"],
       img: "/pila-pila.png",
-      place: "Pila-pila"
+      place: "Pila-pila",
+      followers: 43,
+      rating: 3.9,
+      responseRate: "70%",
+      productsSold: "1k"
     },
     {
       name: "Calumpang Farmers Association",
@@ -136,7 +183,11 @@ const Associations = () => {
       rank: 13,
       categories: ["fruits", "meat"],
       img: "/calumpang.png",
-      place: "Calumpang"
+      place: "Calumpang",
+      followers: 32,
+      rating: 3.8,
+      responseRate: "68%",
+      productsSold: "900"
     },
     {
       name: "Halang Integrated Farmers Association",
@@ -145,7 +196,11 @@ const Associations = () => {
       rank: 14,
       categories: ["root crops", "vegetables"],
       img: "/Halang.png",
-      place: "Halang"
+      place: "Halang",
+      followers: 21,
+      rating: 3.7,
+      responseRate: "65%",
+      productsSold: "800"
     },
     {
       name: "Tatala Farmers Association",
@@ -154,7 +209,11 @@ const Associations = () => {
       rank: 15,
       categories: ["grains", "rice"],
       img: "/tatala.png",
-      place: "Tatala"
+      place: "Tatala",
+      followers: 18,
+      rating: 3.6,
+      responseRate: "62%",
+      productsSold: "700"
     },
     {
       name: "Mambog Farmers Association",
@@ -163,7 +222,11 @@ const Associations = () => {
       rank: 16,
       categories: ["fruits", "vegetables"],
       img: "/mambog.png",
-      place: "Mambog"
+      place: "Mambog",
+      followers: 15,
+      rating: 3.5,
+      responseRate: "60%",
+      productsSold: "600"
     }
   ];
 
@@ -258,7 +321,7 @@ const Associations = () => {
     setCurrentPage(1);
   };
 
-  // NEW: Individual filter removal functions
+  // Individual filter removal functions
   const removeCategoryFilter = () => {
     setSelectedCategory("");
     setSelectedFilter("Relevance");
@@ -271,18 +334,21 @@ const Associations = () => {
     setCurrentPage(1);
   };
 
-  // NEW: Function to handle chat navigation with association data
-  const handleChatNavigation = (farmer) => {
-    navigate('/chatpage', {
+  // NEW: Function to handle View Shop navigation with association data
+  const handleViewShop = (farmer) => {
+    navigate('/view-shop', {
       state: {
-        associationName: farmer.name,
-        associationAvatar: farmer.img,
-        associationLocation: farmer.location,
-        associationCategories: farmer.categories,
-        associationSold: farmer.sold,
-        associationRank: farmer.rank,
-        associationPlace: farmer.place,
-        isAssociation: true // Flag to identify this as an association chat
+        associationData: {
+          id: farmer.rank,
+          img: farmer.img,
+          name: farmer.name,
+          tags: farmer.categories,
+          location: farmer.location,
+          followers: farmer.followers,
+          rating: farmer.rating,
+          responseRate: farmer.responseRate,
+          productsSold: farmer.productsSold,
+        }
       }
     });
   };
@@ -328,17 +394,13 @@ const Associations = () => {
                         ))}
                       </div>
                     </div>
-                    <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                      <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                    <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-gray-600">
+                      <button 
+                        onClick={() => handleViewShop(farmer)}
+                        className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-full border-r hover:bg-[#3c9d3f] transition-colors"
+                      >
                         <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                         View Shop
-                      </button>
-                      <button 
-                        onClick={() => handleChatNavigation(farmer)}
-                        className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
-                      >
-                        <img src="/chat.png" alt="chat" className="w-5 h-5" />        
-                        Chat Now
                       </button>
                     </div>
                   </div>
@@ -491,17 +553,13 @@ const Associations = () => {
                     ))}
                   </div>
                 </div>
-                <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                  <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-gray-600">
+                  <button 
+                    onClick={() => handleViewShop(farmer)}
+                    className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-full border-r hover:bg-[#3c9d3f] transition-colors"
+                  >
                     <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                     View Shop
-                  </button>
-                  <button  
-                    onClick={() => handleChatNavigation(farmer)}
-                    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
-                  >
-                    <img src="/chat.png" alt="chat" className="w-5 h-5" />        
-                    Chat Now
                   </button>
                 </div>
               </div>
