@@ -389,7 +389,6 @@ return (
     </div>
 
 );
-
 };
 
 export default CartPage;
