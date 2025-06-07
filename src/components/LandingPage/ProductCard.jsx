@@ -22,17 +22,17 @@ const ProductCard = ({
       className="bg-white rounded-xl shadow-md p-4 text-left cursor-pointer transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
     >
       {/* Category Badge */}
-      <span className="w-[120px] text-center bg-green-100 text-green-800 text-sm font-semibold px-2 py-1 rounded-full mb-2 uppercase">
+      <span className="w-fit text-center bg-green-100 text-green-900 text-sm font-semibold px-4 py-1 rounded-full mb-4 uppercase">
         {product.category_name}
       </span>
       {/* Product Image */}
       <img
         src={product.images?.image ? BASE_URL + product.images.image : "/placeholder.png"}
         alt={product.name}
-        className="w-full h-40 object-cover rounded-xl"
+        className="w-full h-[200px] object-cover rounded-xl"
       />
       {/* Product Name */}
-      <p className="text-left font-semibold text-lg mt-2">
+      <p className="text-left font-semibold text-xl mt-2">
         {product.name}
       </p>
       {/* Price */}
@@ -43,16 +43,16 @@ const ProductCard = ({
           </span>
         </p>
       {/* Rating & Sold */}
-      <div className="text-[20px] text-gray-600 mt-4 flex items-center gap-1">
+      <div className="text-[20px] text-gray-600 flex items-center gap-1">
         <img src="/Star.png" alt="star" className="w-4 h-4" />
-        5.0 • {product.sold} Sold
+      {product.sold} Sold
       </div>
       {/* Actions */}
       <div className="flex items-center justify-between gap-4 mt-2">
         <img
           src="/shopping-cart.png"
           alt="cart"
-          className="w-6 h-6 transition-transform duration-100 hover:scale-125"
+          className="w-8 h-8 transition-transform duration-100 hover:scale-125"
           onClick={e => {
             e.stopPropagation();
             onAddToCart && onAddToCart(e, product);
@@ -63,7 +63,7 @@ const ProductCard = ({
             e.stopPropagation();
             onBuyNow && onBuyNow(e, product);
           }}
-          className="text-xl bg-[#4CAE4F] text-white w-80 max-w-[140px] px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
+                    className="bg-[#4CAE4F] text-white hover:bg-green-600 font-bold px-2 py-2 rounded-full w-[200px] text-center items-center transition-transform duration-100 hover:scale-105"
         >
           Buy Now
         </button>

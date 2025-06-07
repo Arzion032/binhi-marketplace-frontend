@@ -94,7 +94,7 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
             <input
               type="text"
               placeholder="Click here to products or farmer"
-              className="flex-grow outline-none font-bold text-base"
+              className="flex-grow outline-none text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={handleKeyDown}

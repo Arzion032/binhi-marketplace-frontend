@@ -298,19 +298,17 @@ const Associations = () => {
         <section className="relative px-6 py-10 bg-[#F5F9F5] overflow-hidden">
           <div className="w-full bg-[#F5F9F5] px-[80px] pt-1 pb-20">
             <div className="flex items-center gap-2 mb-6">
-              <img src="/medal.png" alt="medal icon" className="w-8 h-8" />
-              <h2 className="text-3xl font-semibold">
-                Top Associations of the Month
-              </h2>
+              <img src="/medal.png" alt="medal icon" className="w-12 h-12" />
+        <h2 className=" text-4xl font-black text-center p-6 uppercase mb-10"><span  className="text-[#4CAE4F]"> Top Associations </span> of the Month</h2>
             </div>
             <div className="absolute inset-0 pointer-events-none">
               <img src="/confetti.png" alt="confetti" className="pt-[75px] w-full h-full object-cover" />
             </div>
-            <div className="pt-[75px] flex flex-wrap justify-center gap-6 relative z-10">
+            <div className=" flex flex-wrap justify-center gap-6 relative z-10">
               {allFarmers.slice(0, 3).map((farmer, index) => (
                 <div
                   key={index}
-                  className={`bg-white rounded-2xl border-[3px] border-black-200 shadow-md w-[350px] text-center flex flex-col items-center justify-between relative ${index === 1 ? 'mt-[-40px]' : 'mt-0'}`}
+                className={`bg-white rounded-2xl shadow-md w-[350px] text-center flex flex-col items-center transition hover:scale-95 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between relative ${index === 1 ? 'mt-[-40px]' : 'mt-0'}`}
                 >
                   <div className="flex flex-col items-center justify-between h-full w-full">
                     <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
@@ -328,8 +326,8 @@ const Associations = () => {
                         ))}
                       </div>
                     </div>
-                    <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                      <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                    <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-[#4CAE4F]">
+                      <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-[#4CAE4F]">
                         <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                         View Shop
                       </button>
@@ -350,25 +348,23 @@ const Associations = () => {
       )}
 
       {/* Product Results Section */}
-      <div className="w-full bg-[#F5F9F5] px-[100px] pt-10 pb-20">
-        <div className="flex items-center gap-2 mb-6">
-          <img src="/sprout.png" alt="sprout icon" className="w-8 h-8" />
-          <h2 className="text-3xl font-semibold">
-            Meet More Associations
-          </h2>
+      <div className="w-full bg-[#F5F9F5] px-[100px] pb-20">
+        <div className="flex items-center gap-2 mb-4">
+          <img src="/sprout.png" alt="sprout icon" className="w-12 h-12" />
+        <h2 className=" text-4xl font-black text-center p-6 uppercase">Meet More <span className="text-[#4CAE4F]">  Associations </span></h2>
         </div>
 
         {/* Sort Filter */}
         <div className="flex gap-4 mb-8 relative">
-          <div className="flex items-center gap-4 bg-[#EAEAEA] px-6 py-2 rounded-full w-full">
+          <div className="flex items-center gap-4 bg-green-100 px-6 py-4 rounded-xl w-full">
             <p className="text-lg font-semibold text-gray-800">Sort by</p>
 
             {["Relevance", "Latest", "Top Sales"].map((label, idx) => (
               <button
                 key={idx}
                 onClick={() => handleSortFilter(label)}
-                className={`px-4 py-1 rounded-full font-semibold text-sm border transition ${
-                  selectedFilter === label ? 'bg-[#4CAE4F] text-white' : 'bg-white text-gray-700 border-gray-300'
+                className={`px-4 py-2 rounded-full font-semibold text-sm border border-[#4CAE4F] transition ${
+                  selectedFilter === label ? 'bg-[#4CAE4F] text-white' : 'bg-white text-gray-700 border-[#4CAE4F] '
                 }`}
               >
                 {label}
@@ -379,8 +375,8 @@ const Associations = () => {
             <div className="relative">
               <button
                 onClick={() => setShowCategoryDropdown(prev => !prev)}
-                className={`px-4 py-1 pl-4 pr-3 rounded-full font-semibold text-sm border flex items-center gap-2 transition ${
-                  selectedCategory ? 'bg-[#4CAE4F] text-white' : 'bg-white text-gray-700 border-gray-300'
+                className={`px-4 py-2 pl-4 pr-3 rounded-full font-semibold text-sm border flex items-center gap-2 transition ${
+                  selectedCategory ? 'bg-[#4CAE4F] text-white' : 'bg-white text-gray-700 border-[#4CAE4F] '
                 }`}
               >
                 <span>{selectedCategory || "Category"}</span>
@@ -418,8 +414,8 @@ const Associations = () => {
             <div className="relative">
               <button
                 onClick={() => setShowPlaceDropdown(prev => !prev)}
-                className={`px-4 py-1 pl-4 pr-3 rounded-full font-semibold text-sm border flex items-center gap-2 transition ${
-                  selectedPlace ? 'bg-[#4CAE4F] text-white' : 'bg-white text-gray-700 border-gray-300'
+                className={`px-4 py-2 pl-4 pr-3 rounded-full font-semibold text-sm border flex items-center gap-2 transition ${
+                  selectedPlace ? 'bg-[#4CAE4F] text-white' : 'bg-white text-gray-700 border-[#4CAE4F] '
                 }`}
               >
                 <span>{selectedPlace || "Place"}</span>
@@ -467,7 +463,7 @@ const Associations = () => {
           {paginatedFarmers.map((farmer, index) => (
             <div
               key={index}
-              className="bg-white rounded-2xl border-[3px] border-black-200 shadow-md text-center flex flex-col items-center justify-between relative"
+              className="bg-white rounded-2xl transition hover:scale-95 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] shadow-md text-center flex flex-col items-center justify-between relative"
             >
               <div className="flex flex-col items-center justify-between h-full w-full">
                 <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
@@ -491,8 +487,8 @@ const Associations = () => {
                     ))}
                   </div>
                 </div>
-                <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                  <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-[#4CAE4F]">
+                  <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-[#4CAE4F]">
                     <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                     View Shop
                   </button>
@@ -527,8 +523,8 @@ const Associations = () => {
               disabled={currentPage === 1}
               className={`w-[45px] h-[50px] border rounded-xl ${
                 currentPage === 1
-                  ? 'bg-[#D9D9D9] border-[#858585] text-gray-400 cursor-not-allowed'
-                  : 'bg-[#D9D9D9] border-[#858585] text-gray-500 hover:bg-[#c2c2c2]'
+                  ? 'bg--green-100 border-[#858585] text-gray-400 cursor-not-allowed'
+                  : 'bg--green-100 border-[#858585] text-gray-500 hover:bg-[#c2c2c2]'
               }`}
             >
               &lt;
@@ -541,7 +537,7 @@ const Associations = () => {
                 className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
                   currentPage === num
                     ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
-                    : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
+                    : 'bg-green-100  text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
                 }`}
               >
                 {num}
@@ -549,7 +545,7 @@ const Associations = () => {
             ))}
 
             {totalPages > 5 && (
-              <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
+              <button className="w-[45px] h-[50px] rounded-xl border bg-green-100 text-[#858585] border-[#858585] cursor-default" disabled>
                 ...
               </button>
             )}
@@ -559,8 +555,8 @@ const Associations = () => {
               disabled={currentPage === totalPages}
               className={`w-[45px] h-[50px] rounded-xl border ${
                 currentPage === totalPages
-                  ? 'bg-[#D9D9D9] border-[#858585] text-gray-400 cursor-not-allowed'
-                  : 'bg-[#D9D9D9] border-[#858585] text-[#858585] hover:bg-[#c2c2c2]'
+                  ? 'bg-green-100 border-[#858585] text-gray-400 cursor-not-allowed'
+                  : 'bg-green-100 border-[#858585] text-[#858585] hover:bg-[#c2c2c2]'
               }`}
             >
               &gt;

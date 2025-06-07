@@ -1,35 +1,59 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import MainHeader from '../UI/MainHeader';
+import MainFooter from '../UI/MainFooter';
+import ProductCard from './ProductCard';
+import LoadingScreen from '../UI/LoadingScreen';
+import api from '../../api';
 
 const itemsPerPage = 15;
 
 const YourDailyBinhiNeeds = () => {
   const navigate = useNavigate();
   const [currentPage, setCurrentPage] = useState(1);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showToast, setShowToast] = useState(false);
+  const [selectedProductName, setSelectedProductName] = useState('');
 
-  const products = [
-    { name: "Automatic-Cook Rice from the Field of Antartica", price: "₱136", sold: 227, image: "/Search-rice.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "How to Train Your Dragon's Treasure Exotic Fruit", price: "₱53.00", sold: 227, image: "/dragonfruit.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-    { name: "Ultra-Green Superfood Broccoli Hulk Flavored", price: "₱53.00", sold: 227, image: "/brocco.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Farm Fresh Sweet Corn", price: "₱53.00", sold: 227, image: "/corn.png" },
-    { name: "Ultra-Creamy Black Gold Avocado with Balut", price: "₱53.00", sold: 227, image: "/fruit-avocado.png" },
-    { name: "Premium Milk With No Exercise One Week", price: "₱53.00", sold: 227, image: "/milk.png" },
-  ];
+  // Fetch products from API
+  useEffect(() => {
+    api.get("/products/")
+      .then(res => {
+        setProducts(res.data.results || res.data || []);
+      })
+      .catch(err => {
+        console.error('Error fetching products:', err);
+        setError(err.message || "Error fetching products");
+      })
+      .finally(() => setLoading(false));
+  }, []);
+
+  // Show loading screen
+  if (loading) return <LoadingScreen />;
+
+  // Show error if there's an error
+  if (error) {
+    return (
+      <>
+        <MainHeader />
+        <div className="min-h-screen w-full bg-[#F5F9F5] pt-8 flex items-center justify-center">
+          <div className="text-center">
+            <h2 className="text-2xl font-bold text-red-600 mb-4">Error Loading Products</h2>
+            <p className="text-gray-600 mb-4">{error}</p>
+            <button 
+              onClick={() => window.location.reload()}
+              className="bg-[#4CAE4F] text-white px-6 py-2 rounded-lg hover:bg-green-600"
+            >
+              Try Again
+            </button>
+          </div>
+        </div>
+        <MainFooter />
+      </>
+    );
+  }
 
   // Calculate total pages
   const totalPages = Math.ceil(products.length / itemsPerPage);
@@ -76,178 +100,143 @@ const YourDailyBinhiNeeds = () => {
   const handlePageChange = (page) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      // Scroll to top when page changes
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handlePrevious = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
 
   const handleNext = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+  };
+
+  const showModalToast = () => {
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 700);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    setSelectedProductName(product.name);
+    showModalToast();
+    // Add your cart logic here
+    console.log('Added to cart:', product);
+  };
+
+  const handleBuyNow = (e, product) => {
+    e.stopPropagation();
+    navigate(`/product/${product.slug}`);
   };
 
   return (
     <>
       <MainHeader />
       <div className="min-h-screen w-full bg-[#F5F9F5] pt-8">
-        <h1 className="bg-white text-[38px] font-bold text-center shadow-xl">
-          YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
-        </h1>
+        {/* Toast Notification */}
+        {showToast && (
+          <div className="fixed pt-10 inset-0 flex items-center justify-center z-50">
+            <div className="border-2 border-[#858585] bg-white rounded-3xl p-10 w-[420px] shadow-xl text-center">
+              <img src="/Checkpass.png" alt="Success" className="w-20 h-20 mx-auto mb-4" />
+              <h3 className="text-xl font-bold mb-2">{selectedProductName}</h3>
+              <p className="text-lg">has been added to your shopping cart</p>
+            </div>
+          </div>
+        )}
+
+        <h1 className="bg-white border-2 border-gray text-4xl font-black text-center shadow-lg p-6">
+        YOUR DAILY<span className="text-[#4CAE4F]"> BINHI </span> NEEDS
+      </h1>
 
         {/* Products Grid */}
         <section className="px-6 py-6 bg-[#F5F9F5] min-h-[600px]">
-          <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-            {paginatedProducts.map((product, index) => (
-              <div
-                key={`${currentPage}-${index}`}
-                className="bg-white rounded-xl shadow-md p-4 text-left transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
-              >
-                <span className="w-[100px] bg-green-100 text-green-800 text-xs font-semibold px-2 py-1 rounded-full">
-                  VEGETABLE
-                </span>
-                <img src={product.image} alt={product.name} className="w-full h-40 object-contain rounded-xl" />
-                <p className="text-left font-semibold text-[20px]">{product.name}</p>
-                <p className="text-[#4CAE4F] text-[20px] font-bold">
-                  {product.price}
-                  <span className="text-[15px] font-normal text-[#4CAE4F] border-[1px] border-[#4CAE4F] p-0.5 rounded-sm mb-2 ml-1">
-                    per pc.
-                  </span>
-                </p>
-                <div className="text-[20px] text-gray-600 mt-4 flex items-center gap-1">
-                  <img src="/Star.png" alt="star" className="w-4 h-4" />
-                  5.0 • {product.sold} Sold
-                </div>
-                <div className="flex items-center justify-between gap-4 mt-2">
-                  <img src="/shopping-cart.png" alt="cart" className="w-6 h-6 transition-transform duration-100 hover:scale-125" />
+          {products.length === 0 ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="text-center">
+                <h3 className="text-xl font-semibold text-gray-600 mb-2">No Products Available</h3>
+                <p className="text-gray-500">Please check back later for new products.</p>
+              </div>
+            </div>
+          ) : (
+            <>
+              <div className="mx-[50px] max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+                {paginatedProducts.map((product, index) => (
+                  <ProductCard
+                    key={product.id || `${currentPage}-${index}`}
+                    product={product}
+                    onAddToCart={handleAddToCart}
+                    onBuyNow={handleBuyNow}
+                  />
+                ))}
+              </div>
+
+              {/* Pagination */}
+              {totalPages > 1 && (
+                <div className="flex justify-center gap-2 mt-8 mb-4">
                   <button
-                    onClick={() => navigate(`/product/${(currentPage - 1) * itemsPerPage + index}`)}
-                    className="text-[20px] bg-[#4CAE4F] text-white w-80 px-4 py-1 rounded-2xl transition-transform duration-100 hover:scale-110"
+                    onClick={handlePrevious}
+                    disabled={currentPage === 1}
+                    className={`w-[45px] h-[50px] border rounded-xl text-gray-500 transition-colors duration-150 ${
+                      currentPage === 1
+                        ? 'bg-[#E5E5E5] border-[#CCCCCC] text-[#CCCCCC] cursor-not-allowed'
+                        : 'bg-[#D9D9D9] border-[#858585] hover:bg-[#c2c2c2]'
+                    }`}
                   >
-                    Buy Now
+                    &lt;
+                  </button>
+
+                  {getPageNumbers().map((pageNum) => (
+                    <button
+                      key={pageNum}
+                      onClick={() => handlePageChange(pageNum)}
+                      className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
+                        currentPage === pageNum
+                          ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
+                          : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
+                      }`}
+                    >
+                      {pageNum}
+                    </button>
+                  ))}
+
+                  {totalPages > 5 && currentPage < totalPages - 2 && (
+                    <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
+                      ...
+                    </button>
+                  )}
+
+                  <button
+                    onClick={handleNext}
+                    disabled={currentPage === totalPages}
+                    className={`w-[45px] h-[50px] rounded-xl border transition-colors duration-150 ${
+                      currentPage === totalPages
+                        ? 'bg-[#E5E5E5] border-[#CCCCCC] text-[#CCCCCC] cursor-not-allowed'
+                        : 'bg-[#D9D9D9] border-[#858585] text-[#858585] hover:bg-[#c2c2c2]'
+                    }`}
+                  >
+                    &gt;
                   </button>
                 </div>
+              )}
+
+              {/* Page Info */}
+              <div className="text-center text-gray-600 text-sm mb-4">
+                Page {currentPage} of {totalPages} ({products.length} total items)
               </div>
-            ))}
-          </div>
-
-          {/* Pagination */}
-          <div className="flex justify-center gap-2 mt-8 mb-4">
-            <button
-              onClick={handlePrevious}
-              disabled={currentPage === 1}
-              className={`w-[45px] h-[50px] border rounded-xl text-gray-500 transition-colors duration-150 ${
-                currentPage === 1
-                  ? 'bg-[#E5E5E5] border-[#CCCCCC] text-[#CCCCCC] cursor-not-allowed'
-                  : 'bg-[#D9D9D9] border-[#858585] hover:bg-[#c2c2c2]'
-              }`}
-            >
-              &lt;
-            </button>
-
-            {getPageNumbers().map((pageNum) => (
-              <button
-                key={pageNum}
-                onClick={() => handlePageChange(pageNum)}
-                className={`w-[45px] h-[50px] rounded-xl border text-sm font-semibold transition-colors duration-150 ${
-                  currentPage === pageNum
-                    ? 'bg-[#4CAE4F] text-white border-[#4CAE4F] hover:bg-[#3c9d3f]'
-                    : 'bg-[#D9D9D9] text-[#858585] border-[#858585] hover:bg-[#bfbfbf]'
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
-
-            {totalPages > 5 && currentPage < totalPages - 2 && (
-              <button className="w-[45px] h-[50px] rounded-xl border bg-[#D9D9D9] text-[#858585] border-[#858585] cursor-default" disabled>
-                ...
-              </button>
-            )}
-
-            <button
-              onClick={handleNext}
-              disabled={currentPage === totalPages}
-              className={`w-[45px] h-[50px] rounded-xl border transition-colors duration-150 ${
-                currentPage === totalPages
-                  ? 'bg-[#E5E5E5] border-[#CCCCCC] text-[#CCCCCC] cursor-not-allowed'
-                  : 'bg-[#D9D9D9] border-[#858585] text-[#858585] hover:bg-[#c2c2c2]'
-              }`}
-            >
-              &gt;
-            </button>
-          </div>
-
-          {/* Page Info */}
-          <div className="text-center text-gray-600 text-sm mb-4">
-            Page {currentPage} of {totalPages} ({products.length} total items)
-          </div>
+            </>
+          )}
         </section>
 
         {/* Footer */}
-        <footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-x-0 gap-y-1 text-sm text-gray-700 mx-[100px] mb-2 text-center md:text-left">
-            <div className="flex flex-col items-center">
-              <img src="/Primary Logo w_ BG.png" alt="Binhi Logo" />
-              <p className="text-[15px] text-green-600 text-center">Ang Ugat sa Masaganang Bukas!</p>
-            </div>
-            <div className="mx-4">
-              <p className="text-[15px] font-bold mb-3">CUSTOMER SERVICE</p>
-              <ul className="space-y-1">
-                <li>Help Center</li>
-                <li>Payment Methods</li>
-                <li>Return & Refund</li>
-                <li>Contact Us</li>
-              </ul>
-            </div>
-            <div className="mx-4">
-              <p className="text-[15px] font-bold mb-3">ABOUT BINHI</p>
-              <ul className="space-y-1">
-                <li>About Us</li>
-                <li>Privacy Policy</li>
-                <li>Binhi Seller Center</li>
-              </ul>
-            </div>
-            <div className="mx-4">
-              <p className="text-[15px] font-bold mb-3">PAYMENT METHODS</p>
-              <div className="grid grid-cols-2 gap-2">
-                <img src="/cod.png" alt="COD" />
-                <img src="/gcash.png" alt="GCash" />
-                <img src="/paypal.png" alt="PayPal" />
-                <img src="/maya.png" alt="Maya" />
-              </div>
-            </div>
-            <div className="mx-4">
-              <p className="text-[15px] font-bold mb-3">FOLLOW US</p>
-              <ul className="space-y-1">
-                <li className="flex items-center space-x-1">
-                  <img src="/Facebook.png" alt="Facebook" />
-                  <span>BINHI Corp.</span>
-                </li>
-                <li className="flex items-center space-x-1">
-                  <img src="/Messenger.png" alt="Messenger" />
-                  <span>@BINHI Corp.</span>
-                </li>
-                <li className="flex items-center space-x-1">
-                  <img src="/WhatsApp.png" alt="WhatsApp" />
-                  <span>BINHI Corp.</span>
-                </li>
-                <li className="flex items-center space-x-1">
-                  <img src="/Instagram.png" alt="Instagram" />
-                  <span>BINHI Corp.</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </footer>
-
-        <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px]">
-          Binhi 2024, All Rights Reserved.
-        </div>
+        <MainFooter/>
       </div>
     </>
   );

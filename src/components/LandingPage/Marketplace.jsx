@@ -141,28 +141,28 @@ const Marketplace = () => {
             />
           ))}
         </div>
-        <div className="mb-10 flex justify-center mt-10">
+        <div className="mb-10 flex justify-center mt-5">
           <button
             onClick={() => navigate('/daily-needs')}
-            className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
+            className="text-lg font-normal bg-[#4CAE4F] items-center border-2 hover:border-[#4CAE4F] border-[#4CAE4F] text-white w-[300px] h-[50px] px-4 py-1 rounded-full text-center transition-transform duration-200 hover:scale-110"
           >
-            See More
+            See More  <span className="font-black text-2xl mx-2"> → </span> 
           </button>
         </div>
 
         {/*Top Farmers Section*/}
+        <h2 className="bg-white border-2 border-gray text-4xl font-black text-center p-6 uppercase"><span  className="text-[#4CAE4F]"> Top Associations </span> of the Month</h2>
         <section className="pt-[40px] relative px-6 py-10 bg-[#F5F9F5] overflow-hidden">
           <div className="absolute inset-0 pointer-events-none">
             <img src="/confetti.png" alt="confetti" className="w-full h-full object-cover" />
           </div>
 
-          <h2 className="text-center text-3xl font-black font-inter relative z-10 mb-16">Top Associations of the Month</h2>
 
           <div className="pt-[20px] flex flex-wrap justify-center gap-6 relative z-10">
             {farmers.slice(0, 3).map((farmer, index) => (
               <div
                 key={index}
-                className={`bg-white rounded-2xl border-[3px] border-black-200 shadow-md w-[350px] text-center flex flex-col items-center justify-between relative ${index === 1 ? 'mt-[-40px]' : 'mt-0'}`}
+                className={`bg-white rounded-2xl shadow-md w-[350px] text-center flex flex-col items-center transition hover:scale-95 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between relative ${index === 1 ? 'mt-[-40px]' : 'mt-0'}`}
               >
                 <div className="flex flex-col items-center justify-between h-full w-full">
                   <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
@@ -170,7 +170,7 @@ const Marketplace = () => {
                       <img src={farmer.img} alt={farmer.name} className="w-24 h-24 object-cover" />
                     </div>
                     <h3 className="mt-4 text-2xl font-semibold">{farmer.name}</h3>
-                    <p className="text-sm text-gray-500">{farmer.location}</p>
+                    <p className="text-base text-gray-7 00">{farmer.location}</p>
                     <div className="flex items-center gap-2 font-medium mt-1">
                       <span className="text-gray-500 ml-2">{farmer.sold} Sold</span>
                     </div>
@@ -180,16 +180,16 @@ const Marketplace = () => {
                       ))}
                     </div>
                   </div>
-                  <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                    <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
-                      <img src="/shopp.png" alt="shop" className="w-5 h-5" />
+                  <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-[#4CAE4F]">
+                    <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-base py-3 w-1/2 border-r border-[#4CAE4F]">
+                      <img src="/shopp.png" alt="shop" className="w-8 h-8" />
                       View Shop
                     </button>
                     <button 
                     onClick={() => navigate('/chatpage')}
-                    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
+                    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-base py-3 w-1/2"
                     >
-                      <img src="/chat.png" alt="chat" className="w-5 h-5" />        
+                      <img src="/chat.png" alt="chat" className="w-8 h-8" />        
                       Chat Now
                     </button>
                   </div>
@@ -201,18 +201,16 @@ const Marketplace = () => {
           {/* See More Button */}
           <div className="flex justify-center mt-10 relative z-10">
             <button
-              className="text-lg font-bold bg-white border-2 border-[#4CAE4F] text-[#4CAE4F] w-[500px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
+            className="text-lg  bg-[#4CAE4F] border-2 border-[#4CAE4F] text-white w-[300px] h-[50px] px-4 py-1 rounded-full text-center transition-transform duration-100 hover:scale-110"
               onClick={() => navigate('/associations')}
             >
-              See More
+            See More  <span className="font-black text-2xl mx-2"> → </span> 
             </button>
           </div>
         </section>
 
-
-
         {/*Counts*/}
-        <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
+        {/* <section className="bg-[#4CAE4F] rounded-lg text-white py-4 mx-[80px] mt-[20px]">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y-3 md:divide-y-0 md:divide-x divide-white text-center">
             <div className="px-4 py-4">
               <h2 className="text-[70px] font-bold">546+</h2>
@@ -227,7 +225,7 @@ const Marketplace = () => {
               <p className="text-[20px]">Food Items</p>
             </div>
           </div>
-        </section> 
+        </section>  */}
 
         <div className="group fixed bottom-10 right-10 z-50">
           <button
