@@ -19,13 +19,13 @@ const CartItemsList = ({
   return (
     <div className="w-[1200px] xl:w-3/4 space-y-6">
       {/* Header */}
-      <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-400 text-base text-black">
-        <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
-        <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
+      <div className="flex items-center px-6 py-4 bg-white text-center rounded-full font-bold border-2 border-gray-300 text-base text-black">
+        <div className="w-[35%] text-center pr-4">PRODUCT NAME</div>
+        <div className="w-[12%] text-center px-2">VARIATION</div>
+        <div className="w-[12%] text-center px-2">QUANTITY</div>
+        <div className="w-[12%] text-center px-2">UNIT PRICE</div>
+        <div className="w-[12%] text-center px-2">TOTAL PRICE</div>
+        <div className="w-[10%] text-center px-2">UNIT MEAS.</div>
         <div className="w-[7%] text-center">ACTION</div>
       </div>
 
@@ -36,7 +36,7 @@ const CartItemsList = ({
           );
 
           return (
-            <div key={vendorGroup.vendor_id} className="bg-white p-4 rounded-lg shadow border border-gray-400 space-y-4">
+            <div key={vendorGroup.vendor_id} className="bg-white p-4 rounded-lg shadow border-2 border-gray-300 space-y-4">
               {/* Vendor Header */}
               <div className="flex items-center gap-3">
                 <input 
@@ -53,7 +53,7 @@ const CartItemsList = ({
                   onError={(e) => { e.target.src = '/placeholder-avatar.png'; }}
                 />
                 <div className="flex flex-col">
-                  <p className="text-lg font-bold">{vendorGroup.vendor_name}</p>
+                  <p className="text-lg font-extrabold">{vendorGroup.vendor_name}</p>
                   <Link to="/ChatPage">
                     <button className="text-base text-gray-500 underline hover:text-gray-700">
                       Click here to chat
@@ -61,8 +61,8 @@ const CartItemsList = ({
                   </Link>
                 </div>
 
-                <button className="flex items-center gap-2 hover:bg-green-50 text-[#4CAE4F] border border-[#4CAE4F] text-sm font-medium px-3 py-2 rounded-full transition-colors">
-                  <img src="/shoppp.png" className="w-5 h-5" alt="Shop" /> 
+                <button className="flex items-center gap-2 hover:bg-green-50 text-[#4CAE4F] border border-[#4CAE4F] text-xs font-medium px-2 py-2 rounded-full transition-colors">
+                  <img src="/shoppp.png" className="w-3 h-3" alt="Shop" /> 
                   View Shop
                 </button>
               </div>
@@ -73,8 +73,8 @@ const CartItemsList = ({
                 const product = variation.product;
 
                 return (
-                  <div key={variation.id} className="flex items-center border-t border-gray-400 pt-2 px-6 text-sm text-gray-700">
-                    <div className="w-[35%] flex items-center gap-2 border-r border-gray-400 pr-8">
+                  <div key={variation.id} className="flex items-center border-t-2 border-gray-300 pt-2 px-6 text-sm text-gray-700">
+                    <div className="w-[35%] flex items-center gap-2 pr-8">
                       <input
                         type="checkbox"
                         checked={selectedItems.includes(variation.id)}
@@ -95,11 +95,11 @@ const CartItemsList = ({
                       <p className="font-bold text-lg ml-2">{product.name}</p>
                     </div>
 
-                    <div className="w-[12%] text-center border-r border-gray-600 py-3 px-2">
+                    <div className="w-[12%] text-center py-3 px-2">
                       <select
                         value={item.variation.id}
                         onChange={(e) => handleVariationChange(item.variation.id, e.target.value)}
-                        className="w-full bg-[#4CAF50] px-2 py-1 border border-gray-400 rounded-md text-base font-medium text-white focus:border-[#4CAE4F] focus:outline-none focus:ring-1 focus:ring-[#4CAE4F] transition-colors"
+                        className="w-full bg-[#4CAE4F] px-2 py-1 border border-gray-400 rounded-md text-base font-medium text-white focus:border-[#4CAE4F] focus:outline-none focus:ring-1 focus:ring-[#4CAE4F] transition-colors"
                       >
                         {productVariations[item.variation.product.id]?.map(v => (
                           <option key={v.id} value={v.id}>
@@ -109,7 +109,7 @@ const CartItemsList = ({
                       </select>
                     </div>
 
-                    <div className="w-[12%] flex flex-col items-center justify-center gap-1 py-3 border-r border-gray-400">
+                    <div className="w-[12%] flex flex-col items-center justify-center gap-1 py-3">
                       <div className="flex items-center gap-2">
                         <button 
                           onClick={() => handleQuantityChange(variation.id, -1)} 
@@ -119,7 +119,7 @@ const CartItemsList = ({
                         <span className="mx-1 font-bold text-lg">{item.quantity}</span>
                         <button 
                           onClick={() => handleQuantityChange(variation.id, 1)} 
-                          className="px-2 py-1 bg-[#4CAF50] text-white rounded text-sm hover:bg-green-600 transition-colors"
+                          className="px-2 py-1 bg-[#4CAE4F] text-white rounded text-sm hover:bg-green-600 transition-colors"
                         >+</button>
                       </div>
 
@@ -130,15 +130,15 @@ const CartItemsList = ({
                       )}
                     </div>
 
-                    <div className="w-[12%] text-center text-lg font-bold border-r border-gray-400 px-2 py-3">
+                    <div className="w-[12%] text-center text-lg font-bold px-2 py-3">
                       ₱{parseFloat(variation.unit_price).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
 
-                    <div className="w-[12%] text-center font-semibold text-[#4CAF50] text-lg font-bold border-r border-gray-600 px-2 py-3">
+                    <div className="w-[12%] text-center font-semibold text-[#4CAF50] text-lg font-bold px-2 py-3">
                       ₱{(parseFloat(variation.unit_price) * item.quantity).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </div>
 
-                    <div className="w-[10%] text-center border-r border-gray-600 py-3 px-2">
+                    <div className="w-[10%] text-center py-3 px-2">
                       <p className="text-lg font-medium text-gray-600">{variation.unit_measurement}</p>
                     </div>
 

@@ -220,14 +220,14 @@ console.log(product)
                     setShowVariationError(false); // Hide error when variation is selected
                   }}
                   className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer hover:bg-green-100 transition-transform duration-400 hover:scale-105 ${
-                    selectedVariation && selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
+                    selectedVariation && selectedVariation.name === variation.name ? 'border-green-500 ' : 'border-gray-400'
                   }`}
                 >
                   {mainImageObj ? (
                     <img
                       src={BASE_URL + mainImageObj.image}
                       alt={variation.name}
-                      className="w-11 h-11 mr-2 object-contain"
+                      className="w-11 h-11 mr-2 object-contain bg-green-100"
                     />
                   ) : (
                     <div className="w-11 h-11 mr-2 bg-gray-100 flex items-center justify-center rounded">

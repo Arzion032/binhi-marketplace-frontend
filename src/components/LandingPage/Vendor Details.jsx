@@ -5,7 +5,7 @@ const VendorDetails = ({ product, tags }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="mx-10 mt-10 bg-green-100 border-2 border-[#4CAE4F] rounded-3xl px-6 py-6 flex flex-col md:flex-row justify-between">
+    <div className="mx-10 mt-10 border-2 border-[#4CAE4F] rounded-3xl px-6 py-6 flex flex-col md:flex-row justify-between">
       {/* LEFT SIDE: Image, Name, Active Now, Buttons */}
       <div className="flex items-start gap-8 ">
         <div className="relative">
@@ -57,7 +57,7 @@ const VendorDetails = ({ product, tags }) => {
       </div>
 
       {/* RIGHT: Tags */}
-      <div className="flex flex-col mt-2 mr-10">
+      <div className="flex flex-col mr-10">
         <div className="flex items-center gap-2 text-base font-medium mb-2">
           <img src="/Artichoke.png" alt="What I sell?" className="w-8 h-8" />
           What I sell?

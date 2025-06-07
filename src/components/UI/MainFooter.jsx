@@ -3,7 +3,7 @@ import React from 'react';
 const MainFooter = () => {
   return (
     <>
-      <footer className="bg-green-100 pt-8 pb-6">
+      <footer className="bg-[#d2dcd4] pt-12 pb-6">
         <div className="container mx-auto max-w-7xl px-6">
           <div className="grid grid-cols-1 md:grid-cols-5 gap-8 text-base text-gray-700">
             
@@ -81,8 +81,8 @@ const MainFooter = () => {
         </div>
       </footer>
 
-      <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-[20px] font-medium">
-        © Binhi 2025, All Rights Reserved.
+      <div className="flex bg-[#4CAE4F] h-[80px] justify-center items-center text-white text-center text-base font-medium">
+        Binhi 2025, All Rights Reserved.
       </div>
     </>
   );

@@ -2,9 +2,9 @@ import React from 'react'
 
 const OrderSummary = ({subtotal, total, handleCheckout, selectedItems}) => {
   return (
-    <div className="w-[400px] bg-white p-4 rounded-lg shadow border border-gray-400 flex flex-col h-fit">
+    <div className="w-[400px] bg-white p-4 rounded-lg shadow border-2 border-gray-300 flex flex-col h-fit">
 
-          <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
+          <h2 className="text-2xl font-bold text-center mb-4">Order Summary</h2>
           <div className="w-full h-[1px] bg-gray-300 mb-4" />
           
           <div className="space-y-2 text-lg">

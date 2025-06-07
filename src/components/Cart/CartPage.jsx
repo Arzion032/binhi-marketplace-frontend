@@ -326,19 +326,16 @@ return (
       </div>
       <div className="flex items-center px-4">
         <div className="flex items-center bg-white border-2 border-black rounded-full px-3 py-1 w-[600px] h-14">
-          <img src="/search.png" alt="Search" className="w-5 h-5 mx-4" />
+          <img src="/search.png" alt="Search" className="w-8 h-8 mx-4" />
           <input
             type="text"
-            placeholder="Search in cart..."
+            placeholder="Search your cart products..."
             value={searchQuery}
             onChange={handleSearch}
-            className="flex-grow text-sm bg-white outline-none"
+            className="flex-grow text-base bg-white outline-none"
           />
           <button onClick={handleVoiceSearch}>
-            <img src="/mic.png" alt="Mic" className="w-5 h-5 hover:scale-110" />
-          </button>
-          <button onClick={handleCameraSearch}>
-            <img src="/camera.png" alt="Camera" className="w-5 h-5 mx-4 hover:scale-110" />
+            <img src="/mic.png" alt="Mic" className="w-8 h-8 hover:scale-110" />
           </button>
         </div>
       </div>
