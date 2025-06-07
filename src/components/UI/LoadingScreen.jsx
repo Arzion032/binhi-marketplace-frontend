@@ -1,11 +1,19 @@
-import React from 'react'
+import React from 'react';
+import Loading from '../../assets/loadingAnimation.mp4?url';  // Add ?url
 
 const LoadingScreen = () => {
   return (
     <div className="flex justify-center mt-20">
-        <span className="loading loading-spinner text-success w-[350px] h-[350px]"></span>
+      <video
+        className="w-[350px] h-[350px]"
+        src={Loading}
+        autoPlay
+        loop
+        muted
+        playsInline
+      />
     </div>
-  )
-}
+  );
+};
 
-export default LoadingScreen
+export default LoadingScreen;

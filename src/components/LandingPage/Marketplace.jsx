@@ -23,10 +23,7 @@ const Marketplace = () => {
       .finally(() => setLoading(false));
   }, []);
 
-  // Show loading screen while loading
-  if (loading) {
-    return <LoadingScreen />;
-  }
+
 
   // Show error if there's an error
   if (error) return <div>Error: {error}</div>;

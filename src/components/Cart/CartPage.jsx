@@ -363,7 +363,6 @@ return (
           {/* LEFT SECTION */}
           <CartItemsList
             filteredCartItems={filteredCartItems}
-            cartItems={cartItems}
             selectedItems={selectedItems}
             productVariations={productVariations}
             selectedCartItems={selectedCartItems}
