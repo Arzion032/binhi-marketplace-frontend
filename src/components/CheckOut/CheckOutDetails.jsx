@@ -49,7 +49,7 @@ const CheckOutDetails = ({ items, BASE_URL }) => {
                     {/* Product Image + Name */}
                     <div className="w-[30%] flex items-center gap-4">
                     <img
-                        src={BASE_URL + product.variation.main_image}
+                        src={product.variation.main_image}
                         alt={product.variation.product.name}
                         className="w-20 h-20 rounded-lg object-cover"
                         onError={(e) => {

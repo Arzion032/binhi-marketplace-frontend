@@ -51,25 +51,6 @@ const handleAddToCart = async () => {
   }
 };
 
-useEffect(() => {
-  if (selectedVariation && selectedVariation.images && selectedVariation.images.length > 0) {
-    // Set mainImage to the main image object or fallback to first image
-    const mainImg = selectedVariation.images.find(img => img.is_main) || selectedVariation.images[0];
-    setMainImage(mainImg);
-    setPrice(selectedVariation.unit_price)
-    setUnit(selectedVariation.unit_measurement)
-  } else {
-    setMainImage(null); // or some fallback image object if you want
-  }
-}, [selectedVariation]);
-
-
-  const [tasks, setTasks] = useState([
-    { id: 1, text: 'Buy 2 sacks', completed: true },
-    { id: 2, text: 'Follow Jonathan\'s Shop', completed: false },
-  ]);
-  const [selectedFilter, setSelectedFilter] = useState("All");
-
 const incrementQuantity = () => {
   setQuantity(prev => {
     console.log("prev quantity:", prev);
@@ -128,7 +109,7 @@ console.log(product)
             <div className="rounded-lg overflow-hidden mb-4">
               {mainImage ? (
                 <img
-                  src={BASE_URL + mainImage.image}
+                  src={mainImage.image}
                   alt={product.name}
                   className="h-[400px] object-contain"
                 />
@@ -154,7 +135,7 @@ console.log(product)
                   }`}
                 >
                   <img
-                    src={BASE_URL + image.image}
+                    src={image.image}
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -214,7 +195,7 @@ console.log(product)
                 >
                   {mainImageObj ? (
                     <img
-                      src={BASE_URL + mainImageObj.image}
+                      src={mainImageObj.image}
                       alt={variation.name}
                       className="w-11 h-11 mr-2 object-contain"
                     />
@@ -297,7 +278,7 @@ console.log(product)
 
         {/* Seller Info */}
 
-      <VendorDetails selectedFilter={selectedFilter} product={product} tags={tags} />     
+      <VendorDetails product={product} tags={tags} />     
 
 {/* Recommendations */}
 <div className="mt-10 w-full">
@@ -390,7 +371,7 @@ console.log(product)
           name: product.name,
           price: parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
           quantity: quantity,
-          image: BASE_URL + (mainImage?.image || ''),
+          image: (mainImage?.image || ''),
           variation: currentVariation?.name || 'Default',
           seller: product.seller?.name || 'Unknown Seller',
           orderId: `PD-${Date.now()}`,

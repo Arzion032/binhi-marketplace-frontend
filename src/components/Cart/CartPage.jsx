@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api, { BASE_URL } from '../../api';
+import api from '../../api';
 import LoadingScreen from '../UI/LoadingScreen';
 import OrderSummary from './OrderSummary';
 import CartItemsList from './CartItemsList';
@@ -86,7 +86,8 @@ const handleQuantityChange = (variationId, amount) => {
               ? {
                   ...item,
                   quantity: updated.quantity,
-                  total_price: updated.total_price
+                  total_price: updated.total_price,
+                  warning_message: updated.warning_message
                 }
               : item
           )
@@ -119,7 +120,8 @@ const handleVariationChange = async (oldVarId, newVariationId) => {
               ...item,
               variation: updatedItem.variation,
               quantity: updatedItem.quantity,
-              total_price: updatedItem.total_price
+              total_price: updatedItem.total_price,
+              warning_message: updatedItem.warning_message
             };
           }
           return item;
@@ -133,10 +135,25 @@ const handleVariationChange = async (oldVarId, newVariationId) => {
   }
 };
 
-  const handleDelete = (id) => {
-    setCartItems(prev => prev.filter(item => item.variation.id !== id));
-    setSelectedItems(prev => prev.filter(itemId => itemId !== id));
+  const handleDelete = async (id) => {
+    try {
+      // Delete from backend
+      await api.delete(`cart/remove_cartitem/${id}/`);
+      
+      // Remove from local state
+      setCartItems(prev => 
+        prev.map(vendor => ({
+          ...vendor,
+          items: vendor.items.filter(item => item.variation.id !== id)
+        })).filter(vendor => vendor.items.length > 0)  // Remove vendor if no items left
+      );
+      setSelectedItems(prev => prev.filter(itemId => itemId !== id));  // Remove item from selected
+    } catch (err) {
+      setError('Failed to remove item');
+      console.error('Error deleting item:', err);
+    }
   };
+
 
   const handleDeleteAll = () => {
     const selectedItemsToDelete = cartItems.filter(item => selectedItems.includes(item.id));
@@ -260,28 +277,38 @@ const filteredCartItems = cartItems
   const subtotal = calculateSubtotal();
   const total = subtotal;
 
-  const handleCheckout = () => {
-    if (selectedItems.length === 0) return;
-    
-    // Prepare checkout data with proper field mapping
-    const checkoutData = {
-      items: selectedCartItems.map(item => ({
-        ...item,
-      })),
-      subtotal: subtotal,
-      discount: 0,
-      tax: 0,
-      total: subtotal,
-      paymentMethod: 'Cash on Delivery',
-      source: 'cart'
-    };
+ const handleCheckout = () => {
+  if (selectedCartItems.length === 0) return;
+  console.log
+  // Check if any selected item has a warning message
+  const itemWithWarning = selectedCartItems.find(item => item.warning_message !== null);
 
-    console.log('Checkout data being passed:', checkoutData); // For debugging
-    navigate('/checkoutpage', { state: { checkoutData } });
+  if (itemWithWarning) {
+    // Show alert if there's a warning message in any item
+    alert('Some items in your cart exceed the available quantity. Please update your cart before proceeding to checkout.');
+
+
+    // Optional: You can also return or handle navigation to cart page for further updates
+    return; // Prevent checkout from continuing
+  }
+
+  // Prepare checkout data with proper field mapping
+  const checkoutData = {
+    items: selectedCartItems.map(item => ({
+      ...item,
+    })),
+    subtotal: subtotal,
+    discount: 0,
+    tax: 0,
+    total: subtotal,
+    paymentMethod: 'Cash on Delivery',
+    source: 'cart'
   };
-if (loading){
-  <LoadingScreen />
-}
+
+  console.log('Checkout data being passed:', checkoutData); // For debugging
+  navigate('/checkoutpage', { state: { checkoutData } });
+};
+
   if (cartItems && cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center p-4">
@@ -361,19 +388,40 @@ return (
     <div className="flex flex-col lg:flex-row gap-4 mx-10">
 
           {/* LEFT SECTION */}
-          <CartItemsList
-            filteredCartItems={filteredCartItems}
-            selectedItems={selectedItems}
-            productVariations={productVariations}
-            selectedCartItems={selectedCartItems}
-            allCartItems={allCartItems}
-            toggleVendorSelectAll={toggleVendorSelectAll}
-            handleItemSelect={handleItemSelect}
-            handleVariationChange={handleVariationChange}
-            handleQuantityChange={handleQuantityChange}
-            handleDelete={handleDelete}
-            setSearchQuery={setSearchQuery}
-          />
+         {/* LEFT SECTION */}
+          <div className="w-[1200px] xl:w-3/4 space-y-6">
+            {/* Header */}
+            <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-400 text-base text-black">
+              <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
+              <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
+              <div className="w-[7%] text-center">ACTION</div>
+              
+            </div>
+             {loading ? (
+                <LoadingScreen />
+              ) : (
+                <CartItemsList
+                  filteredCartItems={filteredCartItems}
+                  selectedItems={selectedItems}
+                  productVariations={productVariations}
+                  selectedCartItems={selectedCartItems}
+                  allCartItems={allCartItems}
+                  toggleVendorSelectAll={toggleVendorSelectAll}
+                  handleItemSelect={handleItemSelect}
+                  handleVariationChange={handleVariationChange}
+                  handleQuantityChange={handleQuantityChange}
+                  handleDelete={handleDelete}
+                  setSearchQuery={setSearchQuery}
+                />
+              )}
+            </div>
+            
+
+          
 
           {/* RIGHT SECTION - Order Summary */}
           <OrderSummary

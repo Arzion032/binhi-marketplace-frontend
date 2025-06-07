@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BASE_URL } from "../../api"; // adjust as needed
 
 const CartItemsList = ({
   filteredCartItems,
@@ -17,18 +16,8 @@ const CartItemsList = ({
   cartItems
 }) => {
   return (
-    <div className="w-[1200px] xl:w-3/4 space-y-6">
-      {/* Header */}
-      <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-400 text-base text-black">
-        <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
-        <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
-        <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
-        <div className="w-[7%] text-center">ACTION</div>
-      </div>
-
+    
+    <div className="space-y-6">
       {filteredCartItems.length > 0 ? (
         filteredCartItems.map((vendorGroup) => {
           const allSelectedForVendor = vendorGroup.items.every(item =>
@@ -87,7 +76,7 @@ const CartItemsList = ({
                             className="w-4 h-4"
                       />
                       <img 
-                        src={BASE_URL + variation.main_image} 
+                        src={variation.main_image} 
                         alt={product.name} 
                         className="w-12 h-12 rounded-lg object-cover"
                         onError={(e) => { e.target.src = '/placeholder-product.png'; }}

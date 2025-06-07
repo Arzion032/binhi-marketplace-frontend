@@ -60,20 +60,24 @@ const OrderHistory = () => {
   };
 
 
-  const filteredOrders = orders.filter(order => {
-    const matchesTab = selectedTab === "All" || order.status === selectedTab;
-    
-    const matchesSearch = searchQuery === "" || 
-      order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.sellerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.variation.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    return matchesTab && matchesSearch;
-  });
+ const filteredOrders = orders.filter(order => {
+  console.log(order);
+
+  // Normalize both to lowercase to handle case insensitivity
+  const matchesTab = selectedTab.toLowerCase() === "all" || order.status.toLowerCase() === selectedTab.toLowerCase();
+
+  // Check if searchQuery matches any of the fields (sellerName, orderId, or any item name)
+  const matchesSearch = searchQuery === "" || 
+    (order.sellerName && order.sellerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (order.orderId && order.orderId.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    order.items.some(item => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  return matchesTab && matchesSearch;
+});
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  
   };
 
   const clearSearch = () => {

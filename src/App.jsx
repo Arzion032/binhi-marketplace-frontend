@@ -55,9 +55,9 @@ function App() {
         <Route path="/product/:productSlug" element={<MainLayout><ProductDetails /></MainLayout>} />
         <Route path="/" element={<MainLayout onSearch={handleSearch}><Marketplace /></MainLayout>} />
         <Route path="/user-profile" element={<MainLayout><UserProfilePage/></MainLayout>} />
-        <Route path="/orderhistory" element={<ProtectedRoute><OrderLayout><OrderHistory/></OrderLayout></ProtectedRoute>} />
-        <Route path="/cartpage" element={<ProtectedRoute><OrderLayout><CartPage /></OrderLayout></ProtectedRoute>} />
-        <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
+        <Route path="/orderhistory" element={<ProtectedRoute><MainLayout><OrderHistory/></MainLayout></ProtectedRoute>} />
+        <Route path="/cartpage" element={<ProtectedRoute><MainLayout><CartPage /></MainLayout></ProtectedRoute>} />
+        <Route path="/chatpage" element={<MainLayout><ChatPage/></MainLayout>} />
         <Route path="/checkoutpage" element={<MainLayout><CheckOutPage/></MainLayout>} />
         <Route path="/checkout-success" element={<MainLayout><CheckOutSuccess /></MainLayout>} />
         <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />

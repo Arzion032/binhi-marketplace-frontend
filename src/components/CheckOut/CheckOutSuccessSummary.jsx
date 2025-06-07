@@ -33,7 +33,7 @@ const CheckoutSuccessSummary = ({ product, isMultiple, displayTotal }) => {
           product.items.map((item, idx) => (
             <div key={idx} className="flex gap-4 border-b pb-4">
               <img
-                src={`${BASE_URL}${item.variation.main_image}`}
+                src={item.variation.main_image}
                 alt="Product"
                 className="w-20 h-20 rounded-lg object-cover"
                 onError={(e) => {

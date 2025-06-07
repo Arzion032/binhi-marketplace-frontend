@@ -30,7 +30,7 @@ const Marketplace = () => {
 
   const showModalToast = () => {
     setShowToast(true);
-    setTimeout(() => setShowToast(false), 700);
+    setTimeout(() => setShowToast(false), 1250);
   };
 
  const getCategoryClass = (cat) => {

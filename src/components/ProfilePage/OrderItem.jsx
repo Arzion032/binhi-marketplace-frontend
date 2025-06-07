@@ -53,7 +53,7 @@ const OrderItem = ({
           <div key={index} className="grid grid-cols-5 gap-4 py-3 border-b border-gray-100 last:border-b-0">
             <div className="flex items-center gap-3">
               <img
-                src={`${BASE_URL}${item.image?.image || item.image}`}
+                src={item.image?.image || item.image}
                 alt={item.name}
                 className="w-12 h-12 rounded-lg object-cover"
                 />
@@ -101,7 +101,7 @@ const OrderItem = ({
           className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
         >
           Order Details
-        </button>
+        </button> 
 
         {canCancelOrder(order.status) && (
           <button

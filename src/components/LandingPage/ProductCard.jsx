@@ -1,6 +1,6 @@
 // ProductCard.jsx
 import React from "react";
-import { BASE_URL } from "../../api";
+import api, { BASE_URL } from "../../api";
 import { useNavigate } from "react-router-dom";
 
 const ProductCard = ({
@@ -27,7 +27,7 @@ const ProductCard = ({
       </span>
       {/* Product Image */}
       <img
-        src={product.images?.image ? BASE_URL + product.images.image : "/placeholder.png"}
+        src={product.images?.image ? product.images.image : "/placeholder.png"}
         alt={product.name}
         className="w-full h-40 object-cover rounded-xl"
       />
@@ -53,9 +53,23 @@ const ProductCard = ({
           src="/shopping-cart.png"
           alt="cart"
           className="w-6 h-6 transition-transform duration-100 hover:scale-125"
-          onClick={e => {
-            e.stopPropagation();
-            onAddToCart && onAddToCart(e, product);
+          onClick={async (e) => {
+            e.stopPropagation(); // Prevents event from bubbling up
+            console.log(product);
+
+            try {
+              const response = await api.post("/cart/add_to_cart/", {
+                variation_id: product.default_variation,
+                quantity: '1', // Ensure it's sent as a string
+              });
+
+              // Handle the response from the API (e.g., show confirmation, update state)
+              console.log('Item added to cart:', response.data);
+              onAddToCart && onAddToCart(e, product);
+            } catch (error) {
+              // Handle error (e.g., show an error message)
+              console.error('Error adding to cart:', error);
+            }
           }}
         />
         <button
