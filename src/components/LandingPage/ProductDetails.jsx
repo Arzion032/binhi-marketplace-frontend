@@ -17,6 +17,7 @@ const ProductDetails = () => {
   const tags = ["vegetables", "root crops", "grains", "meat"];
   const [price, setPrice] = useState(null)
   const [unit, setUnit] = useState('')
+  const [showVariationError, setShowVariationError] = useState(false);
   const showModalToast = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
@@ -39,6 +40,14 @@ useEffect(() => {
 }, [product]);
 
 const handleAddToCart = async () => {
+
+    // Check if variation is required and selected
+  if (product.variations && product.variations.length > 0 && !selectedVariation) {
+    setShowVariationError(true);
+    setTimeout(() => setShowVariationError(false), 3000);
+    return;
+  }
+
   try {
     const response = await api.post("/cart/add_to_cart/", {
       variation_id: selectedVariation.id,
@@ -211,6 +220,13 @@ console.log(product)
             })}
           </div>
         </div>
+
+        {showVariationError && (
+            <div className="mt-2 text-red-500 text-base font-medium">
+              Please select a variation before adding to cart.
+            </div>
+          )}
+    
 
             {/* Quantity Selector */}
             <div className="mt-6 flex items-center">
