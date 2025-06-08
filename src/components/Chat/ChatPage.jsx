@@ -1,60 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
+
+// Global conversation storage to persist across component mounts
+let globalConversations = [];
 
 const ChatPage = () => {
-  const navigate = useNavigate();
-  const { state } = useLocation();
+  const location = useLocation();
+  const { state } = location; // Get the state passed via navigation
 
-  const [conversations, setConversations] = useState([
-    {
-      id: 1,
-      name: 'Jonathan De Vera',
-      avatar: '/111.png',
-      active: true,
-      messages: [
-        { text: 'Hello! How can I help you today?', sender: 'seller' },
-        { text: 'I have fresh products available.', sender: 'seller' }
-      ],
-      isAssociation: false
-    },
-    {
-      id: 2,
-      name: 'Juan Dela Cruz',
-      avatar: '333.png',
-      active: false,
-      messages: [
-        { text: 'Hi there!', sender: 'seller' },
-        { text: 'Thanks for your order.', sender: 'seller' }
-      ],
-      isAssociation: false
-    },
-    {
-      id: 3,
-      name: 'Maria Santos',
-      avatar: '/avatar.png',
-      active: true,
-      messages: [
-        { text: 'Good morning!', sender: 'seller' },
-        { text: 'Your vegetables are ready for pickup.', sender: 'seller' }
-      ],
-      isAssociation: false
-    },
-    {
-      id: 4,
-      name: 'Pedro Gonzales',
-      avatar: '/seller.png',
-      active: false,
-      messages: [
-        { text: 'Welcome to our farm!', sender: 'seller' },
-        { text: 'We have organic fruits available.', sender: 'seller' }
-      ],
-      isAssociation: false
-    }
-  ]);
-
-  const [selectedConvId, setSelectedConvId] = useState(1);
+  const [conversations, setConversations] = useState(globalConversations);
+  const [selectedConvId, setSelectedConvId] = useState(null);
   const [newMessage, setNewMessage] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null); // state to store selected image
+
+  // Update global storage whenever conversations change
+  useEffect(() => {
+    globalConversations = conversations;
+  }, [conversations]);
 
   useEffect(() => {
     if (state?.isAssociation && state?.associationName) {
@@ -64,25 +27,29 @@ const ChatPage = () => {
 
       if (!existingConv) {
         const welcomeMessage = `Hello! Welcome to ${state.associationName}. We're located in ${state.associationLocation} and specialize in ${state.associationCategories.join(', ')}. How can we help you today?`;
-        
+
         const newId = Math.max(...conversations.map(c => c.id), 0) + 1;
         const newConv = {
           id: newId,
           name: state.associationName,
           avatar: state.associationAvatar,
           active: true,
-          messages: [{ text: welcomeMessage, sender: 'seller' }],
+          messages: [{ text: welcomeMessage, sender: 'seller', timestamp: Date.now(), time: getFormattedTime() }],
           isAssociation: true,
           location: state.associationLocation,
           categories: state.associationCategories,
           sold: state.associationSold,
           rank: state.associationRank,
-          place: state.associationPlace
+          place: state.associationPlace,
+          lastMessageTime: 'Just now'
         };
-setConversations(prev => prev.filter(conv => 
-  !(conv.name === state.associationName && conv.isAssociation)
-));
-        setConversations(prev => [newConv, ...prev]);
+
+        setConversations(prev => {
+          const filtered = prev.filter(conv => 
+            !(conv.name === state.associationName && conv.isAssociation)
+          );
+          return [newConv, ...filtered];
+        });
         setSelectedConvId(newId);
       } else {
         setSelectedConvId(existingConv.id);
@@ -92,13 +59,16 @@ setConversations(prev => prev.filter(conv =>
       const productMessage = `Hi! I'm interested in "${state.productName}" — ${state.variation} at ₱${state.price.toFixed(2)}.`;
 
       if (match) {
-        // Check if this exact message already exists to prevent duplicates
         const messageExists = match.messages.some(msg => msg.text === productMessage);
         if (!messageExists) {
           setConversations(prev =>
             prev.map(conv =>
               conv.name === state.sellerName
-                ? { ...conv, messages: [...conv.messages, { text: productMessage, sender: 'buyer' }] }
+                ? { 
+                    ...conv, 
+                    messages: [...conv.messages, { text: productMessage, sender: 'buyer', timestamp: Date.now(), time: getFormattedTime() }], 
+                    lastMessageTime: 'Just now' 
+                  }
                 : conv
             )
           );
@@ -111,19 +81,70 @@ setConversations(prev => prev.filter(conv =>
           name: state.sellerName,
           avatar: '/111.png',
           active: true,
-          messages: [{ text: productMessage, sender: 'buyer' }],
-          isAssociation: false
+          messages: [{ text: productMessage, sender: 'buyer', timestamp: Date.now(), time: getFormattedTime() }],
+          isAssociation: false,
+          lastMessageTime: 'Just now'
         };
         setConversations(prev => [newConv, ...prev]);
         setSelectedConvId(newId);
       }
+    } else if (conversations.length > 0 && !selectedConvId) {
+      // Select first conversation if none is selected
+      setSelectedConvId(conversations[0].id);
     }
-  }, [state, conversations]);
+  }, [state]);
+
+  // Real-time timestamp updates
+  useEffect(() => {
+    const updateTimestamps = () => {
+      setConversations((prev) => prev.map((conv) => ({
+        ...conv,
+        lastMessageTime: getRelativeTime(conv.messages[conv.messages.length - 1]?.timestamp || Date.now())
+      })));
+    };
+
+    const interval = setInterval(updateTimestamps, 60000); // Update every minute
+    return () => clearInterval(interval);
+  }, []);
+
+  const getFormattedTime = () => {
+    const now = new Date();
+    const hours = now.getHours();
+    const minutes = now.getMinutes();
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    const formattedHours = hours % 12 || 12;  // Convert 24-hour format to 12-hour format
+    const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+    return `${formattedHours}:${formattedMinutes} ${ampm}`;
+  };
+
+  const getRelativeTime = (timestamp) => {
+    const now = Date.now();
+    const diff = now - timestamp;
+
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+
+    if (minutes < 1) return 'Just now';
+    if (minutes < 60) return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+    if (hours < 24) return `${hours} hr${hours > 1 ? 's' : ''} ago`;
+    return `${days} day${days > 1 ? 's' : ''} ago`;
+  };
+
+  // Compare the time difference and return the appropriate time
+  const displayTimestamp = (messageTime, prevMessageTime) => {
+    const diff = messageTime - prevMessageTime;
+    if (diff > 60000) {  // If the time difference is greater than 1 minute
+      return getRelativeTime(messageTime);
+    }
+    return null; // Return null if no need for a new timestamp
+  };
 
   const filteredConversations = conversations.filter(conv => {
     const nameMatch = conv.name.toLowerCase().includes(searchQuery.toLowerCase());
     const messageMatch = conv.messages.some(msg =>
-      msg.text.toLowerCase().includes(searchQuery.toLowerCase())
+      (msg.text && msg.text.toLowerCase().includes(searchQuery.toLowerCase())) || 
+      (msg.image && 'image'.includes(searchQuery.toLowerCase())) // Check if it's an image message
     );
     return nameMatch || messageMatch;
   });
@@ -131,13 +152,34 @@ setConversations(prev => prev.filter(conv =>
   const selectedConversation = conversations.find(c => c.id === selectedConvId);
 
   const handleSend = () => {
-    if (newMessage.trim() !== "") {
-      setConversations(prev => prev.map(conv =>
-        conv.id === selectedConvId
-          ? { ...conv, messages: [...conv.messages, { text: newMessage, sender: 'buyer' }] }
-          : conv
-      ));
+    if (newMessage.trim() !== "" || selectedImage) {
+      const messageContent = selectedImage
+        ? { image: selectedImage, sender: 'buyer', timestamp: Date.now(), time: getFormattedTime() }
+        : { text: newMessage, sender: 'buyer', timestamp: Date.now(), time: getFormattedTime() };
+
+      setConversations(prev => {
+        const updatedConversations = prev.map(conv =>
+          conv.id === selectedConvId
+            ? { 
+                ...conv, 
+                messages: [...conv.messages, { ...messageContent }], 
+                lastMessageTime: 'Just now' 
+              }
+            : conv
+        );
+
+        // Sort the conversations so the most recent one comes to the top
+        updatedConversations.sort((a, b) => {
+          const aLastMessageTimestamp = a.messages[a.messages.length - 1]?.timestamp || 0;
+          const bLastMessageTimestamp = b.messages[b.messages.length - 1]?.timestamp || 0;
+          return bLastMessageTimestamp - aLastMessageTimestamp; // Sort in descending order
+        });
+
+        return updatedConversations;
+      });
+
       setNewMessage("");
+      setSelectedImage(null); // Reset selected image after sending
     }
   };
 
@@ -150,7 +192,7 @@ setConversations(prev => prev.filter(conv =>
   };
 
   const highlightText = (text, query) => {
-    if (!query) return text;
+    if (!query || !text) return text;
 
     const parts = text.split(new RegExp(`(${query})`, 'gi'));
     return parts.map((part, index) =>
@@ -160,126 +202,202 @@ setConversations(prev => prev.filter(conv =>
     );
   };
 
+  // Handle image file selection
+  const handleImageSelection = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setSelectedImage(URL.createObjectURL(file)); // create a URL for the selected image
+      setNewMessage("Image attached"); // Set the input field text when image is selected
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-[#F5F9F5] p-4 lg:p-8">
-      <div className="flex justify-between items-center mb-2">
-        <div className="flex items-center gap-4 mb-2">
+    <div className="min-h-screen bg-[#F5F9F5] p-4 lg:p-7">
+      {/* Header */}
+      <div className="mb-4">
+        <div className="flex items-center justify-between">
           <p className="text-4xl font-bold mx-4">Chats</p>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+          </div>
         </div>
       </div>
 
-      <div className="flex gap-6 h-[75vh]">
-        {/* Sidebar */}
-        <div className="w-1/3 bg-white rounded-2xl shadow border-2 border-gray-300 p-6 flex flex-col">
-          <div className="mb-4">
-            <div className="flex items-center bg-white border-2 border-gray-700 rounded-full px-3 py-1 h-12 relative">
-              <img src="/search.png" alt="Search" className="w-5 h-5 mx-4" />
+      <div className="flex gap-6 h-[calc(100vh-120px)]">
+        {/* Enhanced Sidebar */}
+        <div className="w-1/3 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/50 overflow-hidden flex flex-col">
+          {/* Search Header */}
+          <div className="p-6 border-b border-gray-100">
+            <div className="relative flex items-center bg-white border-2 border-gray-700 rounded-full px-4 py-2">
+              <img src="/search.png" alt="Search" className="w-5 h-5 mr-3" />
               <input
                 type="text"
-                placeholder="Search conversations, messages..."
+                placeholder="Search conversations..."
                 value={searchQuery}
                 onChange={handleSearch}
-                className="flex-grow text-sm bg-white focus:outline-none pr-8"
+                className="flex-grow text-sm bg-white focus:outline-none"
               />
               {searchQuery && (
                 <button
                   onClick={clearSearch}
                   className="absolute right-3 text-gray-400 hover:text-gray-600 text-lg font-bold"
                 >
-                  ×
+                  <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
                 </button>
               )}
             </div>
-
-            {searchQuery && (
-              <div className="mt-2 text-sm text-gray-600">
-                {filteredConversations.length === 0
-                  ? `No conversations found for "${searchQuery}"`
-                  : `${filteredConversations.length} conversation${filteredConversations.length !== 1 ? 's' : ''} found`
-                }
-              </div>
-            )}
           </div>
 
-          <div className="space-y-2">
+          {/* Conversations List */}
+          <div className="flex-1 overflow-y-auto">
             {filteredConversations.length > 0 ? (
-              filteredConversations.map((conv) => (
-                <div
-                  key={conv.id}
-                  onClick={() => setSelectedConvId(conv.id)}
-                  className={`flex items-center justify-between transition rounded-lg p-2 cursor-pointer ${conv.id === selectedConvId ? 'bg-green-100' : 'bg-gray-100 hover:bg-gray-200'}`}
-                >
-                  <div className="flex items-center gap-2">
-                    <img src={conv.avatar} alt="Avatar" className="w-8 h-8 rounded-full object-cover" />
+              <div className="p-2">
+                {filteredConversations.map((conv, index) => (
+                  <div
+                    key={conv.id}
+                    onClick={() => setSelectedConvId(conv.id)}
+                    className={`group relative flex items-center p-4 mx-2 mb-2 rounded-2xl cursor-pointer transition-all duration-200 ${
+                      conv.id === selectedConvId 
+                        ? 'bg-gradient-to-r from-green-500 to-green-600 text-white shadow-lg transform scale-[1.02]' 
+                        : 'hover:bg-gray-50 hover:shadow-md'
+                    }`}
+                  >
+                    {/* Avatar */}
+                    <div className="relative flex-shrink-0 mr-4">
+                      <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white shadow-sm">
+                        <img 
+                          src={conv.avatar} 
+                          alt={conv.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f3f4f6"/><text x="50" y="50" text-anchor="middle" dy="0.35em" font-family="system-ui" font-size="24" fill="%236b7280">${conv.name.charAt(0)}</text></svg>`;
+                          }}
+                        />
+                      </div>
+                      {conv.active && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                      )}
+                    </div>
+
+                    {/* Content */}
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold truncate">
-                        {highlightText(conv.name, searchQuery)}
-                      </p>
-                      <p className="text-xs text-gray-600 truncate">
-                        {conv.messages.length > 0 && highlightText(
+                      <div className="flex items-center justify-between mb-1">
+                        <h3 className={`font-semibold text-sm truncate ${
+                          conv.id === selectedConvId ? 'text-white' : 'text-gray-900'
+                        }`}>
+                          {highlightText(conv.name, searchQuery)}
+                        </h3>
+                        <span className={`text-xs flex-shrink-0 ml-2 ${
+                          conv.id === selectedConvId ? 'text-green-100' : 'text-gray-500'
+                        }`}>
+                          {conv.lastMessageTime}
+                        </span>
+                      </div>
+
+                      <p className={`text-xs truncate ${
+                        conv.id === selectedConvId ? 'text-green-100' : 'text-gray-600'
+                      }`}>
+                        {conv.messages.length > 0 && conv.messages[conv.messages.length - 1].text && highlightText(
                           conv.messages[conv.messages.length - 1].text,
                           searchQuery
                         )}
+                        {conv.messages.length > 0 && conv.messages[conv.messages.length - 1].image && (
+                          <span className="text-sm text-gray-500">Image</span>
+                        )}
                       </p>
                     </div>
+
+                    {/* Unread indicator */}
+                    {conv.id !== selectedConvId && Math.random() > 0.5 && (
+                      <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 ml-2"></div>
+                    )}
                   </div>
-                  <div className="flex flex-col items-end">
-                    <span className="text-xs text-green-500 mb-1">Just Now</span>
-                    <span className={`inline-block w-2 h-2 rounded-full ${conv.active ? 'bg-green-500' : 'bg-gray-400'}`}></span>
-                  </div>
-                </div>
-              ))
+                ))}
+              </div>
             ) : (
-              <div className="text-center py-8">
-                <img src="/search-not-found.png" alt="No Results" className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                <p className="text-sm text-gray-500 mb-2">No conversations found</p>
-                <p className="text-xs text-gray-400">Try adjusting your search terms</p>
-                <button
-                  onClick={clearSearch}
-                  className="mt-3 px-3 py-1 bg-[#4CAE4F] text-white text-xs rounded-full hover:bg-green-700 transition-colors"
-                >
-                  Clear Search
-                </button>
+              <div className="flex-1 flex items-center justify-center p-8">
+                <div className="text-center">
+                  <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                    <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                  </div>
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">No conversations found</h3>
+                  <p className="text-xs text-gray-500 mb-4">Try adjusting your search terms</p>
+                  <button
+                    onClick={clearSearch}
+                    className="inline-flex items-center px-4 py-2 bg-green-600 text-white text-xs font-medium rounded-full hover:bg-green-700 transition-colors duration-200"
+                  >
+                    Clear Search
+                  </button>
+                </div>
               </div>
             )}
           </div>
         </div>
 
-        {/* Chat area */}
-        <div className="w-2/3 bg-white rounded-2xl shadow border-2 border-gray-300 p-6 flex flex-col">
+        {/* Enhanced Chat Area */}
+        <div className="w-2/3 bg-white/80 backdrop-blur-sm rounded-3xl shadow-xl border border-white/50 overflow-hidden flex flex-col">
           {selectedConversation ? (
             <>
-              <div className="flex items-center justify-between border-b pb-2 mb-4">
-                <div className="flex items-center">
-                  <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center text-xs font-bold">
-                    {selectedConversation.name.charAt(0)}
-                  </div>
-                  <div>
-                    <h2 className="font-bold text-lg">{selectedConversation.name}</h2>
-                    <span className={`text-xs ${selectedConversation.active ? 'text-green-500' : 'text-gray-400'}`}>
-                      {selectedConversation.active ? 'Online' : 'Offline'}
-                    </span>
+              {/* Chat Header */}
+              <div className="p-6 border-b border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="relative mr-4">
+                      <div className="w-12 h-12 rounded-full overflow-hidden ring-2 ring-white shadow-sm">
+                        <img 
+                          src={selectedConversation.avatar} 
+                          alt={selectedConversation.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f3f4f6"/><text x="50" y="50" text-anchor="middle" dy="0.35em" font-family="system-ui" font-size="24" fill="%236b7280">${selectedConversation.name.charAt(0)}</text></svg>`;
+                          }}
+                        />
+                      </div>
+                      {selectedConversation.active && (
+                        <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></div>
+                      )}
+                    </div>
+                    <div>
+                      <h2 className="font-bold text-lg text-gray-900">{selectedConversation.name}</h2>
+                      <div className="flex items-center gap-2">
+                        <span className={`text-sm ${selectedConversation.active ? 'text-green-600' : 'text-gray-500'}`}>
+                          {selectedConversation.active ? 'Active now' : 'Offline'}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex-1 mb-4 px-2 flex flex-col gap-3">
+              {/* Messages */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-4">
                 {selectedConversation.messages.map((msg, index) => (
                   <div key={index} className={`flex ${msg.sender === 'buyer' ? 'justify-end' : 'justify-start'}`}>
                     {msg.sender === 'seller' && (
-                      <div className="w-8 h-8 rounded-full bg-gray-300 mr-2 flex items-center justify-center text-xs font-bold">
-                        {selectedConversation.name.charAt(0)}
+                      <div className="w-8 h-8 rounded-full overflow-hidden mr-3 flex-shrink-0 ring-2 ring-white shadow-sm">
+                        <img 
+                          src={selectedConversation.avatar} 
+                          alt={selectedConversation.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.src = `data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23f3f4f6"/><text x="50" y="50" text-anchor="middle" dy="0.35em" font-family="system-ui" font-size="24" fill="%236b7280">${selectedConversation.name.charAt(0)}</text></svg>`;
+                          }}
+                        />
                       </div>
                     )}
-                    <div className={`px-4 py-2 rounded-2xl max-w-[60%] text-sm ${
+                    <div className={`max-w-[70%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
                       msg.sender === 'buyer' 
-                        ? 'bg-green-600 text-white rounded-br-sm' 
-                        : 'bg-gray-200 text-gray-800 rounded-bl-sm'
+                        ? 'bg-gradient-to-r from-green-500 to-green-600 text-white rounded-br-md shadow-lg' 
+                        : 'bg-gray-100 text-gray-800 rounded-bl-md shadow-sm'
                     }`}>
-                      {searchQuery ? highlightText(msg.text, searchQuery) : msg.text}
+                      {msg.text && msg.text}
+                      {msg.image && <img src={msg.image} alt="sent-img" className="w-full h-auto max-h-96 mt-2 rounded-lg" />}
                     </div>
                     {msg.sender === 'buyer' && (
-                      <div className="w-8 h-8 rounded-full bg-blue-600 ml-2 flex items-center justify-center text-xs font-bold text-white">
+                      <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-500 to-blue-600 ml-3 flex items-center justify-center text-xs font-bold text-white shadow-sm flex-shrink-0">
                         You
                       </div>
                     )}
@@ -287,55 +405,86 @@ setConversations(prev => prev.filter(conv =>
                 ))}
 
                 {selectedConversation.messages.length === 0 && (
-                  <div className="text-center text-gray-500 text-sm py-8">
-                    No messages yet. Start the conversation!
+                  <div className="flex-1 flex items-center justify-center text-center py-12">
+                    <div>
+                      <div className="w-16 h-16 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
+                        <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-gray-900 mb-2">Start the conversation</h3>
+                      <p className="text-sm text-gray-500">Send a message to begin chatting with {selectedConversation.name}</p>
+                    </div>
                   </div>
                 )}
               </div>
 
-              <div className="flex items-center border-t pt-4 px-2">
-                <button className="mr-2 hover:scale-110 transition-transform p-2 hover:bg-gray-100 rounded-full">
-                  <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2-2V9z" />
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
-                  </svg>
-                </button>
-                <button className="mr-2 hover:scale-110 transition-transform p-2 hover:bg-gray-100 rounded-full">
-                  <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                  </svg>
-                </button>
-                <input
-                  type="text"
-                  value={newMessage}
-                  onChange={(e) => setNewMessage(e.target.value)}
-                  placeholder="Type your message here..."
-                  className="flex-grow px-4 py-2 text-sm border-2 border-gray-300 rounded-full focus:border-green-600 focus:outline-none"
-                  onKeyDown={(e) => e.key === 'Enter' && handleSend()}
-                />
-                <button
-                  onClick={handleSend}
-                  disabled={!newMessage.trim()}
-                  className={`ml-2 px-4 py-2 rounded-full text-sm font-semibold transition-colors ${
-                    newMessage.trim()
-                      ? 'bg-green-600 hover:bg-green-700 text-white'
-                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  }`}
-                >
-                  Send
-                </button>
+              {/* Message Input */}
+              <div className="p-6 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-white">
+                <div className="flex items-center gap-3">
+                  <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 group">
+                    <img
+                      src="/Cameraa.png"  
+                      alt="Camera Icon"
+                      className="w-6 h-6 group-hover:text-gray-700"
+                    />
+                  </button>
+                  <button className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 group">
+                    <label className="cursor-pointer">
+                      <img
+                        src="/Add Image.png" 
+                        alt="Add Image"
+                        className="w-6 h-6 group-hover:text-gray-700"
+                      />
+                      <input 
+                        type="file" 
+                        accept="image/*"
+                        className="hidden" 
+                        onChange={handleImageSelection} 
+                      />
+                    </label>
+                  </button>
+
+                  <div className="flex-1 relative">
+                    <input
+                      type="text"
+                      value={newMessage}
+                      onChange={(e) => setNewMessage(e.target.value)}
+                      placeholder="Type your message..."
+                      className="w-full px-4 py-3 bg-white border border-gray-200 rounded-2xl text-sm focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-transparent transition-all duration-200"
+                      onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                    />
+                  </div>
+                  <button
+                    onClick={handleSend}
+                    disabled={!newMessage.trim() && !selectedImage}
+                    className={`p-3 rounded-2xl text-sm font-semibold transition-all duration-200 ${
+                      (newMessage.trim() || selectedImage)
+                        ? 'bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white shadow-lg hover:shadow-xl transform hover:scale-105'
+                        : 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                    }`}
+                  >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+                    </svg>
+                  </button>
+                </div>
               </div>
             </>
           ) : (
-            <div className="flex-1 flex items-center justify-center text-gray-500">
+            <div className="flex-1 flex items-center justify-center">
               <div className="text-center">
-                <img src="/chat-placeholder.png" alt="Select Chat" className="w-24 h-24 mx-auto mb-4 opacity-50" />
-                <h3 className="text-xl font-semibold mb-2">Select a conversation</h3>
-                <p className="text-sm">Choose a conversation from the sidebar to start chatting</p>
+                <div className="w-24 h-24 mx-auto mb-6 bg-gradient-to-br from-green-100 to-blue-100 rounded-full flex items-center justify-center">
+                  <svg className="w-12 h-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                  </svg>
+                </div>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Select a conversation</h3>
+                <p className="text-sm text-gray-500">Choose a conversation from the sidebar to start chatting</p>
               </div>
             </div>
           )}
-        </div>
+        </div>t
       </div>
     </div>
   );

@@ -15,11 +15,6 @@ import OrderHistory from './components/ProfilePage/OrdersHistory';
 import MainLayout from "./components/Layout/MainLayout";
 import ProductDetails from "./components/LandingPage/ProductDetails";
 import OrderLayout from "./components/Layout/OrderLayout";
-import CartPage from "./components/Cart/CartPage";
-import ChatPage from "./components/Chat/ChatPage";
-import CheckOutPage from "./components/CheckOut/CheckOutPage";
-import CheckOutSuccess from "./components/CheckOut/CheckOutSuccess";
-import SearchProduct from "./components/LandingPage/SearchProduct"; 
 import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
 import NoResults from "./components/LandingPage/NoResults"; 
 import MarketplaceWithAccount from "./components/LandingPageWithAccount/MarketplaceWithAccount";
@@ -29,7 +24,7 @@ import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
 import SearchProductWithAccount from "./components/LandingPageWithAccount/SearchProductWithAccount";
 import OrderManagement from "./components/SellerCenter/OrderManagement";
 import AboutUsPage from "./components/LandingPage/AboutUsPage";
-import ViewAssociation from "./components/LandingPage/ViewAssociation"; 
+import ViewShop from "./components/LandingPage/ViewShop"; 
 import NotFoundPage from "./components/UI/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Associations from "./components/LandingPage/Associations";
@@ -56,17 +51,12 @@ function App() {
         <Route path="/" element={<MainLayout onSearch={handleSearch}><Marketplace /></MainLayout>} />
         <Route path="/user-profile" element={<MainLayout><UserProfilePage/></MainLayout>} />
         <Route path="/orderhistory" element={<ProtectedRoute><MainLayout><OrderHistory/></MainLayout></ProtectedRoute>} />
-        <Route path="/cartpage" element={<ProtectedRoute><MainLayout><CartPage /></MainLayout></ProtectedRoute>} />
-        <Route path="/chatpage" element={<MainLayout><ChatPage/></MainLayout>} />
-        <Route path="/checkoutpage" element={<MainLayout><CheckOutPage/></MainLayout>} />
-        <Route path="/checkout-success" element={<MainLayout><CheckOutSuccess /></MainLayout>} />
-        <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
         <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
         <Route path="/marketplace" element={<MarketplaceWithAccount />} />
         <Route path="/featured-products" element={<FeaturedProducts />} />
         <Route path="/seller-center" element={<SellerCenter />} />
-        <Route path="/view-association" element={<ViewAssociation />} />
+        <Route path="/view-shop" element={<ViewShop />} />
         <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
         <Route path="/search-product-account" element={<SearchProductWithAccount />} />
         <Route path="/order-management" element={<OrderManagement/>} />
