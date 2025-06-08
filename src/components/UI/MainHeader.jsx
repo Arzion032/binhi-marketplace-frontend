@@ -78,7 +78,9 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
               <option value="English">English</option>
             </select>
           </div>
+          <Link to="/help-center">
           <a href="#" className="text-base hover:underline font-semibold">Need Help?</a>
+       </Link>
         </div>
       </div>
 

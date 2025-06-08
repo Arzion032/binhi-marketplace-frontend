@@ -33,6 +33,7 @@ import ViewShop from "./components/LandingPage/ViewShop";
 import NotFoundPage from "./components/UI/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Associations from "./components/LandingPage/Associations";
+import HelpCenter from "./components/LandingPage/HelpCenter";
 
 function App() {
   return (
@@ -68,6 +69,7 @@ function App() {
         <Route path="/search-products-with-account" element={<SearchProductWithAccount />} />
         <Route path="/order-management" element={<OrderManagement/>} />
         <Route path="/about-us" element={<MainLayout><AboutUsPage/></MainLayout>} />
+        <Route path="/help-center" element={<MainLayout><HelpCenter/></MainLayout>} />
         <Route path="*" element={<MainLayout><NotFoundPage /></MainLayout>}/>
         <Route path="/withAccount" element={<MarketplaceWithAccount />}/>
         <Route path="/associations" element={<Associations />}/>
