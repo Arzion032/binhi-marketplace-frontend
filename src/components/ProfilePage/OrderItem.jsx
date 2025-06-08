@@ -82,6 +82,7 @@ const OrderItem = ({
         ))}
       </div>
 
+
       {/* Order Total */}
       <div className="flex justify-end mb-4">
         <div className="text-right">
@@ -97,6 +98,7 @@ const OrderItem = ({
           onClick={() => {
             setSelectedOrder(order);
             setShowViewOrderModal(true);
+            console.log('order',order)
           }}
           className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
         >
@@ -115,7 +117,7 @@ const OrderItem = ({
           </button>
         )}
 
-        {order.status === "Delivered" && (
+        {order.status === "delivered" && (
           <button
             onClick={() => {
               setSelectedOrder(order);

@@ -21,9 +21,8 @@ const Marketplace = () => {
       .then(res => setProducts(res.data))
       .catch(err => setError(err.message || "Error fetching products"))
       .finally(() => setLoading(false));
+      console.log(products)
   }, []);
-
-
 
   // Show error if there's an error
   if (error) return <div>Error: {error}</div>;
@@ -137,7 +136,7 @@ const Marketplace = () => {
                 setSelectedProductName(product.name);
                 showModalToast();
               }}
-              onBuyNow={() => navigate(`/product/${index}`)}
+              onBuyNow={() => navigate(`/product/${product.slug}`)}
             />
           ))}
         </div>

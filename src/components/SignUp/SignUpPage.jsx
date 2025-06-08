@@ -3,23 +3,52 @@ import { Link, useNavigate } from "react-router-dom";
 import { Button } from "../Button";
 import { Card } from "../Card";
 import { Input } from "../Input"; 
+import api from "../../api.js"
 
 const SignUpPage = () => {
   const navigate = useNavigate();
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [error, setError] = useState(""); // State to hold error message
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(true)
 
-  const handleNext = () => {
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const phoneRegex = /^[0-9]{10}$/;
+ 
+const handleNext = async () => {
+  const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    if (!emailRegex.test(emailOrPhone) && !phoneRegex.test(emailOrPhone)) {
-      setError("Please enter correct Phone Number or Email format.");
+  if (!emailRegex.test(emailOrPhone)) {
+    setError("Invalid Email format.");
+    return;
+  }
+
+  setError(""); 
+  
+  try {
+    // Show loading state (optional)
+    setLoading(true); // You might want to add this state
+    console.log(emailOrPhone)
+    const response = await api.post('/users/request-email-verification/', {
+      email: emailOrPhone
+    });
+
+    // Success - navigate to next step
+    navigate("/next-step", { state: { email: emailOrPhone } });
+
+  } catch (error) {
+    console.error('Error requesting verification:', error);
+    
+    // Handle different types of errors
+    if (error.response?.data?.error) {
+      setError(error.response.data.error);
+    } else if (error.response?.status >= 400) {
+      setError("Failed to send verification code. Please try again.");
     } else {
-      setError(""); 
-      navigate("/next-step", { state: { email: emailOrPhone } });
+      setError("Network error. Please check your connection and try again.");
     }
-  };
+  } finally {
+    setLoading(false); // Hide loading state
+  }
+};
+
   return (
     <div className="flex items-center justify-center px-5 py-10">
   <div className="flex flex-col md:flex-row justify-between rounded-2xl overflow-hidden w-full max-w-7xl">
@@ -38,12 +67,12 @@ const SignUpPage = () => {
           Sign Up and don’t miss the opportunity to <br/>easily connect with BINHI!
         </p>
 
-        <form className="mb-6" onSubmit={handleNext}>
+        <form className="mb-6" onSubmit={(e) => e.preventDefault()}>
           <div>
-            <label className="label font-semibold text-md mb-1">Phone Number/Email</label>
+            <label className="label font-semibold text-lg">Email Address:</label>
             <Input
               type="text"
-              placeholder="Enter your Phone Number or Email"
+              placeholder="Enter your Email Address"
               value={emailOrPhone}
               onChange={(e) => setEmailOrPhone(e.target.value)}
               className={`input input-bordered w-full ${error ? "border-2 border-red-500" : ""}`}
@@ -53,7 +82,11 @@ const SignUpPage = () => {
           <br />
           {error && <p className="text-red-500 text-sm -mt-3 ml-3">{error}</p>}
 
-          <Button className="w-full rounded-full bg-green-500 text-white text-lg h-12 hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out">
+          <Button 
+            type="button" 
+            className="w-full rounded-full bg-green-500 text-white text-lg h-12 hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out"
+            onClick={handleNext}
+            >
             Next
           </Button>
         </form>

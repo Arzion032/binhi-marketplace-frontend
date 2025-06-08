@@ -111,10 +111,10 @@ const handleLogin = async (e) => {
 
         <form onSubmit={handleLogin} className="mb-6" noValidate>
           <div>
-            <label className="label font-semibold text-lg">Phone Number/Email</label>
+            <label className="label font-semibold text-lg">Email Address:</label>
             <Input
               type="text"
-              placeholder="Enter your Phone Number or Email"
+              placeholder="Enter your Email Address"
               onChange={(e) => setEmail(e.target.value)}
               required
               className="h-12 text-lg"
@@ -159,7 +159,7 @@ const handleLogin = async (e) => {
           <button 
             type="submit" 
             disabled={!email.trim() || !password.trim()}
-            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200"
+            className="w-full rounded-full bg-green-500 text-white text-lg h-12 hover:bg-green-600 focus:outline-none focus:ring-0 transition duration-300 ease-in-out"
           >
             Log In
           </button>

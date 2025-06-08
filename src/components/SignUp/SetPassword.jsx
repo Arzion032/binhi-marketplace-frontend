@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const SetPassword = () => {
   const navigate = useNavigate();
+  const location = useLocation(); 
+  const email = location.state?.email;
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [password, setPassword] = useState("");
@@ -29,7 +31,12 @@ const SetPassword = () => {
       setError("* The password confirmation does not match.");
     } else {
       setError(""); 
-      navigate("/set-up");
+      navigate("/set-up", { 
+        state: { 
+          email: email,
+          password: password 
+        } 
+      });
     }
   };
 

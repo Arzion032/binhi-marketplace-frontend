@@ -25,17 +25,17 @@ const OrderHistory = () => {
     setOrders(prevOrders => 
       prevOrders.map(order => 
         order.id === selectedOrder?.id 
-          ? { ...order, status: "Cancelled" }
+          ? { ...order, status: "cancelled" }
           : order
       )
     );
     
     if (selectedOrder) {
-      setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
+      setSelectedOrder({ ...selectedOrder, status: "cancelled" });
     }
     
     setShowCancelModal(false);
-    alert("Order cancelled successfully!");
+    alert("Order Cancelled Successfully!");
   };
   
   useEffect(() => {
@@ -86,15 +86,15 @@ const OrderHistory = () => {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case "Delivered": return "bg-[#4CAE4F]";
-      case "Cancelled": return "bg-red-500";
-      case "Returned": return "bg-gray-500";
+      case "delivered": return "bg-[#4CAE4F]";
+      case "cancelled": return "bg-red-500";
+      case "returned": return "bg-gray-500";
       default: return "bg-[#D1A157]";
     }
   };
 
   const canCancelOrder = (status) => {
-    return ["Pending", "Confirmed"].includes(status);
+    return ["pending", "confirmed"].includes(status);
   };
 
   // Calculate total for each order

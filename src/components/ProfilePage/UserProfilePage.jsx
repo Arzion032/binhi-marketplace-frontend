@@ -364,10 +364,13 @@ const handlePasswordConfirm = async () => {
         <div className="flex items-center gap-4 mb-8">
           <button
             className="flex items-center text-gray-600 hover:text-black"
-            onClick={() => navigate("/")}
+            onClick={() => {
+              window.location.href = '/';  // This will redirect to the home page
+            }}
           >
             <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
           </button>
+
           <p className="text-4xl font-bold font-inter">User Profile</p>
         </div>
 

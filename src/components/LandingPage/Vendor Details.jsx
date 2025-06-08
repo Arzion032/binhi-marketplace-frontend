@@ -46,7 +46,7 @@ const VendorDetails = ({ product, tags }) => {
             <img src="/map-pin.png" className="w-5 h-5" alt="Location" />
             <span>
               {product.vendor_address &&
-                `${product.vendor_address.street_address}, ${product.vendor_address.barangay}, ${product.vendor_address.city}`}
+                `${product.vendor_address.city}, ${product.vendor_address.barangay}`}
             </span>
           </div>
           <div className="flex items-center gap-1">

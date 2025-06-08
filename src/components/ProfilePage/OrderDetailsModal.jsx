@@ -45,7 +45,7 @@ const OrderDetailsModal = ({
               </button>
             )}
 
-            {selectedOrder.status === "Delivered" && (
+            {selectedOrder.status === "delivered" && (
               <button 
                 onClick={() => {
                   setShowDetails(false);
@@ -67,7 +67,7 @@ const OrderDetailsModal = ({
             <img src={selectedOrder.image} alt={selectedOrder.name} className="w-16 h-16 rounded-lg object-cover" />
             <div>
               <h3 className="text-lg font-semibold">{selectedOrder.name}</h3>
-              <p className="text-sm text-gray-500">Qty: {selectedOrder.quantity} • ₱{selectedOrder.price.toFixed(2)}</p>
+              <p className="text-sm text-gray-500">Qty: {selectedOrder.quantity} • ₱{selectedOrder.total_price.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
             </div>
           </div>
           <button
@@ -82,7 +82,7 @@ const OrderDetailsModal = ({
         <div className="border border-gray-400 rounded-xl p-4 mb-4">
           <p className="text-sm font-semibold mb-4">Order Status</p>
           <div className="space-y-4">
-            {selectedOrder.status === "Cancelled" ? (
+            {selectedOrder.status === "cancelled" ? (
               // Show cancelled status
               <div className="flex justify-between items-center">
                 <div className="flex items-center gap-2">
@@ -93,28 +93,38 @@ const OrderDetailsModal = ({
               </div>
             ) : (
               // Show normal status progression
-              ["Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map((label, index, array) => {
-                const statusIndex = array.indexOf(selectedOrder?.status || "Pending");
-                const isActive = index <= statusIndex;
+["Pending", "Confirmed", "Processing", "Shipped", "Delivered"].map((label, index, array) => {
+  // Find the index of the current order status (case-insensitive comparison)
+  const currentStatus = selectedOrder?.status || "Pending";
+  const statusIndex = array.findIndex(status => 
+    status.toLowerCase() === currentStatus.toLowerCase()
+  );
+  
+  // Status is active if current index is less than or equal to the order's status index
+  const isActive = index <= statusIndex;
 
-                const getStatusImage = (status, active) => {
-                  if (active) {
-                    return `/${status.toLowerCase()}.png`;
-                  } else {
-                    switch(status.toLowerCase()) {
-                      case 'confirmed':
-                        return '/notconfirmed.png';
-                      case 'processing':
-                        return '/notprocessing.png';
-                      case 'shipped':
-                        return '/notshipped.png';
-                      case 'delivered':
-                        return '/notdelivered.png';
-                      default:
-                        return `/${status.toLowerCase()}.png`;
-                    }
-                  }
-                };
+  const getStatusImage = (status, active) => {
+    const statusLower = status.toLowerCase();
+    if (active) {
+      return `/${statusLower}.png`; // Active status - no "not" prefix
+    } else {
+      // Inactive status - add "not" prefix for statuses that have it
+      switch (statusLower) {
+        case 'confirmed':
+          return '/notconfirmed.png';
+        case 'processing':
+          return '/notprocessing.png';
+        case 'shipped':
+          return '/notshipped.png';
+        case 'delivered':
+          return '/notdelivered.png';
+        case 'pending':
+          return '/notpending.png'; // Added this case
+        default:
+          return `/${statusLower}.png`;
+      }
+    }
+  };
 
                 return (
                   <div key={label} className="flex justify-between items-center">
@@ -196,8 +206,8 @@ const OrderDetailsModal = ({
                   <p><span className="font-medium">Variation:</span> {selectedOrder.variation}</p>
                   <p><span className="font-medium">Weight:</span> {selectedOrder.weight} kg</p>
                   <p><span className="font-medium">Quantity:</span> {selectedOrder.quantity}</p>
-                  <p><span className="font-medium">Unit Price:</span> ₱{selectedOrder.price.toFixed(2)}</p>
-                  <p><span className="font-medium">Total:</span> ₱{(selectedOrder.price * selectedOrder.quantity).toFixed(2)}</p>
+                  <p><span className="font-medium">Unit Price:</span> ₱{selectedOrder.price.toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
+                  <p><span className="font-medium">Total:</span> ₱{(selectedOrder.price * selectedOrder.quantity).toLocaleString('en-PH', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</p>
                 </div>
               </div>
             </div>
