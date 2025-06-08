@@ -89,7 +89,6 @@ const Marketplace = () => {
           tags: farmer.categories,
           location: farmer.location,
           followers: farmer.followers,
-          rating: farmer.rating,
           responseRate: farmer.responseRate,
           productsSold: farmer.productsSold,
         }

@@ -44,8 +44,7 @@ const ProductCard = ({
         </p>
       {/* Rating & Sold */}
       <div className="text-[20px] text-gray-600 mt-4 flex items-center gap-1">
-        <img src="/Star.png" alt="star" className="w-4 h-4" />
-        5.0 • {product.sold} Sold
+       {product.sold} Sold
       </div>
       {/* Actions */}
       <div className="flex items-center justify-between gap-4 mt-2">
