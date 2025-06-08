@@ -1,36 +1,27 @@
-
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { X, Check } from 'lucide-react';
+import api from '../../api';
+import { regions, provinces, cities, barangays } from '../../constants';
+import AddressModal from './AdressModal';
 
 const UserProfilePage = () => {
+
   const [isEditing, setIsEditing] = useState(false);
-
-  const navigate = (path) => {
-    if (path === '/OrderHistory') {
-      window.location.href = '/OrderHistory';
-    } else {
-      alert(`Would navigate to: ${path}`);
-    }
-  };
-
-  // Modal states
+  const [profileData, setProfileData] = useState(null);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [addressError, setAddressError] = useState("");
+  
+  // Modal states - moved to top level
+  const [showAddressModal, setShowAddressModal] = useState(false);
   const [showConfirmDiscard, setShowConfirmDiscard] = useState(false);
   const [showPasswordModal, setShowPasswordModal] = useState(false);
   const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const [showPasswordSuccessModal, setShowPasswordSuccessModal] = useState(false);
+  const [selectedTab, setSelectedTab] = useState("Region");
 
-  // Profile data state
-  const [profileData, setProfileData] = useState({
-    fullName: "Hulo Daranagan Farmers Association",
-    contactNo: "091234567891",
-    address: "Darangan, Binangonan City",
-    email: "juandelacruz@gmail.com",
-    occupation: "Association"
-  });
-
-  // Temporary state for editing
-  const [editData, setEditData] = useState({...profileData});
+  // Temporary state for editing - initialized with null
+  const [editData, setEditData] = useState(null);
 
   // Password states
   const [passwordData, setPasswordData] = useState({
@@ -39,11 +30,137 @@ const UserProfilePage = () => {
     confirmPassword: ''
   });
 
+    const navigate = (path) => {
+    if (path === '/OrderHistory') {
+      window.location.href = '/OrderHistory';
+    } else {
+      alert(`Would navigate to: ${path}`);
+    }
+  };
+
   // Password visibility states
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmNewPassword, setShowConfirmNewPassword] = useState(false);
   const [passwordError, setPasswordError] = useState('');
+
+  // Selected address details
+  const [selectedRegion, setSelectedRegion] = useState("");
+  const [selectedProvince, setSelectedProvince] = useState("");
+  const [selectedCity, setSelectedCity] = useState("");
+  const [selectedBarangay, setSelectedBarangay] = useState("");
+  const [completeAddress, setCompleteAddress] = useState("");
+  const [defaultCompleteAddress, setDefaultCompleteAddress] = useState("")
+
+
+  useEffect(() => {
+    let address = [];
+    if (selectedBarangay) address.push(selectedBarangay);
+    if (selectedCity) address.push(selectedCity);
+    if (selectedProvince) address.push(selectedProvince);
+    if (selectedRegion) address.push(selectedRegion);
+
+    setCompleteAddress(address.join(", "));
+  }, [selectedRegion, selectedProvince, selectedCity, selectedBarangay]);
+
+  // Countdown effect for success modal redirect
+  useEffect(() => {
+    if (showSuccess) {
+      setCountdown(3); // reset countdown when modal opens
+      const timer = setInterval(() => {
+        setCountdown((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            navigate("/login");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer); // cleanup on modal close/unmount
+    }
+  }, [showSuccess, navigate]);
+
+  // Tab progression logic
+  const progressToNextTab = (currentTab) => {
+    switch (currentTab) {
+      case "Region":
+        setSelectedTab("Province");
+        break;
+      case "Province":
+        setSelectedTab("City");
+        break;
+      case "City":
+        setSelectedTab("Barangay");
+        break;
+      case "Barangay":
+        setShowAddressModal(false);
+        break;
+      default:
+        break;
+    }
+  };
+
+  const handleRegionSelect = (region) => {
+    setSelectedRegion(region);
+    setSelectedProvince("");
+    setSelectedCity("");
+    setSelectedBarangay("");
+    progressToNextTab("Region");
+  };
+
+  const handleProvinceSelect = (province) => {
+    setSelectedProvince(province);
+    setSelectedCity("");
+    setSelectedBarangay("");
+    progressToNextTab("Province");
+  };
+
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
+    setSelectedBarangay("");
+    progressToNextTab("City");
+  };
+
+  const handleBarangaySelect = (barangay) => {
+    setSelectedBarangay(barangay);
+    if (addressError) setAddressError("");
+    progressToNextTab("Barangay");
+  };
+  
+
+ useEffect(() => {
+  const fetchUserData = async () => {
+    try {
+      const response = await api.get('/users/me');
+      setProfileData(response.data);
+      setEditData(response.data); // Initialize editData here
+
+      // Initialize the address components (region, province, city, barangay)
+      const address = response.data.addresses[0] || {}; // Assuming the address is in the first entry of addresses array
+      
+      // Set initial address values
+      setSelectedRegion(address.region || "");
+      setSelectedProvince(address.province || "");
+      setSelectedCity(address.city || "");
+      setSelectedBarangay(address.barangay || "");
+      const formattedAddress = `${address.barangay || ""}, ${address.city || ""}, ${address.province || ""}, ${address.region || ""}`;
+      setDefaultCompleteAddress(formattedAddress); 
+
+      console.log(response.data); // For debugging purposes
+    } catch (error) {
+      console.error('Error fetching user data:', error);
+    }
+  };
+
+  fetchUserData();
+}, []);
+
+  // Early return after all hooks are called
+  if (!profileData) {
+    return <div>Loading...</div>;
+  }
 
   const handleEditClick = () => {
     setEditData({...profileData});
@@ -54,21 +171,65 @@ const UserProfilePage = () => {
 
   const confirmDiscard = () => {
     setEditData({...profileData});
+    setSelectedRegion(profileData.region || "");
+    setSelectedProvince(profileData.province || "");
+    setSelectedCity(profileData.city || "");
+    setSelectedBarangay(profileData.barangay || "");
     setIsEditing(false);
     setShowConfirmDiscard(false);
+    setShowAddressModal(false)
   };
 
-  const handleConfirm = () => {
-    const requiredFields = ['fullName', 'contactNo', 'address', 'email'];
-    const emptyFields = requiredFields.filter(field => !editData[field].trim());
-    if (emptyFields.length > 0) {
-      alert('Please fill in all required fields');
-      return;
+const handleConfirm = async () => {
+  const requiredFields = ['full_name', 'contact_no', 'email'];
+  const emptyFields = requiredFields.filter(field => !editData[field] || !editData[field].trim());
+  if (emptyFields.length > 0) {
+    alert('Please fill in all required fields');
+    console.log(emptyFields)
+    return;
+  }
+
+  // Check if address fields are selected
+  if (!selectedRegion || !selectedProvince || !selectedCity || !selectedBarangay) {
+    alert('Please select all address fields');
+    return;
+  }
+
+  try {
+    const updateData = {
+      email: editData.email,
+      contact_no: editData.contactNo,
+      profile: {
+        full_name: editData.full_name
+      },
+      address: {
+        region: selectedRegion,
+        province: selectedProvince,
+        city: selectedCity,
+        barangay: selectedBarangay
+      }
+    };
+
+    const response = await api.patch('/users/me/update/', updateData);
+    
+    if (response.status === 200) {
+      // Update local state with the response data
+      setProfileData({...editData});
+      setIsEditing(false);
+      setShowSuccessModal(true);
     }
-    setProfileData({...editData});
-    setIsEditing(false);
-    setShowSuccessModal(true);
-  };
+  } catch (error) {
+    console.error('Error updating profile:', error);
+    
+    if (error.response?.data?.details) {
+      // Handle validation errors
+      const errorMessage = Object.values(error.response.data.details).flat().join('\n');
+      alert(`Update failed:\n${errorMessage}`);
+    } else {
+      alert('Failed to update profile. Please try again.');
+    }
+  }
+};
 
   const handleInputChange = (field, value) => {
     setEditData(prev => ({
@@ -86,40 +247,55 @@ const UserProfilePage = () => {
 
   const handleChangePassword = () => setShowPasswordModal(true);
 
-  const handlePasswordDiscard = () => setShowPasswordConfirm(true);
+const handlePasswordDiscard = () => setShowPasswordConfirm(true);
 
-  const confirmPasswordDiscard = () => {
-    setPasswordData({
-      currentPassword: '',
-      newPassword: '',
-      confirmPassword: ''
+const confirmPasswordDiscard = () => {
+  setPasswordData({
+    currentPassword: '',
+    newPassword: '',
+    confirmPassword: ''
+  });
+  setPasswordError('');
+  setShowPasswordModal(false);
+  setShowPasswordConfirm(false);
+};
+
+const isNewPasswordValid =
+  /[A-Z]/.test(passwordData.newPassword) &&
+  /[a-z]/.test(passwordData.newPassword) &&
+  /\d/.test(passwordData.newPassword) &&
+  /[^A-Za-z0-9]/.test(passwordData.newPassword) &&
+  passwordData.newPassword.length >= 8;
+
+const handlePasswordConfirm = async () => {
+  // Client-side validation
+  if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
+    setPasswordError('Please fill in all password fields');
+    return;
+  }
+  
+  if (!isNewPasswordValid) {
+    setPasswordError('New password does not meet all the requirements. Please try again.');
+    return;
+  }
+  
+  if (passwordData.newPassword !== passwordData.confirmPassword) {
+    setPasswordError('The password confirmation does not match. Please try again.');
+    return;
+  }
+
+  // Clear any previous errors
+  setPasswordError('');
+  
+  try {
+    // Make API call to update password
+    const response = await api.patch('users/me/update-password/', {
+      current_password: passwordData.currentPassword,
+      new_password: passwordData.newPassword,
+      confirm_password: passwordData.confirmPassword
     });
-    setPasswordError('');
-    setShowPasswordModal(false);
-    setShowPasswordConfirm(false);
-  };
 
-  const isNewPasswordValid =
-    /[A-Z]/.test(passwordData.newPassword) &&
-    /[a-z]/.test(passwordData.newPassword) &&
-    /\d/.test(passwordData.newPassword) &&
-    /[^A-Za-z0-9]/.test(passwordData.newPassword) &&
-    passwordData.newPassword.length >= 8;
-
-  const handlePasswordConfirm = () => {
-    if (!passwordData.currentPassword || !passwordData.newPassword || !passwordData.confirmPassword) {
-      setPasswordError('Please fill in all password fields');
-      return;
-    }
-    if (!isNewPasswordValid) {
-      setPasswordError('New password does not meet all the requirements. Please try again.');
-      return;
-    }
-    if (passwordData.newPassword !== passwordData.confirmPassword) {
-      setPasswordError('The password confirmation does not match. Please try again.');
-      return;
-    }
-    setPasswordError('');
+    // Success - show success modal and reset form
     setShowPasswordModal(false);
     setShowPasswordSuccessModal(true);
     setPasswordData({
@@ -127,7 +303,38 @@ const UserProfilePage = () => {
       newPassword: '',
       confirmPassword: ''
     });
-  };
+
+  } catch (error) {
+    // Handle different types of errors
+    if (error.response) {
+      // Server responded with error status
+      const { status, data } = error.response;
+      
+      if (status === 400) {
+        // Validation errors from backend
+        if (data.details && typeof data.details === 'object') {
+          // Handle field-specific errors
+          const errorMessages = Object.values(data.details).flat();
+          setPasswordError(errorMessages.join('. '));
+        } else {
+          setPasswordError(data.error || 'Validation failed. Please check your input.');
+        }
+      } else if (status === 401) {
+        setPasswordError('Current password is incorrect.');
+      } else if (status === 500) {
+        setPasswordError('Server error occurred. Please try again later.');
+      } else {
+        setPasswordError('An unexpected error occurred. Please try again.');
+      }
+    } else if (error.request) {
+      // Network error
+      setPasswordError('Network error. Please check your connection and try again.');
+    } else {
+      // Other error
+      setPasswordError('An unexpected error occurred. Please try again.');
+    }
+  }
+};
 
   // Modal Component
   const Modal = ({ isOpen, onClose, children, showCloseButton = true }) => {
@@ -179,7 +386,7 @@ const UserProfilePage = () => {
                   <img src="Edit.png" alt="edit" className="h-6 w-6" />
                 </button>
               </div>
-              <h2 className="text-3xl font-bold text-center mb-2">{isEditing ? editData.fullName : profileData.fullName}</h2>
+              <h2 className="text-3xl font-bold text-center mb-2">{isEditing ? editData.username : profileData.username}</h2>
               <p className="text-xl text-gray-600 text-center mb-6">{profileData.occupation}</p>
               {!isEditing ? (
                 <button
@@ -210,48 +417,93 @@ const UserProfilePage = () => {
               <h3 className="text-2xl font-bold mb-6 text-gray-800">Profile Information</h3>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 {[
-                  { label: "Full Name", field: "fullName", type: "text", required: true },
-                  { label: "Email Address", field: "email", type: "email", required: true },
-                  { label: "Contact Number", field: "contactNo", type: "text", required: true },
-                ].map(({ label, field, type, required }) => (
-                  <div key={label} className="space-y-2">
-                    <label className="block text-gray-700 text-lg font-semibold">
-                      {label} {required && <span className="text-red-500">*</span>}
-                    </label>
-                    <div className="relative">
-                      <input
-                        type={type}
-                        value={isEditing ? editData[field] : profileData[field]}
-                        onChange={isEditing ? (e) => handleInputChange(field, e.target.value) : undefined}
-                        readOnly={!isEditing}
-                        className={`w-full text-lg border-2 rounded-full p-4 focus:outline-none ${
-                          isEditing
-                            ? 'border-gray-300 bg-white focus:border-[#4CAE4F]'
-                            : 'border-gray-300 bg-gray-50 cursor-default'
-                        }`}
-                      />
-                    </div>
-                  </div>
-                ))}
+  { label: "Full Name", field: "full_name", type: "text", required: true, accessor: (data) => data.profile?.full_name || '' },
+  { label: "Email Address", field: "email", type: "email", required: true, accessor: (data) => data.email || '' },
+  { label: "Contact Number", field: "contact_no", type: "text", required: true, accessor: (data) => data.contact_no || '' },
+].map(({ label, field, type, required, accessor }) => (
+  <div key={label} className="space-y-2">
+    <label className="block text-gray-700 text-lg font-semibold">
+      {label} {required && <span className="text-red-500">*</span>}
+    </label>
+    <div className="relative">
+      <input
+        type={type}
+        value={isEditing ? editData[field] : accessor(profileData)}
+        onChange={isEditing ? (e) => handleInputChange(field, e.target.value) : undefined}
+        readOnly={!isEditing}
+        className={`w-full text-lg border-2 rounded-full p-4 focus:outline-none ${
+          isEditing
+            ? 'border-gray-300 bg-white focus:border-[#4CAE4F]'
+            : 'border-gray-300 bg-gray-50 cursor-default'
+        }`}
+      />
+    </div>
+  </div>
+))}
                 {/* Address - Full Width */}
-                <div className="md:col-span-2 space-y-2">
-                  <label className="block text-gray-700 text-lg font-semibold">
-                    Address <span className="text-red-500">*</span>
-                  </label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={isEditing ? editData.address : profileData.address}
-                      onChange={isEditing ? (e) => handleInputChange('address', e.target.value) : undefined}
-                      readOnly={!isEditing}
-                      className={`w-full text-lg border-2 rounded-full p-4 focus:outline-none ${
-                        isEditing
-                          ? 'border-gray-300 bg-white focus:border-[#4CAE4F]'
-                          : 'border-gray-300 bg-gray-50 cursor-default'
-                      }`}
-                    />
-                  </div>
-                </div>
+                <div className="text-left mb-1 relative">
+            <label className="block mb-1 font-bold text-gray-700">Address</label>
+            <div className="relative">
+            <input
+              type="text"
+              className={`input input-bordered rounded-full border-gray-800 w-full h-14 focus:outline-none focus:ring-2 focus:ring-green-600 text-gray-600 text-lg pr-10 placeholder-black ${
+                addressError ? "border-red-500" : ""
+              }`}
+              placeholder={defaultCompleteAddress}
+              readOnly={!isEditing}
+              value={completeAddress}
+            />
+
+              <button
+                className="absolute right-4 top-1/2 transform -translate-y-1/2"
+                disabled={!isEditing}
+                onClick={() => setShowAddressModal(prevState => !prevState)}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5 text-gray-500"
+                  viewBox="0 0 20 20"
+                  fill="currentColor"
+                >
+                  <path
+                    fillRule="evenodd"
+                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                    clipRule="evenodd"
+                  />
+                </svg>
+              </button>
+            </div>
+            {addressError && (
+              <p className="text-red-500 text-xs italic mt-1">{addressError}</p>
+            )}
+
+          <AddressModal
+              showAddressModal={showAddressModal}
+              selectedTab={selectedTab}
+              setSelectedTab={setSelectedTab}
+              regions={regions}
+              provinces={provinces}
+              cities={cities}
+              barangays={barangays}
+              selectedRegion={selectedRegion}
+              selectedProvince={selectedProvince}
+              selectedCity={selectedCity}
+              selectedBarangay={selectedBarangay}
+              handleRegionSelect={handleRegionSelect}
+              handleProvinceSelect={handleProvinceSelect}
+              handleCitySelect={handleCitySelect}
+              handleBarangaySelect={handleBarangaySelect}
+          />
+
+
+          </div>
+
+          {/* Address Modal with Green Border and Custom Scrollbar */}
+         
+         
+
+
+
               </div>
               <div className="mt-8 pt-6 border-t border-gray-200">
                 <h4 className="text-xl font-bold mb-4 text-gray-800">Account Settings</h4>

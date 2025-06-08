@@ -37,33 +37,59 @@ function LogInPage() {
   };
   */
 
-  const handleLogin = async (e) => {
-    e.preventDefault();
-    setError(""); // reset error
+const handleLogin = async (e) => {
+    e.preventDefault();  // Prevent form submission from reloading the page
+    e.stopPropagation(); // Stop event bubbling
+    setError(""); // Reset error message
+
+    // Validate inputs before making API call
+    if (!email.trim() || !password.trim()) {
+        setError("Please enter both email and password.");
+        return;
+    }
 
     try {
-      const response = await api.post("/users/login/", {
-        email,
-        password,
-      });
+        const response = await api.post("/users/login/", {
+            email: email.trim(),
+            password,
+        });
 
-      const { access, refresh, user_id, email: userEmail, role, username } = response.data;
+        // Handle success
+        const { access, refresh, user_id, email: userEmail, role, username } = response.data;
 
-      // Store tokens in localStorage (or cookies if preferred)
-      localStorage.setItem("accessToken", access);
-      localStorage.setItem("refreshToken", refresh);
-      localStorage.setItem("userId", user_id);
-      localStorage.setItem("userEmail", userEmail);
-      localStorage.setItem("userRole", role);
-      localStorage.setItem("userName", username);
+        // Store tokens in localStorage
+        localStorage.setItem("accessToken", access);
+        localStorage.setItem("refreshToken", refresh);
+        localStorage.setItem("userId", user_id);
+        localStorage.setItem("userEmail", userEmail);
+        localStorage.setItem("userRole", role);
+        localStorage.setItem("userName", username);
 
-      // Redirect to Marketplace or Dashboard
-      navigate("/");
+        // Redirect to Marketplace or Dashboard
+        navigate("/"); // Or replace with specific route as needed
     } catch (err) {
-      console.error(err);
-      setError("Invalid email or password.");
+        console.error("Login error:", err); // Log error for debugging
+        
+        // Handle different types of errors
+        if (err.response) {
+            // Server responded with error status
+            const status = err.response.status;
+            if (status === 401 || status === 400) {
+                setError("Invalid email or password.");
+            } else if (status === 500) {
+                setError("Server error. Please try again later.");
+            } else {
+                setError("Login failed. Please try again.");
+            }
+        } else if (err.request) {
+            // Network error
+            setError("Network error. Please check your connection.");
+        } else {
+            // Other error
+            setError("An unexpected error occurred. Please try again.");
+        }
     }
-  };
+};
 
   return (
     <div className="flex items-center justify-center px-5 py-10">
@@ -80,10 +106,10 @@ function LogInPage() {
       <Card className="w-full max-w-xl p-12 pt-2 pb-6 rounded-3xl shadow-2xl bg-white">
         <h2 className="pt-10 text-4xl font-bold text-center mb-4">Welcome Back to BINHI!</h2>
         <p className="text-xl text-center mb-8">
-          Log In and don’t miss the opportunity to <br />easily connect with BINHI!
+          Log In and don't miss the opportunity to <br />easily connect with BINHI!
         </p>
 
-        <form onSubmit={handleLogin} className="mb-6">
+        <form onSubmit={handleLogin} className="mb-6" noValidate>
           <div>
             <label className="label font-semibold text-lg">Phone Number/Email</label>
             <Input
@@ -121,8 +147,22 @@ function LogInPage() {
               Forgot Password?
             </Link>
           </div>
+          
+          {/* Display error message if there's an error */}
+          {error && (
+            <div className="mt-4 mb-4">
+              <p className="text-red-600 text-center text-sm font-medium">{error}</p>
+            </div>
+          )}
+          
           <br />
-          <Button type="submit">Log In</Button>
+          <button 
+            type="submit" 
+            disabled={!email.trim() || !password.trim()}
+            className="w-full bg-green-600 hover:bg-green-700 disabled:bg-gray-400 text-white font-semibold py-3 px-4 rounded-lg transition-colors duration-200"
+          >
+            Log In
+          </button>
         </form>
 
         <div className="divider text-gray-500 my-6 text-sm">OR</div>
