@@ -31,12 +31,19 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      onSearch(searchQuery);
+      handleSearch();
     }
   };
 
   const handleSearchClick = () => {
-    onSearch(searchQuery);
+    handleSearch();
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      // Navigate to the correct search page with query parameter
+      navigate(`/search-products?query=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   const toggleDropdown = () => {
@@ -93,7 +100,7 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
             </div>
             <input
               type="text"
-              placeholder="Click here to products or farmer"
+              placeholder="Click here to search products or farmer"
               className="flex-grow outline-none font-bold text-base"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
