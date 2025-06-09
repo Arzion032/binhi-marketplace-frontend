@@ -3,7 +3,7 @@ import React from 'react';
 const MainFooter = () => {
   return (
     <>
-      <footer className="bg-[#D9D9D9] mt-2 pt-10 pb-4">
+      <footer className="bg-[#D9D9D9] pt-10 pb-4">
         <div className="mx-auto max-w-[1500px] grid grid-cols-1 md:grid-cols-5 gap-y-6 px-6 text-sm text-gray-700 text-center md:text-left">
           {/* Logo Section */}
           <div className="flex flex-col items-center md:items-start">

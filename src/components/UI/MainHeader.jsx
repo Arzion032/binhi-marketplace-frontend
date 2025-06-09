@@ -43,12 +43,19 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
 
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
-      onSearch(searchQuery);
+      handleSearch();
     }
   };
 
   const handleSearchClick = () => {
-    onSearch(searchQuery);
+    handleSearch();
+  };
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      // Navigate to the correct search page with query parameter
+      navigate(`/search-products?query=${encodeURIComponent(searchQuery.trim())}`);
+    }
   };
 
   const toggleDropdown = () => {
@@ -86,7 +93,9 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
               <option value="English">English</option>
             </select>
           </div>
+          <Link to="/help-center">
           <a href="#" className="text-base hover:underline font-semibold">Need Help?</a>
+       </Link>
         </div>
       </div>
 
@@ -119,6 +128,9 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
                 <img src="/mic.png" alt="Mic" className="w-7 h-7 mx-2 hover:scale-110" />
               </button>
             </div>
+
+  {/*}*/}
+
           </div>
         )}
 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import MainHeader from '../UI/MainHeader';
+import { allFarmers } from './AllAssociationCard';
 
 const Associations = () => {
   const navigate = useNavigate();
@@ -15,157 +16,6 @@ const Associations = () => {
   const [showCategoryDropdown, setShowCategoryDropdown] = useState(false);
   const [showPlaceDropdown, setShowPlaceDropdown] = useState(false);
   const itemsPerPage = 10;
-
-  // Expanded farmer data with more variety
-  const allFarmers = [
-  {
-      name: "Pantok Farmers Association",
-      location: "Pantok, Binangonan",
-      sold: "10k",
-      rank: 2,
-      categories: ["milks & dairy", "rice", "grains"],
-      img: "/555.png",
-      gridImg: "/Pantok.png",
-      place: "Pantok"
-    },
-    {
-      name: "Macamot Farmers Association",
-      location: "Macamot, Binangonan",
-      sold: "12k",
-      rank: 1,
-      categories: ["fruits", "rice", "vegetables", "root crops"],
-      img: "/444.png",
-      gridImg: "/Macamot.png",
-      place: "Macamot"
-    },
-    {
-      name: "Tagpos Farmers Association",
-      location: "Tagpos, Binangonan",
-      sold: "9k",
-      rank: 3,
-      categories: ["fruits", "root crops", "meat"],
-      img: "/222.png",
-      gridImg: "/Tagpos.png",
-      place: "Tagpos"
-    },
-    {
-      name: "Bilibiran Farmers Association",
-      location: "Bilibiran, Binangonan",
-      sold: "8k",
-      rank: 4,
-      categories: ["vegetables", "grains"],
-      img: "/Bilibiran.png",
-      place: "Bilibiran"
-    },
-    {
-      name: "Samahang Magsasaka ng Darangan",
-      location: "Darangan, Binangonan",
-      sold: "7k",
-      rank: 5,
-      categories: ["fruits", "vegetables"],
-      img: "/Darangan.png",
-      place: "Darangan"
-    },
-    {
-      name: "Hulo Farmers Association",
-      location: "Hulo, Binangonan",
-      sold: "6k",
-      rank: 6,
-      categories: ["rice", "root crops"],
-      img: "/Hulo.png",
-      place: "Hulo"
-    },
-    {
-      name: "Pugad St. Monique Farmers Association",
-      location: "Pugad, Binangonan",
-      sold: "5k",
-      rank: 7,
-      categories: ["vegetables", "fruits"],
-      img: "/Pugad.png",
-      place: "Pugad"
-    },
-    {
-      name: "Tabing Dagat Farmers Association",
-      location: "T.Dagat, Binangonan",
-      sold: "4k",
-      rank: 8,
-      categories: ["meat", "milks & dairy"],
-      img: "/Tabingdagat.png",
-      place: "T.Dagat"
-    },
-    {
-      name: "Kaykansa Farmers Collective",
-      location: "Kaykansa, Binangonan",
-      sold: "3k",
-      rank: 9,
-      categories: ["grains", "vegetables"],
-      img: "/Kaykansa.png",
-      place: "Kaykansa"
-    },
-    {
-      name: "Kaysapon Agricultural Society",
-      location: "Kaysapon, Binangonan",
-      sold: "2k",
-      rank: 10,
-      categories: ["fruits", "root crops"],
-      img: "/Kaysapon.png",
-      place: "Kaysapon"
-    },
-    {
-      name: "Kaymaputi Farmers Guild",
-      location: "Kaymaputi, Binangonan",
-      sold: "1.5k",
-      rank: 11,
-      categories: ["rice", "grains"],
-      img: "/Kaymaputi.png",
-      place: "Kaymaputi"
-    },
-    {
-      name: "Pila-pila Farmers Association",
-      location: "Pila-pila, Binangonan",
-      sold: "1k",
-      rank: 12,
-      categories: ["vegetables", "milks & dairy"],
-      img: "/pila-pila.png",
-      place: "Pila-pila"
-    },
-    {
-      name: "Calumpang Farmers Association",
-      location: "Calumpang, Binangonan",
-      sold: "900",
-      rank: 13,
-      categories: ["fruits", "meat"],
-      img: "/calumpang.png",
-      place: "Calumpang"
-    },
-    {
-      name: "Halang Integrated Farmers Association",
-      location: "Halang, Binangonan",
-      sold: "800",
-      rank: 14,
-      categories: ["root crops", "vegetables"],
-      img: "/Halang.png",
-      place: "Halang"
-    },
-    {
-      name: "Tatala Farmers Association",
-      location: "Tatala, Binangonan",
-      sold: "700",
-      rank: 15,
-      categories: ["grains", "rice"],
-      img: "/tatala.png",
-      place: "Tatala"
-    },
-    {
-      name: "Mambog Farmers Association",
-      location: "Mambog, Binangonan",
-      sold: "600",
-      rank: 16,
-      categories: ["fruits", "vegetables"],
-      img: "/mambog.png",
-      place: "Mambog"
-    }
-  ];
 
   // Filter farmers based on selected filters
   const getFilteredFarmers = () => {
@@ -258,7 +108,7 @@ const Associations = () => {
     setCurrentPage(1);
   };
 
-  // NEW: Individual filter removal functions
+  // Individual filter removal functions
   const removeCategoryFilter = () => {
     setSelectedCategory("");
     setSelectedFilter("Relevance");
@@ -271,18 +121,21 @@ const Associations = () => {
     setCurrentPage(1);
   };
 
-  // NEW: Function to handle chat navigation with association data
-  const handleChatNavigation = (farmer) => {
-    navigate('/chatpage', {
+  // NEW: Function to handle View Shop navigation with association data
+  const handleViewShop = (farmer) => {
+    navigate('/view-shop', {
       state: {
-        associationName: farmer.name,
-        associationAvatar: farmer.img,
-        associationLocation: farmer.location,
-        associationCategories: farmer.categories,
-        associationSold: farmer.sold,
-        associationRank: farmer.rank,
-        associationPlace: farmer.place,
-        isAssociation: true // Flag to identify this as an association chat
+        associationData: {
+          id: farmer.rank,
+          img: farmer.img,
+          name: farmer.name,
+          tags: farmer.categories,
+          location: farmer.location,
+          followers: farmer.followers,
+          rating: farmer.rating,
+          responseRate: farmer.responseRate,
+          productsSold: farmer.productsSold,
+        }
       }
     });
   };
@@ -328,17 +181,13 @@ const Associations = () => {
                         ))}
                       </div>
                     </div>
-                    <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                      <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                    <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-gray-600">
+                      <button 
+                        onClick={() => handleViewShop(farmer)}
+                        className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-full border-r hover:bg-[#3c9d3f] transition-colors"
+                      >
                         <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                         View Shop
-                      </button>
-                      <button 
-                        onClick={() => handleChatNavigation(farmer)}
-                        className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
-                      >
-                        <img src="/chat.png" alt="chat" className="w-5 h-5" />        
-                        Chat Now
                       </button>
                     </div>
                   </div>
@@ -491,17 +340,13 @@ const Associations = () => {
                     ))}
                   </div>
                 </div>
-                <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-black">
-                  <button className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-1/2 border-r border-black">
+                <div className="w-full flex rounded-b-2xl overflow-hidden border-t border-gray-600">
+                  <button 
+                    onClick={() => handleViewShop(farmer)}
+                    className="flex items-center justify-center gap-2 bg-[#4CAE4F] text-white text-[16px] font-semibold py-3 w-full border-r hover:bg-[#3c9d3f] transition-colors"
+                  >
                     <img src="/shopp.png" alt="shop" className="w-5 h-5" />
                     View Shop
-                  </button>
-                  <button  
-                    onClick={() => handleChatNavigation(farmer)}
-                    className="flex items-center justify-center gap-2 bg-white text-[#4CAE4F] text-[16px] font-semibold py-3 w-1/2"
-                  >
-                    <img src="/chat.png" alt="chat" className="w-5 h-5" />        
-                    Chat Now
                   </button>
                 </div>
               </div>
