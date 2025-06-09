@@ -79,7 +79,6 @@ const MainHeader = ({ profileImage = "/account.png", onSearch }) => {
         <div className="flex gap-4">
           <Link to="/about-us">
           <a href="#" className="text-base font-semibold hover:underline">About Us</a></Link>
-         <Link to="/seller-center" className="text-base font-semibold hover:underline">Seller Center</Link>
         </div>
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
