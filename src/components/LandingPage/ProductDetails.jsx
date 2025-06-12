@@ -189,35 +189,45 @@ console.log(product)
           <div className="flex mt-2 gap-4 flex-wrap">
             <span className="font-semibold pr-3">Variation:</span>
             {product.variations && product.variations.length > 0 && product.variations.map((variation, index) => {
-              // Find main image or first image
-              const mainImageObj = variation.images && variation.images.length > 0
-                ? variation.images.find(img => img.is_main) || variation.images[0]
-                : null;
+  // Find main image or first image
+  const mainImageObj = variation.images && variation.images.length > 0
+    ? variation.images.find(img => img.is_main) || variation.images[0]
+    : null;
 
-              return (
-                <div
-                  key={variation.id || index}
-                  onClick={() => setSelectedVariation(variation)}
-                  className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
-                    selectedVariation && selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
-                  }`}
-                >
-                  {mainImageObj ? (
-                    <img
-                      src={mainImageObj.image}
-                      alt={variation.name}
-                      className="w-11 h-11 mr-2 object-contain"
-                    />
-                  ) : (
-                    <div className="w-11 h-11 mr-2 bg-gray-100 flex items-center justify-center rounded">
-                      {/* placeholder or icon if no image */}
-                      <span className="text-gray-400 text-xs">No Image</span>
-                    </div>
-                  )}
-                  <span className="whitespace-nowrap">{variation.name}</span>
-                </div>
-              );
-            })}
+  // Build the image source
+  const imageSrc = mainImageObj?.image?.startsWith("https")
+    ? mainImageObj.image
+    : `${BASE_URL}/media/${mainImageObj?.image}`;
+
+  return (
+    <div
+      key={variation.id || index}
+     onClick={() => {
+  setSelectedVariation(variation);
+  const newMainImage =
+    variation.images?.find(img => img.is_main) || variation.images?.[0] || null;
+  handleImageChange(newMainImage);
+}}
+      className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
+        selectedVariation && selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
+      }`}
+    >
+      {mainImageObj ? (
+        <img
+          src={imageSrc}
+          alt={variation.name}
+          className="w-11 h-11 mr-2 object-contain"
+          onClick={() => handleImageChange(selectedVariation.images)}
+        />
+      ) : (
+        <div className="w-11 h-11 mr-2 bg-gray-100 flex items-center justify-center rounded">
+          <span className="text-gray-400 text-xs">No Image</span>
+        </div>
+      )}
+      <span className="whitespace-nowrap">{variation.name}</span>
+    </div>
+  );
+})}
           </div>
         </div>
 

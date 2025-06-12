@@ -16,13 +16,16 @@ const Marketplace = () => {
   const [selectedProductName, setSelectedProductName] = useState('');
   const navigate = useNavigate();
 
-  useEffect(() => {
-    api.get("/products/landing-page/")
-      .then(res => setProducts(res.data))
-      .catch(err => setError(err.message || "Error fetching products"))
-      .finally(() => setLoading(false));
-      console.log(products)
-  }, []);
+useEffect(() => {
+  api.get("/products/landing-page/")
+    .then(res => {
+      setProducts(res.data);
+      console.log('landing products', res.data);
+    })
+    .catch(err => setError(err.message || "Error fetching products"))
+    .finally(() => setLoading(false));
+}, []);
+
 
   // Show error if there's an error
   if (error) return <div>Error: {error}</div>;

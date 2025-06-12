@@ -18,7 +18,10 @@ const ProductCard = ({
 
   return (
     <div
-      onClick={handleCardClick}
+      onClick={() => {
+        console.log('Card clicked', product); // or any relevant data
+        handleCardClick();
+      }}
       className="bg-white rounded-xl shadow-md p-4 text-left cursor-pointer transition hover:scale-105 hover:outline hover:outline-green-500 hover:outline-2 hover:shadow-[0_0_10px_2px_rgba(76,174,79,0.5)] flex flex-col justify-between h-full"
     >
       {/* Category Badge */}
@@ -27,10 +30,17 @@ const ProductCard = ({
       </span>
       {/* Product Image */}
       <img
-        src={product.images?.image ? product.images.image : "/placeholder.png"}
-        alt={product.name}
-        className="w-full h-40 object-cover rounded-xl"
-      />
+     src={
+          product.images?.image
+            ? product.images.image.startsWith("https")
+              ? product.images.image
+              : `${BASE_URL}/media/${product.images.image}`
+            : `${BASE_URL}/placeholder.png`
+        }
+
+      alt={product.name}
+      className="w-full h-40 object-cover rounded-xl"
+    />
       {/* Product Name */}
       <p className="text-left font-semibold text-lg mt-2">
         {product.name}
