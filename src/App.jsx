@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useNavigate } from "react-router-dom";
 import SignUpPage from "./components/SignUp/SignUpPage";
 import NextStep from "./components/SignUp/NextStep";
 import SetPassword from "./components/SignUp/SetPassword";
@@ -17,8 +17,8 @@ import ProductDetails from "./components/LandingPage/ProductDetails";
 import OrderLayout from "./components/Layout/OrderLayout";
 import CartPage from "./components/Cart/CartPage";
 import ChatPage from "./components/Chat/ChatPage";
-import CheckoutPage from "./components/Checkout/CheckoutPage";
-import CheckoutSuccess from "./components/Checkout/CheckoutSuccess";
+import CheckOutPage from "./components/CheckOut/CheckOutPage";
+import CheckOutSuccess from "./components/CheckOut/CheckOutSuccess";
 import SearchProduct from "./components/LandingPage/SearchProduct"; 
 import SearchedFarmers from "./components/LandingPage/SearchedFarmers"; 
 import NoResults from "./components/LandingPage/NoResults"; 
@@ -29,15 +29,11 @@ import YourDailyBinhiNeeds from './components/LandingPage/YourDailyBinhiNeeds';
 import SearchProductWithAccount from "./components/LandingPageWithAccount/SearchProductWithAccount";
 import OrderManagement from "./components/SellerCenter/OrderManagement";
 import AboutUsPage from "./components/LandingPage/AboutUsPage";
-import ViewFarmers from "./components/LandingPage/ViewFarmers"; 
+import ViewShop from "./components/LandingPage/ViewShop"; 
 import NotFoundPage from "./components/UI/NotFoundPage";
 import ProtectedRoute from "./components/ProtectedRoute";
-
-const handleSearch = (query) => {
-  if (query.trim()) {
-    navigate(`/search-product-account?query=${encodeURIComponent(query.trim())}`);
-  }
-};
+import Associations from "./components/LandingPage/Associations";
+import HelpCenter from "./components/LandingPage/HelpCenter";
 
 function App() {
   return (
@@ -52,28 +48,34 @@ function App() {
         <Route path="/create-new-password" element={<InitialLayout><CreateNewPassword /></InitialLayout>} />
         <Route path="/verify-code" element={<InitialLayout><VerifyCode /></InitialLayout>} />
         <Route path="/product/:productSlug" element={<MainLayout><ProductDetails /></MainLayout>} />
-        <Route path="/" element={<MainLayout onSearch={handleSearch}><Marketplace /></MainLayout>} />
-        <Route path="/userprofile" element={<MainLayout><UserProfilePage/></MainLayout>} />
-        <Route path="/orderhistory" element={<OrderLayout><OrderHistory/></OrderLayout>} />
-        <Route path="/cartpage" element={<ProtectedRoute><OrderLayout><CartPage /></OrderLayout></ProtectedRoute>} />
-        <Route path="/chatpage" element={<OrderLayout><ChatPage/></OrderLayout>} />
-        <Route path="/checkoutpage" element={<OrderLayout><CheckoutPage/></OrderLayout>} />
-        <Route path="/checkout-success" element={<OrderLayout><CheckoutSuccess /></OrderLayout>} />
-        <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
-        <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
+        <Route path="/" element={<MainLayout><Marketplace /></MainLayout>} />
+        <Route path="/user-profile" element={<MainLayout><UserProfilePage/></MainLayout>} />
+        <Route path="/orderhistory" element={<ProtectedRoute><MainLayout><OrderHistory/></MainLayout></ProtectedRoute>} />
+        <Route path="/cartpage" element={<ProtectedRoute><MainLayout><CartPage /></MainLayout></ProtectedRoute>} />
+        <Route path="/chatpage" element={<MainLayout><ChatPage/></MainLayout>} />
+        <Route path="/checkoutpage" element={<MainLayout><CheckOutPage/></MainLayout>} />
+        <Route path="/checkout-success" element={<MainLayout><CheckOutSuccess /></MainLayout>} />
+        <Route path="/search-product" element={<MainLayout><SearchProduct /></MainLayout>} />
+        <Route path="/searched-farmers" element={<MainLayout><SearchedFarmers /></MainLayout>} />
         <Route path="/no-results" element={<MainLayout><NoResults /></MainLayout>} />
         <Route path="/marketplace" element={<MarketplaceWithAccount />} />
         <Route path="/featured-products" element={<FeaturedProducts />} />
         <Route path="/seller-center" element={<SellerCenter />} />
+        <Route path="/view-shop" element={<ViewShop />} />
         <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
+        {/* Fixed route - use consistent naming */}
+        <Route path="/search-products" element={<SearchProductWithAccount />} />
         <Route path="/search-product-account" element={<SearchProductWithAccount />} />
+        <Route path="/search-products-with-account" element={<SearchProductWithAccount />} />
         <Route path="/order-management" element={<OrderManagement/>} />
         <Route path="/about-us" element={<MainLayout><AboutUsPage/></MainLayout>} />
+        <Route path="/help-center" element={<MainLayout><HelpCenter/></MainLayout>} />
         <Route path="*" element={<MainLayout><NotFoundPage /></MainLayout>}/>
         <Route path="/withAccount" element={<MarketplaceWithAccount />}/>
+        <Route path="/associations" element={<Associations />}/>
       </Routes>
     </Router>
   );
 }
 
-  export default App;
+export default App;

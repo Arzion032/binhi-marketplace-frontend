@@ -1,25 +1,11 @@
-const handleCancelOrder = (cancelData) => {
-    console.log("Submitting cancel request:", cancelData);
-    
-    setOrders(prevOrders => 
-      prevOrders.map(order => 
-        order.id === selectedOrder?.id 
-          ? { ...order, status: "Cancelled" }
-          : order
-      )
-    );
-    
-    if (selectedOrder) {
-      setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
-    }
-    
-    setShowCancelModal(false);
-    alert("Order cancelled successfully!");
-  };import React, { useState } from 'react';
+
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import OrderDetailsModal from './OrderDetailsModal';
 import ReturnRefundModal from './ReturnRefundModal';
 import CancelOrderModal from './CancelOrderModal';
+import api from '../../api';
+import OrderItem from './OrderItem';
 
 const OrderHistory = () => {
   const [selectedTab, setSelectedTab] = useState("All");
@@ -28,75 +14,10 @@ const OrderHistory = () => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [orders, setOrders] = useState([]);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true)
 
-  // Mock navigation function for demo
-  const navigate = (path) => {
-    console.log(`Navigating to: ${path}`);
-  };
-
-  // Enhanced state with delivery fee, weight, and variations
-  const [orders, setOrders] = useState([
-    {
-      id: 1,
-      orderId: "23149MF260",
-      name: "Freshly Home Made Butter with Chocolate Inside",
-      image: "Butter.png",
-      quantity: 1,
-      price: 53.0,
-      weight: 0.5, // in kg
-      variation: "Dark Chocolate",
-      status: "Delivered",
-      sellerName: "Carla Pasig",
-      sellerProfile: "/avatar.png",
-      deliveryFee: 15.0,
-      orderDate: "2025-03-31",
-      deliveryAddress: {
-        name: "Juan Dela Cruz",
-        phone: "(+63) 948 122 9142",
-        address: "Brgy. Mambog Binangonan, Rizal, 1940"
-      }
-    },
-    {
-      id: 2,
-      orderId: "23149MF261",
-      name: "Premium Farm Fresh Sweet Corn",
-      image: "Mais.png",
-      quantity: 2,
-      price: 35.0,
-      weight: 1.2, // in kg
-      variation: "Yellow Corn",
-      status: "Pending",
-      sellerName: "John Farmer",
-      sellerProfile: "/avatar.png",
-      deliveryFee: 20.0,
-      orderDate: "2025-04-01",
-      deliveryAddress: {
-        name: "Juan Dela Cruz",
-        phone: "(+63) 948 122 9142",
-        address: "Brgy. Mambog Binangonan, Rizal, 1940"
-      }
-    },
-    {
-      id: 3,
-      orderId: "23149MF262",
-      name: "Organic Free-Range Eggs",
-      image: "Butter.png", // Using butter as placeholder
-      quantity: 1,
-      price: 120.0,
-      weight: 0.8, // in kg
-      variation: "Large Size (12 pieces)",
-      status: "Delivered",
-      sellerName: "Maria Santos",
-      sellerProfile: "/avatar.png",
-      deliveryFee: 25.0,
-      orderDate: "2025-03-28",
-      deliveryAddress: {
-        name: "Juan Dela Cruz",
-        phone: "(+63) 948 122 9142",
-        address: "Brgy. Mambog Binangonan, Rizal, 1940"
-      }
-    }
-  ]);
 
   const handleCancelOrder = (cancelData) => {
     console.log("Submitting cancel request:", cancelData);
@@ -104,33 +25,59 @@ const OrderHistory = () => {
     setOrders(prevOrders => 
       prevOrders.map(order => 
         order.id === selectedOrder?.id 
-          ? { ...order, status: "Cancelled" }
+          ? { ...order, status: "cancelled" }
           : order
       )
     );
     
     if (selectedOrder) {
-      setSelectedOrder({ ...selectedOrder, status: "Cancelled" });
+      setSelectedOrder({ ...selectedOrder, status: "cancelled" });
     }
     
     setShowCancelModal(false);
-    alert("Order cancelled successfully!");
+    alert("Order Cancelled Successfully!");
+  };
+  
+  useEffect(() => {
+    const fetchOrderHistory = async () => {
+      try {
+        const response = await api.get('/orders/order-history/');
+        setOrders(response.data);
+        setLoading(false);
+        console.log('Orders: ', orders)
+      } catch (err) {
+        setError('Failed to load order history');
+        setLoading(false);
+      }
+    };
+
+    fetchOrderHistory();
+  }, []);
+
+  // Mock navigation function for demo
+  const navigate = (path) => {
+    console.log(`Navigating to: ${path}`);
   };
 
-  const filteredOrders = orders.filter(order => {
-    const matchesTab = selectedTab === "All" || order.status === selectedTab;
-    
-    const matchesSearch = searchQuery === "" || 
-      order.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.sellerName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.orderId.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      order.variation.toLowerCase().includes(searchQuery.toLowerCase());
-    
-    return matchesTab && matchesSearch;
-  });
+
+ const filteredOrders = orders.filter(order => {
+  console.log(order);
+
+  // Normalize both to lowercase to handle case insensitivity
+  const matchesTab = selectedTab.toLowerCase() === "all" || order.status.toLowerCase() === selectedTab.toLowerCase();
+
+  // Check if searchQuery matches any of the fields (sellerName, orderId, or any item name)
+  const matchesSearch = searchQuery === "" || 
+    (order.sellerName && order.sellerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    (order.orderId && order.orderId.toLowerCase().includes(searchQuery.toLowerCase())) ||
+    order.items.some(item => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
+
+  return matchesTab && matchesSearch;
+});
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
+  
   };
 
   const clearSearch = () => {
@@ -139,15 +86,15 @@ const OrderHistory = () => {
 
   const getStatusColor = (status) => {
     switch(status) {
-      case "Delivered": return "bg-[#4CAE4F]";
-      case "Cancelled": return "bg-red-500";
-      case "Returned": return "bg-gray-500";
+      case "delivered": return "bg-[#4CAE4F]";
+      case "cancelled": return "bg-red-500";
+      case "returned": return "bg-gray-500";
       default: return "bg-[#D1A157]";
     }
   };
 
   const canCancelOrder = (status) => {
-    return ["Pending", "Confirmed"].includes(status);
+    return ["pending", "confirmed"].includes(status);
   };
 
   // Calculate total for each order
@@ -156,11 +103,27 @@ const OrderHistory = () => {
     return subtotal + order.deliveryFee;
   };
 
-  // Handler for successful refund submission
-  const handleRefundSuccess = (refundData) => {
-    console.log("Refund request submitted:", refundData);
-    setShowReturnRefundModal(false);
-    alert("Refund request submitted successfully!");
+   const handleVoiceSearch = () => {
+    // Voice search functionality - placeholder for now
+    if ('webkitSpeechRecognition' in window) {
+      const recognition = new window.webkitSpeechRecognition();
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.lang = 'en-US';
+
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        setSearchQuery(transcript);
+      };
+
+      recognition.onerror = (event) => {
+        console.error('Speech recognition error:', event.error);
+      };
+
+      recognition.start();
+    } else {
+      alert('Voice search is not supported in your browser');
+    }
   };
 
   return (
@@ -201,7 +164,7 @@ const OrderHistory = () => {
                 ✕
               </button>
             )}
-            <button>
+            <button onClick={handleVoiceSearch}>
               <img src="/mic.png" alt="Mic" className="w-8 h-8 hover:scale-110" />
             </button>
           </div>
@@ -211,7 +174,7 @@ const OrderHistory = () => {
       <div className="w-[1750px] mx-10 items-center h-[3px] bg-gray-300 mb-6 mt-6" />
 
       {/* Orders Section */}
-      <div className="bg-white mx-10 border-2 border-gray-300 rounded-xl shadow-md p-6">
+      <div className="bg-white mx-10 border-2 border-gray-300 rounded-xl p-6">
         <div className="flex justify-between items-start border-b pb-4 gap-2">
           <div className="flex flex-wrap gap-[100px] mx-10 flex-1">
             {["All", "Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled", "Returned"].map(tab => (
@@ -251,97 +214,18 @@ const OrderHistory = () => {
             </div>
           ) : (
             filteredOrders.map(order => (
-              <div key={order.id} className="flex flex-col border-2 border-gray-300 transition p-4 rounded-xl bg-white shadow-sm relative">
-                {/* Seller Info */}
-                <div className="flex items-center justify-between mb-2">
-                  <div className="flex items-center gap-2">
-                    <img
-                      src={order.sellerProfile || "/default-profile.png"} 
-                      alt="Seller"
-                      className="w-8 h-8 rounded-full object-cover"
-                    />
-                    <p className="text-sm font-medium text-gray-700">{order.sellerName}</p>
-                    <button className="text-gray-500 text-base font-medium px-3 py-2 rounded-full transition">
-                      Click here to chat
-                    </button>
-                    <button className="flex items-center gap-2 hover:bg-green-700 hover:text-white text-[#4CAE4F] text-sm font-medium px-3 py-2 border border-[#4CAE4F] rounded-full transition">
-                      <img src="/shoppp.png" alt="Shop" className="w-5 h-5" /> View Shop
-                    </button>
-                  </div>
 
-                  <div className="flex items-center gap-4">
-                    <span className="text-xs text-gray-500">ID: {order.orderId}</span>
-                    <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${getStatusColor(order.status)}`}>
-                      {order.status}
-                    </span>
-                  </div>
-                </div>
+              <OrderItem
+                  key={order.id}
+                  order={order}
+                  setSelectedOrder={setSelectedOrder}
+                  setShowViewOrderModal={setShowViewOrderModal}
+                  setShowCancelModal={setShowCancelModal}
+                  setShowReturnRefundModal={setShowReturnRefundModal}
+                  canCancelOrder={canCancelOrder}
+                  getStatusColor={getStatusColor}
+                />
 
-                <div className="w-full h-[2px] bg-gray-300 mb-4 mt-2" />
-                
-                <div className="flex justify-between items-start w-full">
-                  <div className="flex gap-4">
-                    <img
-                      src={order.image}
-                      alt={order.name}
-                      className="w-24 h-24 rounded-lg object-cover"
-                    />
-
-                    <div className="flex flex-col justify-between">
-                      <div>
-                        <p className="text-2xl font-semibold">{order.name}</p>
-                        <p className="text-sm text-gray-600">Variation: {order.variation}</p>
-                        <p className="text-sm text-gray-600">Weight: {order.weight} kg</p>
-                        <p className="text-lg text-gray-500 mt-2">Quantity: {order.quantity}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col items-end justify-between h-full">
-                    <div className="text-right">
-                      <p className="text-sm text-gray-500">Unit Price: ₱{order.price.toFixed(2)}</p>
-                      <p className="text-sm text-gray-500">Delivery: ₱{order.deliveryFee.toFixed(2)}</p>
-                      <p className="text-xl font-bold text-[#4CAE4F] mt-2">Total: ₱{calculateTotal(order).toFixed(2)}</p>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="flex justify-end mt-6 gap-4">
-                  <button
-                    onClick={() => {
-                      setSelectedOrder(order);
-                      setShowViewOrderModal(true);
-                    }}
-                    className="w-[130px] hover:bg-green-600 hover:text-white text-sm text-[#4CAE4F] font-bold py-2 px-2 border border-[#4CAE4F] rounded-full transition-all"
-                  >
-                    Order Details
-                  </button>
-
-                  {canCancelOrder(order.status) && (
-                    <button
-                      onClick={() => {
-                        setSelectedOrder(order);
-                        setShowCancelModal(true);
-                      }}
-                      className="w-[130px] hover:bg-orange-600 hover:text-white text-sm text-orange-500 font-bold py-2 px-2 border border-orange-500 rounded-full transition-all"
-                    >
-                      Cancel Order
-                    </button>
-                  )}
-
-                  {order.status === "Delivered" && (
-                    <button
-                      onClick={() => {
-                        setSelectedOrder(order);
-                        setShowReturnRefundModal(true);
-                      }}
-                      className="w-[150px] hover:bg-red-600 hover:text-white text-sm text-red-500 font-bold py-2 px-2 border border-red-500 rounded-full transition-all"
-                    >
-                      Request Refund
-                    </button>
-                  )}
-                </div>
-              </div>
             ))
           )}
         </div>
@@ -390,7 +274,7 @@ const OrderHistory = () => {
       <div className="group fixed bottom-10 right-10 z-50">
         <button
           onClick={() => navigate('/ChatPage')}
-          className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full shadow-lg relative"
+          className="bg-[#4CAE4F] hover:bg-green-700 text-white p-4 rounded-full relative"
         >
           <img src="/chaticon.png" alt="Chat Icon" className="w-8 h-8" />
         </button>

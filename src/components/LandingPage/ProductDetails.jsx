@@ -17,6 +17,7 @@ const ProductDetails = () => {
   const tags = ["vegetables", "root crops", "grains", "meat"];
   const [price, setPrice] = useState(null)
   const [unit, setUnit] = useState('')
+  const [showVariationError, setShowVariationError] = useState(false);
   const showModalToast = () => {
     setShowToast(true);
     setTimeout(() => setShowToast(false), 700);
@@ -38,26 +39,26 @@ useEffect(() => {
   }
 }, [product]);
 
+const handleAddToCart = async () => {
 
-
-useEffect(() => {
-  if (selectedVariation && selectedVariation.images && selectedVariation.images.length > 0) {
-    // Set mainImage to the main image object or fallback to first image
-    const mainImg = selectedVariation.images.find(img => img.is_main) || selectedVariation.images[0];
-    setMainImage(mainImg);
-    setPrice(selectedVariation.unit_price)
-    setUnit(selectedVariation.unit_measurement)
-  } else {
-    setMainImage(null); // or some fallback image object if you want
+    // Check if variation is required and selected
+  if (product.variations && product.variations.length > 0 && !selectedVariation) {
+    setShowVariationError(true);
+    setTimeout(() => setShowVariationError(false), 3000);
+    return;
   }
-}, [selectedVariation]);
 
-
-  const [tasks, setTasks] = useState([
-    { id: 1, text: 'Buy 2 sacks', completed: true },
-    { id: 2, text: 'Follow Jonathan\'s Shop', completed: false },
-  ]);
-  const [selectedFilter, setSelectedFilter] = useState("All");
+  try {
+    const response = await api.post("/cart/add_to_cart/", {
+      variation_id: selectedVariation.id,
+      quantity: quantity.toString(), // make sure it's a string if backend expects it
+    });
+    console.log("Item added:", response.data);
+    showModalToast(); // show success toast/modal
+  } catch (error) {
+    console.error("Failed to add to cart:", error.response?.data || error.message);
+  }
+};
 
 const incrementQuantity = () => {
   setQuantity(prev => {
@@ -117,7 +118,7 @@ console.log(product)
             <div className="rounded-lg overflow-hidden mb-4">
               {mainImage ? (
                 <img
-                  src={BASE_URL + mainImage.image}
+                  src={mainImage.image}
                   alt={product.name}
                   className="h-[400px] object-contain"
                 />
@@ -143,7 +144,7 @@ console.log(product)
                   }`}
                 >
                   <img
-                    src={BASE_URL + image.image}
+                    src={image.image}
                     alt={`Thumbnail ${index + 1}`}
                     className="w-full h-full object-cover"
                   />
@@ -188,37 +189,54 @@ console.log(product)
           <div className="flex mt-2 gap-4 flex-wrap">
             <span className="font-semibold pr-3">Variation:</span>
             {product.variations && product.variations.length > 0 && product.variations.map((variation, index) => {
-              // Find main image or first image
-              const mainImageObj = variation.images && variation.images.length > 0
-                ? variation.images.find(img => img.is_main) || variation.images[0]
-                : null;
+  // Find main image or first image
+  const mainImageObj = variation.images && variation.images.length > 0
+    ? variation.images.find(img => img.is_main) || variation.images[0]
+    : null;
 
-              return (
-                <div
-                  key={variation.id || index}
-                  onClick={() => setSelectedVariation(variation)}
-                  className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
-                    selectedVariation && selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
-                  }`}
-                >
-                  {mainImageObj ? (
-                    <img
-                      src={BASE_URL + mainImageObj.image}
-                      alt={variation.name}
-                      className="w-11 h-11 mr-2 object-contain"
-                    />
-                  ) : (
-                    <div className="w-11 h-11 mr-2 bg-gray-100 flex items-center justify-center rounded">
-                      {/* placeholder or icon if no image */}
-                      <span className="text-gray-400 text-xs">No Image</span>
-                    </div>
-                  )}
-                  <span className="whitespace-nowrap">{variation.name}</span>
-                </div>
-              );
-            })}
+  // Build the image source
+  const imageSrc = mainImageObj?.image?.startsWith("https")
+    ? mainImageObj.image
+    : `${BASE_URL}/media/${mainImageObj?.image}`;
+
+  return (
+    <div
+      key={variation.id || index}
+     onClick={() => {
+  setSelectedVariation(variation);
+  const newMainImage =
+    variation.images?.find(img => img.is_main) || variation.images?.[0] || null;
+  handleImageChange(newMainImage);
+}}
+      className={`border-2 bg-white rounded-xl px-4 py-1 flex items-center cursor-pointer transition ${
+        selectedVariation && selectedVariation.name === variation.name ? 'border-green-500' : 'border-gray-400'
+      }`}
+    >
+      {mainImageObj ? (
+        <img
+          src={imageSrc}
+          alt={variation.name}
+          className="w-11 h-11 mr-2 object-contain"
+          onClick={() => handleImageChange(selectedVariation.images)}
+        />
+      ) : (
+        <div className="w-11 h-11 mr-2 bg-gray-100 flex items-center justify-center rounded">
+          <span className="text-gray-400 text-xs">No Image</span>
+        </div>
+      )}
+      <span className="whitespace-nowrap">{variation.name}</span>
+    </div>
+  );
+})}
           </div>
         </div>
+
+        {showVariationError && (
+            <div className="mt-2 text-red-500 text-base font-medium">
+              Please select a variation before adding to cart.
+            </div>
+          )}
+    
 
             {/* Quantity Selector */}
             <div className="mt-6 flex items-center">
@@ -246,7 +264,7 @@ console.log(product)
             {/* Action Buttons */}
             <div className="mt-10 flex gap-4">
           <button
-            onClick={showModalToast}
+            onClick={handleAddToCart}
             className="border border-green-700 font-medium text-green-600 px-6 py-2 rounded-full w-[320px] h-[53px] flex items-center justify-center gap-2"
           >
             <img src="/shopping-cart.png" alt="shopping cart" className="w-5 h-5" />
@@ -286,7 +304,7 @@ console.log(product)
 
         {/* Seller Info */}
 
-      <VendorDetails selectedFilter={selectedFilter} product={product} tags={tags} />     
+      <VendorDetails product={product} tags={tags} />     
 
 {/* Recommendations */}
 <div className="mt-10 w-full">
@@ -379,7 +397,7 @@ console.log(product)
           name: product.name,
           price: parseFloat(currentPrice.toString().replace(/[₱,]/g, "")),
           quantity: quantity,
-          image: BASE_URL + (mainImage?.image || ''),
+          image: (mainImage?.image || ''),
           variation: currentVariation?.name || 'Default',
           seller: product.seller?.name || 'Unknown Seller',
           orderId: `PD-${Date.now()}`,

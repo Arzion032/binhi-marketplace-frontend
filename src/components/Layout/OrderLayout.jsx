@@ -11,10 +11,7 @@ const OrderLayout = ({ children }) => {
       </div>
 
       {/* Background */}
-      <div
-        className="absolute inset-0 bg-cover bg-center z-20"
-        style={{ backgroundImage: "url('background.jpg')" }}
-      ></div>
+      <div className="absolute inset-0 bg-cover bg-center z-20"></div>
 
       {/* Main Content */}
       <div className="relative z-20">

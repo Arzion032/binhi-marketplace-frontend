@@ -8,4 +8,4 @@ const LoadingScreen = () => {
   )
 }
 
-export default LoadingScreen
+export default LoadingScreen;

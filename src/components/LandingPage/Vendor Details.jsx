@@ -5,7 +5,7 @@ const VendorDetails = ({ product, tags }) => {
   const navigate = useNavigate();
 
   return (
-    <div className="mt-10 border border-gray-300 rounded-3xl px-6 py-4 shadow-sm flex flex-col md:flex-row justify-between items-start gap-6 w-[1320px]">
+    <div className="mt-10 border border-gray-300 rounded-3xl px-6 py-4 shadow-sm flex flex-col md:flex-row justify-between items-start gap-6 w-full max-w-screen-xl">
       {/* LEFT SIDE: Image, Name, Active Now, Buttons */}
       <div className="flex items-start gap-4">
         <div className="relative">
@@ -46,10 +46,10 @@ const VendorDetails = ({ product, tags }) => {
             <img src="/map-pin.png" className="w-5 h-5" alt="Location" />
             <span>
               {product.vendor_address &&
-                `${product.vendor_address.street_address}, ${product.vendor_address.barangay}, ${product.vendor_address.city}`}
+                `${product.vendor_address.city}, ${product.vendor_address.barangay}`}
             </span>
           </div>
-            <div className="flex items-center gap-1">
+          <div className="flex items-center gap-1">
             <img src="/group-seller.png" className="w-5 h-5" alt="Products Sold" />
             <span>9k Products Sold</span>
           </div>

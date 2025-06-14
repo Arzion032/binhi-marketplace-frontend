@@ -1,5 +1,5 @@
 // src/api.js
-import axios from 'axios';
+import axios from "axios";
 
 export const BASE_URL = "http://127.0.0.1:8001";
 
@@ -25,11 +25,23 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
+    // Don't intercept login requests - let them handle their own errors
+    if (originalRequest.url?.includes("/users/login/")) {
+      return Promise.reject(error);
+    }
+
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
 
       try {
         const refreshToken = localStorage.getItem("refreshToken");
+
+        // If no refresh token, don't try to refresh
+        if (!refreshToken) {
+          localStorage.clear();
+          window.location.href = "/login";
+          return Promise.reject(error);
+        }
 
         const res = await axios.post(`${BASE_URL}/users/api/token/refresh/`, {
           refresh: refreshToken,

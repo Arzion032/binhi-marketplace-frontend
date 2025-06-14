@@ -85,11 +85,11 @@ const ReturnRefundModal = ({
             &times;
           </button>
           
-          <h2 className="text-3xl font-bold">Request a Refund</h2>
+          <h2 className="text-3xl font-black">Request a Refund</h2>
           <p className="text-sm text-gray-600 mt-1 mb-6">Please fill the form to request a refund.</p>
           <hr />  
           <p className="text-lg font-bold mt-4">Item(s) you want to refund.</p>
-          <div className="border border-black rounded-xl mt-2 p-4">
+          <div className="border border-gray-400 rounded-xl mt-2 p-4">
             <div className="flex items-center mb-3 gap-2">
               <img src="/avatar.png" className="w-6 h-6 rounded-full" />
               <span className="text-sm font-medium">{selectedOrder?.sellerName}</span>
@@ -112,7 +112,7 @@ const ReturnRefundModal = ({
             </div>
           </div>
 
-          <div className="border border-black mt-4 rounded-xl p-4">
+          <div className="border border-gray-400 mt-4 rounded-xl p-4">
             <p className="text-sm font-semibold mb-2">Why do you want to refund?</p>
             <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm mb-4">
               {['Wrong item received', 'Item is damaged/defective', 'Missing parts/accessories', 'Item did not arrive', 'Others'].map((reason) => (
@@ -132,14 +132,14 @@ const ReturnRefundModal = ({
                 <p className="text-sm font-semibold mb-2">Remarks or Notes</p>
                 <textarea
                   placeholder="Remarks or Notes"
-                  className="w-full h-28 border border-black rounded-xl p-3 text-sm"
+                  className="w-full h-28 border border-gray-400 rounded-xl p-3 text-sm"
                   value={refundNote}
                   onChange={(e) => setRefundNote(e.target.value)}
                 />
               </div>
               <div className="w-1/2">
                 <p className="text-sm font-semibold mb-2">Upload Image or Video</p>
-                <label className="h-28 border-2 border-black border-dashed rounded-xl flex items-center justify-center text-center text-sm text-gray-500 cursor-pointer">
+                <label className="h-28 border-2 border-bgray-400 border-dashed rounded-xl flex items-center justify-center text-center text-sm text-gray-500 cursor-pointer">
                   <input
                     type="file"
                     className="hidden"
@@ -187,7 +187,7 @@ const ReturnRefundModal = ({
           <p className="text-sm text-gray-600 mt-1 mb-6">Please fill the form to cancel your order.</p>
           <hr />  
           <p className="text-lg font-bold mt-4">Item(s) you want to cancel.</p>
-          <div className="border border-black rounded-xl mt-2 p-4">
+          <div className="border border-gray-400 rounded-xl mt-2 p-4">
             <div className="flex items-center mb-3 gap-2">
               <img src="/avatar.png" className="w-6 h-6 rounded-full" />
               <span className="text-sm font-medium">{selectedOrder?.sellerName}</span>
@@ -230,7 +230,7 @@ const ReturnRefundModal = ({
               <p className="text-sm font-semibold mb-2">Additional Notes (Optional)</p>
               <textarea
                 placeholder="Tell us more about why you're cancelling this order..."
-                className="w-full h-28 border border-black rounded-xl p-3 text-sm"
+                className="w-full h-28 border border-gray-400 rounded-xl p-3 text-sm"
                 value={cancelNote}
                 onChange={(e) => setCancelNote(e.target.value)}
               />
@@ -260,3 +260,4 @@ const ReturnRefundModal = ({
 };
 
 export default ReturnRefundModal;
+

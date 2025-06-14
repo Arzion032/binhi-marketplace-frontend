@@ -2,11 +2,11 @@ import React from "react";
 
 const FarmerCard = ({ farmer, className = "", style = {}, ...rest }) => {
   return (
-    <div
-      className={`bg-white rounded-2xl border-[3px] border-black-200 shadow-md w-[350px] text-center flex flex-col items-center justify-between relative ${className}`}
-      style={style}
-      {...rest}
-    >
+      <div
+        className={`bg-white rounded-2xl border-[3px] border-black-200 shadow-md w-[350px] text-center flex flex-col items-center justify-between relative ${className}`}
+        style={style}
+        {...rest}
+      >
       <div className="flex flex-col items-center justify-between h-full w-full">
         <div className="px-6 pt-6 pb-4 w-full flex-1 flex flex-col items-center">
           <div className="relative w-24 h-24">

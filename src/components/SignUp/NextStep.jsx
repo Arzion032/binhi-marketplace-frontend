@@ -1,42 +1,110 @@
 import React, { useState, useRef } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
+import api from "../../api"; // Assuming your api.js is in the parent directory
 
 const NextStep = () => {
   const navigate = useNavigate();
   const location = useLocation(); 
-  const email = location.state?.email || "your email"; 
+  const email = location.state?.email
 
-    const [codes, setCodes] = useState(new Array(6).fill(""));
-    const [error, setError] = useState(""); // Error state to display message
-    const inputsRef = useRef([]);
-  
-    const handleChange = (value, index) => {
-      if (!/^[0-9]?$/.test(value)) {
-        setError("Invalid verification code. Please try again");
-        return;
-      }
-      setError(""); // Reset error if valid input
-      const newCodes = [...codes];
-      newCodes[index] = value;
-      setCodes(newCodes);
-      if (value && index < 5) {
-        inputsRef.current[index + 1].focus();
-      }
-    };
-  
-    const handleKeyDown = (e, index) => {
-      if (e.key === "Backspace" && !codes[index] && index > 0) {
-        inputsRef.current[index - 1].focus();
-      }
-    };
-  
-    const handleSubmit = () => {
-      const code = codes.join("");
-      console.log("Submitted code:", code);
-      navigate("/create-new-password", {
-        state: { email },
+  const [codes, setCodes] = useState(new Array(6).fill(""));
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [resendLoading, setResendLoading] = useState(false);
+  const inputsRef = useRef([]);
+
+  const handleChange = (value, index) => {
+    if (!/^[0-9]?$/.test(value)) {
+      setError("Invalid verification code. Please try again");
+      return;
+    }
+    setError(""); // Reset error if valid input
+    const newCodes = [...codes];
+    newCodes[index] = value;
+    setCodes(newCodes);
+    if (value && index < 5) {
+      inputsRef.current[index + 1].focus();
+    }
+  };
+
+  const handleKeyDown = (e, index) => {
+    if (e.key === "Backspace" && !codes[index] && index > 0) {
+      inputsRef.current[index - 1].focus();
+    }
+  };
+
+  const handleSubmit = async () => {
+    const code = codes.join("");
+    
+    if (code.length !== 6) {
+      setError("Please enter the complete verification code");
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await api.post('/users/verify-email/', {
+        email: email,
+        code: code
       });
-    };
+
+      // Success - navigate to next step
+      navigate("/set-password", { state: { email: email } ,
+      });
+    } catch (error) {
+      console.error('Error verifying code:', error);
+      
+      // Handle different types of errors
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else if (error.response?.status >= 400) {
+        setError("Invalid verification code. Please try again.");
+      } else {
+        setError("Network error. Please check your connection and try again.");
+      }
+      
+      // Clear the code inputs on error
+      setCodes(new Array(6).fill(""));
+      inputsRef.current[0]?.focus();
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendCode = async () => {
+    setResendLoading(true);
+    setError("");
+
+    try {
+      await api.post('/users/resend-verification-code/', {
+        email: email
+      });
+
+      // Success - clear inputs and focus first input
+      setCodes(new Array(6).fill(""));
+      inputsRef.current[0]?.focus();
+      
+      // Optional: You could show a success message here
+      // setSuccessMessage("New verification code sent!");
+      
+    } catch (error) {
+      console.error('Error resending code:', error);
+      
+      // Handle different types of errors
+      if (error.response?.data?.error) {
+        setError(error.response.data.error);
+      } else if (error.response?.status >= 400) {
+        setError("Failed to resend verification code. Please try again.");
+      } else {
+        setError("Network error. Please check your connection and try again.");
+      }
+    } finally {
+      setResendLoading(false);
+    }
+  };
+
   return (
     <div className="bg-fixed min-h-screen bg-cover bg-center bg-no-repeat flex items-center justify-center font-inter px-4" style={{ backgroundImage: 'url("/background.jpg")' }}>
       <div className="bg-white rounded-3xl shadow-lg w-[1412px] h-[731px] p-10 relative flex flex-col" style={{ marginTop: '5 px' }}>
@@ -45,11 +113,12 @@ const NextStep = () => {
         <button
           className="absolute top-6 left-6 flex items-center text-gray-600 hover:text-black"
           onClick={() => navigate("/signup")}
+          disabled={loading || resendLoading}
         >
           <img src="/arrow-left-s-line.png" alt="Back" className="w-20 h-10" />
         </button>
 
-              {/* Step Indicator */}
+        {/* Step Indicator */}
         <div className="flex justify-center mb-5">
           <div className="flex items-center gap-4">
             {/* Step 1 - Active */}
@@ -84,7 +153,6 @@ const NextStep = () => {
           </div>
         </div>
 
-
         {/* Main Content */}
         <div className="text-center flex-grow flex flex-col">
           <div className="text-green-600 text-4xl mb-3">
@@ -115,6 +183,7 @@ const NextStep = () => {
               value={code}
               onChange={(e) => handleChange(e.target.value, i)}
               onKeyDown={(e) => handleKeyDown(e, i)}
+              disabled={loading || resendLoading}
             />
           ))}
         </div>
@@ -127,8 +196,12 @@ const NextStep = () => {
         {/* Resend Text */}
         <p className="text-center text-md text-gray-400">
           Didn't receive a code?{" "}
-          <button className="text-green-600 font-medium hover:underline">
-            Resend code
+          <button 
+            className="text-green-600 font-medium hover:underline disabled:opacity-50 disabled:cursor-not-allowed"
+            onClick={handleResendCode}
+            disabled={resendLoading || loading}
+          >
+            {resendLoading ? "Sending..." : "Resend code"}
           </button>
         </p>
 
@@ -136,10 +209,11 @@ const NextStep = () => {
         <div className="flex-grow"></div>
 
          <button
-          onClick={() => navigate("/set-password")}
-          className="w-[488px] h-[54px] bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto"
+          onClick={handleSubmit}
+          disabled={loading || resendLoading || codes.some(code => !code)}
+          className="w-[488px] h-[54px] bg-[#4CAE4F] text-white py-3 rounded-full hover:bg-green-700 transition mx-auto disabled:opacity-50 disabled:cursor-not-allowed"
         >
-          Next
+          {loading ? "Verifying..." : "Next"}
         </button>
 
         </div>

@@ -1,24 +1,192 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import api, { BASE_URL } from '../../api';
+import api from '../../api';
 import LoadingScreen from '../UI/LoadingScreen';
+import OrderSummary from './OrderSummary';
+import CartItemsList from './CartItemsList';
 
 const CartPage = () => {
-  const [selectedItems, setSelectedItems] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [cartItems, setCartItems] = useState([]);
-
-  useEffect(() => {
-    api.get("/cart/my_cart/")
-      .then(res => setCartItems(res.data))
-      .catch(err => setError(err.message || "Error fetching cart items"))
-      .finally(() => setLoading(false));
-  }, []);
+  const [productVariations, setProductVariations] = useState({});
+  const debounceTimers = useRef({});
+  const [selectedItems, setSelectedItems] = useState([]);
+  const [searchQuery, setSearchQuery] = useState('');
+  const quantityMap = useRef({});
 
 
+useEffect(() => {
+  api.get("/cart/my_cart/")
+    .then(res => {
+      setCartItems(res.data);
+
+      // Fix: Map productId -> variations
+      const variationMap = {};
+      res.data.forEach(vendor => {
+        vendor.items.forEach(item => {
+          const productId = item.variation.product.id;
+          const variations = item.variation.product.variations || [];
+          variationMap[productId] = variations;
+        });
+      });
+      setProductVariations(variationMap); // productId -> [{id, name}]
+    })
+    .catch(err => setError(err.message || "Error fetching cart items"))
+    .finally(() => setLoading(false));
+}, []);
+  
+
+  const getItemByVariationId = (variationId) => {
+  for (const vendor of cartItems) {
+    const found = vendor.items.find(item => item.variation.id === variationId);
+    if (found) return found;
+  }
+  return null;
+};
+
+const handleQuantityChange = (variationId, amount) => {
+  // 1. Track the latest quantity manually
+  let newQuantity = 1;
+
+  setCartItems(prev =>
+    prev.map(vendor => ({
+      ...vendor,
+      items: vendor.items.map(item => {
+        if (item.variation.id === variationId) {
+          newQuantity = Math.max(1, item.quantity + amount);
+          quantityMap.current[variationId] = newQuantity;
+          return { ...item, quantity: newQuantity };
+        }
+        return item;
+      })
+    }))
+  );
+
+  // 2. Debounce the backend PATCH
+  if (debounceTimers.current[variationId]) {
+    clearTimeout(debounceTimers.current[variationId]);
+  }
+
+  debounceTimers.current[variationId] = setTimeout(async () => {
+    try {
+      const response = await api.patch(`/cart/update_cartitem/${variationId}/`, {
+        quantity: quantityMap.current[variationId]
+      });
+
+      const updated = response.data;
+
+      // 3. Sync total price and confirmed quantity
+      setCartItems(prev =>
+        prev.map(vendor => ({
+          ...vendor,
+          items: vendor.items.map(item =>
+            item.variation.id === variationId
+              ? {
+                  ...item,
+                  quantity: updated.quantity,
+                  total_price: updated.total_price,
+                  warning_message: updated.warning_message
+                }
+              : item
+          )
+        }))
+      );
+    } catch (err) {
+      console.error("Failed to update quantity:", err);
+    }
+  }, 500);
+};
+
+
+
+const handleVariationChange = async (oldVarId, newVariationId) => {
+  try {
+    const response = await api.patch(`/cart/update_cartitem/${oldVarId}/`, {
+      variation_id: newVariationId
+    });
+    
+    // The response contains the updated cart item with new variation data
+    const updatedItem = response.data;
+    
+    // Update the local state
+    setCartItems(prev =>
+      prev.map(vendor => ({
+        ...vendor,
+        items: vendor.items.map(item => {
+          if (item.variation.id === oldVarId) {
+            return {
+              ...item,
+              variation: updatedItem.variation,
+              quantity: updatedItem.quantity,
+              total_price: updatedItem.total_price,
+              warning_message: updatedItem.warning_message
+            };
+          }
+          return item;
+        })
+      }))
+    );
+    
+  } catch (error) {
+    console.error('Error updating variation:', error);
+    // Handle error (show toast, etc.)
+  }
+};
+
+  const handleDelete = async (id) => {
+    try {
+      // Delete from backend
+      await api.delete(`cart/remove_cartitem/${id}/`);
+      
+      // Remove from local state
+      setCartItems(prev => 
+        prev.map(vendor => ({
+          ...vendor,
+          items: vendor.items.filter(item => item.variation.id !== id)
+        })).filter(vendor => vendor.items.length > 0)  // Remove vendor if no items left
+      );
+      setSelectedItems(prev => prev.filter(itemId => itemId !== id));  // Remove item from selected
+    } catch (err) {
+      setError('Failed to remove item');
+      console.error('Error deleting item:', err);
+    }
+  };
+
+
+  const handleDeleteAll = () => {
+    const selectedItemsToDelete = cartItems.filter(item => selectedItems.includes(item.id));
+    if (selectedItemsToDelete.length > 0) {
+      const remainingItems = cartItems.filter(item => !selectedItems.includes(item.id));
+      setCartItems(remainingItems);
+      setSelectedItems([]);
+    }
+  };
+
+
+  const toggleVendorSelectAll = (vendorGroup) => {
+    const vendorItemIds = vendorGroup.items.map(item => item.variation.id);
+    const allSelected = vendorItemIds.every(id => selectedItems.includes(id));
+
+    if (allSelected) {
+      // Deselect all this vendor's items
+      setSelectedItems(prev => prev.filter(id => !vendorItemIds.includes(id)));
+    } else {
+      // Add all this vendor's items
+      setSelectedItems(prev => [...new Set([...prev, ...vendorItemIds])]);
+    }
+  };
+
+  const handleItemSelect = (itemId) => {
+    setSelectedItems(prev =>
+      prev.includes(itemId)
+        ? prev.filter(id => id !== itemId)
+        : [...prev, itemId]
+    );
+  };
+
+  // Search functionality
 const filteredCartItems = useMemo(() => {
   return cartItems
     .map(vendorGroup => {
@@ -48,81 +216,6 @@ const filteredCartItems = useMemo(() => {
     .filter(group => group !== null);
 }, [cartItems, searchQuery]);
 
-  const allCartItems = filteredCartItems.flatMap(vendor => vendor.items);
-  const selectedCartItems = allCartItems.filter(item =>
-    selectedItems.includes(item.variation.id)
-  );
-  const subtotal = selectedCartItems.reduce((sum, item) => {
-    const price = Number(item.variation.unit_price) || 0;
-    const qty = Number(item.quantity) || 1;
-    return sum + price * qty;
-  }, 0);
-  const total = subtotal
-
-  const handleItemSelect = (itemId) => {
-  setSelectedItems(prev => {
-    const updated = prev.includes(itemId)
-      ? prev.filter(id => id !== itemId)
-      : [...prev, itemId];
-
-    return updated; // ✅ Must return the new array!
-  });
-};
-
-useEffect(() => {
-  console.log('subtotal', subtotal);
-  console.log('selectedItems', selectedItems);
-  console.log('selectedCartItems', selectedCartItems);
-  console.log('all cart', allCartItems)
-}, [selectedCartItems, selectedItems]); // ✅ correct array syntax
-
-
-  const handleVariationChange = (id, newVariation) => {
-    setCartItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, variation: newVariation } : item
-      )
-    );
-  };
-
-  const handleDeleteAll = () => {
-    const selectedItemsToDelete = cartItems.filter(item => selectedItems.includes(item.id));
-    if (selectedItemsToDelete.length > 0) {
-      const remainingItems = cartItems.filter(item => !selectedItems.includes(item.id));
-      setCartItems(remainingItems);
-      setSelectedItems([]);
-    }
-  };
-
-
-  const toggleVendorSelectAll = (vendorGroup) => {
-    const vendorItemIds = vendorGroup.items.map(item => item.variation.id);
-    const allSelected = vendorItemIds.every(id => selectedItems.includes(id));
-
-    if (allSelected) {
-      // Deselect all this vendor's items
-      setSelectedItems(prev => prev.filter(id => !vendorItemIds.includes(id)));
-    } else {
-      // Add all this vendor's items
-      setSelectedItems(prev => [...new Set([...prev, ...vendorItemIds])]);
-    }
-  };
-
-
-
-// Fix the loading fallback return
-if (loading) {
-  return <LoadingScreen />;
-}
-
-// Fix null check
-if (!cartItems || !Array.isArray(cartItems)) {
-  return (
-    <div className="min-h-screen flex items-center justify-center text-red-500">
-      Error loading cart items.
-    </div>
-  );
-}
 
 
   const handleSearch = (e) => {
@@ -156,22 +249,69 @@ if (!cartItems || !Array.isArray(cartItems)) {
     // Camera search functionality - placeholder for now
     alert('Camera search feature coming soon!');
   };
+ const allCartItemsCopy = filteredCartItems.flatMap(vendor =>
+  vendor.items.map(item => ({
+    ...item,
+    vendor_id: vendor.vendor_id,
+    vendor_name: vendor.vendor_name,
+  }))
+);
+  const allCartItems = filteredCartItems.flatMap(vendor => vendor.items);
+  const selectedCartItems = allCartItemsCopy.filter(item => selectedItems.includes(item.variation.id));
 
-const handleQuantityChange = (id, amount) => {
-  setCartItems(prev =>
-    prev.map(vendorGroup => ({
-      ...vendorGroup,
-      items: vendorGroup.items.map(item =>
-        item.variation.id === id
-          ? { ...item, quantity: Math.max(1, item.quantity + amount) }
-          : item
-      )
-    }))
-  );
+  const calculateSubtotal = () => {
+    let subtotal = 0;
+    
+    filteredCartItems.forEach(vendorGroup => {
+      vendorGroup.items.forEach(item => {
+        // Check if this item is selected
+        if (selectedItems.includes(item.variation.id)) {
+          const unitPrice = parseFloat(item.variation.unit_price);
+          const quantity = item.quantity;
+          subtotal += unitPrice * quantity;
+        }
+      });
+    });
+    
+    return subtotal;
+  };
+
+  const subtotal = calculateSubtotal();
+  const total = subtotal;
+
+ const handleCheckout = () => {
+  if (selectedCartItems.length === 0) return;
+  console.log
+  // Check if any selected item has a warning message
+  const itemWithWarning = selectedCartItems.find(item => item.warning_message !== null);
+
+  if (itemWithWarning) {
+    // Show alert if there's a warning message in any item
+    alert('Some items in your cart exceed the available quantity. Please update your cart before proceeding to checkout.');
+
+
+    // Optional: You can also return or handle navigation to cart page for further updates
+    return; // Prevent checkout from continuing
+  }
+
+  // Prepare checkout data with proper field mapping
+  const checkoutData = {
+    items: selectedCartItems.map(item => ({
+      ...item,
+    })),
+    subtotal: subtotal,
+    discount: 0,
+    tax: 0,
+    total: subtotal,
+    paymentMethod: 'Cash on Delivery',
+    source: 'cart'
+  };
+
+  console.log('Checkout data being passed:', checkoutData); // For debugging
+  navigate('/checkoutpage', { state: { checkoutData } });
 };
 
-
-  if (cartItems.length === 0) {
+  if (cartItems && cartItems.length === 0) {
     return (
       <div className="min-h-screen bg-[#F5F9F5] flex flex-col items-center justify-center p-4">
         <div className="text-center">
@@ -195,32 +335,6 @@ const handleQuantityChange = (id, amount) => {
     );
   }
 
-if (!cartItems){
-  <LoadingScreen />
-}
-
-console.log(selectedItems)
-
-const handleDelete = async (variationId) => {
-  try {
-    await api.delete(`/cart/remove_cartitem/${variationId}/`);
-
-    // Optimistically update the local state
-    setCartItems(prev =>
-      prev.map(vendorGroup => {
-        const updatedItems = vendorGroup.items.filter(item => item.variation.id !== variationId);
-        return {
-          ...vendorGroup,
-          items: updatedItems
-        };
-      }).filter(group => group.items.length > 0) // remove empty vendor groups
-    );
-  } catch (err) {
-    console.error("Error deleting item:", err);
-    alert("Failed to delete item. Please try again.");
-  }
-};
-
 
 return (
   <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
@@ -235,8 +349,8 @@ return (
         </button>
         <div>
           <h1 className="text-4xl font-bold">Your Cart</h1>
-          You have {cartItems.reduce((total, vendor) => total + vendor.items.length, 0)} items in your cart, check out now!
-          
+          <p className="text-gray-600 text-lg">You have {allCartItems.length} items in your cart, check out now!</p>
+
         </div>
       </div>
       <div className="flex items-center px-4">
@@ -274,180 +388,57 @@ return (
     )}
 
     <div className="flex flex-col lg:flex-row gap-4 mx-10">
-      {/* LEFT SECTION */}
-      <div className="w-[1200px] xl:w-3/4 space-y-6">
-        {/* Header */}
-        <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-400 text-base text-black">
-          <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
-          <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
-          <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
-          <div className="w-[7%] text-center">ACTION</div>
-        </div>
 
-       {filteredCartItems.length > 0 ? (
-  filteredCartItems.map((vendorGroup) => {
-    const allSelectedForVendor = vendorGroup.items.every(item =>
-      selectedItems.includes(item.variation.id)
-    );
-
-    return (
-      <div key={vendorGroup.vendor_id} className="bg-white p-4 rounded-lg shadow border border-gray-400 space-y-4">
-        {/* Vendor Header */}
-        <div className="flex items-center gap-3">
-          <input 
-            type="checkbox" 
-            checked={allSelectedForVendor} 
-            onChange={() => toggleVendorSelectAll(vendorGroup)} 
-            className="w-5 h-5 mx-2"
-          />
-
-          <img 
-            src="/111.png" 
-            alt="Seller" 
-            className="w-12 h-12 rounded-full"
-            onError={(e) => { e.target.src = '/placeholder-avatar.png'; }}
-          />
-          <div className="flex flex-col">
-            <p className="text-lg font-bold">{vendorGroup.vendor_name}</p>
-            <Link to="/ChatPage">
-              <button className="text-base text-gray-500 underline hover:text-gray-700">
-                Click here to chat
-              </button>
-            </Link>
-
-          </div>
-          <button className="flex items-center gap-2 hover:bg-green-50 text-[#4CAE4F] border border-[#4CAE4F] text-sm font-medium px-3 py-2 rounded-full transition-colors">
-            <img src="/shoppp.png" className="w-5 h-5" alt="Shop" /> 
-            View Shop
-          </button>
-        </div>
-
-        {/* Items under this vendor */}
-        {vendorGroup.items.map((item) => {
-          const variation = item.variation;
-          const product = variation.product;
-
-          return (
-            <div key={variation.id} className="flex items-center border-t border-gray-400 pt-2 px-6 text-sm text-gray-700">
-              <div className="w-[35%] flex items-center gap-2 border-r border-gray-400 pr-8">
-                <input
-                  type="checkbox"
-                  checked={selectedItems.includes(variation.id)}
-                  onChange={() => handleItemSelect(variation.id)}
-                  className="w-4 h-4"
-                />
-                <img 
-                  src={BASE_URL + variation.main_image} 
-                  alt={product.name}
-                  className="w-12 h-12 rounded-lg object-cover"
-                  onError={(e) => { e.target.src = '/placeholder-product.png'; }}
-                />
-                <p className="font-bold text-lg ml-2">{product.name}</p>
-
-              </div>
-
-              <div className="w-[12%] text-center border-r border-gray-600 py-3 px-2">
-                <p className="text-base font-medium">{variation.name}</p>
-              </div>
-
-              <div className="w-[12%] flex justify-center items-center gap-2 py-3 border-r border-gray-400">
-                <button 
-                  onClick={() => handleQuantityChange(variation.id, -1)} 
-                  className="px-2 py-1 bg-gray-200 rounded text-sm hover:bg-gray-300 transition-colors"
-                  disabled={item.quantity <= 1}
-                >−</button>
-                <span className="mx-1 font-bold text-lg">{item.quantity}</span>
-                <button 
-                  onClick={() => handleQuantityChange(variation.id, 1)} 
-                  className="px-2 py-1 bg-[#4CAF50] text-white rounded text-sm hover:bg-green-600 transition-colors"
-                >+</button>
-              </div>
-
-              <div className="w-[12%] text-center text-lg font-bold border-r border-gray-400 px-2 py-3">
-                ₱{parseFloat(variation.unit_price).toFixed(2)}
-              </div>
-
-              <div className="w-[12%] text-center font-semibold text-[#4CAF50] text-lg font-bold border-r border-gray-600 px-2 py-3">
-                ₱{(parseFloat(variation.unit_price) * item.quantity).toFixed(2)}
-              </div>
-
-              <div className="w-[10%] text-center border-r border-gray-600 py-3 px-2">
-                <p className="text-lg font-medium text-gray-600">pcs</p>
-              </div>
-
-              <div className="w-[7%] text-center">
-                <button 
-                  onClick={() => handleDelete(variation.id)}
-                  className="hover:scale-110 transition-transform"
-                >
-                  <img src="/trash.png" alt="Delete" className="w-5 h-5 inline-block" />
-                </button>
-              </div>
+          {/* LEFT SECTION */}
+         {/* LEFT SECTION */}
+          <div className="w-[1200px] xl:w-3/4 space-y-6">
+            {/* Header */}
+            <div className="flex items-center px-6 py-4 bg-white text-center rounded-lg font-bold border border-gray-400 text-base text-black">
+              <div className="w-[35%] text-center border-r border-gray-400 pr-4">PRODUCT NAME</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">VARIATION</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">QUANTITY</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">UNIT PRICE</div>
+              <div className="w-[12%] text-center border-r border-gray-400 px-2">TOTAL PRICE</div>
+              <div className="w-[10%] text-center border-r border-gray-400 px-2">UNIT MEAS.</div>
+              <div className="w-[7%] text-center">ACTION</div>
+              
             </div>
-          );
-        })}
-      </div>
-    );
-  })
-) : (
-  <div className="bg-white p-8 rounded-3xl shadow border text-center">
-    <img src="/search-not-found.png" alt="No Results" className="w-24 h-24 mx-auto mb-4 opacity-50" />
-    <h3 className="text-2xl font-bold text-gray-600 mb-2">No items found</h3>
-    <p className="text-gray-500 mb-4">Try adjusting your search terms</p>
-    <button 
-      onClick={() => setSearchQuery('')}
-      className="px-4 py-2 bg-[#4CAF50] text-white rounded-full hover:bg-green-700 transition-colors"
-    >
-      Clear Search
-    </button>
-  </div>
-)}
+             {loading ? (
+                <LoadingScreen />
+              ) : (
+                <CartItemsList
+                  filteredCartItems={filteredCartItems}
+                  selectedItems={selectedItems}
+                  productVariations={productVariations}
+                  selectedCartItems={selectedCartItems}
+                  allCartItems={allCartItems}
+                  toggleVendorSelectAll={toggleVendorSelectAll}
+                  handleItemSelect={handleItemSelect}
+                  handleVariationChange={handleVariationChange}
+                  handleQuantityChange={handleQuantityChange}
+                  handleDelete={handleDelete}
+                  setSearchQuery={setSearchQuery}
+                />
+              )}
+            </div>
+            
 
-      </div>
-
-      {/* RIGHT SECTION - Order Summary */}
-        <div className="w-[400px] bg-white p-4 rounded-lg shadow border border-gray-400 flex flex-col h-fit">
-
-          <h2 className="text-2xl font-bold mb-4">Order Summary</h2>
-          <div className="w-full h-[1px] bg-gray-300 mb-4" />
           
-          <div className="space-y-2 text-lg">
-            <div className="flex justify-between">
-              <p>Selected Items:</p>
-              <p className="text-black font-bold">{selectedItems.length}</p>
 
-            </div>
-            <div className="flex justify-between">
-              <p>Subtotal</p>
-              <p className="text-black font-bold">₱{isNaN(subtotal) ? '0.00' : subtotal.toFixed(2)}</p>
-
-            </div>
-            <div className="flex justify-between text-[#4CAF50] text-2xl font-bold pt-4 pb-6 border-t border-gray-600">
-              <p>Total</p>
-              <p className="text-[#4CAF50] font-bold">₱{isNaN(total) ? '0.00' : total.toFixed(2)}</p>
-            </div>
-          </div>
-
-          <button
-            onClick={handleSearch}
-            disabled={selectedCartItems.length === 0}
-            className={`mt-full w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
-              selectedCartItems.length === 0 
-                ? 'bg-gray-400 cursor-not-allowed' 
-                : 'bg-green-600 hover:bg-green-700'
-            }`}
-          >
-            Buy Now ({selectedCartItems.length})
-          </button>
+          {/* RIGHT SECTION - Order Summary */}
+          <OrderSummary
+            subtotal={subtotal}
+            total={total}
+            handleCheckout={handleCheckout}
+            selectedItems={selectedItems}
+          />
         </div>
+
+  
       {/* (Your existing summary panel can stay as is) */}
     </div>
-  </div>
-);
 
+);
 };
 
 export default CartPage;
