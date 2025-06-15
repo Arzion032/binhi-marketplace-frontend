@@ -93,7 +93,7 @@ const SignUpPage = () => {
           alt="Farmer Icon"
           className="w-12 h-12 rounded-full"
         />
-        <p className="text-xl">Federation Member?</p>
+        <p className="text-xl">From Federation?</p>
         <a href="#" className="text-green-600 font-bold text-xl">
           Click Here!
         </a>
