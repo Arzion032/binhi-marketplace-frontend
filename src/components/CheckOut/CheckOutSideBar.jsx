@@ -11,7 +11,8 @@ const CheckoutSidebar = ({
   setPickupLocation,
   paymentMethod,
   setPaymentMethod,
-  handleBuyNow
+  handleBuyNow,
+  isLoading
 }) => {
   return (
     <div className="w-full lg:w-1/3 flex flex-col gap-5">
@@ -51,9 +52,12 @@ const CheckoutSidebar = ({
           <p className="text-sm text-gray-600">Payment: {paymentMethod}</p>
         </div>
 
-        <button
+       <button
           onClick={handleBuyNow}
-          className="mt-5 w-full py-3 px-4 text-xl rounded-full text-white font-semibold bg-green-600 hover:bg-green-700 transition-colors"
+          className={`mt-5 w-full py-3 px-4 text-xl rounded-full text-white font-semibold 
+            ${isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-green-600 hover:bg-green-700'}
+            transition-colors`}
+          disabled={isLoading}
         >
           Buy Now ({items.length})
         </button>

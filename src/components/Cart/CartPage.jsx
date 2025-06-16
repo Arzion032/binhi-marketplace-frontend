@@ -7,7 +7,7 @@ import CartItemsList from './CartItemsList';
 
 const CartPage = () => {
   const navigate = useNavigate();
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [cartItems, setCartItems] = useState([]);
   const [productVariations, setProductVariations] = useState({});
@@ -18,6 +18,7 @@ const CartPage = () => {
 
 
 useEffect(() => {
+  setLoading(true)
   api.get("/cart/my_cart/")
     .then(res => {
       setCartItems(res.data);
@@ -280,6 +281,7 @@ const filteredCartItems = useMemo(() => {
   const total = subtotal;
 
  const handleCheckout = () => {
+   setLoading(true)
   if (selectedCartItems.length === 0) return;
   console.log
   // Check if any selected item has a warning message
@@ -309,6 +311,7 @@ const filteredCartItems = useMemo(() => {
 
   console.log('Checkout data being passed:', checkoutData); // For debugging
   navigate('/checkoutpage', { state: { checkoutData } });
+  setLoading(false)
 };
 
   if (cartItems && cartItems.length === 0) {

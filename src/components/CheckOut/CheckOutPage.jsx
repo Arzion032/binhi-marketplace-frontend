@@ -16,6 +16,7 @@ export default function CheckoutPage({}) {
   const [pickupLocation, setPickupLocation] = useState("President's Location");
   const [deliveryFee, setDeliveryFee] = useState(0);
   const [userData, setUserData] = useState(null);
+  const [isLoading, setLoading] = useState(false);
 
   useEffect(() => {
     api.get(`${BASE_URL}/users/me/`, {
@@ -35,6 +36,7 @@ export default function CheckoutPage({}) {
   const newTotal = total + deliveryFee;
 
 const handleBuyNow = async () => {
+  setLoading(true);
   try {
     const variationIds = items.map((item) => item.variation.id);
     const shippingAddress =
@@ -67,6 +69,9 @@ const handleBuyNow = async () => {
   } catch (error) {
     console.error("Checkout failed:", error);
     alert("There was an error while confirming your order. Please try again.");
+  }
+  finally{
+    setLoading(false);
   }
 };
 
@@ -128,6 +133,7 @@ const handleBuyNow = async () => {
           paymentMethod={paymentMethod}
           setPaymentMethod={setPaymentMethod}
           handleBuyNow={handleBuyNow}
+          isLoading={isLoading}
         />
 
         {/* Chat Button */}

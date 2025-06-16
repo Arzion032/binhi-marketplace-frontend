@@ -1,6 +1,6 @@
 import React from 'react'
 
-const OrderSummary = ({subtotal, total, handleCheckout, selectedItems}) => {
+const OrderSummary = ({subtotal, total, handleCheckout, selectedItems, loading}) => {
   return (
     <div className="w-[400px] bg-white p-4 rounded-lg shadow border border-gray-400 flex flex-col h-fit">
 
@@ -26,7 +26,7 @@ const OrderSummary = ({subtotal, total, handleCheckout, selectedItems}) => {
 
           <button
             onClick={handleCheckout}
-            disabled={selectedItems.length === 0}
+            disabled={selectedItems.length === 0 || loading}
             className={`mt-full w-full py-3 px-4 rounded-full text-white text-2xl font-semibold transition-colors ${
               selectedItems.length === 0 
                 ? 'bg-gray-400 cursor-not-allowed' 
