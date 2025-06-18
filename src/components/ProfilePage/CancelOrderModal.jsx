@@ -12,23 +12,41 @@ const CancelOrderModal = ({ order, onClose, onConfirm, calculateTotal }) => {
     }
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (cancelReasons.length === 0) {
       alert("Please select at least one reason for cancellation");
       return;
     }
+
+    // Map the UI reasons to backend reasons
+    const reasonMapping = {
+      'Out of Stock': 'out_of_stock',
+      'Incorrect Pricing': 'incorrect_pricing',
+      'Logistical Problems': 'logistical_problems',
+      'Customer Request': 'customer_request',
+      'Payment Issues': 'payment_issues',
+      'Others': 'others'
+    };
+
+    // Get the primary reason (first selected reason)
+    const primaryReason = reasonMapping[cancelReasons[0]] || 'others';
     
     const cancelData = {
-      orderId: order?.id,
-      reasons: cancelReasons,
-      note: cancelNote
+      cancellation_reason: primaryReason,
+      cancellation_notes: cancelNote || (primaryReason === 'others' ? cancelReasons.join(', ') : '')
     };
     
-    onConfirm(cancelData);
-    
-    // Reset form
-    setCancelReasons([]);
-    setCancelNote("");
+    console.log("Sending payload:", cancelData); // Log the payload
+
+    try {
+      await onConfirm(cancelData);
+      // Only reset form after successful cancellation
+      setCancelReasons([]);
+      setCancelNote("");
+    } catch (error) {
+      console.error("Cancellation failed:", error.response?.data || error.message);
+      // Do not reset form on error
+    }
   };
 
   const handleClose = () => {
@@ -82,7 +100,7 @@ const CancelOrderModal = ({ order, onClose, onConfirm, calculateTotal }) => {
         <div className="border border-gray-400 mt-4 rounded-xl p-4">
           <p className="text-sm font-semibold mb-2">Why do you want to cancel?</p>
           <div className="flex flex-wrap gap-x-8 gap-y-2 text-sm mb-4">
-            {['Changed my mind', 'Found a better deal', 'Ordered by mistake', 'Payment issues', 'Others'].map((reason) => (
+            {['Out of Stock', 'Incorrect Pricing', 'Logistical Problems', 'Customer Request', 'Payment Issues', 'Others'].map((reason) => (
               <label key={reason} className="flex items-center gap-2">
                 <input
                   type="checkbox"
@@ -125,4 +143,4 @@ const CancelOrderModal = ({ order, onClose, onConfirm, calculateTotal }) => {
   );
 };
 
-export default CancelOrderModal;
+export default CancelOrderModal; 

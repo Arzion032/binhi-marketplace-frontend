@@ -34,42 +34,45 @@ export default function CheckoutPage({}) {
   const { items, subtotal, total } = checkoutData;
   const newTotal = total + deliveryFee;
 
-const handleBuyNow = async () => {
-  try {
-    const variationIds = items.map((item) => item.variation.id);
-    const shippingAddress =
-      deliveryMethod === "Pick-up" ? pickupLocation : "Delivery Address";
+  const handleBuyNow = async () => {
+    try {
+      const variationIds = items.map((item) => item.variation.id);
+      const shippingAddress =
+        deliveryMethod === "Pick-up" ? pickupLocation : "Delivery Address";
 
-    const requestData = {
-      variation_ids: variationIds,
-      shipping_address: shippingAddress,
-      payment_method: paymentMethod,
-      delivery_method: deliveryMethod,
-    };
+      const requestData = {
+        variation_ids: variationIds,
+        shipping_address: shippingAddress,
+        payment_method: paymentMethod,
+        delivery_method: deliveryMethod,
+      };
 
-    console.log("Request Payload:", requestData);  // Log the request data
+      console.log("Request Payload:", requestData);  // Log the request data
 
-    const response = await api.post("/orders/confirm/", requestData);
+      const response = await api.post("/orders/confirm/", requestData, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`
+        }
+      });
 
-    navigate("/checkout-success", {
-      state: {
-        product: {
-          items,
-          subtotal,
-          total: newTotal,
-          paymentMethod,
-          deliveryMethod,
-          pickupLocation: deliveryMethod === "Pick-up" ? pickupLocation : null,
-          deliveryFee,
+      navigate("/checkout-success", {
+        state: {
+          product: {
+            items,
+            subtotal,
+            total: newTotal,
+            paymentMethod,
+            deliveryMethod,
+            pickupLocation: deliveryMethod === "Pick-up" ? pickupLocation : null,
+            deliveryFee,
+          },
         },
-      },
-    });
-  } catch (error) {
-    console.error("Checkout failed:", error);
-    alert("There was an error while confirming your order. Please try again.");
-  }
-};
-
+      });
+    } catch (error) {
+      console.error("Checkout failed:", error);
+      alert("There was an error while confirming your order. Please try again.");
+    }
+  };
 
   return (
     <div className="min-h-screen bg-[#F5F9F5] px-6 py-4">
@@ -91,29 +94,28 @@ const handleBuyNow = async () => {
         {/* Left Section */}
         <div className="w-full lg:w-2/3 space-y-6">
           {/* Delivery Address */}
-      <section>
-        <h2 className="text-xl font-bold mb-2">Delivery Address</h2>
+          <section>
+            <h2 className="text-xl font-bold mb-2">Delivery Address</h2>
 
-        {userData ? (
-          <div className="p-3 flex gap-3 items-start text-[15px]">
-            <img src="/map-pin-house.png" alt="Address" className="w-10 h-10" />
-            <div>
-              <p className="font-semibold text-[16px]">{userData?.username || "No name"}</p>
-              <p className="text-gray-700">(+63) {userData.contact_no}</p>
-              <p className="text-gray-700">
-                {userData.addresses?.[0]
-                  ? `${userData.addresses[0].street_address}, ${userData.addresses[0].barangay}, ${userData.addresses[0].city}, ${userData.addresses[0].province}, ${userData.addresses[0].postal_code}`
-                  : "No address available"}
-              </p>
-            </div>
-          </div>
-        ) : (
-          <p className="text-sm text-gray-500 mt-2">Loading address...</p>
-        )}
-      </section>
+            {userData ? (
+              <div className="p-3 flex gap-3 items-start text-[15px]">
+                <img src="/map-pin-house.png" alt="Address" className="w-10 h-10" />
+                <div>
+                  <p className="font-semibold text-[16px]">{userData?.username || "No name"}</p>
+                  <p className="text-gray-700">(+63) {userData.contact_no}</p>
+                  <p className="text-gray-700">
+                    {userData.addresses?.[0]
+                      ? `${userData.addresses[0].street_address}, ${userData.addresses[0].barangay}, ${userData.addresses[0].city}, ${userData.addresses[0].province}, ${userData.addresses[0].postal_code}`
+                      : "No address available"}
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500 mt-2">Loading address...</p>
+            )}
+          </section>
 
-           <CheckOutDetails items={items} BASE_URL={BASE_URL}/>
-           
+          <CheckOutDetails items={items} BASE_URL={BASE_URL}/>
         </div>
 
         <CheckOutSidebar
@@ -145,4 +147,4 @@ const handleBuyNow = async () => {
       </div>
     </div>
   );
-}
+} 

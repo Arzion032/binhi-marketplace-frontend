@@ -1,4 +1,3 @@
-
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import OrderDetailsModal from './OrderDetailsModal';
@@ -18,24 +17,36 @@ const OrderHistory = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true)
 
-
-  const handleCancelOrder = (cancelData) => {
-    console.log("Submitting cancel request:", cancelData);
-    
-    setOrders(prevOrders => 
-      prevOrders.map(order => 
-        order.id === selectedOrder?.id 
-          ? { ...order, status: "cancelled" }
-          : order
-      )
-    );
-    
-    if (selectedOrder) {
-      setSelectedOrder({ ...selectedOrder, status: "cancelled" });
+  const handleCancelOrder = async (cancelData) => {
+    try {
+      // Make API call to cancel the order
+      const response = await api.post(
+        `/orders/cancel/${selectedOrder.id}/`,
+        cancelData,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        }
+      );
+      // Only update the UI if the API call was successful
+      setOrders(prevOrders => 
+        prevOrders.map(order => 
+          order.id === selectedOrder?.id 
+            ? { ...order, status: "cancelled" }
+            : order
+        )
+      );
+      if (selectedOrder) {
+        setSelectedOrder({ ...selectedOrder, status: "cancelled" });
+      }
+      setShowCancelModal(false);
+      alert("Order Cancelled Successfully!");
+    } catch (error) {
+      console.error('Error cancelling order:', error);
+      alert(error.response?.data?.error || 'Failed to cancel order. Please try again.');
     }
-    
-    setShowCancelModal(false);
-    alert("Order Cancelled Successfully!");
   };
   
   useEffect(() => {
@@ -59,25 +70,23 @@ const OrderHistory = () => {
     console.log(`Navigating to: ${path}`);
   };
 
+  const filteredOrders = orders.filter(order => {
+    console.log(order);
 
- const filteredOrders = orders.filter(order => {
-  console.log(order);
+    // Normalize both to lowercase to handle case insensitivity
+    const matchesTab = selectedTab.toLowerCase() === "all" || order.status.toLowerCase() === selectedTab.toLowerCase();
 
-  // Normalize both to lowercase to handle case insensitivity
-  const matchesTab = selectedTab.toLowerCase() === "all" || order.status.toLowerCase() === selectedTab.toLowerCase();
+    // Check if searchQuery matches any of the fields (sellerName, orderId, or any item name)
+    const matchesSearch = searchQuery === "" || 
+      (order.sellerName && order.sellerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (order.orderId && order.orderId.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      order.items.some(item => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
 
-  // Check if searchQuery matches any of the fields (sellerName, orderId, or any item name)
-  const matchesSearch = searchQuery === "" || 
-    (order.sellerName && order.sellerName.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    (order.orderId && order.orderId.toLowerCase().includes(searchQuery.toLowerCase())) ||
-    order.items.some(item => item.name && item.name.toLowerCase().includes(searchQuery.toLowerCase()));
-
-  return matchesTab && matchesSearch;
-});
+    return matchesTab && matchesSearch;
+  });
 
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
-  
   };
 
   const clearSearch = () => {
@@ -103,7 +112,7 @@ const OrderHistory = () => {
     return subtotal + order.deliveryFee;
   };
 
-   const handleVoiceSearch = () => {
+  const handleVoiceSearch = () => {
     // Voice search functionality - placeholder for now
     if ('webkitSpeechRecognition' in window) {
       const recognition = new window.webkitSpeechRecognition();
@@ -214,18 +223,16 @@ const OrderHistory = () => {
             </div>
           ) : (
             filteredOrders.map(order => (
-
               <OrderItem
-                  key={order.id}
-                  order={order}
-                  setSelectedOrder={setSelectedOrder}
-                  setShowViewOrderModal={setShowViewOrderModal}
-                  setShowCancelModal={setShowCancelModal}
-                  setShowReturnRefundModal={setShowReturnRefundModal}
-                  canCancelOrder={canCancelOrder}
-                  getStatusColor={getStatusColor}
-                />
-
+                key={order.id}
+                order={order}
+                setSelectedOrder={setSelectedOrder}
+                setShowViewOrderModal={setShowViewOrderModal}
+                setShowCancelModal={setShowCancelModal}
+                setShowReturnRefundModal={setShowReturnRefundModal}
+                canCancelOrder={canCancelOrder}
+                getStatusColor={getStatusColor}
+              />
             ))
           )}
         </div>
@@ -244,14 +251,14 @@ const OrderHistory = () => {
       {/* View Order Modal */}
       {showViewOrderModal && selectedOrder && (
         <OrderDetailsModal
-          showDetails={showViewOrderModal}  // <- Changed from order to showDetails
-          setShowDetails={setShowViewOrderModal}  // <- Changed from onClose to setShowDetails
+          showDetails={showViewOrderModal}
+          setShowDetails={setShowViewOrderModal}
           selectedOrder={selectedOrder}
           setShowCancelModal={() => {
             setShowViewOrderModal(false);
             setShowCancelModal(true);
           }}
-          setShowRefundModal={() => {  // <- Changed from onRequestRefund to setShowRefundModal
+          setShowRefundModal={() => {
             setShowViewOrderModal(false);
             setShowReturnRefundModal(true);
           }}
@@ -261,7 +268,7 @@ const OrderHistory = () => {
 
       {/* Return Refund Modal */}
       {showReturnRefundModal && selectedOrder && (
-        <ReturnRefundModal  // <- Changed from ReturnRefund to ReturnRefundModal
+        <ReturnRefundModal
           showRefundModal={showReturnRefundModal}
           setShowRefundModal={setShowReturnRefundModal}
           selectedOrder={selectedOrder}
@@ -286,4 +293,4 @@ const OrderHistory = () => {
   );
 };
 
-export default OrderHistory;
+export default OrderHistory; 

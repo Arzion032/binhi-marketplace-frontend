@@ -29,11 +29,16 @@ const OrderItem = ({
           </button>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex flex-col items-end gap-1">
           <span className="text-sm text-gray-600">Order ID: {order.orderId || order.id.slice(0, 8)}</span>
           <span className={`inline-block text-white text-sm text-center w-28 px-2 py-2 rounded-full ${getStatusColor(order.status)}`}>
             {order.status}
           </span>
+          {order.status === "cancelled" && order.cancellation_reason && (
+            <div className="text-xs text-gray-500 mt-1">
+              Cancellation Reason: {order.cancellation_reason.replace(/_/g, " ").replace(/\b\w/g, l => l.toUpperCase())}
+            </div>
+          )}
         </div>
       </div>
 
@@ -133,4 +138,4 @@ const OrderItem = ({
   );
 };
 
-export default OrderItem;
+export default OrderItem; 
