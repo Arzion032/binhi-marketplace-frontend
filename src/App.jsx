@@ -63,7 +63,6 @@ function App() {
         <Route path="/seller-center" element={<SellerCenter />} />
         <Route path="/view-shop" element={<ViewShop />} />
         <Route path="/daily-needs" element={<YourDailyBinhiNeeds />} />
-        {/* Fixed route - use consistent naming */}
         <Route path="/search-products" element={<SearchProductWithAccount />} />
         <Route path="/search-product-account" element={<SearchProductWithAccount />} />
         <Route path="/search-products-with-account" element={<SearchProductWithAccount />} />

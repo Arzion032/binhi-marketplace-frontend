@@ -434,6 +434,7 @@ return (
             total={total}
             handleCheckout={handleCheckout}
             selectedItems={selectedItems}
+            loading={loading}
           />
         </div>
 

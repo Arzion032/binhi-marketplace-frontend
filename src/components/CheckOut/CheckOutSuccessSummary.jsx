@@ -1,6 +1,3 @@
-import React from "react";
-import { BASE_URL } from "../../constants";
-// adjust the import path as needed
 
 const CheckoutSuccessSummary = ({ product, isMultiple, displayTotal }) => {
   return (
